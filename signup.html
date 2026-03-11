@@ -88,15 +88,7 @@
         </div>
       </div>
 
-      <!-- Role -->
-      <div class="mb-4">
-        <label class="form-label" for="su-role">Account Role</label>
-        <select id="su-role" class="form-select" required>
-          <option value="" disabled selected>Select a role…</option>
-          <option value="Admin">Admin</option>
-          <option value="User">User</option>
-        </select>
-      </div>
+      
 
       <button type="submit" id="submit-btn" class="btn btn-citrine w-100 mb-3">
         Create Account →
@@ -214,7 +206,7 @@ form.addEventListener("submit", async (e) => {
   const username = document.getElementById("su-name").value.trim();
   const email    = document.getElementById("su-email").value.trim();
   const password = document.getElementById("su-password").value;
-  const role     = document.getElementById("su-role").value;
+  const role     = "User";
 
   /* Basic client-side validation */
   if (!username || !email || !password || !role) {
