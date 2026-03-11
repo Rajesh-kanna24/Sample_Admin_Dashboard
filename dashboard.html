@@ -9,15 +9,12 @@
 </head>
 <body>
 
-<!-- Sidebar overlay (mobile) -->
 <div class="sidebar-overlay" id="sidebar-overlay"></div>
 
 <div class="dash-layout">
 
   <!-- ══ SIDEBAR ══════════════════════════════════════════ -->
   <aside class="sidebar" id="sidebar">
-
-    <!-- Brand -->
     <div class="sidebar-brand">
       <div class="sidebar-logo">AF</div>
       <div>
@@ -26,21 +23,19 @@
       </div>
     </div>
 
-    <!-- Nav -->
     <div class="sidebar-menu">
       <p class="sidebar-section">Main</p>
-
       <div class="sidebar-item active" onclick="scrollToSection('section-stats')">
         <span class="si-icon">⬡</span> Overview
       </div>
-      <div class="sidebar-item" onclick="scrollToSection('section-form')">
+      <!-- Add User — Admin only -->
+      <div class="sidebar-item" id="nav-add-user" style="display:none;" onclick="scrollToSection('section-form')">
         <span class="si-icon">＋</span> Add User
       </div>
       <div class="sidebar-item" onclick="scrollToSection('section-table')">
         <span class="si-icon">◧</span> Users Table
-        <span class="si-badge" id="sidebar-count">3</span>
+        <span class="si-badge" id="sidebar-count">0</span>
       </div>
-
       <p class="sidebar-section" style="margin-top:14px;">Account</p>
       <div class="sidebar-item" onclick="showToast('Settings — coming soon!','info')">
         <span class="si-icon">⚙</span> Settings
@@ -50,18 +45,16 @@
       </div>
     </div>
 
-    <!-- Footer user row -->
     <div class="sidebar-footer">
       <div class="user-row">
-        <div class="user-row-avatar" id="sidebar-avatar">A</div>
+        <div class="user-row-avatar" id="sidebar-avatar">?</div>
         <div>
-          <div class="user-row-name js-user-name">Admin</div>
-          <div class="user-row-role js-user-role">Administrator</div>
+          <div class="user-row-name" id="sidebar-username">Loading…</div>
+          <div class="user-row-role" id="sidebar-role">—</div>
         </div>
       </div>
     </div>
-
-  </aside><!-- /sidebar -->
+  </aside>
 
   <!-- ══ TOPBAR ════════════════════════════════════════════ -->
   <nav class="topbar">
@@ -74,13 +67,16 @@
       </div>
     </div>
     <div class="topbar-right">
-      <button class="topbar-icon-btn" onclick="renderTable(); updateStats(); showToast('Data refreshed.','info');" title="Refresh">↺</button>
+      <span id="role-badge" class="badge bg-secondary me-2" style="font-size:0.8rem;padding:6px 12px;"></span>
+      <button class="topbar-icon-btn" onclick="loadUsers();" title="Refresh">↺</button>
       <button class="btn btn-logout btn-sm" id="btn-logout">⏻ Logout</button>
     </div>
   </nav>
 
   <!-- ══ MAIN CONTENT ══════════════════════════════════════ -->
   <main class="dash-main">
+
+    <div id="alert-box" class="alert d-none mb-3" role="alert"></div>
 
     <!-- ── Stat Cards ──────────────────────────────────── -->
     <section id="section-stats">
@@ -89,7 +85,7 @@
           <div class="stat-card">
             <div class="stat-icon gold">👥</div>
             <div>
-              <div class="stat-value" id="stat-total">3</div>
+              <div class="stat-value" id="stat-total">0</div>
               <div class="stat-label">Total Users</div>
             </div>
           </div>
@@ -98,7 +94,7 @@
           <div class="stat-card">
             <div class="stat-icon blue">📧</div>
             <div>
-              <div class="stat-value" id="stat-emails">3</div>
+              <div class="stat-value" id="stat-emails">0</div>
               <div class="stat-label">With Email</div>
             </div>
           </div>
@@ -124,33 +120,24 @@
       </div>
     </section>
 
-    <!-- ── User Form ────────────────────────────────────── -->
-    <section id="section-form">
+    <!-- ── Add/Edit User Form (Admin Only) ─────────────── -->
+    <section id="section-form" style="display:none;">
       <div class="card mb-4 fade-up delay-1">
         <div class="card-header">
           <div class="card-header-title">
             <div class="card-header-pill">✎</div>
             <span id="form-mode-label">Add New User</span>
           </div>
-          <button class="btn btn-sm btn-outline-slate" id="btn-clear">✕ Clear</button>
+          <button class="btn btn-sm btn-outline-slate" onclick="clearForm()">✕ Clear</button>
         </div>
         <div class="card-body">
           <form id="user-form" novalidate>
             <div class="row g-3">
 
-              <!-- ID & Name -->
-              <div class="col-md-6">
-                <label class="form-label" for="f-id">
-                  User ID <span style="color:var(--ink-4);font-weight:400;text-transform:none;">(auto if blank)</span>
-                </label>
-                <input type="number" id="f-id" class="form-control" placeholder="e.g. 1004" />
-              </div>
               <div class="col-md-6">
                 <label class="form-label" for="f-name">Full Name <span style="color:var(--danger)">*</span></label>
                 <input type="text" id="f-name" class="form-control" placeholder="Jane Smith" required />
               </div>
-
-              <!-- Email & Phone -->
               <div class="col-md-6">
                 <label class="form-label" for="f-email">Email Address <span style="color:var(--danger)">*</span></label>
                 <input type="email" id="f-email" class="form-control" placeholder="jane@example.com" required />
@@ -159,14 +146,18 @@
                 <label class="form-label" for="f-phone">Phone Number</label>
                 <input type="tel" id="f-phone" class="form-control" placeholder="+1 555 000 1234" maxlength="20" />
               </div>
-
-              <!-- Address -->
+              <div class="col-md-6">
+                <label class="form-label" for="f-role-select">Role</label>
+                <select id="f-role-select" class="form-select">
+                  <option value="User">User</option>
+                  <option value="Admin">Admin</option>
+                </select>
+              </div>
               <div class="col-12">
                 <label class="form-label" for="f-address">Address</label>
                 <textarea id="f-address" class="form-control" rows="2" placeholder="123 Main Street, City, Country"></textarea>
               </div>
 
-              <!-- Image upload -->
               <div class="col-md-6">
                 <label class="form-label">Profile Image</label>
                 <div class="upload-zone">
@@ -174,13 +165,10 @@
                   <div class="upload-zone-icon">📁</div>
                   <div class="upload-zone-text">Drop file here or <span>browse</span></div>
                 </div>
-                <!-- Preview -->
-                <div id="img-preview-wrap">
-                  <img id="img-preview" src="" alt="Preview" />
-                </div>
+                <img id="img-preview" src="" alt="Preview"
+                  style="display:none;max-width:80px;height:80px;object-fit:cover;border-radius:8px;margin-top:8px;" />
               </div>
 
-              <!-- Dates -->
               <div class="col-md-3">
                 <label class="form-label" for="f-created">Created At</label>
                 <input type="date" id="f-created" class="form-control" />
@@ -190,14 +178,9 @@
                 <input type="date" id="f-updated" class="form-control" />
               </div>
 
-              <!-- Action buttons -->
-              <div class="col-12 d-flex flex-wrap gap-2 pt-2" style="border-top:1px solid var(--rule);margin-top:4px;">
-                <button type="submit" class="btn btn-primary" id="btn-submit">
-                  ＋ Add Data
-                </button>
-                <button type="button" class="btn btn-outline-slate" id="btn-clear-alt" onclick="clearForm()">
-                  Clear Form
-                </button>
+              <div class="col-12 d-flex flex-wrap gap-2 pt-2" style="border-top:1px solid var(--rule);">
+                <button type="submit" class="btn btn-primary" id="btn-submit">＋ Add User</button>
+                <button type="button" class="btn btn-outline-slate" onclick="clearForm()">Clear Form</button>
               </div>
 
             </div>
@@ -206,52 +189,41 @@
       </div>
     </section>
 
-    <!-- ── Users Table ──────────────────────────────────── -->
+    <!-- ── Users Table — visible to ALL logged-in users ── -->
     <section id="section-table">
       <div class="card fade-up delay-2">
         <div class="card-header">
           <div class="card-header-title">
             <div class="card-header-pill">◧</div>
             All Users
-            <span
-              id="table-count"
+            <span id="table-count"
               style="background:var(--citrine-dim);color:var(--citrine);
-                     font-size:0.7rem;font-weight:700;padding:2px 9px;
-                     border-radius:20px;font-family:'Instrument Sans',sans-serif;">
-              3
-            </span>
+                     font-size:0.7rem;font-weight:700;padding:2px 9px;border-radius:20px;">0</span>
           </div>
-          <input
-            type="text"
-            id="table-search"
-            class="form-control"
-            placeholder="🔍 Search users…"
-            style="max-width:220px;font-size:0.85rem;"
-          />
+          <input type="text" id="table-search" class="form-control"
+            placeholder="🔍 Search users…" style="max-width:220px;font-size:0.85rem;" />
         </div>
         <div class="card-body" style="padding:0 !important;">
           <div class="table-wrapper">
             <table class="table" id="users-table">
               <thead>
                 <tr>
-                  <th>ID</th>
+                  <th>#</th>
                   <th>Name</th>
                   <th>Email</th>
                   <th>Phone</th>
+                  <th>Role</th>
                   <th>Address</th>
                   <th>Image</th>
                   <th>Created At</th>
                   <th>Updated At</th>
-                  <th>Actions</th>
+                  <!-- Actions column header — shown only to Admin via JS -->
+                  <th id="th-actions" style="display:none;">Actions</th>
                 </tr>
               </thead>
-              <tbody id="users-tbody">
-                <!-- Populated by script.js -->
-              </tbody>
+              <tbody id="users-tbody"></tbody>
             </table>
           </div>
-
-          <!-- Empty state -->
           <div class="empty-state" id="empty-state" style="display:none;">
             <div class="empty-state-icon">📋</div>
             <div class="empty-state-title">No users found</div>
@@ -261,10 +233,316 @@
       </div>
     </section>
 
-  </main><!-- /dash-main -->
-</div><!-- /dash-layout -->
+  </main>
+</div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="script.js"></script>
+
+<script type="module">
+
+import { initializeApp }  from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import {
+  getAuth, onAuthStateChanged, signOut
+} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import {
+  getFirestore,
+  doc, getDoc,
+  collection, addDoc, getDocs, updateDoc, deleteDoc,
+  serverTimestamp, query, orderBy
+} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+/* ─── Firebase Config ─────────────────────────────────── */
+const firebaseConfig = {
+  apiKey:            "AIzaSyArM8sv7J1RUj4XvAJhJd40tzA7Yc8BGXY",
+  authDomain:        "admin-dashboard-ed62c.firebaseapp.com",
+  projectId:         "admin-dashboard-ed62c",
+  storageBucket:     "admin-dashboard-ed62c.firebasestorage.app",
+  messagingSenderId: "560027475135",
+  appId:             "1:560027475135:web:3fae0cb0268729ae79fa0a",
+  measurementId:     "G-MCJ7CZW829"
+};
+
+const app  = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db   = getFirestore(app);
+
+/* ─── State ───────────────────────────────────────────── */
+let currentUserRole = null;
+let editingDocId    = null;
+let allUsersData    = [];
+
+/*
+  ✅ Firestore path: managedUsers/{docId}
+  - ALL authenticated users can READ
+  - Only Admin role users can WRITE (enforced in code + Firestore rules)
+*/
+const managedUsersCol = collection(db, "managedUsers");
+
+/* ─── Helpers ─────────────────────────────────────────── */
+function showAlert(msg, type = "danger") {
+  const box = document.getElementById("alert-box");
+  box.className   = `alert alert-${type}`;
+  box.textContent = msg;
+  box.classList.remove("d-none");
+  setTimeout(() => box.classList.add("d-none"), 5000);
+}
+
+window.clearForm = function () {
+  document.getElementById("user-form").reset();
+  document.getElementById("img-preview").style.display  = "none";
+  document.getElementById("form-mode-label").textContent = "Add New User";
+  document.getElementById("btn-submit").textContent      = "＋ Add User";
+  editingDocId = null;
+};
+
+/* ─── Auth Observer ───────────────────────────────────── */
+onAuthStateChanged(auth, async (user) => {
+  if (!user) {
+    window.location.href = "index.html";
+    return;
+  }
+
+  // Get user profile from Firestore to read role
+  const snap = await getDoc(doc(db, "users", user.uid));
+  if (!snap.exists()) {
+    await signOut(auth);
+    window.location.href = "index.html";
+    return;
+  }
+
+  const profile   = snap.data();
+  currentUserRole = profile.role || "User";
+  const username  = profile.username || user.displayName || user.email;
+
+  // Update sidebar
+  document.getElementById("sidebar-username").textContent = username;
+  document.getElementById("sidebar-role").textContent     = currentUserRole;
+  document.getElementById("sidebar-avatar").textContent   = username.charAt(0).toUpperCase();
+
+  // Role badge
+  const badge       = document.getElementById("role-badge");
+  badge.textContent = currentUserRole;
+  badge.className   = currentUserRole === "Admin"
+    ? "badge bg-warning text-dark me-2"
+    : "badge bg-primary me-2";
+
+  // ── Show Admin-only UI elements ──────────────────────
+  if (currentUserRole === "Admin") {
+    document.getElementById("section-form").style.display = "";  // Add User form
+    document.getElementById("nav-add-user").style.display = "";  // Sidebar link
+    document.getElementById("th-actions").style.display   = "";  // Table Actions header
+  }
+
+  // Load data — both Admin & User see this
+  await loadUsers();
+});
+
+/* ─── Load Users (shared collection) ─────────────────── */
+window.loadUsers = async function () {
+  try {
+    const q    = query(managedUsersCol, orderBy("created_at", "desc"));
+    const snap = await getDocs(q);
+    allUsersData = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    renderTable(allUsersData);
+    updateStats(allUsersData);
+  } catch (err) {
+    console.error(err);
+    showAlert("Failed to load users: " + err.message);
+  }
+};
+
+/* ─── Render Table ────────────────────────────────────── */
+function renderTable(data) {
+  const tbody  = document.getElementById("users-tbody");
+  const empty  = document.getElementById("empty-state");
+  const tCount = document.getElementById("table-count");
+  const sCount = document.getElementById("sidebar-count");
+
+  tbody.innerHTML  = "";
+  tCount.textContent = data.length;
+  sCount.textContent = data.length;
+
+  if (!data.length) { empty.style.display = "flex"; return; }
+  empty.style.display = "none";
+
+  data.forEach((u, i) => {
+    const createdAt = u.created_at?.toDate
+      ? u.created_at.toDate().toLocaleDateString() : (u.created_at || "—");
+    const updatedAt = u.updated_at?.toDate
+      ? u.updated_at.toDate().toLocaleDateString() : (u.updated_at || "—");
+
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td>${i + 1}</td>
+      <td>${u.name    || "—"}</td>
+      <td>${u.email   || "—"}</td>
+      <td>${u.phone   || "—"}</td>
+      <td><span class="badge ${u.role === 'Admin' ? 'bg-warning text-dark' : 'bg-secondary'}">${u.role || "User"}</span></td>
+      <td>${u.address || "—"}</td>
+      <td>${u.imageUrl
+        ? `<img src="${u.imageUrl}" style="width:36px;height:36px;border-radius:50%;object-fit:cover;">`
+        : "—"}</td>
+      <td>${createdAt}</td>
+      <td>${updatedAt}</td>
+      <td class="td-actions" style="display:${currentUserRole === 'Admin' ? '' : 'none'};">
+        <button class="btn btn-sm btn-outline-primary me-1" onclick="editUser('${u.id}')">✏️</button>
+        <button class="btn btn-sm btn-outline-danger" onclick="deleteUser('${u.id}')">🗑</button>
+      </td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+
+/* ─── Stats ───────────────────────────────────────────── */
+window.updateStats = function (data) {
+  data = data || allUsersData;
+  document.getElementById("stat-total").textContent  = data.length;
+  document.getElementById("stat-emails").textContent = data.filter(u => u.email).length;
+  document.getElementById("stat-images").textContent = data.filter(u => u.imageUrl).length;
+  document.getElementById("stat-today").textContent  = data.filter(u => {
+    if (!u.created_at?.toDate) return false;
+    return u.created_at.toDate().toLocaleDateString() === new Date().toLocaleDateString();
+  }).length;
+};
+
+/* ─── Search ──────────────────────────────────────────── */
+document.getElementById("table-search").addEventListener("input", function () {
+  const q = this.value.toLowerCase();
+  renderTable(allUsersData.filter(u =>
+    (u.name  || "").toLowerCase().includes(q) ||
+    (u.email || "").toLowerCase().includes(q) ||
+    (u.phone || "").toLowerCase().includes(q)
+  ));
+});
+
+/* ─── Image Preview ───────────────────────────────────── */
+document.getElementById("f-image").addEventListener("change", function () {
+  const file = this.files[0];
+  if (!file) return;
+  const r = new FileReader();
+  r.onload = e => {
+    const p = document.getElementById("img-preview");
+    p.src = e.target.result;
+    p.style.display = "block";
+  };
+  r.readAsDataURL(file);
+});
+
+/* ─── Form Submit (Admin Only) ────────────────────────── */
+document.getElementById("user-form").addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  if (currentUserRole !== "Admin") {
+    showAlert("⛔ Access denied. Only Admins can manage users.");
+    return;
+  }
+
+  const name    = document.getElementById("f-name").value.trim();
+  const email   = document.getElementById("f-email").value.trim();
+  const phone   = document.getElementById("f-phone").value.trim();
+  const role    = document.getElementById("f-role-select").value;
+  const address = document.getElementById("f-address").value.trim();
+
+  if (!name || !email) { showAlert("Name and Email are required."); return; }
+
+  // Convert image to base64
+  let imageUrl = "";
+  const fileInput = document.getElementById("f-image");
+  if (fileInput.files[0]) {
+    imageUrl = await new Promise(res => {
+      const r = new FileReader();
+      r.onload = e => res(e.target.result);
+      r.readAsDataURL(fileInput.files[0]);
+    });
+  }
+
+  const btn = document.getElementById("btn-submit");
+  btn.disabled = true;
+  btn.textContent = "Saving…";
+
+  try {
+    const payload = { name, email, phone, role, address, imageUrl, updated_at: serverTimestamp() };
+
+    if (editingDocId) {
+      // UPDATE
+      await updateDoc(doc(db, "managedUsers", editingDocId), payload);
+      showAlert("User updated ✅", "success");
+    } else {
+      // ADD — stored in top-level "managedUsers" collection
+      await addDoc(managedUsersCol, { ...payload, created_at: serverTimestamp() });
+      showAlert("User added ✅", "success");
+    }
+
+    window.clearForm();
+    await loadUsers();
+
+  } catch (err) {
+    console.error(err);
+    showAlert("Error: " + err.message);
+  } finally {
+    btn.disabled    = false;
+    btn.textContent = editingDocId ? "💾 Update User" : "＋ Add User";
+    editingDocId    = null;
+  }
+});
+
+/* ─── Edit ────────────────────────────────────────────── */
+window.editUser = function (docId) {
+  if (currentUserRole !== "Admin") return;
+  const u = allUsersData.find(x => x.id === docId);
+  if (!u) return;
+
+  editingDocId = docId;
+  document.getElementById("f-name").value        = u.name    || "";
+  document.getElementById("f-email").value       = u.email   || "";
+  document.getElementById("f-phone").value       = u.phone   || "";
+  document.getElementById("f-role-select").value = u.role    || "User";
+  document.getElementById("f-address").value     = u.address || "";
+
+  if (u.imageUrl) {
+    const p = document.getElementById("img-preview");
+    p.src = u.imageUrl;
+    p.style.display = "block";
+  }
+
+  document.getElementById("form-mode-label").textContent = "Edit User";
+  document.getElementById("btn-submit").textContent      = "💾 Update User";
+  document.getElementById("section-form").scrollIntoView({ behavior: "smooth" });
+};
+
+/* ─── Delete ──────────────────────────────────────────── */
+window.deleteUser = async function (docId) {
+  if (currentUserRole !== "Admin") return;
+  if (!confirm("Delete this user permanently?")) return;
+  try {
+    await deleteDoc(doc(db, "managedUsers", docId));
+    showAlert("User deleted.", "warning");
+    await loadUsers();
+  } catch (err) {
+    showAlert("Delete failed: " + err.message);
+  }
+};
+
+/* ─── Logout ──────────────────────────────────────────── */
+document.getElementById("btn-logout").addEventListener("click", async () => {
+  await signOut(auth);
+  window.location.href = "index.html";
+});
+
+/* ─── Sidebar toggle ──────────────────────────────────── */
+document.getElementById("sidebar-toggle").addEventListener("click", () => {
+  document.getElementById("sidebar").classList.toggle("open");
+  document.getElementById("sidebar-overlay").classList.toggle("show");
+});
+document.getElementById("sidebar-overlay").addEventListener("click", () => {
+  document.getElementById("sidebar").classList.remove("open");
+  document.getElementById("sidebar-overlay").classList.remove("show");
+});
+
+window.scrollToSection = id =>
+  document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+
+</script>
 </body>
 </html>
