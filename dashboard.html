@@ -7,7 +7,7 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" />
   <link rel="stylesheet" href="style.css" />
 </head>
-<body>
+<body> 
 
 <div class="sidebar-overlay" id="sidebar-overlay"></div>
 
@@ -108,15 +108,6 @@
             </div>
           </div>
         </div>
-        <div class="col-6 col-xl-3 fade-up delay-3">
-          <div class="stat-card">
-            <div class="stat-icon red">📅</div>
-            <div>
-              <div class="stat-value" id="stat-today">0</div>
-              <div class="stat-label">Added Today</div>
-            </div>
-          </div>
-        </div>
       </div>
     </section>
 
@@ -169,15 +160,6 @@
                   style="display:none;max-width:80px;height:80px;object-fit:cover;border-radius:8px;margin-top:8px;" />
               </div>
 
-              <div class="col-md-3">
-                <label class="form-label" for="f-created">Created At</label>
-                <input type="date" id="f-created" class="form-control" />
-              </div>
-              <div class="col-md-3">
-                <label class="form-label" for="f-updated">Updated At</label>
-                <input type="date" id="f-updated" class="form-control" />
-              </div>
-
               <div class="col-12 d-flex flex-wrap gap-2 pt-2" style="border-top:1px solid var(--rule);">
                 <button type="submit" class="btn btn-primary" id="btn-submit">＋ Add User</button>
                 <button type="button" class="btn btn-outline-slate" onclick="clearForm()">Clear Form</button>
@@ -215,8 +197,6 @@
                   <th>Role</th>
                   <th>Address</th>
                   <th>Image</th>
-                  <th>Created At</th>
-                  <th>Updated At</th>
                   <!-- Actions column header — shown only to Admin via JS -->
                   <th id="th-actions" style="display:none;">Actions</th>
                 </tr>
@@ -234,6 +214,85 @@
     </section>
 
   </main>
+</div>
+
+<!-- ══ Image Edit Modal (Admin Only) ══════════════════════ -->
+<div id="img-modal" style="
+  display:none; position:fixed; inset:0; z-index:9999;
+  background:rgba(0,0,0,0.55); backdrop-filter:blur(3px);
+  align-items:center; justify-content:center;
+">
+  <div style="
+    background:#fff; border-radius:16px; padding:28px 24px;
+    width:100%; max-width:380px; box-shadow:0 20px 60px rgba(0,0,0,0.3);
+    position:relative;
+  ">
+    <!-- Close button -->
+    <button onclick="closeImgModal()" style="
+      position:absolute; top:12px; right:14px;
+      background:none; border:none; font-size:1.3rem;
+      cursor:pointer; color:#6b7280; line-height:1;
+    ">✕</button>
+
+    <h5 style="margin:0 0 4px; font-size:1rem; font-weight:700;">Edit Profile Image</h5>
+    <p style="font-size:0.8rem; color:#6b7280; margin-bottom:16px;" id="img-modal-username">User</p>
+
+    <!-- Current image preview -->
+    <div style="display:flex; justify-content:center; margin-bottom:16px;">
+      <div style="position:relative; display:inline-block;">
+        <img id="img-modal-preview" src="" alt="Current"
+          style="width:90px;height:90px;border-radius:50%;object-fit:cover;
+                 border:3px solid #e2e8f0; display:block;" />
+        <!-- Camera icon overlay -->
+        <label for="img-modal-file" style="
+          position:absolute; bottom:0; right:0;
+          background:#4f46e5; color:#fff; border-radius:50%;
+          width:28px; height:28px; display:flex;
+          align-items:center; justify-content:center;
+          cursor:pointer; font-size:0.85rem;
+          box-shadow:0 2px 6px rgba(0,0,0,0.3);
+        " title="Change photo">📷</label>
+      </div>
+    </div>
+
+    <!-- Hidden file input -->
+    <input type="file" id="img-modal-file" accept="image/*" style="display:none;" />
+
+    <!-- New image preview after selection -->
+    <div id="img-modal-new-wrap" style="display:none; text-align:center; margin-bottom:14px;">
+      <p style="font-size:0.75rem; color:#6b7280; margin-bottom:6px;">New image preview:</p>
+      <img id="img-modal-new-preview" src="" alt="New preview"
+        style="width:70px;height:70px;border-radius:50%;object-fit:cover;border:2px solid #22c55e;" />
+    </div>
+
+    <!-- Remove image option -->
+    <div style="text-align:center; margin-bottom:14px;">
+      <button onclick="removeImage()" id="btn-remove-img" style="
+        background:none; border:none; color:#ef4444;
+        font-size:0.78rem; cursor:pointer; text-decoration:underline;
+      ">🗑 Remove current image</button>
+    </div>
+
+    <!-- Action buttons -->
+    <div style="display:flex; gap:10px;">
+      <button onclick="closeImgModal()" style="
+        flex:1; padding:9px; border-radius:8px;
+        border:1px solid #e2e8f0; background:#f8fafc;
+        font-size:0.85rem; cursor:pointer;
+      ">Cancel</button>
+      <button onclick="saveImageOnly()" id="btn-save-img" style="
+        flex:1; padding:9px; border-radius:8px;
+        border:none; background:#4f46e5; color:#fff;
+        font-size:0.85rem; font-weight:600; cursor:pointer;
+      ">💾 Save Image</button>
+    </div>
+
+    <!-- Status message -->
+    <div id="img-modal-status" style="
+      font-size:0.78rem; text-align:center;
+      margin-top:10px; min-height:18px;
+    "></div>
+  </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
@@ -267,6 +326,9 @@ const app  = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db   = getFirestore(app);
 
+/* ─── Admin Config ────────────────────────────────────── */
+const ADMIN_EMAIL = "issacnewton1503@gmail.com"; // 🔒 Change this to your admin email
+
 /* ─── State ───────────────────────────────────────────── */
 let currentUserRole = null;
 let editingDocId    = null;
@@ -297,8 +359,12 @@ window.clearForm = function () {
 };
 
 /* ─── Auth Observer ───────────────────────────────────── */
+// 🔒 Hide entire page until auth is confirmed
+document.body.style.display = "none";
+
 onAuthStateChanged(auth, async (user) => {
   if (!user) {
+    // Not logged in → kick to login page immediately
     window.location.href = "index.html";
     return;
   }
@@ -312,7 +378,8 @@ onAuthStateChanged(auth, async (user) => {
   }
 
   const profile   = snap.data();
-  currentUserRole = profile.role || "User";
+  // ── Role: email match = Admin, everyone else = User ──
+  currentUserRole = user.email === ADMIN_EMAIL ? "Admin" : "User";
   const username  = profile.username || user.displayName || user.email;
 
   // Update sidebar
@@ -326,7 +393,8 @@ onAuthStateChanged(auth, async (user) => {
   badge.className   = currentUserRole === "Admin"
     ? "badge bg-warning text-dark me-2"
     : "badge bg-primary me-2";
-
+// ✅ Auth confirmed — now show the page
+  document.body.style.display = "";
   // ── Show Admin-only UI elements ──────────────────────
   if (currentUserRole === "Admin") {
     document.getElementById("section-form").style.display = "";  // Add User form
@@ -380,11 +448,17 @@ function renderTable(data) {
       <td>${u.phone   || "—"}</td>
       <td><span class="badge ${u.role === 'Admin' ? 'bg-warning text-dark' : 'bg-secondary'}">${u.role || "User"}</span></td>
       <td>${u.address || "—"}</td>
-      <td>${u.imageUrl
-        ? `<img src="${u.imageUrl}" style="width:36px;height:36px;border-radius:50%;object-fit:cover;">`
-        : "—"}</td>
-      <td>${createdAt}</td>
-      <td>${updatedAt}</td>
+      <td>
+        ${u.imageUrl
+          ? `<div style="position:relative;display:inline-block;">
+               <img src="${u.imageUrl}" style="width:36px;height:36px;border-radius:50%;object-fit:cover;display:block;">
+               ${currentUserRole === 'Admin' ? `<span onclick="openImgModal('${u.id}')" style="position:absolute;inset:0;border-radius:50%;background:rgba(0,0,0,0.35);display:flex;align-items:center;justify-content:center;cursor:pointer;opacity:0;transition:opacity 0.2s;" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0" title="Edit image">📷</span>` : ''}
+             </div>`
+          : currentUserRole === 'Admin'
+            ? `<button onclick="openImgModal('${u.id}')" style="background:#f1f5f9;border:1px dashed #cbd5e1;border-radius:6px;padding:4px 8px;font-size:0.72rem;cursor:pointer;color:#64748b;" title="Add image">＋ Add</button>`
+            : "—"
+        }
+      </td>
       <td class="td-actions" style="display:${currentUserRole === 'Admin' ? '' : 'none'};">
         <button class="btn btn-sm btn-outline-primary me-1" onclick="editUser('${u.id}')">✏️</button>
         <button class="btn btn-sm btn-outline-danger" onclick="deleteUser('${u.id}')">🗑</button>
@@ -400,10 +474,6 @@ window.updateStats = function (data) {
   document.getElementById("stat-total").textContent  = data.length;
   document.getElementById("stat-emails").textContent = data.filter(u => u.email).length;
   document.getElementById("stat-images").textContent = data.filter(u => u.imageUrl).length;
-  document.getElementById("stat-today").textContent  = data.filter(u => {
-    if (!u.created_at?.toDate) return false;
-    return u.created_at.toDate().toLocaleDateString() === new Date().toLocaleDateString();
-  }).length;
 };
 
 /* ─── Search ──────────────────────────────────────────── */
@@ -542,6 +612,127 @@ document.getElementById("sidebar-overlay").addEventListener("click", () => {
 
 window.scrollToSection = id =>
   document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+
+/* ─── Image Edit Modal ────────────────────────────────── */
+let imgModalDocId   = null;
+let imgModalNewData = null; // base64 of new selected image
+let imgModalRemove  = false; // flag to remove existing image
+
+window.openImgModal = function (docId) {
+  if (currentUserRole !== "Admin") return;
+  const u = allUsersData.find(x => x.id === docId);
+  if (!u) return;
+
+  imgModalDocId   = docId;
+  imgModalNewData = null;
+  imgModalRemove  = false; 
+
+  // Set current image or placeholder
+  const preview = document.getElementById("img-modal-preview");
+  if (u.imageUrl) {
+    preview.src = u.imageUrl;
+  } else {
+    // Show initials placeholder
+    preview.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(u.name || "U")}&background=4f46e5&color=fff&size=90`;
+  }
+
+  document.getElementById("img-modal-username").textContent = u.name || u.email || "User";
+  document.getElementById("img-modal-new-wrap").style.display = "none";
+  document.getElementById("img-modal-status").textContent    = "";
+  document.getElementById("img-modal-file").value            = "";
+
+  // Show modal
+  const modal = document.getElementById("img-modal");
+  modal.style.display = "flex";
+};
+
+window.closeImgModal = function () {
+  document.getElementById("img-modal").style.display = "none";
+  imgModalDocId   = null;
+  imgModalNewData = null;
+  imgModalRemove  = false;
+};
+
+// Close modal when clicking backdrop
+document.getElementById("img-modal").addEventListener("click", function (e) {
+  if (e.target === this) closeImgModal();
+});
+
+// File selected — show new preview
+document.getElementById("img-modal-file").addEventListener("change", function () {
+  const file = this.files[0];
+  if (!file) return;
+
+  imgModalRemove = false; // cancel remove if new file chosen
+
+  const reader = new FileReader();
+  reader.onload = e => {
+    imgModalNewData = e.target.result; // base64
+    const newPreview = document.getElementById("img-modal-new-preview");
+    newPreview.src = imgModalNewData;
+    document.getElementById("img-modal-new-wrap").style.display = "block";
+    document.getElementById("img-modal-status").textContent     = "";
+  };
+  reader.readAsDataURL(file);
+});
+
+// Remove image button
+window.removeImage = function () {
+  imgModalRemove  = true;
+  imgModalNewData = null;
+
+  // Show removed state in preview
+  const u = allUsersData.find(x => x.id === imgModalDocId);
+  document.getElementById("img-modal-preview").src =
+    `https://ui-avatars.com/api/?name=${encodeURIComponent(u?.name || "U")}&background=e2e8f0&color=94a3b8&size=90`;
+  document.getElementById("img-modal-new-wrap").style.display = "none";
+  document.getElementById("img-modal-status").textContent     = "Image will be removed on save.";
+  document.getElementById("img-modal-status").style.color     = "#f59e0b";
+};
+
+// Save image only — updates just imageUrl in Firestore
+window.saveImageOnly = async function () {
+  if (!imgModalDocId) return;
+
+  const btn    = document.getElementById("btn-save-img");
+  const status = document.getElementById("img-modal-status");
+
+  // Nothing changed
+  if (!imgModalNewData && !imgModalRemove) {
+    status.textContent = "No changes to save.";
+    status.style.color = "#6b7280";
+    return;
+  }
+
+  btn.disabled    = true;
+  btn.textContent = "Saving…";
+  status.textContent = "";
+
+  try {
+    const newImageUrl = imgModalRemove ? "" : imgModalNewData;
+
+    await updateDoc(doc(db, "managedUsers", imgModalDocId), {
+      imageUrl:   newImageUrl,
+      updated_at: serverTimestamp()
+    });
+
+    status.textContent = "✅ Image saved!";
+    status.style.color = "#22c55e";
+
+    // Reload table data
+    await loadUsers();
+
+    // Close after short delay
+    setTimeout(() => closeImgModal(), 900);
+
+  } catch (err) {
+    status.textContent = "❌ Error: " + err.message;
+    status.style.color = "#ef4444";
+  } finally {
+    btn.disabled    = false;
+    btn.textContent = "💾 Save Image";
+  }
+};
 
 </script>
 </body>

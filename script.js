@@ -13,7 +13,7 @@ const toastStack = (() => {
   let el = document.querySelector('.toast-stack');
   if (!el) {
     el = document.createElement('div');
-    el.className = 'toast-stack';
+    el.className = 'toast-stack'; 
     document.body.appendChild(el);
   }
   return el;
