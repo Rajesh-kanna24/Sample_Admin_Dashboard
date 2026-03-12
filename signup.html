@@ -6,6 +6,80 @@
   <title>Sign Up — AdminForge</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" />
   <link rel="stylesheet" href="style.css" />
+  <style>
+    /* ── Step indicator ───────────────────────── */
+    .step-bar {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      margin-bottom: 24px;
+    }
+    .step-dot {
+      width: 28px; height: 28px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.72rem; font-weight: 700;
+      border: 2px solid #e2e8f0;
+      background: #f8fafc; color: #94a3b8;
+      transition: all 0.3s;
+      flex-shrink: 0;
+    }
+    .step-dot.active  { border-color: #4f46e5; background: #4f46e5; color: #fff; }
+    .step-dot.done    { border-color: #22c55e; background: #22c55e; color: #fff; }
+    .step-line {
+      flex: 1; height: 2px; background: #e2e8f0; transition: background 0.3s;
+    }
+    .step-line.done   { background: #22c55e; }
+    .step-label-row {
+      display: flex; justify-content: space-between;
+      margin-bottom: 20px; margin-top: -4px;
+    }
+    .step-label {
+      font-size: 0.68rem; color: #94a3b8; font-weight: 600;
+      text-align: center; width: 80px;
+    }
+    .step-label.active { color: #4f46e5; }
+    .step-label.done   { color: #22c55e; }
+
+    /* ── Verified badge under email ───────────── */
+    .email-verified-badge {
+      display: flex; align-items: center; gap: 8px;
+      background: #f0fdf4; border: 1px solid #bbf7d0;
+      border-radius: 8px; padding: 8px 12px; margin-top: 8px;
+    }
+    .email-verified-badge .badge-icon {
+      font-size: 1.1rem; line-height: 1;
+    }
+    .email-verified-badge .badge-text {
+      font-size: 0.8rem; font-weight: 600; color: #16a34a;
+    }
+    .email-verified-badge .badge-sub {
+      font-size: 0.72rem; color: #4ade80; display: block;
+    }
+
+    /* ── Waiting for verification box ────────── */
+    .verify-waiting-box {
+      background: #fefce8; border: 1px solid #fde68a;
+      border-radius: 10px; padding: 14px 16px; margin-top: 12px;
+      text-align: center;
+    }
+    .verify-waiting-box .spinner {
+      display: inline-block; width: 18px; height: 18px;
+      border: 2px solid #fde68a; border-top-color: #f59e0b;
+      border-radius: 50%; animation: spin 0.8s linear infinite;
+      vertical-align: middle; margin-right: 6px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── Password section locked state ───────── */
+    .pw-locked {
+      opacity: 0.4; pointer-events: none;
+      transition: opacity 0.4s;
+    }
+    .pw-unlocked {
+      opacity: 1; pointer-events: all;
+      transition: opacity 0.4s;
+    }
+  </style>
 </head>
 <body>
 
@@ -32,82 +106,150 @@
   <div class="auth-panel-right fade-up delay-1">
     <p class="auth-form-eyebrow">New account</p>
     <h2 class="auth-form-title">Create your account</h2>
-    <p class="auth-form-sub">Fill in the details below to get started for free.</p>
+    <p class="auth-form-sub">We'll verify your email before setting your password.</p>
+
+    <!-- ── Step Progress Bar ──────────────────────────── -->
+    <div class="step-bar">
+      <div class="step-dot active" id="step-dot-1">1</div>
+      <div class="step-line" id="step-line-1"></div>
+      <div class="step-dot" id="step-dot-2">2</div>
+      <div class="step-line" id="step-line-2"></div>
+      <div class="step-dot" id="step-dot-3">3</div>
+    </div>
+    <div class="step-label-row">
+      <span class="step-label active" id="step-lbl-1">Your Info</span>
+      <span class="step-label" id="step-lbl-2">Verify Email</span>
+      <span class="step-label" id="step-lbl-3">Set Password</span>
+    </div>
 
     <!-- Alert Box -->
     <div id="alert-box" class="alert d-none" role="alert"></div>
 
     <form id="signup-form" novalidate>
 
-      <!-- Username -->
-      <div class="mb-3">
-        <label class="form-label" for="su-name">Username</label>
-        <input
-          type="text"
-          id="su-name"
-          class="form-control"
-          placeholder="johndoe"
-          autocomplete="username"
-          required
-        />
-      </div>
+      <!-- ══ STEP 1 — Name + Email ══════════════════════ -->
+      <div id="step1-fields">
 
-      <!-- Email -->
-      <div class="mb-3">
-        <label class="form-label" for="su-email">Email Address</label>
-        <input
-          type="email"
-          id="su-email"
-          class="form-control"
-          placeholder="you@example.com"
-          autocomplete="email"
-          required
-        />
-      </div>
-
-      <!-- Password -->
-      <div class="mb-3">
-        <label class="form-label" for="su-password">Password</label>
-        <div class="input-group">
-          <input
-            type="password"
-            id="su-password"
-            class="form-control"
-            placeholder="Min. 6 characters"
-            autocomplete="new-password"
-            required
-          />
-          <span class="input-group-text" id="su-pw-toggle" style="cursor:pointer;" title="Show / hide">👁</span>
+        <!-- Username -->
+        <div class="mb-3">
+          <label class="form-label" for="su-name">Username</label>
+          <input type="text" id="su-name" class="form-control"
+            placeholder="johndoe" autocomplete="username" required />
         </div>
-        <!-- Strength meter -->
-        <div id="pw-strength-wrap" style="display:none; margin-top:8px;">
-          <div style="height:4px; background:#e2e8f0; border-radius:2px; overflow:hidden;">
-            <div id="pw-bar-fill" style="height:100%; width:0; transition:width 0.3s, background 0.3s; border-radius:2px;"></div>
+
+        <!-- Email -->
+        <div class="mb-3">
+          <label class="form-label" for="su-email">Email Address</label>
+          <div style="position:relative;">
+            <input type="email" id="su-email" class="form-control"
+              placeholder="you@example.com" autocomplete="email"
+              required style="padding-right:38px;" />
+            <span id="email-status-icon" style="
+              position:absolute; right:10px; top:50%;
+              transform:translateY(-50%); font-size:1rem; display:none;
+            "></span>
           </div>
-          <div id="pw-label" style="font-size:0.72rem; margin-top:4px; font-weight:600;"></div>
+          <div id="email-status-msg" style="font-size:0.78rem; margin-top:4px;"></div>
         </div>
+
+        <!-- Send Verification Button -->
+        <button type="button" id="btn-send-verify" class="btn btn-primary w-100 mb-3" disabled>
+          📧 Send Verification Email
+        </button>
+
       </div>
 
-      <!-- Role -->
-      <div class="mb-4">
-        <label class="form-label" for="su-role">Account Role</label>
-        <select id="su-role" class="form-select" required>
-          <option value="" disabled selected>Select a role…</option>
-          <option value="Admin">Admin</option>
-          <option value="User">User</option>
-        </select>
+      <!-- ══ STEP 2 — Waiting for email click ══════════ -->
+      <div id="step2-fields" style="display:none;">
+
+        <!-- Locked email display -->
+        <div class="mb-3">
+          <label class="form-label">Email Address</label>
+          <input type="email" id="su-email-locked" class="form-control"
+            style="background:#f8fafc; color:#64748b;" readonly />
+        </div>
+
+        <!-- Waiting box -->
+        <div class="verify-waiting-box" id="waiting-box">
+          <div style="font-size:0.85rem; font-weight:600; color:#92400e; margin-bottom:6px;">
+            <span class="spinner"></span> Waiting for you to verify…
+          </div>
+          <div style="font-size:0.78rem; color:#a16207; margin-bottom:10px;">
+            Check your inbox and click the verification link.<br>
+            This page will update automatically.
+          </div>
+          <button type="button" id="btn-resend" style="
+            background:none; border:none; color:#4f46e5;
+            font-size:0.78rem; text-decoration:underline; cursor:pointer;
+          ">Resend email</button>
+          <span id="resend-timer" style="font-size:0.72rem; color:#94a3b8; margin-left:6px;"></span>
+        </div>
+
+        <!-- Change email link -->
+        <div style="text-align:center; margin-top:12px;">
+          <button type="button" id="btn-change-email" style="
+            background:none; border:none; color:#64748b;
+            font-size:0.78rem; text-decoration:underline; cursor:pointer;
+          ">← Use a different email</button>
+        </div>
+
       </div>
 
-      <button type="submit" id="submit-btn" class="btn btn-citrine w-100 mb-3">
-        Create Account →
-      </button>
+      <!-- ══ STEP 3 — Verified badge + Password ════════ -->
+      <div id="step3-fields" style="display:none;">
+
+        <!-- Verified email badge -->
+        <div class="mb-3">
+          <label class="form-label">Email Address</label>
+          <input type="email" id="su-email-final" class="form-control"
+            style="background:#f8fafc; color:#64748b;" readonly />
+          <!-- ✅ Verified badge -->
+          <div class="email-verified-badge">
+            <span class="badge-icon">✅</span>
+            <div>
+              <span class="badge-text">Email Verified!</span>
+              <span class="badge-sub">Your email address is confirmed and real.</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Password — now unlocked -->
+        <div class="mb-3" id="pw-section">
+          <label class="form-label" for="su-password">
+            Set Your Password
+            <span style="color:#22c55e; font-size:0.75rem; font-weight:600; margin-left:6px;">
+              🔓 Unlocked
+            </span>
+          </label>
+          <div class="input-group">
+            <input type="password" id="su-password" class="form-control"
+              placeholder="Min. 6 characters" autocomplete="new-password" required />
+            <span class="input-group-text" id="su-pw-toggle"
+              style="cursor:pointer;" title="Show / hide">👁</span>
+          </div>
+          <!-- Strength meter -->
+          <div id="pw-strength-wrap" style="display:none; margin-top:8px;">
+            <div style="height:4px; background:#e2e8f0; border-radius:2px; overflow:hidden;">
+              <div id="pw-bar-fill" style="height:100%; width:0;
+                transition:width 0.3s, background 0.3s; border-radius:2px;"></div>
+            </div>
+            <div id="pw-label" style="font-size:0.72rem; margin-top:4px; font-weight:600;"></div>
+          </div>
+        </div>
+
+        <!-- Final Create Account button -->
+        <button type="submit" id="submit-btn" class="btn btn-citrine w-100 mb-3">
+          ✅ Create Account →
+        </button>
+
+      </div>
 
     </form>
 
+    <!-- Google signup — always visible -->
     <div class="auth-divider">or sign up with</div>
-
     <div class="d-flex flex-column gap-2 mb-4">
-      <button class="btn btn-social">
+      <button class="btn btn-social" id="google-signup-btn">
         <svg width="18" height="18" viewBox="0 0 48 48">
           <path fill="#EA4335" d="M24 9.5c3.5 0 6.6 1.2 9.1 3.2l6.8-6.8C35.8 2.2 30.2 0 24 0 14.6 0 6.5 5.5 2.5 13.5l7.9 6.1C12.2 13.4 17.6 9.5 24 9.5z"/>
           <path fill="#4285F4" d="M46.5 24.5c0-1.6-.1-3.2-.4-4.7H24v9h12.7c-.6 3-2.3 5.5-4.9 7.2l7.6 5.9c4.4-4.1 7.1-10.1 7.1-17.4z"/>
@@ -129,11 +271,22 @@
 
 <script type="module">
 
-import { initializeApp }                        from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getAuth, createUserWithEmailAndPassword, updateProfile }
-                                                from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-import { getFirestore, doc, setDoc, serverTimestamp }
-                                                from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+  updateProfile,
+  sendEmailVerification,
+  updatePassword,
+  reload,
+  deleteUser,
+  GoogleAuthProvider,
+  signInWithPopup,
+  signOut
+} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import {
+  getFirestore, doc, setDoc, serverTimestamp
+} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 /* ─── Firebase Config ─────────────────────────────────── */
 const firebaseConfig = {
@@ -146,30 +299,263 @@ const firebaseConfig = {
   measurementId:     "G-MCJ7CZW829"
 };
 
-const app  = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db   = getFirestore(app);
+const app      = initializeApp(firebaseConfig);
+const auth     = getAuth(app);
+const db       = getFirestore(app);
+const provider = new GoogleAuthProvider();
+
+/* ─── Admin Config ────────────────────────────────────── */
+const ADMIN_EMAIL = "issacnewton1503@gmail.com"; // 🔒 Change to your admin email
+
+/* ─── State ───────────────────────────────────────────── */
+let tempUser        = null;  // Firebase user created with temp password
+let pollInterval    = null;  // setInterval for checking verification
+let resendCountdown = null;  // timer for resend button cooldown
+let emailDomainOK   = false; // domain check passed
+let verifyTimer     = null;
 
 /* ─── Helper: show alert ──────────────────────────────── */
 function showAlert(message, type = "danger") {
   const box = document.getElementById("alert-box");
-  box.className = `alert alert-${type}`;
+  box.className   = `alert alert-${type}`;
   box.textContent = message;
   box.classList.remove("d-none");
-  setTimeout(() => box.classList.add("d-none"), 5000);
+  if (type !== "success") setTimeout(() => box.classList.add("d-none"), 5000);
 }
+
+/* ─── Step UI helpers ─────────────────────────────────── */
+function goToStep(n) {
+  // Hide all steps
+  document.getElementById("step1-fields").style.display = "none";
+  document.getElementById("step2-fields").style.display = "none";
+  document.getElementById("step3-fields").style.display = "none";
+
+  // Show target step
+  document.getElementById(`step${n}-fields`).style.display = "block";
+
+  // Update dots
+  [1, 2, 3].forEach(i => {
+    const dot = document.getElementById(`step-dot-${i}`);
+    const lbl = document.getElementById(`step-lbl-${i}`);
+    dot.className = "step-dot" + (i < n ? " done" : i === n ? " active" : "");
+    lbl.className = "step-label"  + (i < n ? " done"   : i === n ? " active"  : "");
+    dot.textContent = i < n ? "✓" : i;
+  });
+
+  // Update lines
+  document.getElementById("step-line-1").className = "step-line" + (n > 1 ? " done" : "");
+  document.getElementById("step-line-2").className = "step-line" + (n > 2 ? " done" : "");
+}
+
+/* ─── Known & Fake domain lists ──────────────────────── */
+const KNOWN_DOMAINS = [
+  "gmail.com","yahoo.com","outlook.com","hotmail.com","icloud.com",
+  "protonmail.com","mail.com","zoho.com","yandex.com","aol.com",
+  "live.com","msn.com","me.com","mac.com","googlemail.com",
+  "yahoo.in","yahoo.co.uk","yahoo.co.in","rediffmail.com"
+];
+const FAKE_DOMAINS = [
+  "mailinator.com","guerrillamail.com","tempmail.com","throwam.com",
+  "sharklasers.com","grr.la","spam4.me","trashmail.com","yopmail.com",
+  "maildrop.cc","fakeinbox.com","10minutemail.com","throwaway.email",
+  "getnada.com","spambox.us","discard.email","fakemail.net"
+];
+
+function setEmailStatus(icon, msg, color, ok) {
+  document.getElementById("email-status-icon").style.display = "inline";
+  document.getElementById("email-status-icon").textContent   = icon;
+  document.getElementById("email-status-msg").textContent    = msg;
+  document.getElementById("email-status-msg").style.color    = color;
+  emailDomainOK = ok;
+  // Enable/disable send button
+  document.getElementById("btn-send-verify").disabled =
+    !ok || !document.getElementById("su-name").value.trim();
+}
+
+async function checkEmailDomain(email) {
+  document.getElementById("email-status-icon").style.display = "none";
+  document.getElementById("email-status-msg").textContent    = "";
+  emailDomainOK = false;
+  document.getElementById("btn-send-verify").disabled        = true;
+
+  const parts = email.split("@");
+  if (parts.length !== 2 || !parts[0] || !parts[1].includes(".") || parts[1].length < 4) {
+    setEmailStatus("❌", "Invalid email format.", "#ef4444", false);
+    return;
+  }
+
+  const domain = parts[1].toLowerCase();
+
+  document.getElementById("email-status-icon").style.display = "inline";
+  document.getElementById("email-status-icon").textContent   = "⏳";
+  document.getElementById("email-status-msg").textContent    = "Checking…";
+  document.getElementById("email-status-msg").style.color    = "#6b7280";
+
+  if (FAKE_DOMAINS.includes(domain)) {
+    setEmailStatus("❌", "Disposable emails are not allowed.", "#ef4444", false);
+    return;
+  }
+  if (KNOWN_DOMAINS.includes(domain)) {
+    setEmailStatus("✅", "Valid email domain.", "#22c55e", true);
+    return;
+  }
+  try {
+    const res  = await fetch(`https://dns.google/resolve?name=${domain}&type=MX`);
+    const data = await res.json();
+    if (data.Status === 0 && data.Answer?.length > 0) {
+      setEmailStatus("✅", "Email domain verified.", "#22c55e", true);
+    } else {
+      setEmailStatus("❌", "Email domain doesn't exist.", "#ef4444", false);
+    }
+  } catch {
+    setEmailStatus("⚠️", "Could not verify domain.", "#f59e0b", true);
+  }
+}
+
+/* ─── Email field listeners ───────────────────────────── */
+document.getElementById("su-email").addEventListener("blur", function () {
+  if (this.value.trim()) checkEmailDomain(this.value.trim());
+});
+document.getElementById("su-email").addEventListener("input", function () {
+  document.getElementById("email-status-icon").style.display = "none";
+  document.getElementById("email-status-msg").textContent    = "";
+  emailDomainOK = false;
+  document.getElementById("btn-send-verify").disabled        = true;
+  clearTimeout(verifyTimer);
+  if (this.value.trim().length > 5)
+    verifyTimer = setTimeout(() => checkEmailDomain(this.value.trim()), 1500);
+});
+
+// Also enable send button when name is typed
+document.getElementById("su-name").addEventListener("input", function () {
+  document.getElementById("btn-send-verify").disabled =
+    !emailDomainOK || !this.value.trim();
+});
+
+/* ─── STEP 1 → STEP 2: Send verification email ───────── */
+document.getElementById("btn-send-verify").addEventListener("click", async () => {
+  const name  = document.getElementById("su-name").value.trim();
+  const email = document.getElementById("su-email").value.trim();
+
+  if (!name)  { showAlert("Please enter your username."); return; }
+  if (!email) { showAlert("Please enter your email."); return; }
+  if (!emailDomainOK) { showAlert("Please use a valid email address."); return; }
+
+  const btn = document.getElementById("btn-send-verify");
+  btn.disabled    = true;
+  btn.textContent = "Sending…";
+
+  try {
+    // Create a temporary Firebase account with a random password
+    // This is needed because sendEmailVerification requires an auth user
+    const tempPassword   = "Temp@" + Math.random().toString(36).slice(2, 10) + "!9";
+    const userCredential = await createUserWithEmailAndPassword(auth, email, tempPassword);
+    tempUser             = userCredential.user;
+
+    await updateProfile(tempUser, { displayName: name });
+    await sendEmailVerification(tempUser);
+
+    // Move to step 2
+    document.getElementById("su-email-locked").value = email;
+    goToStep(2);
+    startPollingVerification();
+    startResendCooldown();
+
+  } catch (error) {
+    const msgs = {
+      "auth/email-already-in-use": "This email is already registered. Please sign in instead.",
+      "auth/invalid-email":        "Please enter a valid email address.",
+      "auth/network-request-failed": "Network error. Check your connection."
+    };
+    showAlert(msgs[error.code] || error.message);
+    btn.disabled    = false;
+    btn.textContent = "📧 Send Verification Email";
+  }
+});
+
+/* ─── Poll Firebase every 3s to check if user clicked the link ── */
+function startPollingVerification() {
+  clearInterval(pollInterval);
+  pollInterval = setInterval(async () => {
+    if (!tempUser) return;
+    try {
+      await reload(tempUser); // refresh the user object from Firebase
+      if (tempUser.emailVerified) {
+        clearInterval(pollInterval);
+        onEmailVerified();
+      }
+    } catch (err) {
+      console.error("Poll error:", err);
+    }
+  }, 3000); // check every 3 seconds
+}
+
+/* ─── Called automatically when email link is clicked ─── */
+function onEmailVerified() {
+  const email = document.getElementById("su-email").value.trim();
+  document.getElementById("su-email-final").value = email;
+  goToStep(3);
+  showAlert("✅ Email verified! Now set your password to complete signup.", "success");
+  // Focus password field
+  setTimeout(() => document.getElementById("su-password").focus(), 300);
+}
+
+/* ─── Resend button with 60s cooldown ─────────────────── */
+function startResendCooldown() {
+  let seconds = 60;
+  const btn   = document.getElementById("btn-resend");
+  const timer = document.getElementById("resend-timer");
+  btn.disabled = true;
+  clearInterval(resendCountdown);
+  resendCountdown = setInterval(() => {
+    seconds--;
+    timer.textContent = `(${seconds}s)`;
+    if (seconds <= 0) {
+      clearInterval(resendCountdown);
+      btn.disabled      = false;
+      timer.textContent = "";
+    }
+  }, 1000);
+}
+
+document.getElementById("btn-resend").addEventListener("click", async () => {
+  if (!tempUser) return;
+  try {
+    await sendEmailVerification(tempUser);
+    showAlert("Verification email resent! Check your inbox.", "info");
+    startResendCooldown();
+  } catch (err) {
+    showAlert("Failed to resend: " + err.message);
+  }
+});
+
+/* ─── Change email — go back to step 1 ────────────────── */
+document.getElementById("btn-change-email").addEventListener("click", async () => {
+  clearInterval(pollInterval);
+  clearInterval(resendCountdown);
+
+  // Delete the temporary account so they can use a new email
+  if (tempUser) {
+    try { await deleteUser(tempUser); } catch (e) { /* ignore */ }
+    tempUser = null;
+  }
+
+  document.getElementById("su-email").value = "";
+  document.getElementById("email-status-icon").style.display = "none";
+  document.getElementById("email-status-msg").textContent    = "";
+  emailDomainOK = false;
+
+  goToStep(1);
+  document.getElementById("btn-send-verify").disabled = true;
+  document.getElementById("su-email").focus();
+});
 
 /* ─── Password toggle ─────────────────────────────────── */
 document.getElementById("su-pw-toggle").addEventListener("click", () => {
-  const pwInput = document.getElementById("su-password");
-  const toggle  = document.getElementById("su-pw-toggle");
-  if (pwInput.type === "password") {
-    pwInput.type  = "text";
-    toggle.textContent = "🙈";
-  } else {
-    pwInput.type  = "password";
-    toggle.textContent = "👁";
-  }
+  const input  = document.getElementById("su-password");
+  const toggle = document.getElementById("su-pw-toggle");
+  input.type         = input.type === "password" ? "text" : "password";
+  toggle.textContent = input.type === "password" ? "👁" : "🙈";
 });
 
 /* ─── Password strength meter ─────────────────────────── */
@@ -183,94 +569,107 @@ document.getElementById("su-password").addEventListener("input", function () {
   wrap.style.display = "block";
 
   let score = 0;
-  if (val.length >= 6)                        score++;
-  if (val.length >= 10)                       score++;
+  if (val.length >= 6)                         score++;
+  if (val.length >= 10)                        score++;
   if (/[A-Z]/.test(val) && /[a-z]/.test(val)) score++;
-  if (/\d/.test(val))                         score++;
-  if (/[^A-Za-z0-9]/.test(val))              score++;
+  if (/[0-9]/.test(val))                       score++;
+  if (/[^A-Za-z0-9]/.test(val))               score++;
 
   const levels = [
-    { pct: "20%",  color: "#ef4444", text: "Very Weak" },
-    { pct: "40%",  color: "#f97316", text: "Weak"      },
-    { pct: "60%",  color: "#eab308", text: "Fair"      },
-    { pct: "80%",  color: "#22c55e", text: "Strong"    },
-    { pct: "100%", color: "#16a34a", text: "Very Strong"}
+    { pct: "20%",  color: "#ef4444", text: "Very Weak"  },
+    { pct: "40%",  color: "#f97316", text: "Weak"       },
+    { pct: "60%",  color: "#eab308", text: "Fair"       },
+    { pct: "80%",  color: "#22c55e", text: "Strong"     },
+    { pct: "100%", color: "#16a34a", text: "Very Strong" }
   ];
-
-  const lvl        = levels[Math.min(score, 4)];
-  bar.style.width  = lvl.pct;
+  const lvl            = levels[Math.min(score, 4)];
+  bar.style.width      = lvl.pct;
   bar.style.background = lvl.color;
   label.textContent    = lvl.text;
   label.style.color    = lvl.color;
 });
 
-/* ─── Sign-Up Form Submit ─────────────────────────────── */
+/* ─── STEP 3: Final submit — set real password + save ─── */
 const form      = document.getElementById("signup-form");
 const submitBtn = document.getElementById("submit-btn");
 
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
 
-  const username = document.getElementById("su-name").value.trim();
-  const email    = document.getElementById("su-email").value.trim();
-  const password = document.getElementById("su-password").value;
-  const role     = document.getElementById("su-role").value;
-
-  /* Basic client-side validation */
-  if (!username || !email || !password || !role) {
-    showAlert("Please fill in all fields.");
+  if (!tempUser || !tempUser.emailVerified) {
+    showAlert("Please verify your email first.");
     return;
   }
+
+  const password = document.getElementById("su-password").value;
   if (password.length < 6) {
     showAlert("Password must be at least 6 characters.");
     return;
   }
 
-  /* Disable button & show loading */
-  submitBtn.disabled     = true;
-  submitBtn.textContent  = "Creating account…";
+  submitBtn.disabled    = true;
+  submitBtn.textContent = "Creating account…";
 
   try {
-    /* 1. Create Firebase Auth user */
-    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-    const user           = userCredential.user;
+    const name  = document.getElementById("su-name").value.trim();
+    const email = tempUser.email;
+    const role  = email === ADMIN_EMAIL ? "Admin" : "User";
 
-    /* 2. Set displayName in Auth profile */
-    await updateProfile(user, { displayName: username });
+    // Update from temp random password to the real password user chose
+    await updatePassword(tempUser, password);
 
-    /* 3. Save full profile to Firestore ← the key step */
-    await setDoc(doc(db, "users", user.uid), {
-      uid:        user.uid,
-      username:   username,
-      email:      email,
-      role:       role,
-      created_at: serverTimestamp(),
-      updated_at: serverTimestamp()
+    // Save profile to Firestore
+    await setDoc(doc(db, "users", tempUser.uid), {
+      uid:           tempUser.uid,
+      username:      name,
+      email:         email,
+      role:          role,
+      emailVerified: true,
+      created_at:    serverTimestamp(),
+      updated_at:    serverTimestamp()
     });
 
-    showAlert("Account created successfully! Redirecting…", "success");
+    // Sign out so they login fresh with their real password
+    await signOut(auth);
 
-    form.reset();
-    document.getElementById("pw-strength-wrap").style.display = "none";
+    showAlert("🎉 Account created successfully! Redirecting to login…", "success");
+    setTimeout(() => { window.location.href = "index.html"; }, 2500);
 
-    /* Redirect after short delay so user sees the success message */
-    setTimeout(() => { window.location.href = "dashboard.html"; }, 1500);
+  } catch (err) {
+    console.error(err);
+    const msgs = {
+      "auth/weak-password":          "Password must be at least 6 characters.",
+      "auth/network-request-failed": "Network error. Check your connection."
+    };
+    showAlert(msgs[err.code] || err.message);
+    submitBtn.disabled    = false;
+    submitBtn.textContent = "✅ Create Account →";
+  }
+});
+
+/* ─── Google Sign-Up ──────────────────────────────────── */
+document.getElementById("google-signup-btn").addEventListener("click", async () => {
+  try {
+    const result = await signInWithPopup(auth, provider);
+    const user   = result.user;
+    const role   = user.email === ADMIN_EMAIL ? "Admin" : "User";
+
+    await setDoc(doc(db, "users", user.uid), {
+      uid:           user.uid,
+      username:      user.displayName || user.email.split("@")[0],
+      email:         user.email,
+      role:          role,
+      emailVerified: true,
+      created_at:    serverTimestamp(),
+      updated_at:    serverTimestamp()
+    }, { merge: true });
+
+    window.location.href = "dashboard.html";
 
   } catch (error) {
-    console.error("Sign-Up Error:", error);
-
-    const messages = {
-      "auth/email-already-in-use": "This email is already registered. Please sign in instead.",
-      "auth/invalid-email":        "Please enter a valid email address.",
-      "auth/weak-password":        "Password should be at least 6 characters.",
-      "auth/network-request-failed": "Network error. Please check your connection."
-    };
-
-    showAlert(messages[error.code] || error.message);
-
-  } finally {
-    submitBtn.disabled    = false;
-    submitBtn.textContent = "Create Account →";
+    if (error.code !== "auth/popup-closed-by-user") {
+      showAlert("Google sign-up failed. Please try again.");
+    }
   }
 });
 
