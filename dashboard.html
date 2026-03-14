@@ -156,8 +156,31 @@
                   <div class="upload-zone-icon">📁</div>
                   <div class="upload-zone-text">Drop file here or <span>browse</span></div>
                 </div>
-                <img id="img-preview" src="" alt="Preview"
-                  style="display:none;max-width:80px;height:80px;object-fit:cover;border-radius:8px;margin-top:8px;" />
+                <div style="position:relative;display:inline-block;margin-top:8px;">
+
+  <img id="img-preview" src="" alt="Preview"
+  style="display:none;max-width:80px;height:80px;object-fit:cover;border-radius:8px;" />
+
+  <button type="button"
+    id="remove-img-btn"
+    onclick="removeFormImage()"
+    style="
+      display:none;
+      position:absolute;
+      top:-6px;
+      right:-6px;
+      width:20px;
+      height:20px;
+      border:none;
+      border-radius:50%;
+      background:#ef4444;
+      color:white;
+      font-size:12px;
+      cursor:pointer;">
+    ✕
+  </button>
+
+</div>
               </div>
 
               <div class="col-12 d-flex flex-wrap gap-2 pt-2" style="border-top:1px solid var(--rule);">
@@ -492,9 +515,10 @@ document.getElementById("f-image").addEventListener("change", function () {
   if (!file) return;
   const r = new FileReader();
   r.onload = e => {
-    const p = document.getElementById("img-preview");
-    p.src = e.target.result;
-    p.style.display = "block";
+const p = document.getElementById("img-preview");
+p.src = e.target.result;
+p.style.display = "block";
+document.getElementById("remove-img-btn").style.display = "block";
   };
   r.readAsDataURL(file);
 });
@@ -570,11 +594,12 @@ window.editUser = function (docId) {
   document.getElementById("f-role-select").value = u.role    || "User";
   document.getElementById("f-address").value     = u.address || "";
 
-  if (u.imageUrl) {
-    const p = document.getElementById("img-preview");
-    p.src = u.imageUrl;
-    p.style.display = "block";
-  }
+if (u.imageUrl) {
+  const p = document.getElementById("img-preview");
+  p.src = u.imageUrl;
+  p.style.display = "block";
+  document.getElementById("remove-img-btn").style.display = "block";
+}
 
   document.getElementById("form-mode-label").textContent = "Edit User";
   document.getElementById("btn-submit").textContent      = "💾 Update User";
@@ -733,6 +758,20 @@ window.saveImageOnly = async function () {
     btn.textContent = "💾 Save Image";
   }
 };
+
+function removeFormImage(){
+
+  const img = document.getElementById("img-preview");
+
+  img.src = "";
+  img.style.display = "none";
+
+  document.getElementById("remove-img-btn").style.display = "none";
+
+  document.getElementById("f-image").value = "";
+
+}
+
 
 </script>
 </body>
