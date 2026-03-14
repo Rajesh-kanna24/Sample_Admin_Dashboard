@@ -474,3 +474,24 @@ document.addEventListener('DOMContentLoaded', () => {
   initSignUp();
   initDashboard();
 });
+
+function removeFormImage(){
+
+  const img = document.getElementById("img-preview");
+  const removeBtn = document.getElementById("remove-img-btn");
+  const fileInput = document.getElementById("f-image");
+
+  if(img){
+    img.src = "";
+    img.style.display = "none";
+  }
+
+  if(removeBtn){
+    removeBtn.style.display = "none";
+  }
+
+  if(fileInput){
+    fileInput.value = "";
+  }
+
+}
