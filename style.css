@@ -21,8 +21,8 @@
   --citrine-dim:  rgba(212,160,23,0.12);
   --citrine-glow: rgba(212,160,23,0.25);
   --citrine-light:#fdf6e3;
-  --slate:        #2c3e6b;
-  --slate-dim:    rgba(44,62,107,0.08);
+  --slate:        #6d1201;
+  --slate-dim:    rgba(109,18,1,0.08);
   --danger:       #c0392b;
   --danger-dim:   rgba(192,57,43,0.1);
   --success:      #1a7a4a;
@@ -123,8 +123,8 @@ a:hover { color: #b8880f; }
   font-weight: 800;
   color: var(--citrine);
   margin: 0 auto 32px;
-  box-shadow: 0 0 0 8px rgba(212,160,23,0.1), 0 0 40px rgba(212,160,23,0.2);
-}
+box-shadow: 0 0 0 4px rgba(59,130,246,0.3), 
+            0 0 12px rgba(59,130,246,0.4);}
 
 .auth-left-title {
   font-size: 2.4rem;
@@ -272,13 +272,13 @@ a:hover { color: #b8880f; }
 .btn-primary {
   background: var(--slate) !important;
   color: #fff !important;
-  box-shadow: 0 2px 12px rgba(44,62,107,0.25) !important;
+  box-shadow: 0 2px 12px rgba(109,18,1,0.25) !important;
 }
 .btn-primary:hover {
-  background: #233157 !important;
+  background: #4a0d00 !important;
   color: #fff !important;
   transform: translateY(-1px);
-  box-shadow: 0 4px 20px rgba(44,62,107,0.35) !important;
+  box-shadow: 0 4px 20px rgba(109,18,1,0.35) !important;
 }
 
 .btn-citrine {
@@ -771,4 +771,31 @@ a:hover { color: #b8880f; }
 @media (max-width: 576px) {
   .dash-main { padding: 20px 16px; }
   .auth-panel-right { padding: 32px 20px; }
+}
+
+/* ── Logo image replacing monogram ───────────── */
+.auth-logo-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  margin: 0 auto 28px;
+}
+
+
+.auth-org-name {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: white;
+  text-align: center;
+  letter-spacing: 0.02em;
+  margin: 0;
+  line-height: 1.3;
+  padding: 12px;
+  white-space: nowrap;
+}
+
+.auth-left-desc {
+  font-size: 1.2rem !important;
 }
