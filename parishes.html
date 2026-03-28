@@ -1,0 +1,1433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Parishes — AdminForge</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"/>
+  <!-- Reuse your existing dashboard stylesheet -->
+  <link rel="stylesheet" href="style.css"/>
+  <style>
+    /* ── Parish-specific styles ── */
+    .par-stat-card{background:#fff;border:1px solid #e2e8f0;border-radius:14px;padding:20px 22px;display:flex;align-items:center;gap:16px;box-shadow:0 2px 8px rgba(0,0,0,.05);}
+    .par-stat-icon{width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0;}
+    .par-stat-icon.red{background:#fff1f0;color:#921a02;}
+    .par-stat-icon.blue{background:#eff6ff;color:#2563eb;}
+    .par-stat-icon.green{background:#f0fdf4;color:#16a34a;}
+    .par-stat-icon.gold{background:#fffbeb;color:#d97706;}
+    .par-stat-value{font-size:1.5rem;font-weight:800;color:#1e293b;line-height:1;}
+    .par-stat-label{font-size:.72rem;color:#64748b;margin-top:2px;}
+
+    /* ── Forane tab strip ── */
+    .forane-tabs{display:flex;gap:6px;flex-wrap:wrap;padding:4px 0 12px;}
+    .forane-tab{padding:6px 14px;border-radius:20px;border:1.5px solid #e2e8f0;background:#fff;color:#64748b;font-size:.76rem;font-weight:600;cursor:pointer;transition:all .2s;white-space:nowrap;}
+    .forane-tab:hover{border-color:#921a02;color:#921a02;}
+    .forane-tab.active{background:#921a02;color:#fff;border-color:#921a02;}
+
+    /* ── Parish table ── */
+    .par-img-cell img{width:52px;height:40px;object-fit:cover;border-radius:7px;border:1px solid #f1f5f9;}
+    .par-img-placeholder{width:52px;height:40px;background:#f8fafc;border-radius:7px;border:1px dashed #e2e8f0;display:flex;align-items:center;justify-content:center;font-size:1rem;color:#cbd5e1;}
+    .cat-badge{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:20px;font-size:.68rem;font-weight:700;white-space:nowrap;}
+    .cat-badge.parish   {background:#fff1f0;color:#921a02;}
+    .cat-badge.filial   {background:#eff6ff;color:#2563eb;}
+    .cat-badge.station  {background:#f0fdf4;color:#16a34a;}
+    .cat-badge.shrine   {background:#fffbeb;color:#b45309;}
+    .cat-badge.mission  {background:#faf5ff;color:#7c3aed;}
+
+    /* ── Add/Edit Modal ── */
+    .hm-backdrop{display:none;position:fixed;inset:0;z-index:9998;background:rgba(0,0,0,.55);backdrop-filter:blur(3px);align-items:center;justify-content:center;}
+    .hm-backdrop.show{display:flex;animation:hmFadeIn .2s ease;}
+    @keyframes hmFadeIn{from{opacity:0}to{opacity:1}}
+    .hm-box{background:#fff;border-radius:16px;padding:24px;width:100%;max-width:560px;max-height:92vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.25);position:relative;animation:hmUp .25s ease;}
+    @keyframes hmUp{from{transform:translateY(20px);opacity:0}to{transform:translateY(0);opacity:1}}
+    .hm-box h5{font-size:1rem;font-weight:700;margin:0 0 16px;}
+    .hm-close{position:absolute;top:14px;right:16px;background:none;border:none;font-size:1.2rem;cursor:pointer;color:#6b7280;transition:color .15s;}
+    .hm-close:hover{color:#1e293b;}
+    .hm-group{margin-bottom:12px;}
+    .hm-group label{display:block;font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#64748b;margin-bottom:5px;}
+    .hm-group input,.hm-group textarea,.hm-group select{width:100%;border:1px solid #e2e8f0;border-radius:8px;padding:8px 12px;font-size:.84rem;outline:none;transition:border-color .2s;font-family:inherit;}
+    .hm-group input:focus,.hm-group select:focus{border-color:#921a02;}
+    .hm-save{flex:1;padding:10px;border-radius:8px;border:none;background:#921a02;color:#fff;font-weight:600;font-size:.85rem;cursor:pointer;transition:background .15s;display:flex;align-items:center;justify-content:center;gap:6px;min-height:40px;}
+    .hm-save:hover:not(:disabled){background:#6d1201;}
+    .hm-save:disabled{opacity:.6;cursor:not-allowed;}
+    .hm-cancel{padding:10px 18px;border-radius:8px;border:1px solid #e2e8f0;background:#f8fafc;font-size:.85rem;cursor:pointer;}
+    .hm-cancel:hover{background:#f1f5f9;}
+    .hm-status{font-size:.78rem;text-align:center;margin-top:8px;min-height:18px;}
+    .spin{width:14px;height:14px;border:2px solid rgba(255,255,255,.4);border-top-color:#fff;border-radius:50%;animation:spinAnim .6s linear infinite;display:inline-block;}
+    @keyframes spinAnim{to{transform:rotate(360deg)}}
+
+    /* ── Image upload zone ── */
+    .img-upload-zone{width:100%;height:140px;border:2px dashed #e2e8f0;border-radius:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;cursor:pointer;transition:border-color .2s,background .2s;position:relative;overflow:hidden;}
+    .img-upload-zone:hover{border-color:#921a02;background:#fff5f5;}
+    .img-upload-zone.has-img{border-style:solid;border-color:#e2e8f0;}
+    .img-upload-zone img{width:100%;height:100%;object-fit:cover;border-radius:10px;}
+    .img-upload-zone .img-overlay{position:absolute;inset:0;background:rgba(0,0,0,.45);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;opacity:0;transition:opacity .2s;border-radius:10px;}
+    .img-upload-zone:hover .img-overlay{opacity:1;}
+    .img-upload-zone .img-overlay span{color:#fff;font-size:.78rem;font-weight:600;}
+    .img-upload-placeholder{display:flex;flex-direction:column;align-items:center;gap:6px;color:#94a3b8;}
+    .img-upload-placeholder i{font-size:1.8rem;}
+    .img-upload-placeholder span{font-size:.76rem;font-weight:600;}
+    .img-rm-btn{position:absolute;top:8px;right:8px;background:rgba(239,68,68,.9);color:#fff;border:none;border-radius:50%;width:24px;height:24px;cursor:pointer;font-size:.75rem;display:flex;align-items:center;justify-content:center;z-index:2;transition:background .15s;}
+    .img-rm-btn:hover{background:#dc2626;}
+
+    /* ── Progress bar ── */
+    .upload-progress{margin:8px 0;display:none;}
+    .upload-progress-track{background:#f1f5f9;border-radius:20px;height:6px;overflow:hidden;}
+    .upload-progress-bar{height:100%;background:linear-gradient(90deg,#921a02,#c9a84c);width:0%;transition:width .3s;border-radius:20px;}
+    .upload-progress-text{font-size:.72rem;color:#64748b;margin-top:4px;text-align:center;}
+
+    /* ── Search & filter bar ── */
+    .par-filter-bar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:16px;}
+    .par-search{flex:1;min-width:180px;border:1px solid #e2e8f0;border-radius:8px;padding:8px 14px;font-size:.84rem;outline:none;transition:border-color .2s;}
+    .par-search:focus{border-color:#921a02;}
+    .par-filter-select{border:1px solid #e2e8f0;border-radius:8px;padding:8px 12px;font-size:.82rem;outline:none;cursor:pointer;}
+    .par-filter-select:focus{border-color:#921a02;}
+
+    /* ── Empty state ── */
+    .par-empty{display:none;flex-direction:column;align-items:center;justify-content:center;padding:60px 20px;color:#94a3b8;text-align:center;}
+    .par-empty-icon{font-size:2.5rem;margin-bottom:10px;}
+    .par-empty-title{font-size:.95rem;font-weight:600;color:#64748b;}
+    .par-empty-desc{font-size:.8rem;margin-top:4px;}
+
+    /* ── Toast ── */
+    #par-toast{position:fixed;bottom:24px;right:24px;z-index:99999;background:#1e293b;color:#fff;padding:12px 20px;border-radius:10px;font-size:.82rem;font-weight:600;box-shadow:0 8px 24px rgba(0,0,0,.25);opacity:0;transform:translateY(10px);transition:opacity .25s,transform .25s;pointer-events:none;max-width:300px;}
+    #par-toast.show{opacity:1;transform:translateY(0);}
+    #par-toast.success{background:#16a34a;}
+    #par-toast.error{background:#dc2626;}
+
+    /* ── Bulk import banner ── */
+    .import-banner{background:linear-gradient(135deg,#fff7ed,#fef3c7);border:1px solid #fcd34d;border-radius:12px;padding:16px 20px;margin-bottom:20px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;}
+    .import-banner i{font-size:1.4rem;color:#d97706;flex-shrink:0;}
+    .import-banner .ib-text{flex:1;min-width:200px;}
+    .import-banner .ib-title{font-size:.85rem;font-weight:700;color:#92400e;margin:0 0 2px;}
+    .import-banner .ib-sub{font-size:.76rem;color:#b45309;margin:0;}
+    /* Phone link in table */
+.par-phone-link {
+  display: inline-flex; align-items: center; gap: 5px;
+  color: #16a34a; font-size: .78rem; font-weight: 600;
+  text-decoration: none; padding: 3px 8px;
+  border-radius: 20px; background: #f0fdf4;
+  border: 1px solid #bbf7d0; transition: background .15s;
+  white-space: nowrap;
+}
+.par-phone-link:hover { background: #dcfce7; color: #15803d; }
+.par-phone-icon { font-size: .8rem; }
+
+/* Drag-over highlight */
+.img-upload-zone.drag-over {
+  border-color: #921a02 !important;
+  background: #fff5f5 !important;
+  box-shadow: 0 0 0 3px rgba(146,26,2,.15);
+}
+    /* ── Loading skeleton ── */
+    .skel{background:linear-gradient(90deg,#f1f5f9 25%,#e2e8f0 50%,#f1f5f9 75%);background-size:200% 100%;animation:skelShimmer 1.4s infinite;border-radius:6px;}
+    @keyframes skelShimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+
+    /* ── Responsive ── */
+    @media(max-width:768px){
+      .forane-tabs{gap:4px;}
+      .forane-tab{padding:5px 10px;font-size:.7rem;}
+      .par-filter-bar{flex-direction:column;}
+      .par-search{min-width:100%;}
+    }
+  </style>
+</head>
+<body>
+
+<div id="par-toast"></div>
+
+<!-- ═══════════════════════════════════════════
+     LAYOUT (matches dashboard.html exactly)
+═══════════════════════════════════════════ -->
+<div class="sidebar-overlay" id="sidebar-overlay"></div>
+<div class="dash-layout">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-brand">
+      <div class="sidebar-logo">AF</div>
+      <div>
+        <div class="sidebar-brand-text">AdminForge</div>
+        <div class="sidebar-brand-sub">Management System</div>
+      </div>
+    </div>
+    <div class="sidebar-menu">
+      <p class="sidebar-section">Main</p>
+      <a href="dashboard.html" class="sidebar-item">
+        <span class="si-icon">⬡</span> Dashboard
+      </a>
+      <p class="sidebar-section">Pages</p>
+      <a href="dashboard.html" class="sidebar-item">
+        <span class="si-icon">⬡</span> Home
+      </a>
+      <a href="parishes.html" class="sidebar-item active" id="nav-parishes">
+        <span class="si-icon">⛪</span> Parishes
+        <span class="si-badge" id="sidebar-par-count">0</span>
+      </a>
+      <a href="priests.html" class="sidebar-item active" id="nav-priests">
+        <span class="si-icon">✝</span> Priests
+        <span class="si-badge" id="sidebar-pr-count">0</span>
+      </a>
+      <p class="sidebar-section" style="margin-top:14px;">Account</p>
+      <div class="sidebar-item" onclick="parToast('Settings — coming soon!')"><span class="si-icon">⚙</span> Settings</div>
+      <div class="sidebar-item" onclick="parToast('Profile editor — coming soon!')"><span class="si-icon">◉</span> My Profile</div>
+    </div>
+    <div class="sidebar-footer">
+      <div class="user-row">
+        <div class="user-row-avatar" id="sidebar-avatar">?</div>
+        <div>
+          <div class="user-row-name" id="sidebar-username">Loading…</div>
+          <div class="user-row-role" id="sidebar-role">—</div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- TOPBAR -->
+  <nav class="topbar">
+    <div class="topbar-left">
+      <button class="sidebar-toggle" id="sidebar-toggle">☰</button>
+      <div class="topbar-rule d-none d-lg-block"></div>
+      <div>
+        <div class="topbar-title">Parishes</div>
+        <div class="topbar-sub">Manage Parish Directory</div>
+      </div>
+    </div>
+    <div class="topbar-right">
+      <span id="role-badge" class="badge bg-secondary me-2" style="font-size:.8rem;padding:6px 12px;"></span>
+      <button class="btn btn-logout btn-sm" id="btn-logout">⏻ Logout</button>
+    </div>
+  </nav>
+
+  <!-- MAIN -->
+  <main class="dash-main">
+
+    <!-- Stats row -->
+    <div class="row g-3 mb-4" id="par-stats-row">
+      <div class="col-6 col-xl-3">
+        <div class="par-stat-card">
+          <div class="par-stat-icon red">⛪</div>
+          <div><div class="par-stat-value" id="st-total">—</div><div class="par-stat-label">Total Entries</div></div>
+        </div>
+      </div>
+      <div class="col-6 col-xl-3">
+        <div class="par-stat-card">
+          <div class="par-stat-icon blue">🖼</div>
+          <div><div class="par-stat-value" id="st-withimg">—</div><div class="par-stat-label">With Photo</div></div>
+        </div>
+      </div>
+      <div class="col-6 col-xl-3">
+        <div class="par-stat-card">
+          <div class="par-stat-icon green">✅</div>
+          <div><div class="par-stat-value" id="st-parishes">—</div><div class="par-stat-label">Parishes</div></div>
+        </div>
+      </div>
+      <div class="col-6 col-xl-3">
+        <div class="par-stat-card">
+          <div class="par-stat-icon gold">🗺</div>
+          <div><div class="par-stat-value" id="st-foranes">16</div><div class="par-stat-label">Foranes</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Import banner (shown only if Firestore has 0 entries) -->
+    <div class="import-banner" id="import-banner" style="display:none;">
+      <i class="bi bi-database-fill-up"></i>
+      <div class="ib-text">
+        <p class="ib-title">No parishes in database yet</p>
+        <p class="ib-sub">Click "Import Default Data" to seed all 16 foranes from the built-in dataset. You can edit or delete entries after importing.</p>
+      </div>
+      <button onclick="importDefaultData()" id="btn-import"
+        style="background:#d97706;color:#fff;border:none;border-radius:8px;padding:9px 18px;font-size:.8rem;font-weight:700;cursor:pointer;flex-shrink:0;transition:background .2s;">
+        ⬆ Import Default Data
+      </button>
+    </div>
+
+    <!-- Card: forane tabs + table -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-header-title">
+          <div class="card-header-pill">⛪</div>
+          <span id="forane-title">All Parishes</span>
+        </div>
+        <button onclick="openParishAdd()" id="btn-add-parish"
+          style="display:none;background:#921a02;color:#fff;border:none;border-radius:8px;padding:7px 16px;font-size:.78rem;font-weight:700;cursor:pointer;transition:background .2s;">
+          + Add Parish
+        </button>
+      </div>
+
+      <div class="card-body">
+        <!-- Forane tab strip -->
+        <div class="forane-tabs" id="forane-tabs"></div>
+
+        <!-- Filter bar -->
+        <div class="par-filter-bar">
+          <input type="text" id="par-search" class="par-search" placeholder="🔍 Search name or location…" oninput="applyFilters()"/>
+          <select id="par-cat-filter" class="par-filter-select" onchange="applyFilters()">
+            <option value="">All Categories</option>
+            <option value="">Parish</option>
+            <option value="Filial Church">Filial Church</option>
+            <option value="Station">Station</option>
+            <option value="Chapel/Shrine">Chapel / Shrine</option>
+            <option value="Mission">Mission</option>
+          </select>
+          <select id="par-sort" class="par-filter-select" onchange="applyFilters()">
+            <option value="name">Sort: Name A–Z</option>
+            <option value="cat">Sort: Category</option>
+            <option value="newest">Sort: Newest</option>
+          </select>
+        </div>
+
+        <!-- Table -->
+        <div class="table-wrapper">
+          <table class="table" id="par-table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Photo</th>
+                <th>Name</th>
+                <th>Location</th>
+                <th>Category</th>
+                <th>Forane</th>
+                <th>Phone</th>
+                <th id="par-th-actions" style="display:none;">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="par-tbody"></tbody>
+          </table>
+        </div>
+
+        <!-- Skeleton loader -->
+        <div id="par-skeleton" style="padding:8px 0;">
+          <div style="display:flex;flex-direction:column;gap:10px;">
+            <div class="skel" style="height:44px;border-radius:8px;"></div>
+            <div class="skel" style="height:44px;border-radius:8px;opacity:.7;"></div>
+            <div class="skel" style="height:44px;border-radius:8px;opacity:.4;"></div>
+          </div>
+        </div>
+
+        <!-- Empty state -->
+        <div class="par-empty" id="par-empty">
+          <div class="par-empty-icon">⛪</div>
+          <div class="par-empty-title">No parishes found</div>
+          <div class="par-empty-desc">Try a different forane or search query.</div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     ADD / EDIT MODAL
+═══════════════════════════════════════════ -->
+<div id="m-parish" class="hm-backdrop">
+  <div class="hm-box">
+    <button class="hm-close" onclick="closePM()">✕</button>
+    <h5 id="pm-title">Add Parish</h5>
+
+    <!-- Image upload -->
+    <div class="hm-group">
+      <label>Parish Photo <span style="color:#94a3b8;font-weight:400;text-transform:none;font-size:.68rem;">(optional — stored on Cloudinary)</span></label>
+      <div class="img-upload-zone" id="img-zone" onclick="document.getElementById('pm-img-file').click()">
+        <img id="pm-img-preview" src="" alt="" style="display:none;width:100%;height:100%;object-fit:cover;border-radius:10px;"/>
+        <div class="img-overlay"><i class="bi bi-camera-fill" style="color:#fff;font-size:1.3rem;"></i><span>Change photo</span></div>
+        <div class="img-upload-placeholder" id="pm-placeholder">
+          <i class="bi bi-cloud-arrow-up"></i>
+          <span>Click to upload image</span>
+          <span style="font-size:.68rem;font-weight:400;color:#cbd5e1;">JPG, PNG, WEBP — max 5 MB</span>
+        </div>
+        <button class="img-rm-btn" id="pm-rm-btn" onclick="removePMImg(event)" style="display:none;">✕</button>
+      </div>
+      <input type="file" id="pm-img-file" accept="image/*" style="display:none;" onchange="onPMImg(event)"/>
+      <div class="upload-progress" id="pm-progress">
+        <div class="upload-progress-track"><div class="upload-progress-bar" id="pm-prog-bar"></div></div>
+        <div class="upload-progress-text" id="pm-prog-text">Uploading…</div>
+      </div>
+    </div>
+    <div class="hm-group">
+  <label>Image URL <span style="color:#94a3b8;font-weight:400;text-transform:none;font-size:.68rem;">(paste a URL directly — or upload above)</span></label>
+  <input type="url" id="pm-img-url" placeholder="https://example.com/image.jpg"
+    oninput="onImgUrlInput(this.value)"/>
+</div>
+
+<div class="hm-group">
+  <label>Phone Number <span style="color:#94a3b8;font-weight:400;text-transform:none;font-size:.68rem;">(optional — tap to call)</span></label>
+  <input type="tel" id="pm-phone" placeholder="e.g. +91 98765 43210"/>
+</div>
+
+    <div class="hm-group">
+      <label>Forane *</label>
+      <select id="pm-forane">
+        <!-- populated by JS -->
+      </select>
+    </div>
+    <div class="hm-group">
+      <label>Parish Name *</label>
+      <input type="text" id="pm-name" placeholder="e.g. St. Mary's"/>
+    </div>
+    <div class="hm-group">
+      <label>Location *</label>
+      <input type="text" id="pm-location" placeholder="e.g. Changanacherry"/>
+    </div>
+    <div class="hm-group">
+      <label>Category</label>
+      <select id="pm-cat">
+        <option value="">Parish</option>
+        <option value="Filial Church">Filial Church</option>
+        <option value="Station">Station</option>
+        <option value="Chapel/Shrine">Chapel / Shrine</option>
+        <option value="Mission">Mission</option>
+      </select>
+    </div>
+
+    <div style="display:flex;gap:10px;margin-top:18px;flex-wrap:wrap;">
+      <button class="hm-cancel" onclick="closePM()">Cancel</button>
+      <button class="hm-save" id="btn-pm-save" onclick="saveParish()" style="flex:1;">💾 Save Parish</button>
+      <button id="btn-pm-del" onclick="deleteParish()"
+        style="display:none;padding:10px 14px;border-radius:8px;border:none;background:#ef4444;color:#fff;font-size:.82rem;cursor:pointer;transition:background .2s;">
+        🗑 Delete
+      </button>
+    </div>
+    <div class="hm-status" id="pm-status"></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     DELETE CONFIRM MODAL
+═══════════════════════════════════════════ -->
+<div id="m-del-confirm" class="hm-backdrop">
+  <div class="hm-box" style="max-width:400px;">
+    <h5>⚠️ Delete Parish</h5>
+    <p style="font-size:.84rem;color:#374151;" id="del-confirm-text">Are you sure you want to delete this parish? This action cannot be undone.</p>
+    <div style="display:flex;gap:10px;margin-top:16px;">
+      <button class="hm-cancel" onclick="document.getElementById('m-del-confirm').classList.remove('show');">Cancel</button>
+      <button id="btn-del-confirm" onclick="confirmDelete()"
+        style="flex:1;padding:10px;border-radius:8px;border:none;background:#ef4444;color:#fff;font-weight:600;font-size:.85rem;cursor:pointer;">
+        Yes, Delete
+      </button>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<script type="module">
+import { initializeApp }    from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getAuth, onAuthStateChanged, signOut }
+  from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { getFirestore, doc, getDoc, setDoc, collection, addDoc,
+         getDocs, updateDoc, deleteDoc, serverTimestamp,
+         query, where, orderBy, getCountFromServer }
+  from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+/* ════════════════════════════════════════
+   FIREBASE CONFIG  ← same as dashboard.html
+════════════════════════════════════════ */
+const FC = {
+  apiKey:            "AIzaSyArM8sv7J1RUj4XvAJhJd40tzA7Yc8BGXY",
+  authDomain:        "admin-dashboard-ed62c.firebaseapp.com",
+  projectId:         "admin-dashboard-ed62c",
+  storageBucket:     "admin-dashboard-ed62c.firebasestorage.app",
+  messagingSenderId: "560027475135",
+  appId:             "1:560027475135:web:3fae0cb0268729ae79fa0a"
+};
+const ADMIN = "issacnewton1503@gmail.com";
+const app   = initializeApp(FC);
+const auth  = getAuth(app);
+const db    = getFirestore(app);
+const PAR_COL = collection(db, "parishes");
+
+/* ════════════════════════════════════════
+   CLOUDINARY CONFIG  ← replace these 3 values
+════════════════════════════════════════ */
+const CLOUD_NAME    = "dqwayxpbp";     // e.g. "dxyz123abc"
+const UPLOAD_PRESET = "preset";  // unsigned preset name
+// NOTE: API Secret is NEVER put in browser JS.
+// For Cloudinary delete we use a signed-URL approach via a tiny
+// Cloudinary "delete_by_token" or store public_id and delete via
+// your own backend / Firebase Function. See comments below.
+
+/* ════════════════════════════════════════
+   FORANE LIST
+════════════════════════════════════════ */
+const FORANES = [
+  "Changanacherry","Alappuzha","Amboori","Athirampuzha",
+  "Champakulam - Kalloorkad","Edathua - Koilmuk","Kollam - Ayoor",
+  "Kottayam","Kudamaloor","Kurumpanadom","Manimala","Nedumkunnam",
+  "Pulincunnoo","Thiruvananthapuram","Thrickodithanam","Thuruthy"
+];
+
+/* ════════════════════════════════════════
+   DEFAULT SEED DATA (from your parishes.html)
+════════════════════════════════════════ */
+const DEFAULT_DATA = {
+  "Changanacherry":[
+    {name:"St. Mary's Metropolitan Cathedral",location:"Changanacherry",cat:""},
+    {name:"Sacred Heart's (CMI - TVM)",location:"Chethipuzha",cat:""},
+    {name:"St. George's",location:"Cheeranchira",cat:""},
+    {name:"St. Gregory's",location:"Kidangara",cat:""},
+    {name:"St. Mary's",location:"Kumaramkary",cat:""},
+    {name:"St. Joseph's",location:"Laikad",cat:""},
+    {name:"St. Sebastian's",location:"Mahendrapuram",cat:""},
+    {name:"St. Joseph's",location:"Manackachira",cat:""},
+    {name:"St. Antony's",location:"Paral",cat:""},
+    {name:"St. Mary's",location:"Parel",cat:""},
+    {name:"St. Joseph's",location:"Veroor",cat:""},
+    {name:"Marth Mariam",location:"Kunnamkary - Pulimukham",cat:"Filial Church"},
+    {name:"St. Antony's",location:"Perunna East",cat:"Filial Church"},
+    {name:"St. Thomas",location:"Puzhavathu",cat:"Filial Church"},
+    {name:"St. Mary's",location:"Vazhappally West - Parekadavu",cat:"Filial Church"},
+    {name:"St. Antony's",location:"Vettithuruth",cat:"Filial Church"},
+    {name:"Assumption College Chapel",location:"Changanacherry",cat:"Station"},
+    {name:"Pastoral Centre",location:"Changanacherry",cat:"Station"},
+    {name:"SB College Chapel",location:"Changanacherry",cat:"Station"},
+    {name:"St. Joseph's CMI - TVM",location:"Koonamthanam",cat:"Station"},
+    {name:"SABS Convent Chapel",location:"Vazhappally",cat:"Station"},
+    {name:"St. Michael's",location:"Angady",cat:"Chapel/Shrine"},
+    {name:"Holy Family Chapel",location:"Boat Jetty, Changanacherry",cat:"Chapel/Shrine"},
+    {name:"St. Joseph's Shrine",location:"Changanacherry",cat:"Chapel/Shrine"},
+    {name:"St. Thomas Shrine",location:"Kakkanthode",cat:"Chapel/Shrine"},
+    {name:"St. Antony's",location:"Kavalikara",cat:"Chapel/Shrine"},
+    {name:"St. James' Chapel",location:"Pandakasalakadavu",cat:"Chapel/Shrine"},
+    {name:"Our Lady of Immaculate Conception Shrine",location:"Parel",cat:"Chapel/Shrine"},
+    {name:"Our Lady of Dolours Chapel",location:"Vegetable Market, Changanacherry",cat:"Chapel/Shrine"}
+  ],
+  "Alappuzha":[
+    {name:"Mar Sleeva Forane",location:"Alappuzha - Pazhavangadi",cat:""},
+    {name:"St. Joseph's",location:"Arattuvazhy",cat:""},
+    {name:"Sacred Heart",location:"Arunoottampadam",cat:""},
+    {name:"Little Flower",location:"Aryad",cat:""},
+    {name:"St. Alphonsa's",location:"Chathanad",cat:""},
+    {name:"Lourdes Matha",location:"Charamangalam",cat:""},
+    {name:"St. Mary's",location:"Kainakary",cat:""},
+    {name:"Immaculate Heart",location:"Kaithavana",cat:""},
+    {name:"St. Thomas",location:"Kalavoor",cat:""},
+    {name:"St. Joseph's (Pandicherry)",location:"Kuttamangalam",cat:""},
+    {name:"Our Lady of Perpetual Help",location:"Mannancherry",cat:""},
+    {name:"St. George's",location:"Muhamma",cat:""},
+    {name:"St. Thomas",location:"Pallathuruthy",cat:""},
+    {name:"St. Francis Assisi",location:"Poonthope",cat:""},
+    {name:"St. Mary's",location:"Punnamada",cat:""},
+    {name:"Mar Gregorios",location:"Punnapra",cat:""},
+    {name:"Mar Sleeva",location:"Purakkad",cat:""},
+    {name:"St. George's",location:"Puthenangady",cat:""},
+    {name:"St. Michael's",location:"Thathampally",cat:""},
+    {name:"St. Antony's (Kanichukulangara)",location:"Paduvapuram",cat:"Filial Church"},
+    {name:"St. Sebastian's (Kanjikuzhy)",location:"SL Puram",cat:"Filial Church"},
+    {name:"St. Mary's (Thathampally)",location:"Kalath",cat:"Filial Church"},
+    {name:"Holy Family (Punnapra)",location:"Paravoor",cat:"Filial Church"},
+    {name:"St. Kuriakose Elias Chavara",location:"Ambalapuzha",cat:"Station"},
+    {name:"St. Rita's",location:"Aryad South",cat:"Station"},
+    {name:"Nithyasahaya Matha",location:"Ayiravely",cat:"Station"},
+    {name:"Convent Chapel",location:"Kainakary",cat:"Station"},
+    {name:"St. Antony's (Purakkad)",location:"Orslem",cat:"Station"},
+    {name:"St. Sebastian's",location:"Arattuvazhy",cat:"Chapel/Shrine"},
+    {name:"Chapel (Thathampally)",location:"Korthassery",cat:"Chapel/Shrine"},
+    {name:"Our Lady of Perpetual Help",location:"Muhamma",cat:"Chapel/Shrine"},
+    {name:"St. Mary's (Punnapra)",location:"Paravoor",cat:"Chapel/Shrine"},
+    {name:"St. Mary's",location:"Pazhavangadi",cat:"Chapel/Shrine"},
+    {name:"St. Joseph's Shrine",location:"Punnapra",cat:"Chapel/Shrine"},
+    {name:"Panthankurisady",location:"Thathampally",cat:"Chapel/Shrine"}
+  ],
+  "Amboori":[
+    {name:"St. George Forane",location:"Amboori",cat:""},
+    {name:"St. Mary's",location:"Dalumugham",cat:""},
+    {name:"St. Joseph's (CMI - TVM)",location:"Kuchapuram",cat:""},
+    {name:"St. Mary's",location:"Mayam - Marygiri",cat:""},
+    {name:"Christ the King",location:"Rajagiri",cat:""},
+    {name:"St. Mary's",location:"Thekkupara",cat:""},
+    {name:"Sacred Heart",location:"Vavode",cat:""},
+    {name:"Sacred Heart (Dalumugham)",location:"Pachakadu",cat:"Filial Church"},
+    {name:"St. Mary's (Kuchapuram)",location:"Charupara",cat:"Station"},
+    {name:"St. Antony's (Amboori)",location:"Koottappu",cat:"Station"},
+    {name:"St. Thomas (Kuchapuram)",location:"Kundamam",cat:"Station"},
+    {name:"St. Gerard Karumankulam",location:"Kuttara",cat:"Station"},
+    {name:"St. Jude (Mayam)",location:"Pantha",cat:"Station"},
+    {name:"St. Alphonsa (Mayam)",location:"Parathi",cat:"Station"},
+    {name:"Queen of Virgins (Kuchapuram)",location:"Vimalagiri",cat:"Station"}
+  ],
+  "Athirampuzha":[
+    {name:"St. Mary's Forane",location:"Athirampuzha",cat:""},
+    {name:"Mangalavartha",location:"Arumanoor",cat:""},
+    {name:"Lisieux (MCBS - KTM)",location:"Srikandamangalam",cat:""},
+    {name:"St. Sebastian's",location:"Cheruvandoor",cat:""},
+    {name:"Christ the King",location:"Ettumanoor",cat:""},
+    {name:"St. Xavier's",location:"Kattachira",cat:""},
+    {name:"St. Mary's",location:"Kainakary",cat:""},
+    {name:"St. Mathew's",location:"Kottackupuram",cat:""},
+    {name:"St. Gregorios",location:"Mannarkunnu",cat:""},
+    {name:"St. Thomas",location:"Nalpathimala",cat:""},
+    {name:"St. Thomas",location:"Pallikkunnu",cat:""},
+    {name:"St. Thomas (Vellappally)",location:"Punnathura",cat:""},
+    {name:"St. Joseph's",location:"Thellakom - Pushpagiri",cat:""},
+    {name:"St. Mary's",location:"Vettimukal",cat:""},
+    {name:"St. Rita's (Athirampuzha)",location:"Athirampuzha",cat:"Station"},
+    {name:"St. George (Kottackupuram)",location:"Kattaathi",cat:"Station"},
+    {name:"St. Sebastian (Punnathura)",location:"Kattode",cat:"Station"},
+    {name:"St. Thomas (Vettimukal)",location:"Klamattom",cat:"Station"},
+    {name:"St. George's (Athirampuzha)",location:"Parolickal",cat:"Station"},
+    {name:"St. Antony's",location:"Athirampuzha Town",cat:"Station"},
+    {name:"St. Jude (Kottackupuram)",location:"Kanakkary",cat:"Station"},
+    {name:"St. Joseph's (Athirampuzha)",location:"Marambu",cat:"Station"},
+    {name:"St. Antony's (Punnathura)",location:"Adappally",cat:"Chapel/Shrine"},
+    {name:"St. Theresa's Chapel",location:"Kallampara",cat:"Chapel/Shrine"},
+    {name:"St. Mary's Chapel",location:"Velamkulam",cat:"Chapel/Shrine"}
+  ],
+  "Champakulam - Kalloorkad":[
+    {name:"St. Mary's Basilica (Forane)",location:"Champakulam - Kalloorkad",cat:""},
+    {name:"Lourdes Matha (Koolippurackal)",location:"Chennamkary",cat:""},
+    {name:"St. Joseph's",location:"Chennamkary",cat:""},
+    {name:"St. Joseph's",location:"Kandankary",cat:""},
+    {name:"St. Joseph's",location:"Kondackal",cat:""},
+    {name:"St. Sebastian's (Chempumpuram)",location:"Narbonapuram",cat:""},
+    {name:"St. Jerome's",location:"Nazareth",cat:""},
+    {name:"St. Joseph's",location:"Padaharam",cat:""},
+    {name:"Mar Sleeva (Sleevapuram)",location:"Ponga",cat:""},
+    {name:"Holy Family",location:"Pullangady",cat:""},
+    {name:"St. John's",location:"Thekkekara",cat:""},
+    {name:"St. Sebastian's",location:"Thekkekara",cat:""},
+    {name:"Sacred Heart's",location:"Thottuvathala",cat:""},
+    {name:"St. George's",location:"Vadakke Amichakary",cat:""},
+    {name:"St. Antony's",location:"Vaisyambhagom",cat:""},
+    {name:"Sacred Heart (Champakulam)",location:"Nedumudy",cat:"Station"},
+    {name:"St. Martin's (Champakulam)",location:"Chempakassery",cat:"Station"},
+    {name:"St. Joseph's (Champakulam)",location:"Manapra",cat:"Station"},
+    {name:"St. Joseph's (Champakulam)",location:"Thekke Amichakary",cat:"Station"},
+    {name:"St. Antony's",location:"Chennamkary",cat:"Chapel/Shrine"},
+    {name:"St. Peter's (Orslem)",location:"Champakulam",cat:"Chapel/Shrine"}
+  ],
+  "Edathua - Koilmuk":[
+    {name:"St. George's Forane",location:"Edathua - Koilmuk",cat:""},
+    {name:"St. Nicholas",location:"Karumady",cat:""},
+    {name:"St. Joseph's",location:"Karuvatta",cat:""},
+    {name:"Our Lady of Dolours",location:"Kelamangalam",cat:""},
+    {name:"Holy Family",location:"Kizhakke Mithrakary",cat:""},
+    {name:"St. Joseph's",location:"Koduppunna",cat:""},
+    {name:"St. Alphonsa",location:"Mavelikkara",cat:""},
+    {name:"St. George's",location:"Muttar Old",cat:""},
+    {name:"St. Thomas",location:"Muttar New",cat:""},
+    {name:"Immaculate Conception (CMI - TVM)",location:"Muttar",cat:""},
+    {name:"Mar Thoma Sleeha Pilgrim Centre",location:"Niranam",cat:""},
+    {name:"Lourdes Matha",location:"Pacha - Chekkidikad",cat:""},
+    {name:"Fathima Matha",location:"Pandy",cat:""},
+    {name:"St. Xavier's",location:"Puthukary",cat:""},
+    {name:"St. Rita's",location:"Thakazhy - Thennady",cat:""},
+    {name:"St. Antony's",location:"Thayamkary",cat:""},
+    {name:"St. Mary's (Karumady)",location:"Ambalapuzha - Chirakode",cat:"Filial Church"},
+    {name:"Holy Family (Karuvatta)",location:"Kariyil",cat:"Filial Church"},
+    {name:"St Joseph's (Karumady)",location:"Karumady",cat:"Filial Church"},
+    {name:"St. Joseph's (Edathua)",location:"Changankary",cat:"Filial Church"},
+    {name:"St. Joseph's (Edathua)",location:"Koilmuk",cat:"Filial Church"},
+    {name:"Mary Matha (Edathua)",location:"Mariyapuram",cat:"Filial Church"},
+    {name:"St. Pius X (Edathua)",location:"Pandankary",cat:"Filial Church"},
+    {name:"St. Mary's (Karuvatta)",location:"Kumarapuram",cat:"Filial Church"},
+    {name:"St. Joseph's (Puthukary)",location:"Thekke Puthukary",cat:"Filial Church"},
+    {name:"Sacred Heart (Koilmuk)",location:"Kunthirickal",cat:"Station"},
+    {name:"St. Jude's (Thakazhy)",location:"Viruppala",cat:"Station"},
+    {name:"St. Joseph's (Pacha)",location:"Chekkidikad",cat:"Station"}
+  ],
+  "Kollam - Ayoor":[
+    {name:"Christ - The King Forane",location:"Ayoor",cat:""},
+    {name:"St. Joseph's",location:"Anakulam",cat:""},
+    {name:"Mary Matha",location:"Anchal",cat:""},
+    {name:"St. Mary's",location:"Aryankavu",cat:""},
+    {name:"Nithyasahayamatha",location:"Chenkulam",cat:""},
+    {name:"St. Sebastian's",location:"Cheriyavelinalloor",cat:""},
+    {name:"Infant Jesus",location:"Cherukadavu",cat:""},
+    {name:"St. George's",location:"Edapalayam",cat:""},
+    {name:"Nithyasahayamatha (CSsR)",location:"Karavaloor",cat:""},
+    {name:"St. Thomas",location:"Kollam",cat:""},
+    {name:"St. Sebastian's",location:"Kulathupuzha",cat:""},
+    {name:"Christ the King (Makkannoor)",location:"Kuttikonam",cat:""},
+    {name:"Lourdes Matha",location:"Meenkulam",cat:""},
+    {name:"St. Mary's",location:"Narikkallu",cat:""},
+    {name:"St. Thomas",location:"Pazhayeroor",cat:""},
+    {name:"St. Joseph's",location:"Philgiri",cat:""},
+    {name:"Sacred Heart",location:"Punaloor",cat:""},
+    {name:"St. George's",location:"Venchempu",cat:""},
+    {name:"St. Thomas (CMF)",location:"Kottarakara",cat:"Station"},
+    {name:"Mar Aprem",location:"Pathanapuram",cat:"Station"},
+    {name:"Holy Cross (Aryankavu)",location:"Rajakoope",cat:"Station"}
+  ],
+  "Kottayam":[
+    {name:"Lourdes Forane",location:"Kottayam",cat:""},
+    {name:"Lourdes Matha",location:"Aruvikuzhy",cat:""},
+    {name:"St. Sebastian's",location:"Ayarkunnam",cat:""},
+    {name:"Marth Mariam",location:"Cheppumpara",cat:""},
+    {name:"Our Lady of Assumption",location:"Eravinalloor",cat:""},
+    {name:"Little Flower (Kollad, MCBS)",location:"Kaduvakulam",cat:""},
+    {name:"Mar Sleeva",location:"Kooroppada",cat:""},
+    {name:"Deivamatha",location:"Pampady",cat:""},
+    {name:"Sacred Heart",location:"Pangada",cat:""},
+    {name:"St. Antony's (CMI - KTM)",location:"Puthuppally - Poomattom",cat:""},
+    {name:"Sacred Heart",location:"Thazhathangady",cat:""},
+    {name:"St. Thomas",location:"Vadavathoor",cat:""},
+    {name:"St. Alphonsa Chapel (Ayarkunnam)",location:"Amayannoor",cat:"Filial Church"},
+    {name:"Lourdes Matha Shrine",location:"Aruvikuzhy",cat:"Chapel/Shrine"},
+    {name:"Kannamkunnu Chapel",location:"Cheppumpara",cat:"Chapel/Shrine"}
+  ],
+  "Kudamaloor":[
+    {name:"St. Mary's Forane (Major Archiepiscopal Pilgrim Centre)",location:"Kudamaloor",cat:""},
+    {name:"St. George's",location:"Aickarachira",cat:""},
+    {name:"St. Xavier's",location:"Arpookara - Villoonni",cat:""},
+    {name:"Cherupushpam",location:"Arpookara",cat:""},
+    {name:"St. Antony's (CMI - TVM)",location:"Cheepunkal",cat:""},
+    {name:"St. Francis De Sales",location:"Kiliroor",cat:""},
+    {name:"Holy Family",location:"Kumarakom Nava Nazareth",cat:""},
+    {name:"St. John Nepumseanos",location:"Kumarakom Vadakumkara",cat:""},
+    {name:"St. Thomas",location:"Kumaranalloor",cat:""},
+    {name:"St. Joseph's (CMI - TVM)",location:"Mannanam",cat:""},
+    {name:"Twelve Apostles",location:"Mannanam",cat:""},
+    {name:"Holy Family",location:"Mudiyoorkara",cat:""},
+    {name:"Bethlehem",location:"Parampuzha",cat:""},
+    {name:"St. Sebastian's (Kumarakom)",location:"Chengalam",cat:"Filial Church"},
+    {name:"Infant Jesus (Kudamaloor)",location:"Arpookara",cat:"Station"},
+    {name:"St. Sebastian's (Kudamaloor)",location:"Arpookara",cat:"Station"},
+    {name:"St. Thomas (Arpookara St. Xavier's)",location:"Kaipuzha",cat:"Station"},
+    {name:"Holy Family (Mannanam - CMI)",location:"Kaipuzha",cat:"Station"},
+    {name:"St. Joseph's (Parampuzha)",location:"Vellooparampu",cat:"Station"},
+    {name:"St. Thomas",location:"Aickarachira",cat:"Chapel/Shrine"},
+    {name:"St. Antony's (Aickarachira)",location:"Aymanam",cat:"Chapel/Shrine"},
+    {name:"St. Antony's",location:"Kudamaloor",cat:"Chapel/Shrine"},
+    {name:"St. Joseph's",location:"Kudamaloor",cat:"Chapel/Shrine"},
+    {name:"St. Joseph's (Arpookara St. Xavier's)",location:"Thonnamkuzhy",cat:"Chapel/Shrine"}
+  ],
+  "Kurumpanadom":[
+    {name:"St. Antony's Forane",location:"Kurumpanadom",cat:""},
+    {name:"St. Mary's",location:"Eravuchira",cat:""},
+    {name:"Assumption",location:"Kurumpanadom",cat:""},
+    {name:"Little Flower",location:"Madappally",cat:""},
+    {name:"Lourdes Matha",location:"Mammood",cat:""},
+    {name:"Holy Family",location:"Mannila",cat:""},
+    {name:"Sacred Heart",location:"Rajamattom",cat:""},
+    {name:"St. George's",location:"Thottackad",cat:""},
+    {name:"St. Thomas (St. Antony's)",location:"Kurumpanadom",cat:"Station"},
+    {name:"St. Jude (Thottackad)",location:"Ambalakavala",cat:"Chapel/Shrine"},
+    {name:"St. Joseph's (Eravuchira)",location:"Eravuchira",cat:"Chapel/Shrine"},
+    {name:"St. Thomas (Assumption)",location:"Ezhuthupally",cat:"Chapel/Shrine"},
+    {name:"St. Jude (Assumption)",location:"Karikandom",cat:"Chapel/Shrine"},
+    {name:"St. George (Rajamattom)",location:"Kariyappilakavala",cat:"Chapel/Shrine"},
+    {name:"Sacred Heart (Eravuchira)",location:"Malamkotta",cat:"Chapel/Shrine"},
+    {name:"St. Mary's",location:"Mammood",cat:"Chapel/Shrine"},
+    {name:"Assumption (Kurumpanadom)",location:"Pailykavala",cat:"Chapel/Shrine"},
+    {name:"St. George (Assumption)",location:"Pallithazhe",cat:"Chapel/Shrine"},
+    {name:"St.Thomas (St. Antony's)",location:"Perumpanachy",cat:"Chapel/Shrine"},
+    {name:"St. Mary's (Eravuchira)",location:"Pongamthanam",cat:"Chapel/Shrine"},
+    {name:"St. Joseph",location:"Rajamattom",cat:"Chapel/Shrine"},
+    {name:"St. Sebastian's (Rajamattom)",location:"Vattoly",cat:"Chapel/Shrine"}
+  ],
+  "Manimala":[
+    {name:"Holy Magi Forane",location:"Manimala",cat:""},
+    {name:"Little Flower",location:"Chunkapara",cat:""},
+    {name:"St. Mary's",location:"Kadayanickadu",cat:""},
+    {name:"St. James (CMI - KTM)",location:"Karikkattoor",cat:""},
+    {name:"Sacred Heart",location:"Karimpanakulam",cat:""},
+    {name:"St. John's",location:"Kottangal",cat:""},
+    {name:"Little Flower",location:"Kulathoor",cat:""},
+    {name:"St. Basil's",location:"Manimala New",cat:""},
+    {name:"St. Mary's",location:"Nirmalapuram",cat:""},
+    {name:"St. Thomas",location:"Perumkavu",cat:""},
+    {name:"St. Mary's",location:"Vallamchira",cat:""},
+    {name:"St. Antony's (Kottangal)",location:"Alaprakad",cat:"Station"},
+    {name:"Assumption",location:"Karikkattoor",cat:"Chapel/Shrine"},
+    {name:"St. Mary's",location:"Karimpanakulam",cat:"Chapel/Shrine"},
+    {name:"St. Joseph's",location:"Kottangal",cat:"Chapel/Shrine"},
+    {name:"St. Mary's",location:"Vallamchira",cat:"Chapel/Shrine"},
+    {name:"St. Sebastian's (Kadayanickadu)",location:"Vyakulagiri",cat:"Chapel/Shrine"}
+  ],
+  "Nedumkunnam":[
+    {name:"St. John - The Baptist Forane",location:"Nedumkunnam",cat:""},
+    {name:"St. Antony's",location:"Anickadu",cat:""},
+    {name:"St. Joseph's",location:"Champakara",cat:""},
+    {name:"St. Joseph's",location:"Ezhumattoor",cat:""},
+    {name:"Lourdes Matha (Puthussery)",location:"Kallooppara",cat:""},
+    {name:"St. Mary's",location:"Koothrappally",cat:""},
+    {name:"St. Athanasius (Nedungadappally)",location:"Mallappally",cat:""},
+    {name:"St. Antony's",location:"Mundathanam",cat:""},
+    {name:"Fathima Matha",location:"Nedumanny",cat:""},
+    {name:"St. Sebastian's",location:"Panayampala",cat:""},
+    {name:"Little Flower",location:"Punnavely",cat:""},
+    {name:"St. Mary's",location:"Pulickalkavala",cat:""},
+    {name:"St. Antony's",location:"Thadiyoor",cat:""},
+    {name:"St. Joseph's",location:"Vaipur New",cat:""},
+    {name:"St. Thomas",location:"Pazhayeroor",cat:""},
+    {name:"St. Mary's",location:"Vaipur Old",cat:""},
+    {name:"St. Sebastian's",location:"Vettickalpurayidom",cat:""},
+    {name:"St. George (Nedumanny)",location:"Cheeramattom",cat:"Station"},
+    {name:"St. Joseph's (Koothrappally)",location:"Palamattom",cat:"Station"},
+    {name:"St. Alphonsa (Nedumkunnam)",location:"Karukachal",cat:"Station"},
+    {name:"St. Sebastian's (Nedumkunnam)",location:"Angady",cat:"Chapel/Shrine"},
+    {name:"St. Alphonsa (Nedumkunnam)",location:"Komakal",cat:"Chapel/Shrine"},
+    {name:"St. Anthony's (Champakara)",location:"Kuruppankavala",cat:"Chapel/Shrine"},
+    {name:"St. Thomas (Champakara)",location:"Manakkara",cat:"Chapel/Shrine"},
+    {name:"St. George's (Champakara)",location:"Nethalloor",cat:"Chapel/Shrine"},
+    {name:"St. Joseph's",location:"Paikuzhi",cat:"Chapel/Shrine"},
+    {name:"St. Sebastian's (Champakara)",location:"Pampady",cat:"Chapel/Shrine"}
+  ],
+  "Pulincunnoo":[
+    {name:"St. Mary's Forane",location:"Pulincunnoo",cat:""},
+    {name:"St. Rita's",location:"Kannady",cat:""},
+    {name:"St. Joseph's",location:"Kannady",cat:""},
+    {name:"St. Theresa's",location:"Kavalam",cat:""},
+    {name:"Little Flower",location:"Kavalam Lisieux",cat:""},
+    {name:"St. Antony's",location:"Kayalpuram",cat:""},
+    {name:"St. Joseph's",location:"Kayalpuram",cat:""},
+    {name:"Lourdes Matha",location:"Mampuzhakkary",cat:""},
+    {name:"St. Mary's",location:"Manalady",cat:""},
+    {name:"St. Pius X",location:"Moncompu",cat:""},
+    {name:"St. Xavier's",location:"Mithrakary",cat:""},
+    {name:"Fathima Matha",location:"Pallikkoottumma",cat:""},
+    {name:"St. Joseph's",location:"Punnakkunnathussery",cat:""},
+    {name:"St. Joseph's",location:"Ramankary",cat:""},
+    {name:"St. Gregory's (Kesaria)",location:"Veliyanadu North",cat:""},
+    {name:"St. Joseph's",location:"Veliyanadu North",cat:""},
+    {name:"St. Xavier's",location:"Veliyanadu South",cat:""},
+    {name:"St. Paul's",location:"Vezhapra",cat:""},
+    {name:"St. Theresa's (Pulincunnoo)",location:"Kizhakkethalackal",cat:"Station"},
+    {name:"Fathima Matha (Pulincunnoo)",location:"Kollamuttam",cat:"Station"},
+    {name:"St. Mary's",location:"Punnakkunnathussery",cat:"Chapel/Shrine"}
+  ],
+  "Thiruvananthapuram":[
+    {name:"Lourdes Forane",location:"Thiruvananthapuram",cat:""},
+    {name:"St. Mother Theresa",location:"Kannammoola",cat:""},
+    {name:"St. Joseph's",location:"Karyavattom",cat:""},
+    {name:"Ranigiri (OFM Cap.)",location:"Mannanthala",cat:""},
+    {name:"St. Mary's (Peringamala)",location:"Palode",cat:""},
+    {name:"Lourdes Hill",location:"Peroorkada",cat:""},
+    {name:"St. Alphonsa",location:"Pongummoodu",cat:""},
+    {name:"Emmaus (MCBS - KTM)",location:"Sreekaryam",cat:""},
+    {name:"Holy Family",location:"Thirumala",cat:""},
+    {name:"Sacred Heart",location:"Thiruvallam - Kovalam",cat:""},
+    {name:"St. Francis De Sales (MSFS)",location:"Vattiyoorkavu",cat:""},
+    {name:"All Saints",location:"Vithura",cat:""},
+    {name:"St. Peter's (CMI - TVM)",location:"Vizhinjam",cat:""},
+    {name:"Mar Geevarghese",location:"Kesavadasapuram",cat:"Filial Church"},
+    {name:"St. Jude Chapel",location:"Attingal",cat:"Station"},
+    {name:"Christ the King (CMI - TVM)",location:"Kattukulam",cat:"Station"},
+    {name:"St. John Paul II Youth Centre",location:"Kazhakkoottam",cat:"Station"},
+    {name:"Divine Providence Chapel",location:"Killy",cat:"Station"},
+    {name:"St. Thomas (CMI - TVM)",location:"Koliyoor",cat:"Station"},
+    {name:"Nirmala Bhavan Chapel",location:"Kowdiar",cat:"Station"},
+    {name:"Mar Thoma Sleeha Church",location:"Kuttichal",cat:"Station"},
+    {name:"St. Thomas (Peroorkada)",location:"Nedumangadu",cat:"Station"},
+    {name:"St. Cicily's (CMI - TVM)",location:"Uchakkada",cat:"Station"},
+    {name:"Little Flower Chapel",location:"Vellayani",cat:"Station"},
+    {name:"Mar Thomagiri Amala Chapel",location:"Venjarammood",cat:"Station"}
+  ],
+  "Thrickodithanam":[
+    {name:"St. Xavier's Forane",location:"Thrickodithanam",cat:""},
+    {name:"Our Lady of Lourdes (CMI - TVM)",location:"Ayroor",cat:""},
+    {name:"St. Sebastian's",location:"Chanjody",cat:""},
+    {name:"Marth Mariam",location:"Chengannur",cat:""},
+    {name:"Fathima Matha",location:"Fathimapuram",cat:""},
+    {name:"St. Sebastian's",location:"Kodinattumkunnu",cat:""},
+    {name:"St. Joseph's",location:"Kunnamthanam",cat:""},
+    {name:"St. Mary's",location:"Mundupalam",cat:""},
+    {name:"St. Mary's",location:"Nedumon",cat:""},
+    {name:"Lourdes Matha",location:"Paippad",cat:""},
+    {name:"St. Thomas",location:"Paippad - Nalukody",cat:""},
+    {name:"St. Antony's",location:"Thiruvalla - Muthoor",cat:""},
+    {name:"Mar Sleeva Mission",location:"Adoor",cat:"Mission"},
+    {name:"Denaha Mission",location:"Pandalam",cat:"Mission"},
+    {name:"Fathima Matha",location:"Fathimapuram",cat:"Chapel/Shrine"},
+    {name:"St. Jude's",location:"Paippad - Nalukody",cat:"Chapel/Shrine"}
+  ],
+  "Thuruthy":[
+    {name:"Marth Mariam Forane",location:"Thuruthy",cat:""},
+    {name:"Lourdes Matha's",location:"Eara",cat:""},
+    {name:"St. Mary's",location:"Ithithanam",cat:""},
+    {name:"Our Lady of Dolours",location:"Kainady",cat:""},
+    {name:"St. Joseph's",location:"Kavalam",cat:""},
+    {name:"St. Joseph's (Shanthigiri)",location:"Kurichy",cat:""},
+    {name:"Holy Family",location:"Payattupakka",cat:""},
+    {name:"Holy Family",location:"Podippara",cat:""},
+    {name:"St. Mary's",location:"Vadakkekara",cat:""},
+    {name:"St. Jude's",location:"Yudapuram",cat:""},
+    {name:"St. Mary's Shrine (Ithithanam)",location:"Chalachira",cat:"Chapel/Shrine"},
+    {name:"St. George's Shrine (Ithithanam)",location:"Enachira",cat:"Chapel/Shrine"},
+    {name:"St. Antony's Shrine",location:"Ithithanam",cat:"Chapel/Shrine"},
+    {name:"St. Mary's (Kainady)",location:"Cherukara",cat:"Station"}
+  ]
+};
+
+/* ════════════════════════════════════════
+   STATE
+════════════════════════════════════════ */
+let userRole      = null;
+let allParishes   = [];      // current forane's data
+let filteredData  = [];      // after search/filter
+let activeForane  = FORANES[0];
+let editId        = null;
+let newImgFile    = null;
+let newImgPreview = null;
+let existingImgUrl      = null;
+let existingPublicId    = null;
+let pendingImgRemove    = false;
+let imageUrlInput = "";
+
+/* ════════════════════════════════════════
+   UTILS
+════════════════════════════════════════ */
+const esc = s => String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+const b64 = f => new Promise(r=>{ const fr=new FileReader(); fr.onload=e=>r(e.target.result); fr.readAsDataURL(f); });
+
+window.parToast = function(msg, type="", dur=2800){
+  const t = document.getElementById("par-toast");
+  t.textContent = msg;
+  t.className = "show" + (type?" "+type:"");
+  clearTimeout(t._t);
+  t._t = setTimeout(()=>t.className="", dur);
+};
+
+function busyBtn(id, on, lbl=""){
+  const b = document.getElementById(id); if(!b) return;
+  if(on){ b._lbl=b.innerHTML; b.disabled=true; b.innerHTML=`<span class="spin"></span> Saving…`; }
+  else  { b.disabled=false; b.innerHTML=lbl||b._lbl||"Save"; }
+}
+
+function catBadge(cat){
+  const map = {
+    "":              ["parish",  "Parish"],
+    "Filial Church": ["filial",  "Filial Church"],
+    "Station":       ["station", "Station"],
+    "Chapel/Shrine": ["shrine",  "Chapel/Shrine"],
+    "Mission":       ["mission", "Mission"]
+  };
+  const [cls, label] = map[cat]||["parish","Parish"];
+  return `<span class="cat-badge ${cls}">${esc(label)}</span>`;
+}
+
+/* ════════════════════════════════════════
+   CLOUDINARY UPLOAD
+════════════════════════════════════════ */
+async function uploadToCloudinary(file, onProgress){
+  return new Promise((resolve, reject)=>{
+    const fd = new FormData();
+    fd.append("file",           file);
+    fd.append("upload_preset",  UPLOAD_PRESET);
+    fd.append("folder",         "parishes");
+    const xhr = new XMLHttpRequest();
+    xhr.open("POST", `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`);
+    xhr.upload.onprogress = e => {
+      if(e.lengthComputable && onProgress) onProgress(Math.round(e.loaded/e.total*100));
+    };
+    xhr.onload  = () => xhr.status===200 ? resolve(JSON.parse(xhr.responseText)) : reject(new Error("Upload failed"));
+    xhr.onerror = () => reject(new Error("Network error"));
+    xhr.send(fd);
+  });
+}
+
+async function deleteCloudinaryImg(publicId) {
+  if (!publicId) return false;
+  try {
+    const fd = new FormData();
+    fd.append("public_id", publicId);
+    fd.append("upload_preset", UPLOAD_PRESET);
+    fd.append("folder",         "parishes");
+
+    const res  = await fetch(
+      `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/destroy`,
+      { method: "POST", body: fd }
+    );
+    const data = await res.json();
+
+    if (data.result === "ok") {
+      console.log("✅ Cloudinary deleted:", publicId);
+      return true;
+    } else {
+      console.warn("⚠️ Cloudinary response:", data);
+      return false;
+    }
+  } catch (err) {
+    console.warn("❌ Cloudinary delete failed:", err.message);
+    return false;
+  }
+}
+
+/* ════════════════════════════════════════
+   AUTH
+════════════════════════════════════════ */
+document.body.style.display = "none";
+onAuthStateChanged(auth, async user => {
+  if(!user){ window.location.href="index.html"; return; }
+  const snap = await getDoc(doc(db,"users",user.uid));
+  if(!snap.exists()){ await signOut(auth); window.location.href="index.html"; return; }
+  const prof = snap.data();
+  userRole = user.email===ADMIN ? "Admin" : "User";
+  const uname = prof.username||user.displayName||user.email;
+
+  document.getElementById("sidebar-username").textContent = uname;
+  document.getElementById("sidebar-role").textContent     = userRole;
+  document.getElementById("sidebar-avatar").textContent   = uname[0].toUpperCase();
+  const badge = document.getElementById("role-badge");
+  badge.textContent = userRole;
+  badge.className   = userRole==="Admin"?"badge bg-warning text-dark me-2":"badge bg-primary me-2";
+
+  if(userRole==="Admin"){
+    document.getElementById("btn-add-parish").style.display = "";
+    document.getElementById("par-th-actions").style.display = "";
+  }
+
+  document.body.style.display = "";
+  buildForaneTabs();
+  await loadStats();
+  await loadForane(activeForane);
+});
+
+document.getElementById("btn-logout").addEventListener("click", async()=>{
+  await signOut(auth); window.location.href="index.html";
+});
+document.getElementById("sidebar-toggle").addEventListener("click",()=>{
+  document.getElementById("sidebar").classList.toggle("open");
+  document.getElementById("sidebar-overlay").classList.toggle("show");
+});
+document.getElementById("sidebar-overlay").addEventListener("click",()=>{
+  document.getElementById("sidebar").classList.remove("open");
+  document.getElementById("sidebar-overlay").classList.remove("show");
+});
+
+/* ════════════════════════════════════════
+   FORANE TABS
+════════════════════════════════════════ */
+function buildForaneTabs(){
+  const wrap = document.getElementById("forane-tabs");
+  wrap.innerHTML = FORANES.map(f =>
+    `<button class="forane-tab${f===activeForane?" active":""}"
+       onclick="switchForane('${f.replace(/'/g,"\\'")}',this)">${f}</button>`
+  ).join("");
+}
+
+window.switchForane = async function(forane, btn){
+  activeForane = forane;
+  document.querySelectorAll(".forane-tab").forEach(b=>b.classList.remove("active"));
+  btn.classList.add("active");
+  document.getElementById("forane-title").textContent = forane+" Forane";
+  document.getElementById("par-search").value="";
+  document.getElementById("par-cat-filter").value="";
+  await loadForane(forane);
+};
+
+/* ════════════════════════════════════════
+   LOAD STATS
+════════════════════════════════════════ */
+async function loadStats(){
+  try{
+    const all     = await getDocs(PAR_COL);
+    const docs    = all.docs.map(d=>d.data());
+    const total   = docs.length;
+    const withImg = docs.filter(d=>d.imageUrl).length;
+    const parishes= docs.filter(d=>!d.cat).length;
+    document.getElementById("st-total").textContent   = total;
+    document.getElementById("st-withimg").textContent = withImg;
+    document.getElementById("st-parishes").textContent= parishes;
+    document.getElementById("sidebar-par-count").textContent = total;
+    // Show import banner if empty
+    if(total===0){
+      document.getElementById("import-banner").style.display="flex";
+    }
+  }catch(err){ console.warn("Stats error:", err); }
+}
+
+/* ════════════════════════════════════════
+   LOAD FORANE DATA
+════════════════════════════════════════ */
+async function loadForane(forane){
+  showSkeleton(true);
+  try{
+    const q   = query(PAR_COL, where("forane","==",forane));
+    const sn  = await getDocs(q);
+    allParishes = sn.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>(a.order??999)-(b.order??999));
+    applyFilters();
+  }catch(err){
+    parToast("❌ Failed to load: "+err.message, "error");
+    console.error(err);
+  }finally{
+    showSkeleton(false);
+  }
+}
+
+function showSkeleton(on){
+  document.getElementById("par-skeleton").style.display = on ? "block" : "none";
+  document.getElementById("par-table").style.display    = on ? "none"  : "";
+}
+
+/* ════════════════════════════════════════
+   FILTER & RENDER TABLE
+════════════════════════════════════════ */
+window.applyFilters = function(){
+  const q   = (document.getElementById("par-search")?.value||"").toLowerCase();
+  const cat = document.getElementById("par-cat-filter")?.value||"";
+  const srt = document.getElementById("par-sort")?.value||"name";
+
+  let data = [...allParishes];
+
+  if(q){
+    data = data.filter(p=>
+      (p.name||"").toLowerCase().includes(q)||
+      (p.location||"").toLowerCase().includes(q)
+    );
+  }
+  if(cat){
+    data = data.filter(p => cat==="" ? !p.cat : p.cat===cat);
+  }
+  if(srt==="name")   data.sort((a,b)=>(a.name||"").localeCompare(b.name||""));
+  if(srt==="cat")    data.sort((a,b)=>(a.cat||"").localeCompare(b.cat||""));
+  if(srt==="newest") data.reverse();
+
+  filteredData = data;
+  renderTable(data);
+};
+
+function renderTable(data){
+  const tbody = document.getElementById("par-tbody");
+  const empty = document.getElementById("par-empty");
+
+  if(!data.length){
+    tbody.innerHTML="";
+    empty.style.display="flex";
+    return;
+  }
+  empty.style.display="none";
+
+  tbody.innerHTML = data.map((p,i)=>`
+  <tr>
+    <td style="color:#94a3b8;font-size:.78rem;">${i+1}</td>
+    <td class="par-img-cell">
+      ${p.imageUrl
+        ? `<img src="${esc(p.imageUrl)}" alt="${esc(p.name)}" loading="lazy"/>`
+        : `<div class="par-img-placeholder">⛪</div>`
+      }
+    </td>
+    <td style="font-weight:600;font-size:.84rem;">${esc(p.name)}</td>
+    <td style="font-size:.82rem;color:#64748b;">${esc(p.location)}</td>
+    <td>${catBadge(p.cat||"")}</td>
+    <td style="font-size:.76rem;color:#94a3b8;">${esc(p.forane||"")}</td>
+    <td>
+      ${p.phone
+        ? `<a href="tel:${esc(p.phone)}" class="par-phone-link">
+             <span class="par-phone-icon">📞</span>${esc(p.phone)}
+           </a>`
+        : `<span style="color:#e2e8f0;font-size:.75rem;">—</span>`
+      }
+    </td>
+    <td style="display:${userRole==='Admin'?'':'none'};">
+      <button onclick="openParishEdit('${p.id}')"
+        style="background:#4f46e5;color:#fff;border:none;border-radius:6px;padding:4px 11px;font-size:.72rem;cursor:pointer;transition:background .15s;margin-right:4px;"
+        onmouseover="this.style.background='#4338ca'" onmouseout="this.style.background='#4f46e5'">
+        ✏️ Edit
+      </button>
+    </td>
+  </tr>
+`).join("");
+ 
+}
+
+/* ════════════════════════════════════════
+   MODAL HELPERS
+════════════════════════════════════════ */
+function openPM(){ document.getElementById("m-parish").classList.add("show"); }
+window.closePM = function(){ document.getElementById("m-parish").classList.remove("show"); resetPMImg(); };
+document.getElementById("m-parish").addEventListener("click", e=>{ if(e.target===e.currentTarget) window.closePM(); });
+
+function resetPMImg(){
+  newImgFile=null; newImgPreview=null; pendingImgRemove=false;
+  existingImgUrl=null; existingPublicId=null;
+  document.getElementById("pm-img-preview").style.display="none";
+  document.getElementById("pm-img-preview").src="";
+  document.getElementById("pm-placeholder").style.display="flex";
+  document.getElementById("pm-rm-btn").style.display="none";
+  document.getElementById("img-zone").classList.remove("has-img");
+  document.getElementById("pm-img-file").value="";
+  document.getElementById("pm-progress").style.display="none";
+}
+/* ── Drag & Drop ── */
+(function initDragDrop(){
+  const zone = document.getElementById("img-zone");
+  ["dragenter","dragover"].forEach(ev =>
+    zone.addEventListener(ev, e => {
+      e.preventDefault(); e.stopPropagation();
+      zone.classList.add("drag-over");
+    })
+  );
+  ["dragleave","dragend","drop"].forEach(ev =>
+    zone.addEventListener(ev, e => {
+      e.preventDefault(); e.stopPropagation();
+      zone.classList.remove("drag-over");
+    })
+  );
+  zone.addEventListener("drop", async e => {
+    const f = e.dataTransfer?.files?.[0];
+    if(!f || !f.type.startsWith("image/")) {
+      parToast("⚠ Only image files allowed", "error"); return;
+    }
+    if(f.size > 5*1024*1024) {
+      parToast("⚠ Image must be under 5 MB", "error"); return;
+    }
+    newImgFile = f;
+    newImgPreview = await b64(f);
+    setPMImg(newImgPreview);
+    pendingImgRemove = false;
+    // Clear URL field when file dropped
+    document.getElementById("pm-img-url").value = "";
+  });
+})();
+
+function setPMImg(url){
+  document.getElementById("pm-img-preview").src=url;
+  document.getElementById("pm-img-preview").style.display="block";
+  document.getElementById("pm-placeholder").style.display="none";
+  document.getElementById("pm-rm-btn").style.display="flex";
+  document.getElementById("img-zone").classList.add("has-img");
+}
+
+window.onPMImg = async function(ev){
+  const f=ev.target.files[0]; if(!f)return;
+  if(f.size>5*1024*1024){ parToast("Image must be under 5 MB","error"); return; }
+  newImgFile=f;
+  newImgPreview=await b64(f);
+  setPMImg(newImgPreview);
+  pendingImgRemove=false;
+};
+window.onImgUrlInput = function(val) {
+  val = val.trim();
+  if(!val) { resetPMImg(); return; }
+  // Show preview from URL
+  newImgFile = null;
+  newImgPreview = null;
+  existingImgUrl = val;
+  setPMImg(val);
+  pendingImgRemove = false;
+};
+window.removePMImg = function(ev){
+  ev.stopPropagation();
+  pendingImgRemove = !!existingPublicId;
+  newImgFile=null; newImgPreview=null;
+  resetPMImg();
+};
+
+/* ════════════════════════════════════════
+   OPEN ADD
+════════════════════════════════════════ */
+window.openParishAdd = function(){
+  if(userRole!=="Admin"){ parToast("⛔ Admin only"); return; }
+  editId=null;
+  resetPMImg();
+  document.getElementById("pm-title").textContent     = "Add Parish";
+  document.getElementById("pm-name").value            = "";
+  document.getElementById("pm-location").value        = "";
+  document.getElementById("pm-cat").value             = "";
+  document.getElementById("pm-forane").value          = activeForane;
+  document.getElementById("pm-status").textContent    = "";
+  document.getElementById("btn-pm-del").style.display = "none";
+  document.getElementById("pm-phone").value = "";
+  busyBtn("btn-pm-save",false,"💾 Save Parish");
+  openPM();
+};
+
+/* Populate forane select in modal */
+(function populateModalForane(){
+  const sel = document.getElementById("pm-forane");
+  sel.innerHTML = FORANES.map(f=>`<option value="${esc(f)}">${f}</option>`).join("");
+})();
+
+/* ════════════════════════════════════════
+   OPEN EDIT
+════════════════════════════════════════ */
+window.openParishEdit = function(id){
+  if(userRole!=="Admin"){ parToast("⛔ Admin only"); return; }
+  const p = allParishes.find(x=>x.id===id); if(!p) return;
+  editId=id;
+  resetPMImg();
+  existingImgUrl   = p.imageUrl||"";
+  existingPublicId = p.cloudinaryPublicId||"";
+  if(p.imageUrl) setPMImg(p.imageUrl);
+
+  document.getElementById("pm-title").textContent     = "Edit Parish";
+  document.getElementById("pm-name").value            = p.name||"";
+  document.getElementById("pm-location").value        = p.location||"";
+  document.getElementById("pm-cat").value             = p.cat||"";
+  document.getElementById("pm-forane").value          = p.forane||activeForane;
+  document.getElementById("pm-status").textContent    = "";
+  document.getElementById("btn-pm-del").style.display = "";
+  document.getElementById("pm-phone").value = p.phone || "";
+  busyBtn("btn-pm-save",false,"💾 Save Parish");
+  openPM();
+};
+
+/* ════════════════════════════════════════
+   SAVE PARISH
+════════════════════════════════════════ */
+window.saveParish = async function(){
+  const name     = document.getElementById("pm-name").value.trim();
+  const location = document.getElementById("pm-location").value.trim();
+  const cat      = document.getElementById("pm-cat").value;
+  const forane   = document.getElementById("pm-forane").value;
+  const st       = document.getElementById("pm-status");
+
+  if(!name){    st.textContent="⚠ Parish name is required."; st.style.color="#ef4444"; return; }
+  if(!location){ st.textContent="⚠ Location is required.";   st.style.color="#ef4444"; return; }
+
+  busyBtn("btn-pm-save", true);
+  st.textContent=""; st.style.color="#64748b";
+
+  try{
+    let imageUrl    = existingImgUrl||"";
+    let cloudPublicId = existingPublicId||"";
+
+    /* Remove old image if user clicked remove */
+    if(pendingImgRemove && existingPublicId){
+      await deleteCloudinaryImg(existingPublicId);
+      imageUrl=""; cloudPublicId="";
+    }
+
+    /* Upload new image */
+    if(newImgFile){
+      document.getElementById("pm-progress").style.display="block";
+      st.textContent="Uploading image…"; st.style.color="#64748b";
+      const res = await uploadToCloudinary(newImgFile, pct=>{
+        document.getElementById("pm-prog-bar").style.width   = pct+"%";
+        document.getElementById("pm-prog-text").textContent  = `Uploading… ${pct}%`;
+      });
+      imageUrl      = res.secure_url;
+      cloudPublicId = res.public_id;
+      document.getElementById("pm-progress").style.display="none";
+      st.textContent="";
+    }
+
+    /* Figure out order */
+    let order = 999;
+    if(editId){
+      order = allParishes.find(p=>p.id===editId)?.order ?? 999;
+    } else {
+      const existing = allParishes.filter(p=>p.forane===forane);
+      order = existing.length;
+    }
+    // If no file uploaded but URL field has value, use that
+if(!newImgFile && !existingImgUrl) {
+  const urlFieldVal = document.getElementById("pm-img-url").value.trim();
+  if(urlFieldVal) { imageUrl = urlFieldVal; cloudPublicId = ""; }
+}
+const phone = document.getElementById("pm-phone").value.trim();
+
+    const payload = {
+      name, location, cat, forane,
+      imageUrl:            String(imageUrl),
+      cloudinaryPublicId:  String(cloudPublicId),
+      phone:              String(phone),
+      order,
+      updated_at: serverTimestamp()
+    };
+
+    if(editId){
+      await updateDoc(doc(db,"parishes",editId), payload);
+      parToast("✅ Parish updated!","success");
+    } else {
+      await addDoc(PAR_COL, {...payload, created_at: serverTimestamp()});
+      parToast("✅ Parish added!","success");
+    }
+
+    closePM();
+
+    /* Reload if still on same forane */
+    if(forane===activeForane){
+      await loadForane(activeForane);
+    } else {
+      /* Switch to the saved forane tab */
+      activeForane=forane;
+      buildForaneTabs();
+      document.getElementById("forane-title").textContent=forane+" Forane";
+      await loadForane(forane);
+    }
+    await loadStats();
+
+  }catch(err){
+    document.getElementById("pm-progress").style.display="none";
+    st.textContent="❌ "+err.message; st.style.color="#ef4444";
+    busyBtn("btn-pm-save",false,"💾 Save Parish");
+  }
+};
+
+/* ════════════════════════════════════════
+   DELETE PARISH
+════════════════════════════════════════ */
+let pendingDeleteId = null;
+
+window.deleteParish = function(){
+  if(!editId) return;
+  const p = allParishes.find(x=>x.id===editId);
+  pendingDeleteId = editId;
+  document.getElementById("del-confirm-text").textContent =
+    `Delete "${p?.name||"this parish"}"? This cannot be undone.`;
+  document.getElementById("m-del-confirm").classList.add("show");
+};
+
+window.confirmDelete = async function(){
+  if(!pendingDeleteId) return;
+  const btn = document.getElementById("btn-del-confirm");
+  btn.disabled=true; btn.textContent="Deleting…";
+  try{
+    const p = allParishes.find(x=>x.id===pendingDeleteId);
+    if(p?.cloudinaryPublicId) await deleteCloudinaryImg(p.cloudinaryPublicId);
+    await deleteDoc(doc(db,"parishes",pendingDeleteId));
+    document.getElementById("m-del-confirm").classList.remove("show");
+    closePM();
+    parToast("Parish deleted.","success");
+    await loadForane(activeForane);
+    await loadStats();
+  }catch(err){
+    parToast("❌ Delete failed: "+err.message,"error");
+  }finally{
+    btn.disabled=false; btn.textContent="Yes, Delete";
+    pendingDeleteId=null;
+  }
+};
+
+document.getElementById("m-del-confirm").addEventListener("click", e=>{
+  if(e.target===e.currentTarget) e.currentTarget.classList.remove("show");
+});
+
+
+/* ════════════════════════════════════════
+   IMPORT DEFAULT DATA
+════════════════════════════════════════ */
+window.importDefaultData = async function(){
+  if(!confirm("This will import all 16 foranes' default parish data into Firestore.\n\nThis is a one-time action — existing data will not be overwritten.\n\nContinue?")) return;
+  const btn = document.getElementById("btn-import");
+  btn.disabled=true; btn.textContent="⏳ Importing…";
+
+  let count=0;
+  try{
+    for(const [forane, items] of Object.entries(DEFAULT_DATA)){
+      for(let i=0;i<items.length;i++){
+        const p=items[i];
+        await addDoc(PAR_COL,{
+          name:              String(p.name||""),
+          location:          String(p.location||""),
+          cat:               String(p.cat||""),
+          forane:            forane,
+          imageUrl:          "",
+          cloudinaryPublicId:"",
+          order:             i,
+          created_at:        serverTimestamp(),
+          updated_at:        serverTimestamp()
+        });
+        count++;
+        btn.textContent=`⏳ Imported ${count}…`;
+      }
+    }
+    document.getElementById("import-banner").style.display="none";
+    parToast(`✅ Imported ${count} parishes!`,"success");
+    await loadStats();
+    await loadForane(activeForane);
+  }catch(err){
+    parToast("❌ Import failed: "+err.message,"error");
+    btn.disabled=false; btn.textContent="⬆ Import Default Data";
+  }
+};
+
+
+</script>
+</body>
+</html>
