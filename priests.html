@@ -1,0 +1,894 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Priests — AdminForge</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"/>
+  <link rel="stylesheet" href="style.css"/>
+  <style>
+    /* ── Priest stat cards ── */
+    .pr-stat-card{background:#fff;border:1px solid #e2e8f0;border-radius:14px;padding:20px 22px;display:flex;align-items:center;gap:16px;box-shadow:0 2px 8px rgba(0,0,0,.05);}
+    .pr-stat-icon{width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0;}
+    .pr-stat-icon.red   {background:#fff1f0;color:#921a02;}
+    .pr-stat-icon.blue  {background:#eff6ff;color:#2563eb;}
+    .pr-stat-icon.green {background:#f0fdf4;color:#16a34a;}
+    .pr-stat-icon.gold  {background:#fffbeb;color:#d97706;}
+    .pr-stat-value{font-size:1.5rem;font-weight:800;color:#1e293b;line-height:1;}
+    .pr-stat-label{font-size:.72rem;color:#64748b;margin-top:2px;}
+
+    /* ── Section tabs ── */
+    .section-tabs{display:flex;gap:6px;flex-wrap:wrap;padding:4px 0 12px;}
+    .section-tab{padding:6px 16px;border-radius:20px;border:1.5px solid #e2e8f0;background:#fff;color:#64748b;font-size:.76rem;font-weight:600;cursor:pointer;transition:all .2s;white-space:nowrap;}
+    .section-tab:hover{border-color:#921a02;color:#921a02;}
+    .section-tab.active{background:#921a02;color:#fff;border-color:#921a02;}
+
+    /* ── Priest cards grid (admin view) ── */
+    .pr-cards-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:18px;margin-bottom:20px;}
+
+    /* Priest card */
+    .pr-card{background:#fff;border:1px solid #e2e8f0;border-radius:14px;overflow:hidden;box-shadow:0 2px 10px rgba(0,0,0,.05);transition:transform .25s,box-shadow .25s;}
+    .pr-card:hover{transform:translateY(-3px);box-shadow:0 10px 30px rgba(0,0,0,.1);}
+    .pr-card-photo{width:100%;aspect-ratio:1/1;background:#f8fafc;display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative;}
+    .pr-card-photo img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .4s;}
+    .pr-card:hover .pr-card-photo img{transform:scale(1.05);}
+    .pr-photo-placeholder{width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:linear-gradient(160deg,rgba(146,26,2,.08),rgba(201,168,76,.04));}
+    .pr-photo-placeholder svg{width:52%;height:52%;fill:rgba(146,26,2,.25);}
+    .pr-card-accent{width:100%;height:4px;background:linear-gradient(90deg,#6e1301,#921a02,#c9a84c);}
+    .pr-card-body{padding:13px 14px 14px;}
+    .pr-card-name{font-size:.85rem;font-weight:700;color:#1a1a1a;text-align:center;margin-bottom:10px;padding-bottom:9px;border-bottom:1px solid #f1f5f9;}
+    .pr-info-row{display:flex;align-items:flex-start;gap:6px;font-size:.75rem;color:#555;margin-bottom:4px;line-height:1.5;}
+    .pr-info-row .pi-icon{color:#921a02;font-size:.72rem;margin-top:2px;width:13px;flex-shrink:0;}
+    .pr-info-row .pi-lbl{font-weight:700;color:#921a02;font-size:.67rem;text-transform:uppercase;letter-spacing:.03em;flex-shrink:0;min-width:36px;}
+    .pr-info-row .pi-val{color:#555;flex:1;word-break:break-word;}
+    .pr-card-contacts{margin-top:10px;padding-top:9px;border-top:1px solid #f1f5f9;display:flex;flex-wrap:wrap;gap:5px;}
+    .c-pill{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:20px;font-size:.67rem;font-weight:600;text-decoration:none;border:1px solid #e2e8f0;background:rgba(146,26,2,.05);color:#921a02;transition:all .18s;cursor:pointer;}
+    .c-pill i{font-size:.72rem;}
+    .c-pill:hover{background:#921a02;color:#fff;border-color:#921a02;}
+    .c-pill.wa:hover{background:#25d366;border-color:#25d366;color:#fff;}
+    .c-pill.em:hover{background:#6e1301;border-color:#6e1301;color:#fff;}
+
+    /* ── Admin action overlay on card ── */
+    .pr-card-actions{display:flex;gap:6px;justify-content:center;padding:10px 14px 13px;}
+    .pr-edit-btn{flex:1;padding:7px;border-radius:8px;border:none;background:#4f46e5;color:#fff;font-size:.75rem;font-weight:600;cursor:pointer;transition:background .15s;}
+    .pr-edit-btn:hover{background:#4338ca;}
+
+    /* ── Search / filter bar ── */
+    .pr-filter-bar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:16px;}
+    .pr-search{flex:1;min-width:180px;border:1px solid #e2e8f0;border-radius:8px;padding:8px 14px;font-size:.84rem;outline:none;transition:border-color .2s;}
+    .pr-search:focus{border-color:#921a02;}
+    .pr-filter-select{border:1px solid #e2e8f0;border-radius:8px;padding:8px 12px;font-size:.82rem;outline:none;cursor:pointer;}
+    .pr-filter-select:focus{border-color:#921a02;}
+
+    /* ── Pagination ── */
+    .pr-pagination{display:flex;align-items:center;justify-content:center;gap:6px;flex-wrap:wrap;padding:10px 0 4px;}
+    .pg-btn{display:inline-flex;align-items:center;justify-content:center;min-width:36px;height:36px;padding:0 8px;border-radius:8px;border:1.5px solid #e2e8f0;background:#fff;color:#555;font-size:.8rem;font-weight:600;cursor:pointer;transition:all .2s;}
+    .pg-btn:hover:not(:disabled){background:rgba(146,26,2,.08);border-color:rgba(146,26,2,.4);color:#921a02;}
+    .pg-btn.active{background:#921a02;border-color:#921a02;color:#fff;}
+    .pg-btn:disabled{opacity:.4;cursor:not-allowed;}
+    .pr-pg-info{font-size:.78rem;color:#64748b;text-align:center;margin-bottom:8px;}
+
+    /* ── Empty state ── */
+    .pr-empty{display:none;flex-direction:column;align-items:center;justify-content:center;padding:60px 20px;color:#94a3b8;text-align:center;}
+    .pr-empty-icon{font-size:2.5rem;margin-bottom:10px;}
+    .pr-empty-title{font-size:.95rem;font-weight:600;color:#64748b;}
+
+    /* ── Toast ── */
+    #pr-toast{position:fixed;bottom:24px;right:24px;z-index:99999;background:#1e293b;color:#fff;padding:12px 20px;border-radius:10px;font-size:.82rem;font-weight:600;box-shadow:0 8px 24px rgba(0,0,0,.25);opacity:0;transform:translateY(10px);transition:opacity .25s,transform .25s;pointer-events:none;max-width:300px;}
+    #pr-toast.show{opacity:1;transform:translateY(0);}
+    #pr-toast.success{background:#16a34a;}
+    #pr-toast.error{background:#dc2626;}
+
+    /* ── Modal ── */
+    .hm-backdrop{display:none;position:fixed;inset:0;z-index:9998;background:rgba(0,0,0,.55);backdrop-filter:blur(3px);align-items:center;justify-content:center;}
+    .hm-backdrop.show{display:flex;animation:hmFadeIn .2s ease;}
+    @keyframes hmFadeIn{from{opacity:0}to{opacity:1}}
+    .hm-box{background:#fff;border-radius:16px;padding:24px;width:100%;max-width:600px;max-height:92vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.25);position:relative;animation:hmUp .25s ease;}
+    @keyframes hmUp{from{transform:translateY(20px);opacity:0}to{transform:translateY(0);opacity:1}}
+    .hm-box h5{font-size:1rem;font-weight:700;margin:0 0 16px;}
+    .hm-close{position:absolute;top:14px;right:16px;background:none;border:none;font-size:1.2rem;cursor:pointer;color:#6b7280;}
+    .hm-close:hover{color:#1e293b;}
+    .hm-group{margin-bottom:12px;}
+    .hm-group label{display:block;font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#64748b;margin-bottom:5px;}
+    .hm-group input,.hm-group textarea,.hm-group select{width:100%;border:1px solid #e2e8f0;border-radius:8px;padding:8px 12px;font-size:.84rem;outline:none;transition:border-color .2s;font-family:inherit;}
+    .hm-group input:focus,.hm-group select:focus,.hm-group textarea:focus{border-color:#921a02;}
+    .hm-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+    .hm-save{flex:1;padding:10px;border-radius:8px;border:none;background:#921a02;color:#fff;font-weight:600;font-size:.85rem;cursor:pointer;transition:background .15s;display:flex;align-items:center;justify-content:center;gap:6px;min-height:40px;}
+    .hm-save:hover:not(:disabled){background:#6d1201;}
+    .hm-save:disabled{opacity:.6;cursor:not-allowed;}
+    .hm-cancel{padding:10px 18px;border-radius:8px;border:1px solid #e2e8f0;background:#f8fafc;font-size:.85rem;cursor:pointer;}
+    .hm-cancel:hover{background:#f1f5f9;}
+    .hm-status{font-size:.78rem;text-align:center;margin-top:8px;min-height:18px;}
+    .spin{width:14px;height:14px;border:2px solid rgba(255,255,255,.4);border-top-color:#fff;border-radius:50%;animation:spinAnim .6s linear infinite;display:inline-block;}
+    @keyframes spinAnim{to{transform:rotate(360deg)}}
+
+    /* ── Image upload zone ── */
+    .img-upload-zone{width:100%;height:160px;border:2px dashed #e2e8f0;border-radius:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;cursor:pointer;transition:border-color .2s,background .2s;position:relative;overflow:hidden;}
+    .img-upload-zone:hover,.img-upload-zone.drag-over{border-color:#921a02;background:#fff5f5;box-shadow:0 0 0 3px rgba(146,26,2,.1);}
+    .img-upload-zone.has-img{border-style:solid;border-color:#e2e8f0;}
+    .img-upload-zone img{width:100%;height:100%;object-fit:cover;border-radius:10px;}
+    .img-overlay{position:absolute;inset:0;background:rgba(0,0,0,.45);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;opacity:0;transition:opacity .2s;border-radius:10px;}
+    .img-upload-zone:hover .img-overlay{opacity:1;}
+    .img-overlay span{color:#fff;font-size:.78rem;font-weight:600;}
+    .img-placeholder{display:flex;flex-direction:column;align-items:center;gap:6px;color:#94a3b8;}
+    .img-placeholder i{font-size:2rem;}
+    .img-placeholder span{font-size:.76rem;font-weight:600;}
+    .img-rm-btn{position:absolute;top:8px;right:8px;background:rgba(239,68,68,.9);color:#fff;border:none;border-radius:50%;width:26px;height:26px;cursor:pointer;font-size:.75rem;display:flex;align-items:center;justify-content:center;z-index:2;}
+    .img-rm-btn:hover{background:#dc2626;}
+    .upload-progress{margin:6px 0;display:none;}
+    .upload-progress-track{background:#f1f5f9;border-radius:20px;height:6px;overflow:hidden;}
+    .upload-progress-bar{height:100%;background:linear-gradient(90deg,#921a02,#c9a84c);width:0%;transition:width .3s;border-radius:20px;}
+    .upload-progress-text{font-size:.72rem;color:#64748b;margin-top:3px;text-align:center;}
+
+    /* ── Skeleton ── */
+    .skel{background:linear-gradient(90deg,#f1f5f9 25%,#e2e8f0 50%,#f1f5f9 75%);background-size:200% 100%;animation:skelShimmer 1.4s infinite;border-radius:8px;}
+    @keyframes skelShimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+
+    /* ── Responsive ── */
+    @media(max-width:768px){
+      .pr-cards-grid{grid-template-columns:repeat(2,1fr);gap:12px;}
+      .hm-row{grid-template-columns:1fr;}
+      .pr-filter-bar{flex-direction:column;}
+    }
+    @media(max-width:480px){
+      .pr-cards-grid{grid-template-columns:repeat(2,1fr);gap:8px;}
+    }
+  </style>
+</head>
+<body>
+
+<div id="pr-toast"></div>
+
+<div class="sidebar-overlay" id="sidebar-overlay"></div>
+<div class="dash-layout">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-brand">
+      <div class="sidebar-logo">AF</div>
+      <div>
+        <div class="sidebar-brand-text">AdminForge</div>
+        <div class="sidebar-brand-sub">Management System</div>
+      </div>
+    </div>
+    <div class="sidebar-menu">
+      <p class="sidebar-section">Main</p>
+      <a href="dashboard.html" class="sidebar-item"><span class="si-icon">⬡</span> Home</a>
+      <a href="parishes.html" class="sidebar-item"><span class="si-icon">⛪</span> Parishes</a>
+      <a href="priests.html" class="sidebar-item active" id="nav-priests">
+        <span class="si-icon">✝</span> Priests
+        <span class="si-badge" id="sidebar-pr-count">0</span>
+      </a>
+      <p class="sidebar-section" style="margin-top:14px;">Account</p>
+      <div class="sidebar-item" onclick="prToast('Settings — coming soon!')"><span class="si-icon">⚙</span> Settings</div>
+      <div class="sidebar-item" onclick="prToast('Profile editor — coming soon!')"><span class="si-icon">◉</span> My Profile</div>
+    </div>
+    <div class="sidebar-footer">
+      <div class="user-row">
+        <div class="user-row-avatar" id="sidebar-avatar">?</div>
+        <div>
+          <div class="user-row-name" id="sidebar-username">Loading…</div>
+          <div class="user-row-role" id="sidebar-role">—</div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- TOPBAR -->
+  <nav class="topbar">
+    <div class="topbar-left">
+      <button class="sidebar-toggle" id="sidebar-toggle">☰</button>
+      <div class="topbar-rule d-none d-lg-block"></div>
+      <div>
+        <div class="topbar-title">Priests</div>
+        <div class="topbar-sub">Manage Priest Directory</div>
+      </div>
+    </div>
+    <div class="topbar-right">
+      <span id="role-badge" class="badge bg-secondary me-2" style="font-size:.8rem;padding:6px 12px;"></span>
+      <button class="btn btn-logout btn-sm" id="btn-logout">⏻ Logout</button>
+    </div>
+  </nav>
+
+  <!-- MAIN -->
+  <main class="dash-main">
+
+    <!-- Stats -->
+    <div class="row g-3 mb-4">
+      <div class="col-6 col-xl-3">
+        <div class="pr-stat-card">
+          <div class="pr-stat-icon red">✝</div>
+          <div><div class="pr-stat-value" id="st-total">—</div><div class="pr-stat-label">Total Priests</div></div>
+        </div>
+      </div>
+      <div class="col-6 col-xl-3">
+        <div class="pr-stat-card">
+          <div class="pr-stat-icon blue">🖼</div>
+          <div><div class="pr-stat-value" id="st-withimg">—</div><div class="pr-stat-label">With Photo</div></div>
+        </div>
+      </div>
+      <div class="col-6 col-xl-3">
+        <div class="pr-stat-card">
+          <div class="pr-stat-icon green">📱</div>
+          <div><div class="pr-stat-value" id="st-withphone">—</div><div class="pr-stat-label">With Contact</div></div>
+        </div>
+      </div>
+      <div class="col-6 col-xl-3">
+        <div class="pr-stat-card">
+          <div class="pr-stat-icon gold">📄</div>
+          <div><div class="pr-stat-value" id="st-page">1</div><div class="pr-stat-label">Current Page</div></div>
+        </div>
+      </div>
+    </div>
+    <div style="background:linear-gradient(135deg,#fff7ed,#fef3c7);border:1px solid #fcd34d;border-radius:12px;padding:16px 20px;margin-bottom:20px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;" id="import-priests-banner">
+  <i class="bi bi-database-fill-up" style="font-size:1.4rem;color:#d97706;"></i>
+  <div style="flex:1;">
+    <p style="font-size:.85rem;font-weight:700;color:#92400e;margin:0 0 2px;">Import existing priests.json data</p>
+    <p style="font-size:.76rem;color:#b45309;margin:0;">One-time import — existing Firestore data will not be overwritten.</p>
+  </div>
+  <button id="btn-import-priests" onclick="importPriestsJSON()"
+    style="background:#d97706;color:#fff;border:none;border-radius:8px;padding:9px 18px;font-size:.8rem;font-weight:700;cursor:pointer;">
+    ⬆ Import priests.json
+  </button>
+</div>
+
+    <!-- Card -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-header-title">
+          <div class="card-header-pill">✝</div>
+          <span>Priests Directory</span>
+        </div>
+        <button onclick="openPriestAdd()" id="btn-add-priest"
+          style="display:none;background:#921a02;color:#fff;border:none;border-radius:8px;padding:7px 16px;font-size:.78rem;font-weight:700;cursor:pointer;">
+          + Add Priest
+        </button>
+      </div>
+
+      <div class="card-body">
+
+        <!-- Filter bar -->
+        <div class="pr-filter-bar">
+          <input type="text" id="pr-search" class="pr-search" placeholder="🔍 Search name, parish, location…" oninput="applyFilters()"/>
+          <select id="pr-sort" class="pr-filter-select" onchange="applyFilters()">
+            <option value="name">Sort: Name A–Z</option>
+            <option value="parish">Sort: Parish</option>
+            <option value="newest">Sort: Newest</option>
+            <option value="ord">Sort: Ordination</option>
+          </select>
+        </div>
+
+        <!-- Skeleton -->
+        <div id="pr-skeleton" style="padding:8px 0;">
+          <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:18px;">
+            <div class="skel" style="height:320px;"></div>
+            <div class="skel" style="height:320px;opacity:.7;"></div>
+            <div class="skel" style="height:320px;opacity:.4;"></div>
+          </div>
+        </div>
+
+        <!-- Cards grid -->
+        <div class="pr-cards-grid" id="pr-cards-grid" style="display:none;"></div>
+
+        <!-- Empty -->
+        <div class="pr-empty" id="pr-empty">
+          <div class="pr-empty-icon">✝</div>
+          <div class="pr-empty-title">No priests found</div>
+        </div>
+
+        <!-- Pagination -->
+        <div id="pr-pg-wrap" style="display:none;">
+          <div class="pr-pg-info" id="pr-pg-info"></div>
+          <div class="pr-pagination" id="pr-pagination"></div>
+        </div>
+
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- ═══════════════════════════
+     ADD / EDIT MODAL
+═══════════════════════════ -->
+<div id="m-priest" class="hm-backdrop">
+  <div class="hm-box">
+    <button class="hm-close" onclick="closePrM()">✕</button>
+    <h5 id="prm-title">Add Priest</h5>
+
+    <!-- Photo upload -->
+    <div class="hm-group">
+      <label>Priest Photo <span style="color:#94a3b8;font-weight:400;text-transform:none;font-size:.68rem;">(Cloudinary — drag & drop / click / paste URL)</span></label>
+      <div class="img-upload-zone" id="pr-img-zone" onclick="document.getElementById('pr-img-file').click()">
+        <img id="pr-img-preview" src="" alt="" style="display:none;width:100%;height:100%;object-fit:cover;border-radius:10px;"/>
+        <div class="img-overlay"><i class="bi bi-camera-fill" style="color:#fff;font-size:1.4rem;"></i><span>Change photo</span></div>
+        <div class="img-placeholder" id="pr-placeholder">
+          <i class="bi bi-cloud-arrow-up"></i>
+          <span>Click or drag & drop image here</span>
+          <span style="font-size:.68rem;font-weight:400;color:#cbd5e1;">JPG, PNG, WEBP — max 5 MB</span>
+        </div>
+        <button class="img-rm-btn" id="pr-rm-btn" onclick="removePrImg(event)" style="display:none;" title="Remove photo">✕</button>
+      </div>
+      <input type="file" id="pr-img-file" accept="image/*" style="display:none;" onchange="onPrImg(event)"/>
+      <div class="upload-progress" id="pr-progress">
+        <div class="upload-progress-track"><div class="upload-progress-bar" id="pr-prog-bar"></div></div>
+        <div class="upload-progress-text" id="pr-prog-text">Uploading…</div>
+      </div>
+    </div>
+
+    <!-- Image URL -->
+    <div class="hm-group">
+      <label>Image URL <span style="color:#94a3b8;font-weight:400;text-transform:none;font-size:.68rem;">(paste URL directly — preview auto-loads)</span></label>
+      <input type="url" id="prm-img-url" placeholder="https://example.com/photo.jpg" oninput="onPrImgUrl(this.value)"/>
+    </div>
+
+    <!-- Name -->
+    <div class="hm-group">
+      <label>Priest Name *</label>
+      <input type="text" id="prm-name" placeholder="e.g. Rev. Fr. Thomas Joseph"/>
+    </div>
+
+    <!-- Parish & Home Tel -->
+    <div class="hm-row">
+      <div class="hm-group">
+        <label>Parish *</label>
+        <input type="text" id="prm-parish" placeholder="e.g. St. Mary's, Changanacherry"/>
+      </div>
+      <div class="hm-group">
+        <label>Home Tel</label>
+        <input type="tel" id="prm-hometel" placeholder="e.g. 0481-2420040"/>
+      </div>
+    </div>
+
+    <!-- DOB & Ordination -->
+    <div class="hm-row">
+      <div class="hm-group">
+        <label>Date of Birth</label>
+        <input type="text" id="prm-dob" placeholder="e.g. 01-01-1975"/>
+      </div>
+      <div class="hm-group">
+        <label>Date of Ordination</label>
+        <input type="text" id="prm-ord" placeholder="e.g. 01-06-2005"/>
+      </div>
+    </div>
+
+    <!-- Address -->
+    <div class="hm-group">
+      <label>Address</label>
+      <input type="text" id="prm-addr" placeholder="e.g. Changanacherry, Kerala"/>
+    </div>
+
+    <!-- Mobile & WhatsApp -->
+    <div class="hm-row">
+      <div class="hm-group">
+        <label>Mobile / Phone</label>
+        <input type="tel" id="prm-mobile" placeholder="e.g. 9876543210"/>
+      </div>
+      <div class="hm-group">
+        <label>WhatsApp <span style="color:#94a3b8;font-weight:400;text-transform:none;font-size:.68rem;">(leave blank = same as mobile)</span></label>
+        <input type="tel" id="prm-whatsapp" placeholder="e.g. 9876543210"/>
+      </div>
+    </div>
+
+    <!-- Email -->
+    <div class="hm-group">
+      <label>Email</label>
+      <input type="email" id="prm-email" placeholder="e.g. fr.thomas@example.com"/>
+    </div>
+
+    <!-- Buttons -->
+    <div style="display:flex;gap:10px;margin-top:18px;flex-wrap:wrap;">
+      <button class="hm-cancel" onclick="closePrM()">Cancel</button>
+      <button class="hm-save" id="btn-prm-save" onclick="savePriest()" style="flex:1;">💾 Save Priest</button>
+      <button id="btn-prm-del" onclick="deletePriest()"
+        style="display:none;padding:10px 14px;border-radius:8px;border:none;background:#ef4444;color:#fff;font-size:.82rem;cursor:pointer;">
+        🗑 Delete
+      </button>
+    </div>
+    <div class="hm-status" id="prm-status"></div>
+  </div>
+</div>
+
+<!-- Delete confirm -->
+<div id="m-del-confirm" class="hm-backdrop">
+  <div class="hm-box" style="max-width:400px;">
+    <h5>⚠️ Delete Priest</h5>
+    <p style="font-size:.84rem;color:#374151;" id="del-confirm-text">Are you sure?</p>
+    <div style="display:flex;gap:10px;margin-top:16px;">
+      <button class="hm-cancel" onclick="document.getElementById('m-del-confirm').classList.remove('show');">Cancel</button>
+      <button id="btn-del-confirm" onclick="confirmDelete()"
+        style="flex:1;padding:10px;border-radius:8px;border:none;background:#ef4444;color:#fff;font-weight:600;font-size:.85rem;cursor:pointer;">
+        Yes, Delete
+      </button>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<script type="module">
+import { initializeApp }   from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getAuth, onAuthStateChanged, signOut }
+  from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { getFirestore, doc, getDoc, collection, addDoc,
+         getDocs, updateDoc, deleteDoc, serverTimestamp, query, orderBy }
+  from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+/* ── Firebase ── */
+const FC = {
+  apiKey:            "AIzaSyArM8sv7J1RUj4XvAJhJd40tzA7Yc8BGXY",
+  authDomain:        "admin-dashboard-ed62c.firebaseapp.com",
+  projectId:         "admin-dashboard-ed62c",
+  storageBucket:     "admin-dashboard-ed62c.firebasestorage.app",
+  messagingSenderId: "560027475135",
+  appId:             "1:560027475135:web:3fae0cb0268729ae79fa0a"
+};
+const ADMIN = "issacnewton1503@gmail.com";
+const app   = initializeApp(FC);
+const auth  = getAuth(app);
+const db    = getFirestore(app);
+const PR_COL = collection(db, "priests");
+
+/* ── Cloudinary ── */
+const CLOUD_NAME    = "dqwayxpbp";
+const UPLOAD_PRESET = "preset";
+
+/* ── State ── */
+let userRole       = null;
+let allPriests     = [];
+let filteredData   = [];
+let currentPage    = 1;
+const PER_PAGE     = 20;
+let editId         = null;
+let newImgFile     = null;
+let existingImgUrl = null;
+let existingPubId  = null;
+let pendingRemove  = false;
+
+/* ── Utils ── */
+const esc = s => String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+const b64 = f => new Promise(r=>{ const fr=new FileReader(); fr.onload=e=>r(e.target.result); fr.readAsDataURL(f); });
+
+window.prToast = function(msg, type="", dur=2800){
+  const t=document.getElementById("pr-toast");
+  t.textContent=msg; t.className="show"+(type?" "+type:"");
+  clearTimeout(t._t); t._t=setTimeout(()=>t.className="",dur);
+};
+
+function busyBtn(id,on){
+  const b=document.getElementById(id); if(!b)return;
+  if(on){b._lbl=b.innerHTML;b.disabled=true;b.innerHTML=`<span class="spin"></span> Saving…`;}
+  else{b.disabled=false;b.innerHTML=b._lbl||"Save";}
+}
+
+/* ── Cloudinary upload ── */
+async function uploadToCloudinary(file, onProgress){
+  return new Promise((resolve,reject)=>{
+    const fd=new FormData();
+    fd.append("file",file);
+    fd.append("upload_preset",UPLOAD_PRESET);
+    fd.append("folder","priests");
+    const xhr=new XMLHttpRequest();
+    xhr.open("POST",`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`);
+    xhr.upload.onprogress=e=>{if(e.lengthComputable&&onProgress)onProgress(Math.round(e.loaded/e.total*100));};
+    xhr.onload=()=>xhr.status===200?resolve(JSON.parse(xhr.responseText)):reject(new Error("Upload failed"));
+    xhr.onerror=()=>reject(new Error("Network error"));
+    xhr.send(fd);
+  });
+}
+
+/* ── Auth ── */
+document.body.style.display="none";
+onAuthStateChanged(auth, async user=>{
+  if(!user){window.location.href="index.html";return;}
+  const snap=await getDoc(doc(db,"users",user.uid));
+  if(!snap.exists()){await signOut(auth);window.location.href="index.html";return;}
+  const prof=snap.data();
+  userRole=user.email===ADMIN?"Admin":"User";
+  const uname=prof.username||user.displayName||user.email;
+  document.getElementById("sidebar-username").textContent=uname;
+  document.getElementById("sidebar-role").textContent=userRole;
+  document.getElementById("sidebar-avatar").textContent=uname[0].toUpperCase();
+  const badge=document.getElementById("role-badge");
+  badge.textContent=userRole;
+  badge.className=userRole==="Admin"?"badge bg-warning text-dark me-2":"badge bg-primary me-2";
+  if(userRole==="Admin") document.getElementById("btn-add-priest").style.display="";
+  document.body.style.display="";
+  await loadPriests();
+});
+
+document.getElementById("btn-logout").addEventListener("click",async()=>{await signOut(auth);window.location.href="index.html";});
+document.getElementById("sidebar-toggle").addEventListener("click",()=>{
+  document.getElementById("sidebar").classList.toggle("open");
+  document.getElementById("sidebar-overlay").classList.toggle("show");
+});
+document.getElementById("sidebar-overlay").addEventListener("click",()=>{
+  document.getElementById("sidebar").classList.remove("open");
+  document.getElementById("sidebar-overlay").classList.remove("show");
+});
+
+/* ── Load priests ── */
+async function loadPriests(){
+  showSkeleton(true);
+  try{
+    const sn=await getDocs(query(PR_COL,orderBy("order","asc")));
+    allPriests=sn.docs.map(d=>({id:d.id,...d.data()}));
+    updateStats();
+    applyFilters();
+  }catch(err){
+    prToast("❌ Failed to load: "+err.message,"error");
+  }finally{
+    showSkeleton(false);
+  }
+}
+
+function showSkeleton(on){
+  document.getElementById("pr-skeleton").style.display=on?"block":"none";
+  document.getElementById("pr-cards-grid").style.display=on?"none":"";
+}
+
+function updateStats(){
+  const total=allPriests.length;
+  const withImg=allPriests.filter(p=>p.image).length;
+  const withPhone=allPriests.filter(p=>p.mobile||p.email).length;
+  document.getElementById("st-total").textContent=total;
+  document.getElementById("st-withimg").textContent=withImg;
+  document.getElementById("st-withphone").textContent=withPhone;
+  document.getElementById("sidebar-pr-count").textContent=total;
+}
+
+/* ── Filter & render ── */
+window.applyFilters=function(){
+  const q=(document.getElementById("pr-search")?.value||"").toLowerCase();
+  const srt=document.getElementById("pr-sort")?.value||"name";
+  let data=[...allPriests];
+  if(q) data=data.filter(p=>
+    (p.name||"").toLowerCase().includes(q)||
+    (p.parish||"").toLowerCase().includes(q)||
+    (p.address||"").toLowerCase().includes(q)
+  );
+  if(srt==="name")   data.sort((a,b)=>(a.name||"").localeCompare(b.name||""));
+  if(srt==="parish") data.sort((a,b)=>(a.parish||"").localeCompare(b.parish||""));
+  if(srt==="newest") data.reverse();
+  if(srt==="ord")    data.sort((a,b)=>(a.ordination||"").localeCompare(b.ordination||""));
+  filteredData=data;
+  currentPage=1;
+  renderPage();
+};
+
+const placeholderSVG=`<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="34" r="20"/><ellipse cx="50" cy="80" rx="32" ry="22"/></svg>`;
+
+function phoneToWA(num){
+  if(!num||num==="-")return null;
+  const clean=num.replace(/\D/g,"");
+  if(/^[6-9]\d{9}$/.test(clean))return"91"+clean;
+  if(/^91[6-9]\d{9}$/.test(clean))return clean;
+  return null;
+}
+
+function renderPage(){
+  const grid=document.getElementById("pr-cards-grid");
+  const empty=document.getElementById("pr-empty");
+  const pgWrap=document.getElementById("pr-pg-wrap");
+
+  if(!filteredData.length){
+    grid.innerHTML=""; empty.style.display="flex"; pgWrap.style.display="none"; return;
+  }
+  empty.style.display="none"; pgWrap.style.display="";
+
+  const total=Math.ceil(filteredData.length/PER_PAGE)||1;
+  if(currentPage>total)currentPage=total;
+  const start=(currentPage-1)*PER_PAGE;
+  const pageData=filteredData.slice(start,Math.min(start+PER_PAGE,filteredData.length));
+
+  document.getElementById("st-page").textContent=currentPage;
+  document.getElementById("pr-pg-info").textContent=
+    `Showing ${start+1}–${start+pageData.length} of ${filteredData.length} priests (Page ${currentPage} of ${total})`;
+
+  grid.innerHTML=pageData.map(p=>{
+    const hasMobile=p.mobile&&p.mobile!=="-";
+    const hasEmail=p.email&&p.email!=="-";
+    const waNum=p.whatsapp?("91"+p.whatsapp.replace(/\D/g,"")):phoneToWA(p.mobile);
+
+    const pills=[
+      hasMobile?`<a class="c-pill" href="tel:${esc(p.mobile)}"><i class="bi bi-telephone-fill"></i>${esc(p.mobile)}</a>`:"",
+      waNum?`<a class="c-pill wa" href="https://wa.me/${esc(waNum)}" target="_blank"><i class="bi bi-whatsapp"></i>WhatsApp</a>`:"",
+      hasEmail?`<a class="c-pill em" href="mailto:${esc(p.email)}"><i class="bi bi-envelope-fill"></i>Email</a>`:"",
+    ].filter(Boolean).join("");
+
+    return `
+    <div class="pr-card">
+      <div class="pr-card-photo">
+        ${p.image
+          ?`<img src="${esc(p.image)}" alt="${esc(p.name)}" loading="lazy"/>`
+          :`<div class="pr-photo-placeholder">${placeholderSVG}</div>`
+        }
+      </div>
+      <div class="pr-card-accent"></div>
+      <div class="pr-card-body">
+        <div class="pr-card-name">${esc(p.name||"")}</div>
+        <div class="pr-info-row"><i class="pi-icon bi bi-building-fill"></i><span class="pi-lbl">Parish</span><span class="pi-val">${esc(p.parish||"—")}</span></div>
+        <div class="pr-info-row"><i class="pi-icon bi bi-telephone"></i><span class="pi-lbl">Home</span><span class="pi-val">${esc(p.homeTel||"—")}</span></div>
+        <div class="pr-info-row"><i class="pi-icon bi bi-calendar3"></i><span class="pi-lbl">DOB</span><span class="pi-val">${esc(p.dob||"—")}</span></div>
+        <div class="pr-info-row"><i class="pi-icon bi bi-award-fill"></i><span class="pi-lbl">Ord.</span><span class="pi-val">${esc(p.ordination||"—")}</span></div>
+        <div class="pr-info-row"><i class="pi-icon bi bi-geo-alt-fill"></i><span class="pi-lbl">Addr.</span><span class="pi-val">${esc(p.address||"—")}</span></div>
+        ${pills?`<div class="pr-card-contacts">${pills}</div>`:""}
+      </div>
+      ${userRole==="Admin"?`
+      <div class="pr-card-actions">
+        <button class="pr-edit-btn" onclick="openPriestEdit('${p.id}')">✏️ Edit</button>
+      </div>`:""}
+    </div>`;
+  }).join("");
+
+  /* Stagger animation */
+  grid.querySelectorAll(".pr-card").forEach((card,i)=>{
+    card.style.opacity="0"; card.style.transform="translateY(14px)";
+    setTimeout(()=>{card.style.transition="opacity .3s,transform .3s";card.style.opacity="1";card.style.transform="translateY(0)";},i*30);
+  });
+
+  renderPagination(currentPage,total);
+}
+
+function renderPagination(page,total){
+  const wrap=document.getElementById("pr-pagination");
+  wrap.innerHTML="";
+  const mk=(lbl,pg,extra="")=>{
+    const b=document.createElement("button");
+    b.className="pg-btn "+extra; b.innerHTML=lbl;
+    if(pg===null){b.disabled=true;}
+    else b.addEventListener("click",()=>{currentPage=pg;renderPage();});
+    return b;
+  };
+  wrap.appendChild(mk('<i class="bi bi-chevron-left"></i>',page>1?page-1:null));
+  const pages=[];
+  if(total<=7){for(let p=1;p<=total;p++)pages.push(p);}
+  else{
+    pages.push(1);
+    if(page>3)pages.push("…");
+    for(let p=Math.max(2,page-1);p<=Math.min(total-1,page+1);p++)pages.push(p);
+    if(page<total-2)pages.push("…");
+    pages.push(total);
+  }
+  pages.forEach(p=>{
+    if(p==="…"){const s=document.createElement("span");s.className="pg-btn";s.style.cursor="default";s.textContent="…";wrap.appendChild(s);}
+    else wrap.appendChild(mk(p,p,p===page?"active":""));
+  });
+  wrap.appendChild(mk('<i class="bi bi-chevron-right"></i>',page<total?page+1:null));
+}
+
+/* ── Image zone helpers ── */
+function resetPrImg(){
+  newImgFile=null; existingImgUrl=null; existingPubId=null; pendingRemove=false;
+  document.getElementById("pr-img-preview").style.display="none";
+  document.getElementById("pr-img-preview").src="";
+  document.getElementById("pr-placeholder").style.display="flex";
+  document.getElementById("pr-rm-btn").style.display="none";
+  document.getElementById("pr-img-zone").classList.remove("has-img");
+  document.getElementById("pr-img-file").value="";
+  document.getElementById("pr-progress").style.display="none";
+  document.getElementById("prm-img-url").value="";
+}
+
+function setPrImg(url){
+  document.getElementById("pr-img-preview").src=url;
+  document.getElementById("pr-img-preview").style.display="block";
+  document.getElementById("pr-placeholder").style.display="none";
+  document.getElementById("pr-rm-btn").style.display="flex";
+  document.getElementById("pr-img-zone").classList.add("has-img");
+}
+
+window.onPrImg=async function(ev){
+  const f=ev.target.files[0]; if(!f)return;
+  if(f.size>5*1024*1024){prToast("Image must be under 5 MB","error");return;}
+  newImgFile=f; setPrImg(await b64(f)); pendingRemove=false;
+  document.getElementById("prm-img-url").value="";
+};
+
+window.onPrImgUrl=function(val){
+  val=val.trim();
+  if(!val){resetPrImg();return;}
+  newImgFile=null; existingImgUrl=val; setPrImg(val); pendingRemove=false;
+};
+
+window.removePrImg=function(ev){
+  ev.stopPropagation();
+  pendingRemove=!!existingPubId;
+  newImgFile=null; resetPrImg();
+};
+
+/* ── Drag & drop ── */
+(function(){
+  const zone=document.getElementById("pr-img-zone");
+  ["dragenter","dragover"].forEach(ev=>zone.addEventListener(ev,e=>{e.preventDefault();e.stopPropagation();zone.classList.add("drag-over");}));
+  ["dragleave","dragend","drop"].forEach(ev=>zone.addEventListener(ev,e=>{e.preventDefault();e.stopPropagation();zone.classList.remove("drag-over");}));
+  zone.addEventListener("drop",async e=>{
+    const f=e.dataTransfer?.files?.[0];
+    if(!f||!f.type.startsWith("image/")){prToast("⚠ Only image files allowed","error");return;}
+    if(f.size>5*1024*1024){prToast("⚠ Image must be under 5 MB","error");return;}
+    newImgFile=f; setPrImg(await b64(f)); pendingRemove=false;
+    document.getElementById("prm-img-url").value="";
+  });
+})();
+
+/* ── Modal open/close ── */
+function openPrM(){ document.getElementById("m-priest").classList.add("show"); }
+window.closePrM=function(){ document.getElementById("m-priest").classList.remove("show"); resetPrImg(); };
+document.getElementById("m-priest").addEventListener("click",e=>{if(e.target===e.currentTarget)window.closePrM();});
+document.getElementById("m-del-confirm").addEventListener("click",e=>{if(e.target===e.currentTarget)e.currentTarget.classList.remove("show");});
+
+/* ── Open Add ── */
+window.openPriestAdd=function(){
+  if(userRole!=="Admin"){prToast("⛔ Admin only");return;}
+  editId=null; resetPrImg();
+  document.getElementById("prm-title").textContent="Add Priest";
+  ["prm-name","prm-parish","prm-hometel","prm-dob","prm-ord","prm-addr","prm-mobile","prm-whatsapp","prm-email"]
+    .forEach(id=>{ const el=document.getElementById(id); if(el)el.value=""; });
+  document.getElementById("prm-status").textContent="";
+  document.getElementById("btn-prm-del").style.display="none";
+  busyBtn("btn-prm-save",false);
+  openPrM();
+};
+
+/* ── Open Edit ── */
+window.openPriestEdit=function(id){
+  if(userRole!=="Admin"){prToast("⛔ Admin only");return;}
+  const p=allPriests.find(x=>x.id===id); if(!p)return;
+  editId=id; resetPrImg();
+  existingImgUrl=p.image||""; existingPubId=p.cloudinaryPublicId||"";
+  if(p.image) setPrImg(p.image);
+  document.getElementById("prm-title").textContent="Edit Priest";
+  document.getElementById("prm-name").value=p.name||"";
+  document.getElementById("prm-parish").value=p.parish||"";
+  document.getElementById("prm-hometel").value=p.homeTel||"";
+  document.getElementById("prm-dob").value=p.dob||"";
+  document.getElementById("prm-ord").value=p.ordination||"";
+  document.getElementById("prm-addr").value=p.address||"";
+  document.getElementById("prm-mobile").value=p.mobile||"";
+  document.getElementById("prm-whatsapp").value=p.whatsapp||"";
+  document.getElementById("prm-email").value=p.email||"";
+  document.getElementById("prm-status").textContent="";
+  document.getElementById("btn-prm-del").style.display="";
+  busyBtn("btn-prm-save",false);
+  openPrM();
+};
+
+/* ── Save ── */
+window.savePriest=async function(){
+  const name   =document.getElementById("prm-name").value.trim();
+  const parish =document.getElementById("prm-parish").value.trim();
+  const st     =document.getElementById("prm-status");
+  if(!name){st.textContent="⚠ Priest name is required.";st.style.color="#ef4444";return;}
+  if(!parish){st.textContent="⚠ Parish is required.";st.style.color="#ef4444";return;}
+  busyBtn("btn-prm-save",true);
+  st.textContent=""; st.style.color="#64748b";
+  try{
+    let image=existingImgUrl||"";
+    let cloudinaryPublicId=existingPubId||"";
+
+    /* Upload new file */
+    if(newImgFile){
+      document.getElementById("pr-progress").style.display="block";
+      st.textContent="Uploading image…";
+      const res=await uploadToCloudinary(newImgFile,pct=>{
+        document.getElementById("pr-prog-bar").style.width=pct+"%";
+        document.getElementById("pr-prog-text").textContent=`Uploading… ${pct}%`;
+      });
+      image=res.secure_url; cloudinaryPublicId=res.public_id;
+      document.getElementById("pr-progress").style.display="none";
+      st.textContent="";
+    }
+
+    /* URL field fallback */
+    if(!newImgFile&&!existingImgUrl){
+      const urlVal=document.getElementById("prm-img-url").value.trim();
+      if(urlVal){image=urlVal;cloudinaryPublicId="";}
+    }
+
+    const order=editId?(allPriests.find(p=>p.id===editId)?.order??999):allPriests.length;
+
+    const payload={
+      name,
+      parish,
+      homeTel:     document.getElementById("prm-hometel").value.trim(),
+      dob:         document.getElementById("prm-dob").value.trim(),
+      ordination:  document.getElementById("prm-ord").value.trim(),
+      address:     document.getElementById("prm-addr").value.trim(),
+      mobile:      document.getElementById("prm-mobile").value.trim(),
+      whatsapp:    document.getElementById("prm-whatsapp").value.trim(),
+      email:       document.getElementById("prm-email").value.trim(),
+      image:       String(image),
+      cloudinaryPublicId: String(cloudinaryPublicId),
+      order,
+      updated_at:  serverTimestamp()
+    };
+
+    if(editId){
+      await updateDoc(doc(db,"priests",editId),payload);
+      prToast("✅ Priest updated!","success");
+    } else {
+      await addDoc(PR_COL,{...payload,created_at:serverTimestamp()});
+      prToast("✅ Priest added!","success");
+    }
+    window.closePrM();
+    await loadPriests();
+  }catch(err){
+    document.getElementById("pr-progress").style.display="none";
+    st.textContent="❌ "+err.message; st.style.color="#ef4444";
+    busyBtn("btn-prm-save",false);
+  }
+};
+
+/* ── Delete ── */
+let pendingDeleteId=null;
+window.deletePriest=function(){
+  if(!editId)return;
+  const p=allPriests.find(x=>x.id===editId);
+  pendingDeleteId=editId;
+  document.getElementById("del-confirm-text").textContent=`Delete "${p?.name||"this priest"}"? This cannot be undone.`;
+  document.getElementById("m-del-confirm").classList.add("show");
+};
+
+window.confirmDelete=async function(){
+  if(!pendingDeleteId)return;
+  const btn=document.getElementById("btn-del-confirm");
+  btn.disabled=true; btn.textContent="Deleting…";
+  try{
+    await deleteDoc(doc(db,"priests",pendingDeleteId));
+    document.getElementById("m-del-confirm").classList.remove("show");
+    window.closePrM();
+    prToast("Priest deleted.","success");
+    await loadPriests();
+  }catch(err){
+    prToast("❌ Delete failed: "+err.message,"error");
+  }finally{
+    btn.disabled=false; btn.textContent="Yes, Delete";
+    pendingDeleteId=null;
+  }
+}; 
+
+/*
+    window.importPriestsJSON = async function(){
+  if(!confirm("priests.json data-ஐ Firestore-க்கு import பண்ணவா?")) return;
+  const btn = document.getElementById("btn-import-priests");
+  btn.disabled = true; btn.textContent = "⏳ Importing…";
+  try{
+    const res  = await fetch("priests.json");
+    const data = await res.json();
+    let count  = 0;
+    for(let i = 0; i < data.length; i++){
+      const p = data[i];
+      await addDoc(PR_COL, {
+        name:              String(p.name        || ""),
+        parish:            String(p.parish      || ""),
+        homeTel:           String(p.homeTel     || ""),
+        dob:               String(p.dob         || ""),
+        ordination:        String(p.ordination  || ""),
+        address:           String(p.address     || ""),
+        mobile:            String(p.mobile      || ""),
+        whatsapp:          String(p.whatsapp    || ""),
+        email:             String(p.email       || ""),
+        image:             String(p.image       || ""),
+        cloudinaryPublicId:"",
+        order:             i,
+        created_at:        serverTimestamp(),
+        updated_at:        serverTimestamp()
+      });
+      count++;
+      btn.textContent = `⏳ Imported ${count}…`;
+    }
+    prToast(`✅ ${count} priests imported!`, "success");
+    await loadPriests();
+  }catch(err){
+    prToast("❌ Import failed: " + err.message, "error");
+  }finally{
+    btn.disabled = false; btn.textContent = "⬆ Import priests.json";
+  }
+}; */
+
+
+
+</script>
+</body>
+</html>
