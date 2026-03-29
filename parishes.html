@@ -120,6 +120,13 @@
   background: #fff5f5 !important;
   box-shadow: 0 0 0 3px rgba(146,26,2,.15);
 }
+.vic-name {
+  display: inline-flex; align-items: center; gap: 5px;
+  color:#921a02; font-size: .78rem; font-weight: 600;
+  text-decoration: none; padding: 3px 8px;
+  white-space: nowrap;
+}
+
     /* ── Loading skeleton ── */
     .skel{background:linear-gradient(90deg,#f1f5f9 25%,#e2e8f0 50%,#f1f5f9 75%);background-size:200% 100%;animation:skelShimmer 1.4s infinite;border-radius:6px;}
     @keyframes skelShimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
@@ -291,6 +298,7 @@
                 <th>Category</th>
                 <th>Forane</th>
                 <th>Phone</th>
+                <th>Vicar</th>
                 <th id="par-th-actions" style="display:none;">Actions</th>
               </tr>
             </thead>
@@ -355,6 +363,10 @@
 <div class="hm-group">
   <label>Phone Number <span style="color:#94a3b8;font-weight:400;text-transform:none;font-size:.68rem;">(optional — tap to call)</span></label>
   <input type="tel" id="pm-phone" placeholder="e.g. +91 98765 43210"/>
+</div>
+<div class="hm-group">
+  <label>Vicar Name </label>
+  <input type="text" id="pm-vicar" placeholder="e.g. Fr. John Doe"/>
 </div>
 
     <div class="hm-group">
@@ -1102,6 +1114,7 @@ function renderTable(data){
     </td>
     <td style="font-weight:600;font-size:.84rem;">${esc(p.name)}</td>
     <td style="font-size:.82rem;color:#64748b;">${esc(p.location)}</td>
+    <td style="font-weight:600;font-size:.84rem;">${esc(p.vicar)}</td>
     <td>${catBadge(p.cat||"")}</td>
     <td style="font-size:.76rem;color:#94a3b8;">${esc(p.forane||"")}</td>
     <td>
@@ -1222,6 +1235,7 @@ window.openParishAdd = function(){
   document.getElementById("pm-status").textContent    = "";
   document.getElementById("btn-pm-del").style.display = "none";
   document.getElementById("pm-phone").value = "";
+  document.getElementById("pm-vicar").value = "";
   busyBtn("btn-pm-save",false,"💾 Save Parish");
   openPM();
 };
@@ -1252,6 +1266,7 @@ window.openParishEdit = function(id){
   document.getElementById("pm-status").textContent    = "";
   document.getElementById("btn-pm-del").style.display = "";
   document.getElementById("pm-phone").value = p.phone || "";
+  document.getElementById("pm-vicar").value = p.vicar || "";
   busyBtn("btn-pm-save",false,"💾 Save Parish");
   openPM();
 };
@@ -1310,12 +1325,14 @@ if(!newImgFile && !existingImgUrl) {
   if(urlFieldVal) { imageUrl = urlFieldVal; cloudPublicId = ""; }
 }
 const phone = document.getElementById("pm-phone").value.trim();
+const vicar = document.getElementById("pm-vicar").value.trim();
 
     const payload = {
       name, location, cat, forane,
       imageUrl:            String(imageUrl),
       cloudinaryPublicId:  String(cloudPublicId),
       phone:              String(phone),
+      vicar:              String(vicar),
       order,
       updated_at: serverTimestamp()
     };
