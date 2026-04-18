@@ -1,0 +1,1106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>About Page — AdminForge</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"/>
+  <link rel="stylesheet" href="style.css"/>
+  <style>
+    /* ── Stat cards ── */
+    .ab-stat-card{background:#fff;border:1px solid #e2e8f0;border-radius:14px;padding:20px 22px;display:flex;align-items:center;gap:16px;box-shadow:0 2px 8px rgba(0,0,0,.05);}
+    .ab-stat-icon{width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0;}
+    .ab-stat-icon.red   {background:#fff1f0;color:#921a02;}
+    .ab-stat-icon.blue  {background:#eff6ff;color:#2563eb;}
+    .ab-stat-icon.green {background:#f0fdf4;color:#16a34a;}
+    .ab-stat-icon.gold  {background:#fffbeb;color:#d97706;}
+    .ab-stat-value{font-size:1.5rem;font-weight:800;color:#1e293b;line-height:1;}
+    .ab-stat-label{font-size:.72rem;color:#64748b;margin-top:2px;}
+
+    /* ── Section tabs ── */
+    .section-tabs{display:flex;gap:6px;flex-wrap:wrap;padding:4px 0 16px;}
+    .section-tab{padding:7px 18px;border-radius:20px;border:1.5px solid #e2e8f0;background:#fff;color:#64748b;font-size:.76rem;font-weight:600;cursor:pointer;transition:all .2s;white-space:nowrap;}
+    .section-tab:hover{border-color:#921a02;color:#921a02;}
+    .section-tab.active{background:#921a02;color:#fff;border-color:#921a02;}
+
+    /* ── Editor panel ── */
+    .ab-editor-panel{background:#fff;border:1px solid #e2e8f0;border-radius:14px;overflow:hidden;box-shadow:0 2px 10px rgba(0,0,0,.05);}
+    .ab-panel-header{background:linear-gradient(135deg,#921a02,#6e1301);color:#fff;padding:16px 20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;}
+    .ab-panel-header h5{margin:0;font-size:.95rem;font-weight:700;}
+    .ab-panel-header p{margin:0;font-size:.75rem;opacity:.8;}
+    .ab-panel-body{padding:24px;}
+
+    /* ── Form styles ── */
+    .hm-group{margin-bottom:14px;}
+    .hm-group label{display:block;font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#64748b;margin-bottom:5px;}
+    .hm-group input,.hm-group textarea,.hm-group select{width:100%;border:1px solid #e2e8f0;border-radius:8px;padding:8px 12px;font-size:.84rem;outline:none;transition:border-color .2s;font-family:inherit;}
+    .hm-group input:focus,.hm-group textarea:focus,.hm-group select:focus{border-color:#921a02;}
+    .hm-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+    @media(max-width:640px){.hm-row{grid-template-columns:1fr;}}
+
+    /* ── Hierarch / prelate row ── */
+    .hr-row{display:flex;gap:8px;align-items:center;background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:10px 12px;margin-bottom:8px;}
+    .hr-row input{border:1px solid #e2e8f0;border-radius:6px;padding:6px 10px;font-size:.8rem;outline:none;flex:1;}
+    .hr-row input:focus{border-color:#921a02;}
+    .hr-row .rm{background:none;border:none;color:#ef4444;cursor:pointer;font-size:1rem;padding:0 4px;flex-shrink:0;}
+
+    /* ── Save/Cancel buttons ── */
+    .hm-save{padding:10px 22px;border-radius:8px;border:none;background:#921a02;color:#fff;font-weight:600;font-size:.85rem;cursor:pointer;display:inline-flex;align-items:center;gap:6px;min-height:40px;transition:background .15s;}
+    .hm-save:hover:not(:disabled){background:#6d1201;}
+    .hm-save:disabled{opacity:.6;cursor:not-allowed;}
+    .hm-cancel{padding:10px 18px;border-radius:8px;border:1px solid #e2e8f0;background:#f8fafc;font-size:.85rem;cursor:pointer;}
+    .hm-cancel:hover{background:#f1f5f9;}
+    .hm-status{font-size:.78rem;margin-top:8px;min-height:18px;}
+    .spin{width:14px;height:14px;border:2px solid rgba(255,255,255,.4);border-top-color:#fff;border-radius:50%;animation:spinAnim .6s linear infinite;display:inline-block;}
+    @keyframes spinAnim{to{transform:rotate(360deg)}}
+
+    /* ── Toast ── */
+    #ab-toast{position:fixed;bottom:24px;right:24px;z-index:99999;background:#1e293b;color:#fff;padding:12px 20px;border-radius:10px;font-size:.82rem;font-weight:600;box-shadow:0 8px 24px rgba(0,0,0,.25);opacity:0;transform:translateY(10px);transition:opacity .25s,transform .25s;pointer-events:none;max-width:320px;}
+    #ab-toast.show{opacity:1;transform:translateY(0);}
+    #ab-toast.success{background:#16a34a;}
+    #ab-toast.error{background:#dc2626;}
+
+    /* ── Skeleton ── */
+    .skel{background:linear-gradient(90deg,#f1f5f9 25%,#e2e8f0 50%,#f1f5f9 75%);background-size:200% 100%;animation:skelShimmer 1.4s infinite;border-radius:8px;}
+    @keyframes skelShimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+
+    /* banner */
+    .import-banner{background:linear-gradient(135deg,#fff7ed,#fef3c7);border:1px solid #fcd34d;border-radius:12px;padding:16px 20px;margin-bottom:20px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;}
+
+    /* ── NEW: Editable heading inline ── */
+    .editable-section-title{
+      display:flex;align-items:center;gap:8px;flex:1;min-width:0;
+    }
+    .editable-section-title input{
+      background:rgba(255,255,255,.15);border:1.5px solid rgba(255,255,255,.3);border-radius:6px;
+      color:#fff;font-size:.95rem;font-weight:700;padding:4px 10px;outline:none;flex:1;min-width:0;
+      transition:background .2s,border-color .2s;
+    }
+    .editable-section-title input::placeholder{color:rgba(255,255,255,.5);}
+    .editable-section-title input:focus{background:rgba(255,255,255,.25);border-color:rgba(255,255,255,.6);}
+    .edit-heading-hint{font-size:.68rem;opacity:.65;white-space:nowrap;margin-top:2px;}
+
+    /* ── NEW: Dynamic bio fields ── */
+    .bio-field-block{
+      background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;
+      padding:14px 16px;margin-bottom:12px;position:relative;
+    }
+    .bio-field-block .field-drag-handle{
+      position:absolute;left:6px;top:50%;transform:translateY(-50%);
+      color:#cbd5e1;font-size:.85rem;cursor:grab;user-select:none;
+    }
+    .bio-field-block .field-remove{
+      position:absolute;right:8px;top:8px;background:none;border:none;
+      color:#ef4444;cursor:pointer;font-size:.9rem;padding:2px 6px;border-radius:4px;
+      transition:background .15s;
+    }
+    .bio-field-block .field-remove:hover{background:#fee2e2;}
+    .bio-field-block label{
+      font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;
+      color:#64748b;margin-bottom:5px;display:block;padding-left:18px;
+    }
+    .bio-field-block input.field-label-input{
+      width:100%;border:1px dashed #cbd5e1;border-radius:6px;padding:5px 10px;
+      font-size:.78rem;color:#374151;margin-bottom:8px;outline:none;
+      background:#fff;transition:border-color .2s;
+    }
+    .bio-field-block input.field-label-input:focus{border-color:#921a02;border-style:solid;}
+    .bio-field-block textarea.field-value-input,
+    .bio-field-block input.field-value-input{
+      width:100%;border:1px solid #e2e8f0;border-radius:6px;padding:7px 10px;
+      font-size:.82rem;outline:none;transition:border-color .2s;font-family:monospace;
+      background:#fff;
+    }
+    .bio-field-block textarea.field-value-input:focus,
+    .bio-field-block input.field-value-input:focus{border-color:#921a02;}
+
+    /* ── NEW: Add field toolbar ── */
+    .add-field-toolbar{
+      display:flex;gap:8px;flex-wrap:wrap;padding:12px 0 4px;border-top:1px dashed #e2e8f0;
+      margin-top:12px;
+    }
+    .add-field-btn{
+      display:inline-flex;align-items:center;gap:5px;padding:6px 13px;
+      border:1.5px dashed #cbd5e1;border-radius:20px;background:#f8fafc;
+      color:#64748b;font-size:.75rem;font-weight:600;cursor:pointer;
+      transition:all .2s;
+    }
+    .add-field-btn:hover{border-color:#921a02;color:#921a02;background:#fff1f0;}
+
+    /* ── NEW: History field blocks ── */
+    .hist-field-block{
+      background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;
+      padding:14px 16px;margin-bottom:12px;position:relative;
+    }
+    .hist-field-block .field-heading-row{
+      display:flex;align-items:center;gap:8px;margin-bottom:8px;
+    }
+    .hist-field-block .fh-label{
+      font-size:.72rem;font-weight:700;text-transform:uppercase;color:#64748b;
+      white-space:nowrap;letter-spacing:.04em;
+    }
+    .hist-field-block .fh-title-input{
+      flex:1;border:1px dashed #cbd5e1;border-radius:6px;padding:5px 10px;
+      font-size:.82rem;font-weight:600;color:#1e293b;outline:none;
+      background:#fff;transition:border-color .2s;
+    }
+    .hist-field-block .fh-title-input:focus{border-color:#921a02;border-style:solid;}
+    .hist-field-block .fh-remove{
+      background:none;border:none;color:#ef4444;cursor:pointer;
+      font-size:.85rem;padding:4px 6px;border-radius:4px;transition:background .15s;flex-shrink:0;
+    }
+    .hist-field-block .fh-remove:hover{background:#fee2e2;}
+    .hist-field-block textarea{
+      width:100%;border:1px solid #e2e8f0;border-radius:6px;padding:8px 10px;
+      font-size:.8rem;font-family:monospace;outline:none;transition:border-color .2s;background:#fff;
+    }
+    .hist-field-block textarea:focus{border-color:#921a02;}
+
+    /* ── Section heading badge ── */
+    .section-heading-badge{
+      display:inline-flex;align-items:center;gap:6px;
+      background:rgba(255,255,255,.18);border-radius:6px;
+      padding:3px 10px;font-size:.72rem;font-weight:600;
+      opacity:.85;cursor:default;
+    }
+  </style>
+</head>
+<body>
+
+<div id="ab-toast"></div>
+<div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+<div class="dash-layout">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-brand">
+      <div class="sidebar-logo">AF</div>
+      <div>
+        <div class="sidebar-brand-text">AdminForge</div>
+        <div class="sidebar-brand-sub">Management System</div>
+      </div>
+    </div>
+    <div class="sidebar-menu">
+      <p class="sidebar-section">Main</p>
+      <a href="dashboard.html" class="sidebar-item"><span class="si-icon">⬡</span> Home</a>
+      <a href="about.html" class="sidebar-item active" id="nav-about">
+        <span class="si-icon">ℹ</span> About Us
+      </a>
+      <!-- ★ ADMINISTRATION SIDEBAR ITEM ★ -->
+      <a href="administration.html" class="sidebar-item">
+  <span class="si-icon">⛪</span> Administration
+</a>
+      <a href="parishes.html" class="sidebar-item" id="nav-parishes">
+        <span class="si-icon">⛪</span> Parishes
+        <span class="si-badge" id="sidebar-par-count">0</span>
+      </a>
+      <a href="priests.html" class="sidebar-item " id="nav-priests">
+        <span class="si-icon">✝</span> Priests
+        <span class="si-badge" id="sidebar-pr-count">0</span>
+      </a>
+       <a href="seminarians.html" class="sidebar-item" id="nav-seminarians">
+        <span class="si-icon">🎓</span> Seminarians
+        <span class="si-badge" id="sidebar-sem-count">0</span>
+      </a>
+      <p class="sidebar-section" style="margin-top:14px;">Account</p>
+      <div class="sidebar-item" onclick="abToast('Settings — coming soon!')"><span class="si-icon">⚙</span> Settings</div>
+      <div class="sidebar-item" onclick="abToast('Profile editor — coming soon!')"><span class="si-icon">◉</span> My Profile</div>
+    </div>
+    <div class="sidebar-footer">
+      <div class="user-row">
+        <div class="user-row-avatar" id="sidebar-avatar">?</div>
+        <div>
+          <div class="user-row-name" id="sidebar-username">Loading…</div>
+          <div class="user-row-role" id="sidebar-role">—</div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- TOPBAR -->
+  <nav class="topbar">
+    <div class="topbar-left">
+      <button class="sidebar-toggle" id="sidebar-toggle">☰</button>
+      <div class="topbar-rule d-none d-lg-block"></div>
+      <div>
+        <div class="topbar-title">About Us Page</div>
+        <div class="topbar-sub">Manage About Page Content</div>
+      </div>
+    </div>
+    <div class="topbar-right">
+      <span id="role-badge" class="badge bg-secondary me-2" style="font-size:.8rem;padding:6px 12px;"></span>
+      <a href="about.html" target="_blank" class="btn btn-sm btn-outline-secondary me-2">🌐 Live Page</a>
+      <button class="btn btn-logout btn-sm" id="btn-logout">⏻ Logout</button>
+    </div>
+  </nav>
+
+  <!-- MAIN -->
+  <main class="dash-main">
+
+    <!-- Stats -->
+    <div class="row g-3 mb-4">
+      <div class="col-6 col-xl-3">
+        <div class="ab-stat-card">
+          <div class="ab-stat-icon red"><i class="bi bi-book-half"></i></div>
+          <div><div class="ab-stat-value" id="st-sections">7</div><div class="ab-stat-label">Sections</div></div>
+        </div>
+      </div>
+      <div class="col-6 col-xl-3">
+        <div class="ab-stat-card">
+          <div class="ab-stat-icon gold"><i class="bi bi-person-badge-fill"></i></div>
+          <div><div class="ab-stat-value" id="st-hierarchs">—</div><div class="ab-stat-label">Former Hierarchs</div></div>
+        </div>
+      </div>
+      <div class="col-6 col-xl-3">
+        <div class="ab-stat-card">
+          <div class="ab-stat-icon blue"><i class="bi bi-globe2"></i></div>
+          <div><div class="ab-stat-value" id="st-prelates">—</div><div class="ab-stat-label">Prelates Listed</div></div>
+        </div>
+      </div>
+      <div class="col-6 col-xl-3">
+        <div class="ab-stat-card">
+          <div class="ab-stat-icon green"><i class="bi bi-check2-circle"></i></div>
+          <div><div class="ab-stat-value" id="st-admins">—</div><div class="ab-stat-label">Administrators</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Import banner -->
+    <div class="import-banner" id="import-banner">
+      <i class="bi bi-database-fill-up" style="font-size:1.4rem;color:#d97706;"></i>
+      <div style="flex:1;">
+        <p style="font-size:.85rem;font-weight:700;color:#92400e;margin:0 0 2px;">First-time setup — Seed default About page data</p>
+        <p style="font-size:.76rem;color:#b45309;margin:0;">This will upload all About page content to Firestore. Existing docs will NOT be overwritten.</p>
+      </div>
+      <button id="btn-seed" onclick="seedAllData()"
+        style="background:#d97706;color:#fff;border:none;border-radius:8px;padding:9px 18px;font-size:.8rem;font-weight:700;cursor:pointer;">
+        ⬆ Seed Default Data
+      </button>
+    </div>
+
+    <!-- Section tabs -->
+    <div class="section-tabs" id="ab-tabs">
+      <button class="section-tab active" onclick="switchTab('history',this)">📜 History</button>
+      <button class="section-tab" onclick="switchTab('perumthottam',this)">👤 Mar Perumthottam</button>
+      <button class="section-tab" onclick="switchTab('powathil',this)">👤 Mar Powathil</button>
+      <button class="section-tab" onclick="switchTab('tharayil',this)">👤 Mar Tharayil</button>
+      <button class="section-tab" onclick="switchTab('hierarchs',this)">📋 Former Hierarchs</button>
+      <button class="section-tab" onclick="switchTab('prelates',this)">🌍 Prelates</button>
+      <button class="section-tab" onclick="switchTab('administrators',this)">📂 Administrators</button>
+    </div>
+
+    <!-- ── HISTORY SECTION ── -->
+    <div class="ab-editor-panel" id="panel-history">
+      <div class="ab-panel-header">
+        <div style="flex:1;min-width:0;">
+          <div class="editable-section-title">
+            <input type="text" id="history-panel-heading" value="📜 A Glimpse Into The Past"
+              placeholder="Section panel heading" title="Edit panel heading"/>
+          </div>
+          <p class="edit-heading-hint">✏️ Panel heading is editable — changes saved with content</p>
+        </div>
+        <div style="display:flex;gap:8px;flex-shrink:0;">
+          <button onclick="loadSection('history')" style="background:rgba(255,255,255,.2);color:#fff;border:none;border-radius:6px;padding:6px 12px;font-size:.75rem;cursor:pointer;">↺ Reload</button>
+          <button class="hm-save" id="btn-save-history" onclick="saveHistory()">💾 Save</button>
+        </div>
+      </div>
+      <div class="ab-panel-body">
+        <div id="skel-history" class="skel" style="height:200px;"></div>
+        <div id="form-history" style="display:none;">
+
+          <!-- Dynamic history fields list -->
+          <div id="history-fields-list"></div>
+
+          <!-- Add field toolbar -->
+          <div class="add-field-toolbar">
+            <span style="font-size:.72rem;font-weight:700;text-transform:uppercase;color:#94a3b8;margin-right:4px;">Add field:</span>
+            <button class="add-field-btn" onclick="addHistoryField('text')">＋ Text Block</button>
+            <button class="add-field-btn" onclick="addHistoryField('section')">＋ Sub-Section</button>
+          </div>
+
+          <div class="hm-status" id="status-history"></div>
+          <div style="display:flex;gap:10px;margin-top:16px;">
+            <button class="hm-cancel" onclick="loadSection('history')">↺ Reset</button>
+            <button class="hm-save" onclick="saveHistory()">💾 Save History</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── PERUMTHOTTAM ── -->
+    <div class="ab-editor-panel" id="panel-perumthottam" style="display:none;">
+      <div class="ab-panel-header">
+        <div style="flex:1;min-width:0;">
+          <div class="editable-section-title">
+            <input type="text" id="perumthottam-panel-heading" value="👤 Mar Joseph Perumthottam — Metropolitan Archbishop"
+              placeholder="Panel heading" title="Edit panel heading"/>
+          </div>
+          <p class="edit-heading-hint">✏️ Panel heading is editable — changes saved with content</p>
+        </div>
+        <button class="hm-save" id="btn-save-perumthottam" onclick="saveBio('perumthottam')" style="flex-shrink:0;">💾 Save</button>
+      </div>
+      <div class="ab-panel-body">
+        <div id="skel-perumthottam" class="skel" style="height:180px;"></div>
+        <div id="form-perumthottam" style="display:none;">
+          <!-- Dynamic bio fields -->
+          <div id="perumthottam-fields-list"></div>
+          <div class="add-field-toolbar">
+            <span style="font-size:.72rem;font-weight:700;text-transform:uppercase;color:#94a3b8;margin-right:4px;">Add field:</span>
+            <button class="add-field-btn" onclick="addBioField('perumthottam','text')">＋ Text</button>
+            <button class="add-field-btn" onclick="addBioField('perumthottam','textarea')">＋ Paragraph</button>
+          </div>
+          <div class="hm-status" id="status-perumthottam"></div>
+          <div style="display:flex;gap:10px;margin-top:16px;">
+            <button class="hm-cancel" onclick="loadSection('perumthottam')">↺ Reset</button>
+            <button class="hm-save" onclick="saveBio('perumthottam')">💾 Save</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── POWATHIL ── -->
+    <div class="ab-editor-panel" id="panel-powathil" style="display:none;">
+      <div class="ab-panel-header">
+        <div style="flex:1;min-width:0;">
+          <div class="editable-section-title">
+            <input type="text" id="powathil-panel-heading" value="👤 Mar Joseph Powathil — Metropolitan Emeritus"
+              placeholder="Panel heading" title="Edit panel heading"/>
+          </div>
+          <p class="edit-heading-hint">✏️ Panel heading is editable — changes saved with content</p>
+        </div>
+        <button class="hm-save" id="btn-save-powathil" onclick="saveBio('powathil')" style="flex-shrink:0;">💾 Save</button>
+      </div>
+      <div class="ab-panel-body">
+        <div id="skel-powathil" class="skel" style="height:180px;"></div>
+        <div id="form-powathil" style="display:none;">
+          <div id="powathil-fields-list"></div>
+          <div class="add-field-toolbar">
+            <span style="font-size:.72rem;font-weight:700;text-transform:uppercase;color:#94a3b8;margin-right:4px;">Add field:</span>
+            <button class="add-field-btn" onclick="addBioField('powathil','text')">＋ Text</button>
+            <button class="add-field-btn" onclick="addBioField('powathil','textarea')">＋ Paragraph</button>
+          </div>
+          <div class="hm-status" id="status-powathil"></div>
+          <div style="display:flex;gap:10px;margin-top:16px;">
+            <button class="hm-cancel" onclick="loadSection('powathil')">↺ Reset</button>
+            <button class="hm-save" onclick="saveBio('powathil')">💾 Save</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── THARAYIL ── -->
+    <div class="ab-editor-panel" id="panel-tharayil" style="display:none;">
+      <div class="ab-panel-header">
+        <div style="flex:1;min-width:0;">
+          <div class="editable-section-title">
+            <input type="text" id="tharayil-panel-heading" value="👤 Mar Thomas Tharayil — Auxiliary Bishop"
+              placeholder="Panel heading" title="Edit panel heading"/>
+          </div>
+          <p class="edit-heading-hint">✏️ Panel heading is editable — changes saved with content</p>
+        </div>
+        <button class="hm-save" id="btn-save-tharayil" onclick="saveBio('tharayil')" style="flex-shrink:0;">💾 Save</button>
+      </div>
+      <div class="ab-panel-body">
+        <div id="skel-tharayil" class="skel" style="height:180px;"></div>
+        <div id="form-tharayil" style="display:none;">
+          <div id="tharayil-fields-list"></div>
+          <div class="add-field-toolbar">
+            <span style="font-size:.72rem;font-weight:700;text-transform:uppercase;color:#94a3b8;margin-right:4px;">Add field:</span>
+            <button class="add-field-btn" onclick="addBioField('tharayil','text')">＋ Text</button>
+            <button class="add-field-btn" onclick="addBioField('tharayil','textarea')">＋ Paragraph</button>
+          </div>
+          <div class="hm-status" id="status-tharayil"></div>
+          <div style="display:flex;gap:10px;margin-top:16px;">
+            <button class="hm-cancel" onclick="loadSection('tharayil')">↺ Reset</button>
+            <button class="hm-save" onclick="saveBio('tharayil')">💾 Save</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── HIERARCHS ── -->
+    <div class="ab-editor-panel" id="panel-hierarchs" style="display:none;">
+      <div class="ab-panel-header">
+        <div style="flex:1;min-width:0;">
+          <div class="editable-section-title">
+            <input type="text" id="hierarchs-panel-heading" value="📋 Former Hierarchs of the Archeparchy"
+              placeholder="Panel heading" title="Edit panel heading"/>
+          </div>
+          <p class="edit-heading-hint">✏️ Panel heading is editable — changes saved with content</p>
+        </div>
+        <button class="hm-save" id="btn-save-hierarchs" onclick="saveTable('hierarchs')" style="flex-shrink:0;">💾 Save</button>
+      </div>
+      <div class="ab-panel-body">
+        <div id="skel-hierarchs" class="skel" style="height:180px;"></div>
+        <div id="form-hierarchs" style="display:none;">
+          <p style="font-size:.75rem;color:#64748b;margin-bottom:12px;">Each row: Name | Years | Death date</p>
+          <div id="hierarchs-list"></div>
+          <button onclick="addTableRow('hierarchs',3)" style="width:100%;padding:8px;border:1px dashed #e2e8f0;border-radius:8px;background:#f8fafc;color:#64748b;cursor:pointer;font-size:.8rem;margin-bottom:14px;">＋ Add Row</button>
+          <div class="hm-status" id="status-hierarchs"></div>
+          <div style="display:flex;gap:10px;">
+            <button class="hm-cancel" onclick="loadSection('hierarchs')">↺ Reset</button>
+            <button class="hm-save" onclick="saveTable('hierarchs')">💾 Save Hierarchs</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── PRELATES ── -->
+    <div class="ab-editor-panel" id="panel-prelates" style="display:none;">
+      <div class="ab-panel-header">
+        <div style="flex:1;min-width:0;">
+          <div class="editable-section-title">
+            <input type="text" id="prelates-panel-heading" value="🌍 Prelates From The Archeparchy"
+              placeholder="Panel heading" title="Edit panel heading"/>
+          </div>
+          <p class="edit-heading-hint">✏️ Panel heading is editable — changes saved with content</p>
+        </div>
+        <button class="hm-save" id="btn-save-prelates" onclick="saveTable('prelates')" style="flex-shrink:0;">💾 Save</button>
+      </div>
+      <div class="ab-panel-body">
+        <div id="skel-prelates" class="skel" style="height:180px;"></div>
+        <div id="form-prelates" style="display:none;">
+          <p style="font-size:.75rem;color:#64748b;margin-bottom:12px;">Each row: Name | Years</p>
+          <div id="prelates-list"></div>
+          <button onclick="addTableRow('prelates',2)" style="width:100%;padding:8px;border:1px dashed #e2e8f0;border-radius:8px;background:#f8fafc;color:#64748b;cursor:pointer;font-size:.8rem;margin-bottom:14px;">＋ Add Row</button>
+          <div class="hm-status" id="status-prelates"></div>
+          <div style="display:flex;gap:10px;">
+            <button class="hm-cancel" onclick="loadSection('prelates')">↺ Reset</button>
+            <button class="hm-save" onclick="saveTable('prelates')">💾 Save Prelates</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── ADMINISTRATORS ── -->
+    <div class="ab-editor-panel" id="panel-administrators" style="display:none;">
+      <div class="ab-panel-header">
+        <div style="flex:1;min-width:0;">
+          <div class="editable-section-title">
+            <input type="text" id="administrators-panel-heading" value="📂 Former Administrators / Vicars General / Proto Syncellus &amp; Syncelli"
+              placeholder="Panel heading" title="Edit panel heading"/>
+          </div>
+          <p class="edit-heading-hint">✏️ Panel heading is editable — changes saved with content</p>
+        </div>
+        <button class="hm-save" id="btn-save-administrators" onclick="saveTable('administrators')" style="flex-shrink:0;">💾 Save</button>
+      </div>
+      <div class="ab-panel-body">
+        <div id="skel-administrators" class="skel" style="height:180px;"></div>
+        <div id="form-administrators" style="display:none;">
+          <p style="font-size:.75rem;color:#64748b;margin-bottom:12px;">Each row: Name | Years</p>
+          <div id="administrators-list"></div>
+          <button onclick="addTableRow('administrators',2)" style="width:100%;padding:8px;border:1px dashed #e2e8f0;border-radius:8px;background:#f8fafc;color:#64748b;cursor:pointer;font-size:.8rem;margin-bottom:14px;">＋ Add Row</button>
+          <div class="hm-status" id="status-administrators"></div>
+          <div style="display:flex;gap:10px;">
+            <button class="hm-cancel" onclick="loadSection('administrators')">↺ Reset</button>
+            <button class="hm-save" onclick="saveTable('administrators')">💾 Save Administrators</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<script type="module">
+import { initializeApp }   from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getAuth, onAuthStateChanged, signOut }
+  from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { getFirestore, doc, getDoc, setDoc, serverTimestamp }
+  from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+/* ── Firebase config ── */
+const FC = {
+  apiKey:            "AIzaSyArM8sv7J1RUj4XvAJhJd40tzA7Yc8BGXY",
+  authDomain:        "admin-dashboard-ed62c.firebaseapp.com",
+  projectId:         "admin-dashboard-ed62c",
+  storageBucket:     "admin-dashboard-ed62c.firebasestorage.app",
+  messagingSenderId: "560027475135",
+  appId:             "1:560027475135:web:3fae0cb0268729ae79fa0a"
+};
+const ADMIN = "issacnewton1503@gmail.com";
+const app = initializeApp(FC);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+// ──────────────────────────────────────────────
+// DEFAULT DATA (matches the live about.html exactly)
+// ──────────────────────────────────────────────
+const DEFAULTS = {
+  history: {
+    panelHeading: "📜 A Glimpse Into The Past",
+    // New dynamic fields format: array of {type, label, value} or {type:'section', heading, text}
+    fields: [
+      {
+        type: "text",
+        label: "Main Historical Text",
+        hint: "plain paragraphs, one per line break; HTML tags allowed",
+        value: `The Apostolic Church of St. Thomas Christians traces its origin back to the preaching of St. Thomas, the Apostle who arrived on the Coast of Kerala in AD 52. The Church grew up on the solid apostolic foundation. In the course of history this Church entered into hierarchical relationship with the East Syrian Church of Seleucia-Ctesiphon and became an autonomous Metropolitan See under the East Syrian Patriarch who was in communion with the Apostolic See of Rome. The office of the Metropolitan was entitled 'the Metropolitan and Gate of All India'. The administrative head of the Church was the Archdeacon and was called The 'Archdeacon of All India'.
+
+Portuguese missionaries who arrived in the 16 century could not decipher the liturgical traditions and the mode of governance of this Church. They took various measures to latinize our ancient rite. When the domination of the Portuguese missionaries became unbearable, the Thomas Christians made a public protest against their rule in 1653, which became known in history as Coonan Cross Oath (കൂനൻ ക്രൂശ് സത്യം). Gradually, there occurred divisions in the church and in the course of time a fraction of the Thomas Christians adopted the faith of the Antiochian Jacobite Church.
+
+Later, a small portion among them became reunited to Catholic faith and they now form the Syro Malankara Church. The majority of the Thomas Christians who always remained faithful to the Catholic faith are the present Syro Malabar Church.
+
+The modern history of the Church of the Catholic Thomas Christians renamed as the Syro Malabar Church began with the erection of two Vicariates in 1887.
+
+Pope Leo XIII of happy memory by his Bull Quod Jam Pridem dated May 20, 1887 established two Vicariates Apostolic - Kottayam and Thrichur - exclusively for the Syro Malabarians and Dr. Charles Lavigne SJ and Dr. Adolph Medlycott respectively were appointed the Vicars Apostolic respectively.
+
+With the permission of the Holy See, Mar Charles Lavigne changed his residence from Kottayam to Changanacherry in 1891. The strong Catholic presence at Changanacherry and the newly built beautiful church were the main attractions for Mar Lavigne to prefer Changanacherry as his residence.
+
+The same Pope reorganized the existing Vicariates by the Apostolic Bull Quae Rei Sacrae dated July 28, 1896 establishing a new Vicariate, Ernakulam, with territories carved out from the two existing Vicariates (Pallippuram, Edappally and Arakuzha divisions from Kottayam Vicariate).
+
+Having established the Head Quarters in Changanacherry the Vicariate of Kottayam was renamed Changanacherry. Indigenous bishops were appointed Vicars Apostolic to the new Sees. They were Mar Mathew Makkil for Changanacherry, Mar Louis Pazheparambil (from Changanacherry Vicariate) for Ernakulam and Mar John Menacherry for Thrichur.
+
+A new Vicariate of Kottayam was constituted in 1911 exclusively for the Suddists and Mar Mathew Makkil was transferred to Kottayam as the Vicar Apostolic of Suddists and Mar Thomas Kurialacherry was appointed the Vicar Apostolic of Changanacherry. The Syro Malabar Hierarchy was established on December 21, 1923 by the Apostolic Bull Romani Pontifices of Pope Pius XI, with Ernakulam as the Metropolitan See and the Eparchies of Thrichur, Changanacherry and Kottayam as its suffragans thereby constituting the first Syro Malabar Province. Mar Thomas Kurialacherry was called to eternal reward in 1925 and Mar James Kalacherry succeeded.
+
+On July 25, 1950 the Eparchy of Changanacherry was bifurcated by the Apostolic Bull Quo Ecclesiarum of Pope Pius XII and the new Eparchy of Palai was created. Mar Mathew Kavukatt was appointed the bishop of Changanacherry as the successor of Mar Kalacherry in 1950.
+
+The Holy See, impressed by the wonderful progress achieved by the Syro Malabarians, extended the hitherto held boundaries of Changanacherry to the areas south of river Pamba, up to (including) Kanyakumari, by the Bull Multorum Fidelium of Pope Pius XII, dated April 29, 1955. Similarly, the boundary of the Church in the North was extended beyond Bharathapuzha by another Apostolic Bull.
+
+Changanacherry was raised to the status of an Archeparchy on July 26, 1956 by Pope Pius XII constituting the second province in the Syro Malabar Church and Kottayam and Pala became its suffragans. The Apostolic Constitution Regnum Caelorum of November 26, 1959 of Pope John XXIII gave effect to this decision of Pope Pius XII. Mar Mathew Kavukattu served the Archeparchy as the Metropolitan Archbishop until 1969 and was succeeded by Archbishop Mar Antony Padiyara in 1970.
+
+In 1975 the missionary work of three (now five) civil districts of the Latin Archdiocese of Agra in the State of Uttar Pradesh was taken up completely by the Archeparchy of Changanacherry.
+
+The Archeparchy was again divided on February 26, 1977 by the Bull Nos Beati Petri of Pope Paul VI and the new Eparchy of Kanjirappally was set up comprising parts of the Civil districts of Kottayam, Idukki and Pathanamthitta. Mar Joseph Powathil was appointed the first bishop of the eparchy of Kanjirappally. Mar Joseph Powathil was appointed Metropolitan Archbishop of Changanacherry in 1985, when Archbishop Mar Antony Padiyara was transferred to Ernakulam as its Metropolitan Archbishop. Archbishop Mar Joseph Powathil took charge of the Archeparchy on 17 January 1986.
+
+The Archeparchy was divided a fifth time when its Kanyakumari Mission was elevated to the status of a new Eparchy by the Bull Apud Indorum Gentes of St. John Paul II, dated December 18, 1996. The formal inauguration of the new eparchy of Thuckalay and the Episcopal Ordination of Mar George Alencherry as its first Bishop took place on February 2, 1997.
+
+Archbishop Mar Joseph Powathil served the Archeparchy until his retirement in 2007 and Mar Joseph Perumthottam was appointed on January 20, 2007 as the new Metropolitan Archbishop of Changanacherry and was installed on March 19, 2007. The Archeparchy of Changanacherry now comprises the Civil districts of Thiruvananthapuram, Kollam, Pathanamthitta, Alappuzha and Kottayam in Kerala with Palai, Kanjirapally and Thuckalay as its suffragans. The most important ecclesial event of this period was the canonization of Blessed Sr. Alphonsa FCC in 2008 by His Holiness Pope Benedict XVI as the first woman Saint of India. Appointment of a Syncellus for the Southern region, erection of four more Foranes (Kudamaloor, Thrickodithanam, Kollam - Ayoor, Thuruthy) and the formation of forane councils are some of the noteworthy pastoral initiatives during these years.`
+      },
+      {
+        type: "section",
+        label: "Pastoral Ministry Section",
+        heading: "Pastoral Ministry at Present",
+        value: `The pastoral ministry in the Archeparchy is organized centered on ten areas, namely. കുടുംബം, കൂട്ടായ്മ, ആതുരസേവനം സാമൂഹികക്ഷേമം, ദൈവാരാധന, പ്രേഷിതഭൗത്യം, വിദ്യാഭ്യാസം, വിശ്വാസപരിശീലനം, പരിസ്ഥിതി സംരക്ഷണം, പ്രവാസി ക്ഷേമം. The activities are organized and co-ordinated under different departments headed by priests and some laymen. The Proto Syncellus and the Syncelli supervise the whole activities in the respective areas assigned to them. There are regular gatherings of the Departmental Heads and the Archeparchial Curia members with the Metropolitan Archbishop to share and evaluate the various pastoral activities. The curia meetings are held twice in a week to discuss and decide day to day pastoral affairs.`
+      },
+      {
+        type: "text",
+        label: "Additional Paragraphs (after Pastoral Ministry)",
+        value: `The post centenary Silver Jubilee (125) of the Archeparchy was a major event which was celebrated in 2012 with a triennial intensive preparation. The three year preparation was arranged as the Year of Priests (2009-2010), Year of the Consecrated (2010-2011) and the Year of the Laity (2011-2012) which coincided with the Jubilee year.
+
+The celebration was officially inaugurated by Archbishop Salvatore Pennachio, the Apostolic Nuncio of India on May 19, 2011. On June 11, 2011 the Feast of Pentecost, parish level and family level inaugurations of the Jubilee Year were held. Apart from the parish and forane level programmes there were around 10 different gatherings in the Archeparchial level in which the people from different spheres of life came together. The most important among these gatherings was the meeting of about 5000 representatives from the parishes and other institutions which was held on January 14, 2012. The chief guests of the programme were His Eminence Leonardo Cardinal Sandri, the Prefect of the Congregation for the Oriental Churches, Sri. Oommen Chandy, the Chief Minister of Kerala, and His Beatitude Mar George Cardinal Alencherry, the Major Archbishop of the Syro Malabar Church.
+
+The concluding ceremony of the Jubilee Year was held on May 19, 2012 at St. Mary's Cathedral Church, Changanacherry. The ceremony began with the celebration of Holy Qurbana and was followed by a public meeting. The chief guests were His Eminence Montero Cardinal de Castro the Apostolic Penitentiary, His Beatitude Mar George Cardinal Alencherry the Major Archbishop, Sri. Oommen Chandy the Chief Minister, and Moran Mor Baselios Marthoma Paulos II Catholicos of the Malankara Orthodox Syrian Church. Archbishops and Bishops from other Eparchies, leaders of other religions and political dignitaries were present in the meeting.
+
+In the year 2012-2013 the Archeparchy celebrated The Year of Faith meaningfully in response to the call of His Holiness Pope Benedict XVI. The celebration was aimed at the fruitful continuation of the Jubilee Celebration. It was also a spiritual preparation for the forthcoming Archeparchial Assembly. The Fourth Changanacherry Archeparchial Assembly was conducted in connection with the 125 Anniversary of the First Eparchial Assembly in the history of the Syro Malabar Church, which was named Changanacherry Soonahados (ചങ്ങനാശ്ശേരി സൂനഹദോസ്). The assembly was summoned from December 18-21, 2013. The solemn inauguration of the Assembly was held at St. Mary's Metropolitan Church, Changanacherry with Holy Qurbana and Public Meeting. Other programmes were scheduled at Zion Retreat Centre, Kunnamthanam. The Assembly discussed in detail the pastoral priorities of the Archeparchy for the coming 10 years. The most important and immediate follow up of the Assembly was the proclamation of 'the Year of Sanctification of Family' in the Archeparchy. The official inauguration of the celebration of the year was on 19 March 2014. In response to the declaration of the Year of the Consecrated by Pope Francis, the Archeparchy has organized several programmes to celebrate the year meaningfully in collaboration with the Religious in the Archeparchy.
+
+Archbishop Mar Joseph Perumthottam announced a Pastoral Five Year plan (പഞ്ചവൽസര അജപാലന പദ്ധതി) for the Archeparchy in 2016. This pastoral plan aimed at rejuvenating the catholic spirit against the challenges of faith, and leading a genuine life of faith and morals by assimilating the liturgy of the Syro Malabar Church.`
+      }
+    ]
+  },
+  perumthottam: {
+    panelHeading: "👤 Mar Joseph Perumthottam — Metropolitan Archbishop",
+    fields: [
+      { type: "text", label: "Section Title", value: "Mar Joseph Perumthottam — The Metropolitan Archbishop" },
+      { type: "textarea", label: "Full Biography", value: `Born on July 5, 1948, at Kongandoor (St. Thomas Church, Punnathura), Joseph (Babychan) had his education in St. Thomas LP School Kongandoor, St. Joseph's High School, Punnathura and St. Berchmans' College, Changanacherry. Completed his seminary studies at St. Thomas Minor Seminary, Parel - Changanacherry and St. Thomas Apostolic Seminary, Vadavathoor - Kottayam. He was ordained a priest on 18 December 1974 by Archbishop Mar Joseph Powathil, then auxiliary bishop of Changanacherry. After his ministry as assistant parish priest for a few years he was appointed Director of Sandesanilayam, the Catechetical and Pastoral Centre of the Archeparchy, in 1979 and the Chaplain of Christian Workers' Movement of the Archeparchy. In the Catechetical field, he introduced many training programmes, including Catechetical Leaders' Training (CLT), which is being continued to this day by Sandesanilayam. In 1983 he was sent for higher studies at Gregorian University, Rome where he took doctorate in Church History. Back from Rome, in 1989 he was appointed professor in St. Thomas Apostolic Seminary, Vadavathoor and Missionary Orientation Centre, Manganam, Kottayam, Director of Pastoral Centre, Director of Small Ecclesial Community and Vicar of St. Sebastian's Church, Kodinattumkunnu. During this period he was instrumental in starting Marthoma Vidyanikethan, the Higher Institute of Religious Sciences for the Laity, at Changanacherry, with the active support of Archbishop Mar Joseph Powathil. This Institute is a unique venture sponsored by Paurastya Vidyapitham (PVP), Vadavathoor, conferring Post Graduation degree recognized by the Congregation for Catholic Education, Rome and Rev. Dr. Joseph Perumthottam has been at its helm for more than a decade. Simultaneously, he was the vicar of Mar Sleeva Church, Ponga. He also served as the Secretary of the Pastoral Council, Presbyteral Council, Director of the Liturgy Department, member of the Central Liturgical Committee and Board member of Liturgical Research Centre (LRC), Kakkanad. He was nominated auxiliary bishop on 24 April 2002 and was ordained a bishop by Archbishop Mar Joseph Powathil at St. Mary's Metropolitan Church, Changanacherry, on 20 May 2002, the 116th Anniversary of the Archeparchy.\n\nOn 19 March 2007 he succeeded Archbishop Mar Joseph Powathil as the 4th Archbishop of Changanacherry and was enthroned by His Beatitude Mar Varkey Vithayathil at a solemn function held at the St. Mary's Metropolitan Church ground, Changanacherry.\n\nArchbishop Mar Joseph Perumthottam has been shepherding the eparchy on the solid foundation laid by his predecessor. He envisages ten important areas of pastoral ministry - ദൈവാരാധന, വിശ്വാസപരിശീലനം, വിദ്യാഭ്യാസം, കുടുംബം, കൂട്ടായ്‌മ, ആതുരസേവനം, സാമൂഹികക്ഷേമം, പ്രേഷിതദൗത്യം, പരിസ്ഥിതിസംരക്ഷണം, പ്രവാസിക്ഷേമം. Primacy is always given to ensure a sound ecclesial life and liturgical spirituality in the Archeparchy. Regular parish pastoral visits in the parishes, faith formation through Kudumbakkoottayma insistence on the significance of lay leadership, special care for the migrants from our eparchy, determined efforts to eradicate social evils are some of the major features of his pastoral vision.\n\nHe has been a member of CBCI Standing Committee and the Permanent Synod of Syro Malabar Church since 2007. In December 2013 he was elected as the vice president of KCBC. In August 2014 he was selected as the Chairman of the Synodal Commission for Vadavathoor Seminary and the Vice Chancellor of Paurastya Vidyapitham. He is also the chairman of CBCI Office for Dialogue and desk for Ecumenism and Chairman of Syro Malabar Synodal Commission for Ecumenism.\n\nArchbishop Mar Joseph Perumthottam announced a Pastoral Five Year plan for the Archeparchy in 2016. This pastoral plan aimed at rejuvenating the catholic spirit against the challenges of faith, and leading a genuine life of faith and morals by assimilating the liturgy of the Syro Malabar Church.` }
+    ]
+  },
+  powathil: {
+    panelHeading: "👤 Mar Joseph Powathil — Metropolitan Emeritus",
+    fields: [
+      { type: "text", label: "Section Title", value: "Mar Joseph Powathil — The Metropolitan Emeritus" },
+      { type: "textarea", label: "Full Biography", value: `Born on August 14, 1930 PJ Joseph (Pappachan) had his primary education in Holy Family LP School and St. Peter's UP School, Kurumpanadom and high school education in St. Berchmans High School Changanacherry. He had his higher studies in St. Berchmans College Changanacherry and Loyola College, Madras from where he took his MA degree in Economics.\n\nHe did his seminary studies at St. Thomas Minor Seminary, Parel and Papal Seminary, Pune. After the Ordination on 3rd October 1962 at Pune he was appointed lecturer of Economics and Warden of St. Joseph's Hostel, St. Berchmans College, Changanacherry. He was on the campus ministry for one decade (1962-1972). In 1969, he had the advantage of taking a one year course in Developmental Economics at the prestigious Oxford University.\n\nHe took keen interest also in the study of the ancient patrimony of the Syro Malabar Church and for its restoration in accordance with the directives of Vatican II Council, as a member of the Central Liturgical Committee (CLC) of the Church. He was actively involved in the various apostolates of the Archeparchy and was secretary of the Pastoral Council for a short period.\n\nOn January 29, 1972 he was nominated Auxiliary Bishop of Changanacherry and was ordained Bishop by St. Pope Paul VI on February 13, 1972 in Rome. During the five years of his service as Auxiliary Bishop and Vicar General (Ex Officio) introduced many reforms in the Archeparchy in close collaboration with then Archbishop Mar Antony Padiyara.\n\nRealizing the importance of youth apostolate he took the initiative in establishing an Eparchial Youth Movement called Yuvadeepti. In course of time, it spread to all the Eparchies in Kerala leading to the formation of Kerala Catholic Youth Movement (KCYM). He was at the forefront in the struggle for educational freedom. He helped the Archbishop in establishing several institutions for the under privileged such as homes for the mentally and physically challenged.\n\nDuring the next 9 years he was entrusted with the task of nurturing the new born Eparchy of Kanjirappally to which he was appointed bishop on February 26, 1977 and assumed charge on May 12, 1977.\n\nBishop Joseph Powathil was appointed Archbishop of Changanacherry on November 05, 1985 and he assumed charge on January 17 the next year. True to his motto, the ministry of Mar Joseph Powathil as bishop and Archbishop has been one of dedication and commitment to 'Truth and Charity'. He served as President of CBCI (1994-1998), Chairman of KCBC (1993-1996) & Chairman of Education Commission of CBCI. He was a member of Pro Oriente Foundation Vienna - Austria (1993), Syro Malabar Permanent Synod (1993-2007), the Post Synodal Commission for Asia (1998) and Founder Chairman of Inter Church Council for Education (1990-2013). Federation of Asian Bishops' Conferences (FABC).\n\nThe Syro Malabar Church, in which he was born and brought up, has always been kept close to his heart. He has always been a devoted son of this Church, and therefore always on the forefront in the struggles for the restoration of its legitimate rights and its identity as an Individual Church.\n\nHe did a great deal to promote formation based on this identity to priests, religious and the laity (Oriental Study Forum, Dukrana, Christian Orient, Missionary Orientation Centre (MOC), Amala Theological College, Marthoma Vidyanikethan, Zion Retreat Centre etc., He also founded an Eastern Monastic Congregation - Sisters of St. Thomas (SST - Marthoma Sahodarikal (MTS)). The new Priests' Home stands out as a symbol of his care and concern for the elderly and sick priests.\n\nArchbishop Joseph Powathil has been a staunch defender of the teachings of the Magisterium. His concern for the poor, the underprivileged and the marginalized was such that he initiated a number of schemes for their development. Malanad Development Society (MDS - 1977) in Eparchy of Kanjirappally and the various projects of the Changanacherry Social Service Society (CHASS) bear ample testimony to this. Worthy of special mentions are the foundation of Blessed Alphonsa Snehanivas for street children and Blessed Alphonsa Centre (Abhaya Bhavan) for the terminally ill.\n\nMar Joseph Powathil's pastoral outlook is broad and encompasses the non Catholics and even the non Christians. He is well known in the ecumenical movement (Inter Church Council, Nilackal Ecumenical Trust) and the Church's fellowship with followers of the other religions. New centres or parishes have been established in the extended territory (home mission) namely, at Chengannur, Mavelikkara, Adoor, Kollam, Niranam, Pathanapuram, Kottarakkara, Karavaloor etc. The source of Mar Joseph Powathil's sense of mission and dedication is undoubtedly his commitment to Truth and Charity, enriched by his solid faith and life in the Spirit. Considering the valuable contributions of Mar Joseph Powathil to the Syro Malabar Church, he was awarded Doctorate in Theology from Paurastya Vidyapitham, Vadavathoor in the year 2020.` }
+    ]
+  },
+  tharayil: {
+    panelHeading: "👤 Mar Thomas Tharayil — Auxiliary Bishop",
+    fields: [
+      { type: "text", label: "Section Title", value: "Mar Thomas Tharayil — The Auxiliary Bishop" },
+      { type: "textarea", label: "Full Biography", value: `Tomy was born to Tharayil Mr. TJ Joseph (late) and Mrs. Mariamma as the youngest of seven children on 2 February, 1972 at Changanacherry. He was baptized with the name Thomas at his home Parish St. Mary's Metropolitan Church, Changanacherry. He had his primary education at St. Joseph's LP School, Changanacherry and high school education at Sacred Heart English Medium School, Fathimapuram.\n\nHaving completed his Pre Degree course at St. Berchmans College, Changanacherry, Tomy joined St. Thomas Minor Seminary, Kurichy and after the elementary studies there, he was sent to St. Thomas Apostolic Seminary, Vadavathoor where he completed both his philosophical and theological studies. Bro. Tomy served the office of the Archeparchial Family Apostolate for a year during his Regency and at that time he took Masters Degree in English Literature from the University of Kerala.\n\nHe was ordained priest in the Great Jubilee Year, 2000 together with 10 of his batchmates on 1 January at Metropolitan Church, Changanacherry by His Grace Mar Joseph Powathil.\n\nFr. Thomas Tharayil served three Forane parishes, viz. Athirampuzha (2000), Nedumkunnam (2001) and Koilmuck - Edathua (2003) as Assistant Parish Priest. Before being sent to Rome for higher studies, he was the Vicar Administrator of Thazhathuvadakara parish for a short period in 2004.\n\nHe completed his doctoral studies in Psychology from Pontifical Gregorian University, Rome. Soon after his return from Rome he was appointed Director of Danahalaya - an Institute of Formation and Counselling - Punnapra, Alappuzha as the successor of Rev. Dr. Thomas Thyparambil in 2011. As the 'Formator of Formators', he raised the institute to new heights. He has been an Archeparchial Consultor since 2012.\n\nDuring his seminary days itself Bro. Tomy was known for his teaching and oratory skills in conducting classes on various subjects in different parishes and schools. He has been one of the visiting faculties of St. Thomas Minor Seminary, Kurichy as the English teacher of final year seminarians. He has been serving as a visiting professor to St. Thomas Apostolic Seminary Vadavathoor, National Vocation Service Centre Pune, Vidya Kshetram Dharmaram and Institute of Formators Bengaluru since 2012. He is proficient in English, Italian, Spanish and German languages. He has written books and articles on Psychology which has got wider acclamation.\n\nHe is well known as a Psychologist as well as a retreat preacher around the Globe, preaching the Word of God to people in all walks of life; children, laity, nuns, priests and bishops which is unique in its kind.\n\nThe synod of Bishops of the Syro Malabar Church elected Rev. Dr. Thomas Tharayil as Auxiliary Bishop of the Archeparchy of Changanacherry and it was announced simultaneously at Mount St. Thomas, Kakkanad and Vatican on 14 January, 2017. He was ordained Auxiliary Bishop by Mar Joseph Perumthottam, the Metropolitan of Changanacherry on 23 of April, 2017. He is also the Titular Bishop of the episcopal see of Agrippias. The southern region of the Archeparchy consisting of Thiruvanathapuram, Kollam and Amboori Foranes is entrusted to the special care of Mar Thomas Tharayil.\n\nBishop Thomas Tharayil serves as a member in Public Affairs Commission and Clergy Commission of the Syro Malabar Church. His interventions in various social and ecclesiastical issues are well appreciated.` }
+    ]
+  },
+  hierarchs: {
+    panelHeading: "📋 Former Hierarchs of the Archeparchy",
+    rows: [
+      { name: "Bishop Charles Lavigne SJ", years: "1887 – 1896", death: "11.07.1913" },
+      { name: "Bishop Mar Mathew Makkil", years: "1896 – 1911", death: "26.01.1914" },
+      { name: "Bishop Mar Thomas Kurialacherry", years: "1911 – 1925", death: "02.06.1925" },
+      { name: "Bishop Mar James Kalacherry", years: "1927 – 1949", death: "27.10.1949" },
+      { name: "Archbishop Mar Mathew Kavukattu", years: "1950 – 1969", death: "09.10.1969" },
+      { name: "Archbishop Mar Antony Padiyara", years: "1970 – 1985", death: "23.03.2000" },
+      { name: "Archbishop Mar Joseph Powathil", years: "1986 – 2007", death: "" }
+    ]
+  },
+  prelates: {
+    panelHeading: "🌍 Prelates From The Archeparchy",
+    rows: [
+      { name: "Late Mar Louis Pazheparampil (First Vicar Apostolic of Ernakulam)", years: "1896 – 1919" },
+      { name: "Late Mar Antony Cardinal Padiyara (First Major Archbishop)", years: "1955 – 1996" },
+      { name: "Late Msgr Jacob Vadakkeveettil CM (Administrator of Balasore)", years: "1968 – 1990" },
+      { name: "Late Mar George Anathil SVD (Bishop of Indore)", years: "1973 – 2009" },
+      { name: "Mar Joseph Pathalil (Bishop Emeritus of Udaipur)", years: "1985 –" },
+      { name: "Late Mar Hyppolitus Kunnumkal OFM Cap. (Bishop of Jammu–Srinagar)", years: "1986 – 1998" },
+      { name: "Mar Simon Stock Palathra CMI (Bishop Emeritus of Jagdalpur)", years: "1993 – 2013" },
+      { name: "Mar Mathew Cheriankunnel (Bishop Emeritus of Kurnool)", years: "1987 – 1995" },
+      { name: "Mar George Cardinal Alencherry (Major Archbishop of Syro Malabar Church)", years: "1997 –" },
+      { name: "Mar George Kocherry (Apostolic Nuntio)", years: "2000 –" },
+      { name: "Mar Thomas Thuruthimattom CST (Bishop of Gorakhpur)", years: "2006 –" },
+      { name: "Mar Alex Thomas Kaliyaniyil (Archbishop of Bulavaya, Zimbabwe)", years: "2009 –" },
+      { name: "Mar James Athikalam (Bishop of Sagar)", years: "2020 –" }
+    ]
+  },
+  administrators: {
+    panelHeading: "📂 Former Administrators / Vicars General / Proto Syncellus & Syncelli",
+    rows: [
+      { name: "Msgr Emmanuel Nidhiri", years: "1889 – 1892" },
+      { name: "Msgr Joseph Thayyil", years: "1892 – 1908" },
+      { name: "Msgr Cyriac Kandankary", years: "1908 – 1919" },
+      { name: "Msgr Jacob Kallarackal", years: "1919 – 1951" },
+      { name: "Administrator", years: "1925 – 1927" },
+      { name: "Administrator", years: "1949 – 1950" },
+      { name: "Very Rev. Fr. Joseph Vechianickal", years: "1940" },
+      { name: "Very Rev. Fr. Kuruvilla Plathottam", years: "1940 – 1945" },
+      { name: "Msgr Jacob Kattakkayam", years: "1945 – 1949" },
+      { name: "Msgr Thomas Puthenpura", years: "1951 – 1958" },
+      { name: "Msgr Luke J Chittoor", years: "1958 – 1972" },
+      { name: "Administrator", years: "1969 – 1970" },
+      { name: "Mar Joseph Powathil", years: "1972 – 1977" },
+      { name: "Very Rev. Fr. Joseph Maliparampil", years: "1971 – 1975" },
+      { name: "Msgr Kuriakose Parampath", years: "1977 – 1981" },
+      { name: "Msgr Joseph Karimpalil", years: "1981 – 1986" },
+      { name: "Administrator", years: "1985 – 1986" },
+      { name: "Very Rev. Fr. Mathew Pulickaparampil", years: "1986 – 1994" },
+      { name: "Very Rev. Fr. Mathew Mattam", years: "1987 – 1994" },
+      { name: "Mar George Alencherry", years: "1994 – 1997" },
+      { name: "Very Rev. Fr. Jos P Kottaram", years: "1994 – 2007" },
+      { name: "Very Rev. Dr. Mathew Vellanickal", years: "1998 – 2017" },
+      { name: "Mar Joseph Perumthottam", years: "2002 – 2007" },
+      { name: "Very Rev. Fr. Joseph Kurinjiparampil", years: "2007 – 2012" },
+      { name: "Very Rev. Dr. Joseph Naduvilezham", years: "2007 – 2012" },
+      { name: "Very Rev. Dr. John V Thadathil", years: "2010 – 2014" },
+      { name: "Very Rev. Dr. Joseph Mundakathil", years: "2012 – 2019" },
+      { name: "Very Rev. Dr. James Palackal", years: "2012 – 2018" },
+      { name: "Very Rev. Dr. Mani Puthiyidam", years: "2014 – 2017" },
+      { name: "Very Rev. Dr. Philips Wadakkekalam", years: "2017 – 2020" }
+    ]
+  }
+};
+
+// ──────────────────────────────────────────────
+// Firestore helpers
+// ──────────────────────────────────────────────
+const abDoc = (section) => doc(db, "aboutpage", section);
+const e = s => String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+
+// ──────────────────────────────────────────────
+// Toast / busy
+// ──────────────────────────────────────────────
+window.abToast = function(msg,type="",dur=2800){
+  const t=document.getElementById("ab-toast");
+  t.textContent=msg; t.className="show"+(type?" "+type:"");
+  clearTimeout(t._t); t._t=setTimeout(()=>t.className="",dur);
+};
+function busy(id,on){
+  const b=document.getElementById(id); if(!b)return;
+  if(on){b._lbl=b.innerHTML;b.disabled=true;b.innerHTML=`<span class="spin"></span> Saving…`;}
+  else{b.disabled=false;b.innerHTML=b._lbl||"Save";}
+}
+function setStatus(id,msg,color="#ef4444"){
+  const el=document.getElementById(id); if(el){el.textContent=msg;el.style.color=color;}
+}
+
+// ──────────────────────────────────────────────
+// Tab switching
+// ──────────────────────────────────────────────
+let currentTab = "history";
+window.switchTab = function(tab, btn){
+  currentTab = tab;
+  document.querySelectorAll(".section-tab").forEach(b=>b.classList.remove("active"));
+  btn.classList.add("active");
+  ["history","perumthottam","powathil","tharayil","hierarchs","prelates","administrators"]
+    .forEach(s=>{ const p=document.getElementById("panel-"+s); if(p)p.style.display="none"; });
+  const panel = document.getElementById("panel-"+tab);
+  if(panel){ panel.style.display=""; loadSection(tab); }
+};
+
+// ──────────────────────────────────────────────
+// Load section from Firestore
+// ──────────────────────────────────────────────
+window.loadSection = async function(tab){
+  const skel = document.getElementById("skel-"+tab);
+  const form = document.getElementById("form-"+tab);
+  if(skel) skel.style.display="block";
+  if(form) form.style.display="none";
+  try{
+    const snap = await getDoc(abDoc(tab));
+    const data = snap.exists() ? snap.data() : DEFAULTS[tab];
+    populateForm(tab, data);
+    updateStats();
+  }catch(err){
+    abToast("❌ Failed to load: "+err.message,"error");
+  }finally{
+    if(skel) skel.style.display="none";
+    if(form) form.style.display="";
+  }
+};
+
+// ──────────────────────────────────────────────
+// Populate forms — now all use dynamic field system
+// ──────────────────────────────────────────────
+function populateForm(tab, data){
+  // Set panel heading input
+  const headingInput = document.getElementById(tab+"-panel-heading");
+  if(headingInput && data.panelHeading){
+    headingInput.value = data.panelHeading;
+  }
+
+  if(tab === "history"){
+    // Migrate legacy data format -> new fields array
+    let fields = data.fields;
+    if(!fields && (data.mainText || data.pastoralHeading)){
+      fields = migrateHistoryData(data);
+    }
+    window._historyFields = fields || [...DEFAULTS.history.fields];
+    renderHistoryFields();
+  } else if(["perumthottam","powathil","tharayil"].includes(tab)){
+    // Migrate legacy bio format -> fields array
+    let fields = data.fields;
+    if(!fields && (data.title || data.bio)){
+      fields = [
+        { type: "text", label: "Section Title", value: data.title || "" },
+        { type: "textarea", label: "Full Biography", value: data.bio || "" }
+      ];
+    }
+    window._bioFields = window._bioFields || {};
+    window._bioFields[tab] = fields || [...DEFAULTS[tab].fields];
+    renderBioFields(tab);
+  } else if(["hierarchs","prelates","administrators"].includes(tab)){
+    window._tableData = window._tableData || {};
+    window._tableData[tab] = (data.rows||[]).map(r=>({...r}));
+    renderTableRows(tab);
+  }
+}
+
+// Migrate old history format to new fields array
+function migrateHistoryData(data){
+  const fields = [];
+  if(data.mainText){
+    fields.push({ type:"text", label:"Main Historical Text", hint:"plain paragraphs, one per line break; HTML tags allowed", value: data.mainText });
+  }
+  if(data.pastoralHeading || data.pastoralText){
+    fields.push({ type:"section", label:"Pastoral Ministry Section", heading: data.pastoralHeading||"Pastoral Ministry at Present", value: data.pastoralText||"" });
+  }
+  if(data.extraText){
+    fields.push({ type:"text", label:"Additional Paragraphs (after Pastoral Ministry)", value: data.extraText });
+  }
+  return fields;
+}
+
+function updateStats(){
+  const hRows = window._tableData?.hierarchs?.length ?? DEFAULTS.hierarchs.rows.length;
+  const pRows = window._tableData?.prelates?.length ?? DEFAULTS.prelates.rows.length;
+  const aRows = window._tableData?.administrators?.length ?? DEFAULTS.administrators.rows.length;
+  document.getElementById("st-hierarchs").textContent = hRows;
+  document.getElementById("st-prelates").textContent = pRows;
+  document.getElementById("st-admins").textContent = aRows;
+}
+
+// ──────────────────────────────────────────────
+// HISTORY: Dynamic field rendering
+// ──────────────────────────────────────────────
+function renderHistoryFields(){
+  const list = document.getElementById("history-fields-list");
+  if(!list) return;
+  const fields = window._historyFields || [];
+  list.innerHTML = fields.map((f,i) => {
+    if(f.type === "section"){
+      return `
+        <div class="hist-field-block" data-idx="${i}">
+          <div class="field-heading-row">
+            <span class="fh-label">Sub-Section Heading:</span>
+            <input class="fh-title-input" type="text" value="${e(f.heading||'')}"
+              placeholder="e.g. Pastoral Ministry at Present"
+              oninput="window._historyFields[${i}].heading=this.value"/>
+            <button class="fh-remove" onclick="removeHistoryField(${i})" title="Remove field">✕</button>
+          </div>
+          <textarea rows="5" oninput="window._historyFields[${i}].value=this.value"
+            placeholder="Section content…">${e(f.value||'')}</textarea>
+        </div>`;
+    } else {
+      // type === 'text'
+      const rows = (f.value||'').split('\n').length;
+      const r = Math.max(6, Math.min(rows+3, 25));
+      return `
+        <div class="hist-field-block" data-idx="${i}">
+          <div class="field-heading-row">
+            <span class="fh-label">Block Label:</span>
+            <input class="fh-title-input" type="text" value="${e(f.label||'')}"
+              placeholder="e.g. Main Historical Text"
+              oninput="window._historyFields[${i}].label=this.value"/>
+            <button class="fh-remove" onclick="removeHistoryField(${i})" title="Remove field">✕</button>
+          </div>
+          ${f.hint?`<div style="font-size:.7rem;color:#94a3b8;margin-bottom:6px;">ℹ️ ${e(f.hint)}</div>`:''}
+          <textarea rows="${r}" style="font-family:monospace;font-size:.8rem;"
+            oninput="window._historyFields[${i}].value=this.value"
+            placeholder="Enter content…">${e(f.value||'')}</textarea>
+        </div>`;
+    }
+  }).join('');
+}
+
+window.addHistoryField = function(type){
+  if(!window._historyFields) window._historyFields=[];
+  if(type==='text'){
+    window._historyFields.push({type:'text',label:'New Text Block',value:''});
+  } else {
+    window._historyFields.push({type:'section',label:'New Sub-Section',heading:'New Section Heading',value:''});
+  }
+  renderHistoryFields();
+};
+
+window.removeHistoryField = function(i){
+  if(!confirm("Remove this field?")) return;
+  window._historyFields.splice(i,1);
+  renderHistoryFields();
+};
+
+// ──────────────────────────────────────────────
+// BIO SECTIONS: Dynamic field rendering
+// ──────────────────────────────────────────────
+function renderBioFields(tab){
+  const list = document.getElementById(tab+"-fields-list");
+  if(!list) return;
+  const fields = (window._bioFields && window._bioFields[tab]) || [];
+  list.innerHTML = fields.map((f,i) => {
+    const isTextarea = f.type==='textarea';
+    return `
+      <div class="bio-field-block" data-idx="${i}">
+        <button class="field-remove" onclick="removeBioField('${tab}',${i})" title="Remove this field">✕</button>
+        <label>Field Label (internal use):</label>
+        <input class="field-label-input" type="text" value="${e(f.label||'')}"
+          placeholder="Label (internal)"
+          oninput="window._bioFields['${tab}'][${i}].label=this.value"/>
+        ${isTextarea
+          ? `<textarea class="field-value-textarea" rows="14" style="font-family:monospace;font-size:.8rem;width:100%;border:1px solid #e2e8f0;border-radius:6px;padding:7px 10px;outline:none;"
+              oninput="window._bioFields['${tab}'][${i}].value=this.value">${e(f.value||'')}</textarea>`
+          : `<input class="field-value-text" type="text" style="width:100%;border:1px solid #e2e8f0;border-radius:6px;padding:7px 10px;font-size:.84rem;outline:none;"
+              value="${e(f.value||'')}"
+              oninput="window._bioFields['${tab}'][${i}].value=this.value"/>`
+        }
+      </div>`;
+  }).join('');
+}
+
+window.addBioField = function(tab, type){
+  if(!window._bioFields) window._bioFields={};
+  if(!window._bioFields[tab]) window._bioFields[tab]=[];
+  window._bioFields[tab].push({type, label:'New Field', value:''});
+  renderBioFields(tab);
+};
+
+window.removeBioField = function(tab, i){
+  if(!confirm("Remove this field?")) return;
+  window._bioFields[tab].splice(i,1);
+  renderBioFields(tab);
+};
+
+// ──────────────────────────────────────────────
+// Table row rendering (unchanged logic, heading now from input)
+// ──────────────────────────────────────────────
+function renderTableRows(tab){
+  const rows = window._tableData?.[tab]||[];
+  const is3col = tab==="hierarchs";
+  document.getElementById(tab+"-list").innerHTML = rows.map((r,i)=>`
+    <div class="hr-row">
+      <input value="${e(r.name)}" id="r${tab}n${i}" placeholder="Name" oninput="window._tableData['${tab}'][${i}].name=this.value"/>
+      <input value="${e(r.years)}" id="r${tab}y${i}" placeholder="Years" style="max-width:130px;" oninput="window._tableData['${tab}'][${i}].years=this.value"/>
+      ${is3col?`<input value="${e(r.death||'')}" id="r${tab}d${i}" placeholder="Death" style="max-width:110px;" oninput="window._tableData['${tab}'][${i}].death=this.value"/>`:""}
+      <button class="rm" onclick="delTableRow('${tab}',${i})">✕</button>
+    </div>`).join("");
+}
+
+window.addTableRow = function(tab, cols){
+  if(!window._tableData) window._tableData={};
+  if(!window._tableData[tab]) window._tableData[tab]=[];
+  const row = cols===3 ? {name:"",years:"",death:""} : {name:"",years:""};
+  window._tableData[tab].push(row);
+  renderTableRows(tab);
+};
+
+window.delTableRow = function(tab, i){
+  window._tableData[tab].splice(i,1);
+  renderTableRows(tab);
+  updateStats();
+};
+
+// ──────────────────────────────────────────────
+// SAVE: History — now saves fields array + panelHeading
+// ──────────────────────────────────────────────
+window.saveHistory = async function(){
+  busy("btn-save-history",true);
+  setStatus("status-history","");
+  try{
+    const panelHeading = document.getElementById("history-panel-heading")?.value || "";
+    // Sync current textarea values into the fields array
+    const fields = (window._historyFields||[]).map((f,i)=>{
+      const block = document.querySelector(`#history-fields-list [data-idx="${i}"]`);
+      if(!block) return f;
+      const ta = block.querySelector('textarea');
+      if(ta) f.value = ta.value;
+      if(f.type==='section'){
+        const hi = block.querySelector('.fh-title-input');
+        if(hi) f.heading = hi.value;
+      } else {
+        const li = block.querySelector('.fh-title-input');
+        if(li) f.label = li.value;
+      }
+      return f;
+    });
+    // Also save legacy fields for backward compatibility with about.html
+    const mainField = fields.find(f=>f.type==='text');
+    const sectionField = fields.find(f=>f.type==='section');
+    const extraField = fields.filter(f=>f.type==='text')[1];
+    const data = {
+      panelHeading,
+      fields,
+      // Legacy keys for backward compat
+      mainText: mainField?.value || "",
+      pastoralHeading: sectionField?.heading || "",
+      pastoralText: sectionField?.value || "",
+      extraText: extraField?.value || "",
+      updated_at: serverTimestamp()
+    };
+    await setDoc(abDoc("history"), data);
+    window._historyFields = fields;
+    abToast("✅ History saved!","success");
+    setStatus("status-history","Saved ✓","#16a34a");
+  }catch(err){
+    setStatus("status-history","❌ "+err.message);
+    abToast("❌ Save failed","error");
+  }finally{ busy("btn-save-history",false); }
+};
+
+// ──────────────────────────────────────────────
+// SAVE: Bio sections — now saves fields array + panelHeading
+// ──────────────────────────────────────────────
+window.saveBio = async function(tab){
+  busy("btn-save-"+tab,true);
+  setStatus("status-"+tab,"");
+  try{
+    const panelHeading = document.getElementById(tab+"-panel-heading")?.value || "";
+    // Sync DOM values into fields array
+    const fields = (window._bioFields?.[tab]||[]).map((f,i)=>{
+      const block = document.querySelector(`#${tab}-fields-list [data-idx="${i}"]`);
+      if(!block) return f;
+      const inp = block.querySelector('.field-value-text') || block.querySelector('.field-value-textarea');
+      if(inp) f.value = inp.value;
+      const li = block.querySelector('.field-label-input');
+      if(li) f.label = li.value;
+      return f;
+    });
+    // Legacy keys for backward compat with about.html
+    const titleField = fields.find(f=>f.type==='text');
+    const bioField = fields.find(f=>f.type==='textarea');
+    const data = {
+      panelHeading,
+      fields,
+      title: titleField?.value || "",
+      bio: bioField?.value || "",
+      updated_at: serverTimestamp()
+    };
+    await setDoc(abDoc(tab), data);
+    window._bioFields[tab] = fields;
+    abToast("✅ Saved!","success");
+    setStatus("status-"+tab,"Saved ✓","#16a34a");
+  }catch(err){
+    setStatus("status-"+tab,"❌ "+err.message);
+    abToast("❌ Save failed","error");
+  }finally{ busy("btn-save-"+tab,false); }
+};
+
+// ──────────────────────────────────────────────
+// SAVE: Table sections — now includes panelHeading
+// ──────────────────────────────────────────────
+window.saveTable = async function(tab){
+  busy("btn-save-"+tab,true);
+  setStatus("status-"+tab,"");
+  const panelHeading = document.getElementById(tab+"-panel-heading")?.value || "";
+  const rows = window._tableData?.[tab]||[];
+  const is3col = tab==="hierarchs";
+  const cleanRows = rows.map((_,i)=>({
+    name:  document.getElementById("r"+tab+"n"+i)?.value||"",
+    years: document.getElementById("r"+tab+"y"+i)?.value||"",
+    ...(is3col?{death: document.getElementById("r"+tab+"d"+i)?.value||""}:{})
+  }));
+  try{
+    await setDoc(abDoc(tab), { panelHeading, rows: cleanRows, updated_at: serverTimestamp() });
+    window._tableData[tab] = cleanRows;
+    updateStats();
+    abToast("✅ Saved!","success");
+    setStatus("status-"+tab,"Saved ✓","#16a34a");
+  }catch(err){
+    setStatus("status-"+tab,"❌ "+err.message);
+    abToast("❌ Save failed","error");
+  }finally{ busy("btn-save-"+tab,false); }
+};
+
+// ──────────────────────────────────────────────
+// Seed all default data (first-time setup)
+// ──────────────────────────────────────────────
+window.seedAllData = async function(){
+  if(!confirm("Upload all default About page data to Firestore?\n\nExisting documents will NOT be overwritten.")) return;
+  const btn = document.getElementById("btn-seed");
+  btn.disabled=true; btn.textContent="⏳ Seeding…";
+  const sections = Object.keys(DEFAULTS);
+  let seeded=0, skipped=0;
+  try{
+    for(const s of sections){
+      const snap = await getDoc(abDoc(s));
+      if(snap.exists()){ skipped++; continue; }
+      await setDoc(abDoc(s), { ...DEFAULTS[s], updated_at: serverTimestamp() });
+      seeded++;
+    }
+    abToast(`✅ Done: ${seeded} seeded, ${skipped} skipped.`,"success",4000);
+    document.getElementById("import-banner").style.display="none";
+    await loadSection(currentTab);
+  }catch(err){
+    abToast("❌ Seed failed: "+err.message,"error",4000);
+  }finally{
+    btn.disabled=false; btn.textContent="⬆ Seed Default Data";
+  }
+};
+
+// ──────────────────────────────────────────────
+// Auth
+// ──────────────────────────────────────────────
+document.body.style.display="none";
+onAuthStateChanged(auth, async user=>{
+  if(!user){window.location.href="index.html";return;}
+  const snap = await getDoc(doc(db,"users",user.uid));
+  if(!snap.exists()){await signOut(auth);window.location.href="index.html";return;}
+  const prof = snap.data();
+  const userRole = user.email===ADMIN?"Admin":"User";
+  const uname = prof.username||user.displayName||user.email;
+  document.getElementById("sidebar-username").textContent=uname;
+  document.getElementById("sidebar-role").textContent=userRole;
+  document.getElementById("sidebar-avatar").textContent=uname[0].toUpperCase();
+  const badge=document.getElementById("role-badge");
+  badge.textContent=userRole;
+  badge.className=userRole==="Admin"?"badge bg-warning text-dark me-2":"badge bg-primary me-2";
+  if(userRole!=="Admin"){
+    abToast("⛔ Admin access required.","error");
+    document.querySelectorAll(".hm-save,#btn-seed").forEach(b=>b.style.display="none");
+  }
+  document.body.style.display="";
+  window._tableData={};
+  window._bioFields={};
+  window._historyFields=[];
+  await loadSection("history");
+});
+
+document.getElementById("btn-logout").addEventListener("click",async()=>{await signOut(auth);window.location.href="index.html";});
+document.getElementById("sidebar-toggle").addEventListener("click",()=>{
+  document.getElementById("sidebar").classList.toggle("open");
+  document.getElementById("sidebar-overlay").classList.toggle("show");
+});
+document.getElementById("sidebar-overlay").addEventListener("click",()=>{
+  document.getElementById("sidebar").classList.remove("open");
+  document.getElementById("sidebar-overlay").classList.remove("show");
+});
+</script>
+</body>
+</html>
