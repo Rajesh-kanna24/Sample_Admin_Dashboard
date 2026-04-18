@@ -124,15 +124,17 @@
     </div>
 
     <!-- Stats -->
-    <div class="stats-bar">
-      <div class="stat-pill"><span class="stat-num" id="st-t3">0</span><div class="stat-lbl">III Theology</div></div>
-      <div class="stat-pill"><span class="stat-num" id="st-t2">0</span><div class="stat-lbl">II Theology</div></div>
+    <div class="stats-bar"> 
+      <div class="stat-pill"><span class="stat-num" id="st-dn">0</span><div class="stat-lbl">Deacons</div></div>
+  <div class="stat-pill"><span class="stat-num" id="st-t3">0</span><div class="stat-lbl">III Theology</div></div>      
+  <div class="stat-pill"><span class="stat-num" id="st-t2">0</span><div class="stat-lbl">II Theology</div></div>
       <div class="stat-pill"><span class="stat-num" id="st-t1">0</span><div class="stat-lbl">I Theology</div></div>
       <div class="stat-pill"><span class="stat-num" id="st-rg">0</span><div class="stat-lbl">Regents</div></div>
       <div class="stat-pill"><span class="stat-num" id="st-hi">0</span><div class="stat-lbl">Higher</div></div>
       <div class="stat-pill"><span class="stat-num" id="st-p3n">0</span><div class="stat-lbl">Phil 3NG</div></div>
       <div class="stat-pill"><span class="stat-num" id="st-p3g">0</span><div class="stat-lbl">Phil 3G</div></div>
       <div class="stat-pill"><span class="stat-num" id="st-p2">0</span><div class="stat-lbl">Phil 2</div></div>
+      <div class="stat-pill"><span class="stat-num" id="st-p1">0</span><div class="stat-lbl">Phil 1</div></div>
       <div class="stat-pill"><span class="stat-num" id="st-mn">0</span><div class="stat-lbl">Minor Sem</div></div>
       <div class="stat-pill"><span class="stat-num" id="st-et">0</span><div class="stat-lbl">Etawah</div></div>
       <div class="stat-pill" style="border-color:#921a02"><span class="stat-num" id="st-all">0</span><div class="stat-lbl">Total</div></div>
@@ -140,7 +142,8 @@
 
     <!-- Tabs -->
     <div class="sem-tabs">
-      <button class="sem-tab active" onclick="switchTab('sem-theology-3',this)">III Theology</button>
+     <button class="sem-tab active" onclick="switchTab('sem-deacons',this)">Deacons</button>
+  <button class="sem-tab" onclick="switchTab('sem-theology-3',this)">III Theology</button>
       <button class="sem-tab" onclick="switchTab('sem-theology-2',this)">II Theology</button>
       <button class="sem-tab" onclick="switchTab('sem-theology-1',this)">I Theology</button>
       <button class="sem-tab" onclick="switchTab('sem-regents',this)">Regents</button>
@@ -148,12 +151,14 @@
       <button class="sem-tab" onclick="switchTab('sem-philo-3ng',this)">III Phil (NG)</button>
       <button class="sem-tab" onclick="switchTab('sem-philo-3g',this)">III Phil (G)</button>
       <button class="sem-tab" onclick="switchTab('sem-philo-2',this)">II Philosophy</button>
+      <button class="sem-tab" onclick="switchTab('sem-philo-1',this)">I Philosophy</button>
       <button class="sem-tab" onclick="switchTab('sem-minor',this)">Minor Seminary</button>
       <button class="sem-tab" onclick="switchTab('sem-etawah',this)">Etawah Mission</button>
     </div>
 
     <!-- Panels -->
-    <div id="panel-sem-theology-3" class="panel-card"></div>
+     <div id="panel-sem-deacons"    class="panel-card"></div>
+    <div id="panel-sem-theology-3" class="panel-card" style="display: none;"></div>
     <div id="panel-sem-theology-2" class="panel-card" style="display:none"></div>
     <div id="panel-sem-theology-1" class="panel-card" style="display:none"></div>
     <div id="panel-sem-regents"    class="panel-card" style="display:none"></div>
@@ -161,6 +166,7 @@
     <div id="panel-sem-philo-3ng"  class="panel-card" style="display:none"></div>
     <div id="panel-sem-philo-3g"   class="panel-card" style="display:none"></div>
     <div id="panel-sem-philo-2"    class="panel-card" style="display:none"></div>
+    <div id="panel-sem-philo-1" class="panel-card" style="display:none"></div>
     <div id="panel-sem-minor"      class="panel-card" style="display:none"></div>
     <div id="panel-sem-etawah"     class="panel-card" style="display:none"></div>
   </main>
@@ -186,7 +192,8 @@
     <div class="hm-group">
       <label>Section <span style="color:red">*</span></label>
       <select id="f-section">
-        <option value="sem-theology-3">III Theology (Deacons)</option>
+        <option value="sem-deacons">Major Seminary Deacons</option>
+  <option value="sem-theology-3">III Theology (Deacons)</option>
         <option value="sem-theology-2">II Theology (Deacons)</option>
         <option value="sem-theology-1">I Theology (Deacons)</option>
         <option value="sem-regents">Regents</option>
@@ -194,6 +201,7 @@
         <option value="sem-philo-3ng">III Philosophy (Non-Graduate)</option>
         <option value="sem-philo-3g">III Philosophy (Graduate)</option>
         <option value="sem-philo-2">II Philosophy</option>
+        <option value="sem-philo-1">I Philosophy</option>
         <option value="sem-minor-degree">Minor Seminary — Higher Studies (Degree)</option>
         <option value="sem-minor-4">Minor Seminary — IV Years (Niranam)</option>
         <option value="sem-minor-3">Minor Seminary — III Years</option>
@@ -225,11 +233,11 @@ const ADMIN="issacnewton1503@gmail.com";
 const app=initializeApp(FC),auth=getAuth(app),db=getFirestore(app);
 
 /* Sections with code column */
-const HAS_CODE=new Set(["sem-theology-3","sem-theology-2","sem-theology-1","sem-philo-3ng","sem-philo-3g","sem-philo-2"]);
-
-/* All section doc IDs in Firestore */
-const ALL_IDS=["sem-theology-3","sem-theology-2","sem-theology-1","sem-regents","sem-higher",
-  "sem-philo-3ng","sem-philo-3g","sem-philo-2",
+const HAS_CODE = new Set(["sem-deacons","sem-theology-3","sem-theology-2","sem-theology-1",
+  "sem-philo-3ng","sem-philo-3g","sem-philo-2","sem-philo-1"]);  // ← sem-philo-1 add/* All section doc IDs in Firestore */
+const ALL_IDS = ["sem-deacons","sem-theology-3","sem-theology-2","sem-theology-1",
+  "sem-regents","sem-higher",
+  "sem-philo-3ng","sem-philo-3g","sem-philo-2","sem-philo-1",  // ← sem-philo-1 add
   "sem-minor-degree","sem-minor-4","sem-minor-3","sem-minor-2","sem-minor-1",
   "sem-etawah-4","sem-etawah-3","sem-etawah-2","sem-etawah-1"];
 
@@ -252,6 +260,10 @@ const GROUPED={
 
 /* Default data — exact from your seminarians.html */
 const DEFAULT={
+  "sem-deacons":{rows:[
+  {name:"Kamicherry Joseph (Aneesh)", parish:"St. Joseph's, Kuttamangalam", code:"ROM"},
+  {name:"Pulickal Mathew (Sajan)",    parish:"Lourdes Matha, Mammood",       code:"ROM"},
+]},
 "sem-theology-3":{rows:[
   {name:"Ambalathunkal Kurian (Nithin)",    parish:"Holy Magi Forane, Manimala",               code:"VAD"},
   {name:"Koilparampil Henry (Tony)",         parish:"Little Flower, Kaduvakulam",               code:"ALW"},
@@ -351,34 +363,45 @@ const DEFAULT={
   {name:"Vadakkethadathil Mathew (Mathew)",  parish:"Sacred Heart, Thiruvallam",                code:"ALW"},
   {name:"Vattakalam Joseph (Blesson)",       parish:"St. Mary's Metropolitan, Changanacherry",  code:"BNG"},
 ]},
-"sem-philo-2":{rows:[
-  {name:"Chakkathara Kurian (Gladvin)",      parish:"St. Mary's Basilica, Champakulam",         code:"VAD"},
-  {name:"Chennattucherry Xavier (Alby)",     parish:"St. Joseph's, Ramankary",                  code:"KUN"},
-  {name:"Ezharayil Sebastian (Alan)",        parish:"Fathima Matha, Pandy",                     code:"ALW"},
-  {name:"Kalathiparambil Joseph (Akhil)",    parish:"St. Mary's, Koothrappally",                code:"VAD"},
-  {name:"Kalluvettukuzhyil James (Gerald)",  parish:"St. Xavier's, Kattachira",                 code:"KUN"},
-  {name:"Kanjikara Thomas (Derik)",          parish:"St. Joseph's, Ramankary",                  code:"ALW"},
-  {name:"Naduviletharayil Mathew (Jis)",     parish:"St. George's, Thottackad",                 code:"ALW"},
-  {name:"Naduvileveedu Antony (Alan)",       parish:"St. Thomas, Muttar New",                   code:"VAD"},
-  {name:"Naickarottu Sebastian (Sebin)",     parish:"St. Sebastian's, Chanjody",                code:"VAD"},
-  {name:"Thekkanam Joseph (Sabin)",          parish:"St. Mary's Major Archiepiscopal, Kudamaloor",code:"ALW"},
-  {name:"Mannamthuruthil Mathew (Mathew)",   parish:"Lourdes Matha, Pacha",                     code:"PUN"},
-  {name:"Srampickal Kalathil Mathew (Milan)",parish:"St. Joseph's, Ramankary",                  code:"PUN"},
-  {name:"Valiyaveetil Mathew (Alen)",        parish:"St. Joseph's, Punnakkunnathussery",        code:"UJN"},
-  {name:"Chooranolickal Francis (Sanjay)",   parish:"St. George Forane, Amboori",               code:"UJN"},
-  {name:"Ettiyamparambil Antony (Bichu)",    parish:"St. Antony's, Paduvapuram",                code:"KUN"},
-  {name:"Kaithathara Puthenveedu Joseph (Sachin)",parish:"St. Antony's, Vaisyambhagom",        code:"KUN"},
-  {name:"Kavalakkatt Anthony (Antony)",      parish:"Holy Family, Thirumala",                   code:"ALW"},
-  {name:"Kizhakkepulliyathra Thomas (Sebin)",parish:"St. Rita's, Thakazhy",                     code:"ALW"},
-  {name:"Mammoottil Joseph (Nivin)",         parish:"St. Mary's, Narickal",                     code:"VAD"},
-  {name:"Mlamkuzhyputhenpura Chacko (Jefrin)",parish:"St. Thomas, Nalpathimala",               code:"VAD"},
-  {name:"Mulamoottil Thomas (Jilson)",       parish:"St. Antony's, Thayamkary",                 code:"ALW"},
-  {name:"Palakunnel Cherryan (Cherryn)",     parish:"St. Mary's, Koothrappally",                code:"VAD"},
-  {name:"Pulimparampil Jose (Kevin)",        parish:"St. Mary's, Ithithanam",                   code:"ALW"},
-  {name:"Pullattukala Thomas (Thomaskutty)", parish:"Lourdes Matha, Aruvikuzhy",                code:"KUN"},
-  {name:"Thuravassery Kuriakose (Martin)",   parish:"St. Joseph's, Veroor",                     code:"VAD"},
-  {name:"Thuruthiyil Joseph (Alen)",         parish:"St. Mathew's, Kottackupuram",              code:"UJN"},
-]},
+// sem-philo-2 — rows 1-13 மட்டும் வையுங்க (இந்த 13 entries remove ஆகும்):
+"sem-philo-2": {
+  hasCode: true,
+  rows: [
+    { name:"Chakkathara Kurian (Gladvin)",       parish:"St. Mary's Basilica, Champakulam",           code:"VAD" },
+    { name:"Chennattucherry Xavier (Alby)",      parish:"St. Joseph's, Ramankary",                    code:"KUN" },
+    { name:"Ezharayil Sebastian (Alan)",         parish:"Fathima Matha, Pandy",                       code:"ALW" },
+    { name:"Kalathiparambil Joseph (Akhil)",     parish:"St. Mary's, Koothrappally",                  code:"VAD" },
+    { name:"Kalluvettukuzhyil James (Gerald)",   parish:"St. Xavier's, Kattachira",                   code:"KUN" },
+    { name:"Kanjikara Thomas (Derik)",           parish:"St. Joseph's, Ramankary",                    code:"ALW" },
+    { name:"Naduviletharayil Mathew (Jis)",      parish:"St. George's, Thottackad",                   code:"ALW" },
+    { name:"Naduvileveedu Antony (Alan)",        parish:"St. Thomas, Muttar New",                     code:"VAD" },
+    { name:"Naickarottu Sebastian (Sebin)",      parish:"St. Sebastian's, Chanjody",                  code:"VAD" },
+    { name:"Thekkanam Joseph (Sabin)",           parish:"St. Mary's Major Archiepiscopal, Kudamaloor", code:"ALW" },
+    { name:"Mannamthuruthil Mathew (Mathew)",    parish:"Lourdes Matha, Pacha",                       code:"PUN" },
+    { name:"Srampickal Kalathil Mathew (Milan)", parish:"St. Joseph's, Ramankary",                    code:"PUN" },
+    { name:"Valiyaveetil Mathew (Alen)",         parish:"St. Joseph's, Punnakkunnathussery",          code:"UJN" },
+  ]
+},
+
+// புதுசா I Philosophy add பண்ணுங்க:
+"sem-philo-1": {
+  hasCode: true,
+  rows: [
+    { name:"Chooranolickal Francis (Sanjay)",             parish:"St. George Forane, Amboori",          code:"UJN" },
+    { name:"Ettiyamparambil Antony (Bichu)",              parish:"St. Antony's, Paduvapuram",            code:"KUN" },
+    { name:"Kaithathara Puthenveedu Joseph (Sachin)",     parish:"St. Antony's, Vaisyambhagom",         code:"KUN" },
+    { name:"Kavalakkatt Anthony (Antony)",                parish:"Holy Family, Thirumala",               code:"ALW" },
+    { name:"Kizhakkepulliyathra Thomas (Sebin)",          parish:"St. Rita's, Thakazhy",                 code:"ALW" },
+    { name:"Mammoottil Joseph (Nivin)",                   parish:"St. Mary's, Narickal",                 code:"VAD" },
+    { name:"Mlamkuzhyputhenpura Chacko (Jefrin)",         parish:"St. Thomas, Nalpathimala",             code:"VAD" },
+    { name:"Mulamoottil Thomas (Jilson)",                 parish:"St. Antony's, Thayamkary",             code:"ALW" },
+    { name:"Palakunnel Cherryan (Cherryn)",               parish:"St. Mary's, Koothrappally",            code:"VAD" },
+    { name:"Pulimparampil Jose (Kevin)",                  parish:"St. Mary's, Ithithanam",               code:"ALW" },
+    { name:"Pullattukala Thomas (Thomaskutty)",           parish:"Lourdes Matha, Aruvikuzhy",            code:"KUN" },
+    { name:"Thuravassery Kuriakose (Martin)",             parish:"St. Joseph's, Veroor",                 code:"VAD" },
+    { name:"Thuruthiyil Joseph (Alen)",                   parish:"St. Mathew's, Kottackupuram",          code:"UJN" },
+  ]
+},
 "sem-minor-degree":{rows:[
   {name:"Karukakalam Jacob (Jacob)",         parish:"Marth Mariam, Chengannur",                 code:""},
   {name:"Thondikkakuzhy Joseph (Jaison)",    parish:"Lourdes Matha, Aruvikuzhy",               code:""},
@@ -549,9 +572,10 @@ async function loadAll(){
 
 /* ── STATS ── */
 const STAT_IDS={
+  "sem-deacons":"st-dn",
   "sem-theology-3":"st-t3","sem-theology-2":"st-t2","sem-theology-1":"st-t1",
   "sem-regents":"st-rg","sem-higher":"st-hi",
-  "sem-philo-3ng":"st-p3n","sem-philo-3g":"st-p3g","sem-philo-2":"st-p2",
+  "sem-philo-3ng":"st-p3n","sem-philo-3g":"st-p3g","sem-philo-2":"st-p2","sem-philo-1":"st-p1",
 };
 function updateStats(){
   let total=0;
@@ -585,7 +609,7 @@ function renderTab(tabId){
 }
 
 /* ── RENDER SIMPLE TABLE ── */
-const LABELS={"sem-theology-3":"III Theology","sem-theology-2":"II Theology","sem-theology-1":"I Theology","sem-regents":"Regents","sem-higher":"Higher Studies","sem-philo-3ng":"III Philosophy (Non-Graduate)","sem-philo-3g":"III Philosophy (Graduate)","sem-philo-2":"II Philosophy"};
+const LABELS={"sem-deacons":"Major Seminary Deacons","sem-theology-3":"III Theology","sem-theology-2":"II Theology","sem-theology-1":"I Theology","sem-regents":"Regents","sem-higher":"Higher Studies","sem-philo-3ng":"III Philosophy (Non-Graduate)","sem-philo-3g":"III Philosophy (Graduate)","sem-philo-2":"II Philosophy","sem-philo-1":"I Philosophy"};
 function renderSimple(secId){
   const panel=document.getElementById("panel-"+secId);
   const rows=allData[secId]?.rows||[];
