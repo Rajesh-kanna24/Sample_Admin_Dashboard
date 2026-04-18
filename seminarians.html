@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Seminarians — AdminForge</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"/>
+  <link rel="stylesheet" href="style.css"/>
+  <style>
+    :root{--brand:#921a02;--brand-dark:#6d1201;--brand-light:rgba(146,26,2,0.08);--brand-border:rgba(146,26,2,0.18);}
+    .hm-backdrop{display:none;position:fixed;inset:0;z-index:9998;background:rgba(0,0,0,.55);backdrop-filter:blur(3px);align-items:center;justify-content:center}
+    .hm-backdrop.show{display:flex;animation:hmFadeIn .2s ease}
+    @keyframes hmFadeIn{from{opacity:0}to{opacity:1}}
+    .hm-box{background:#fff;border-radius:16px;padding:24px;width:100%;max-width:560px;max-height:92vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.25);position:relative;animation:hmUp .25s ease}
+    @keyframes hmUp{from{transform:translateY(20px);opacity:0}to{transform:translateY(0);opacity:1}}
+    .hm-box h5{font-size:1rem;font-weight:700;margin:0 0 16px}
+    .hm-close{position:absolute;top:14px;right:16px;background:none;border:none;font-size:1.2rem;cursor:pointer;color:#6b7280}
+    .hm-group{margin-bottom:12px}
+    .hm-group label{display:block;font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#64748b;margin-bottom:5px}
+    .hm-group input,.hm-group select{width:100%;border:1px solid #e2e8f0;border-radius:8px;padding:8px 12px;font-size:.84rem;outline:none;transition:border-color .2s;font-family:inherit}
+    .hm-group input:focus,.hm-group select:focus{border-color:#921a02}
+    .hm-actions{display:flex;gap:10px;margin-top:16px}
+    .hm-save{flex:1;padding:10px;border-radius:8px;border:none;background:#921a02;color:#fff;font-weight:600;font-size:.85rem;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;min-height:40px}
+    .hm-save:hover:not(:disabled){background:#6d1201}
+    .hm-save:disabled{opacity:.6;cursor:not-allowed}
+    .hm-cancel{padding:10px 18px;border-radius:8px;border:1px solid #e2e8f0;background:#f8fafc;font-size:.85rem;cursor:pointer}
+    .hm-status{font-size:.78rem;text-align:center;margin-top:8px;min-height:18px}
+    .spin{width:14px;height:14px;border:2px solid rgba(255,255,255,.4);border-top-color:#fff;border-radius:50%;animation:spinAnim .6s linear infinite;display:inline-block}
+    @keyframes spinAnim{to{transform:rotate(360deg)}}
+    #dash-toast{position:fixed;bottom:24px;right:24px;z-index:99999;background:#1e293b;color:#fff;padding:12px 20px;border-radius:10px;font-size:.82rem;font-weight:600;box-shadow:0 8px 24px rgba(0,0,0,.25);opacity:0;transform:translateY(10px);transition:opacity .25s,transform .25s;pointer-events:none;max-width:320px}
+    #dash-toast.show{opacity:1;transform:translateY(0)}
+    #dash-toast.success{background:#16a34a}
+    #dash-toast.error{background:#dc2626}
+    .sem-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;flex-wrap:wrap;gap:10px}
+    .sem-title{font-size:1.05rem;font-weight:800;color:#1e293b;margin:0}
+    .sem-sub{font-size:.74rem;color:#64748b;margin:2px 0 0}
+    .sem-tabs{display:flex;gap:3px;background:#f1f5f9;border-radius:10px;padding:4px;margin-bottom:18px;flex-wrap:wrap;}
+    .sem-tab{padding:7px 12px;border-radius:7px;border:none;background:transparent;color:#64748b;font-size:.7rem;font-weight:700;cursor:pointer;white-space:nowrap;transition:all .18s}
+    .sem-tab.active{background:#921a02;color:#fff;box-shadow:0 2px 8px rgba(146,26,2,.3)}
+    .sem-tab:hover:not(.active){background:#fff;color:#374151}
+    .group-hdr{font-size:.8rem;font-weight:700;color:#921a02;padding:6px 10px;background:rgba(146,26,2,.06);border-radius:7px;border-left:3px solid #921a02;margin:14px 0 8px;display:flex;align-items:center;justify-content:space-between}
+    .g-badge{font-size:.65rem;background:rgba(146,26,2,.12);color:#921a02;padding:2px 8px;border-radius:10px;font-weight:700}
+    .sem-table{width:100%;border-collapse:collapse;font-size:.77rem}
+    .sem-table th{background:#921a02;color:#fff;padding:8px 10px;text-align:left;font-weight:600;font-size:.7rem;white-space:nowrap}
+    .sem-table td{padding:7px 10px;border-bottom:1px solid #f1f5f9;vertical-align:middle}
+    .sem-table tr:hover td{background:#fef9f9}
+    .sem-table tr:last-child td{border-bottom:none}
+    .code-badge{display:inline-block;background:rgba(146,26,2,.1);color:#921a02;padding:2px 7px;border-radius:4px;font-size:.68rem;font-weight:700}
+    .num-cell{width:34px;color:#94a3b8;font-size:.7rem;font-weight:700;text-align:center}
+    .btn-edit{background:#4f46e5;color:#fff;border:none;border-radius:5px;padding:3px 8px;font-size:.67rem;cursor:pointer}
+    .btn-edit:hover{background:#4338ca}
+    .btn-del2{background:#fee2e2;color:#dc2626;border:none;border-radius:5px;padding:3px 8px;font-size:.67rem;cursor:pointer}
+    .btn-del2:hover{background:#fecaca}
+    .btn-add-row{display:inline-flex;align-items:center;gap:5px;padding:5px 13px;background:#921a02;color:#fff;border:none;border-radius:7px;font-size:.7rem;font-weight:700;cursor:pointer}
+    .btn-add-row:hover{background:#6d1201}
+    .btn-add-sm{background:rgba(146,26,2,.08);color:#921a02;border:1px dashed rgba(146,26,2,.3);border-radius:6px;padding:4px 10px;font-size:.68rem;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:3px}
+    .btn-add-sm:hover{background:rgba(146,26,2,.14)}
+    .sem-empty{text-align:center;padding:24px;color:#94a3b8;font-size:.78rem}
+    .sem-empty i{font-size:1.6rem;display:block;margin-bottom:6px;opacity:.4}
+    .stats-bar{display:grid;grid-template-columns:repeat(auto-fit,minmax(80px,1fr));gap:8px;margin-bottom:16px}
+    .stat-pill{background:#fff;border:1px solid #e2e8f0;border-radius:9px;padding:9px;text-align:center}
+    .stat-num{font-size:1.2rem;font-weight:800;color:#921a02;line-height:1;display:block}
+    .stat-lbl{font-size:.58rem;color:#64748b;margin-top:3px}
+    .panel-card{background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:16px}
+  </style>
+</head>
+<body>
+<div id="dash-toast"></div>
+<div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+<div class="dash-layout">
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-brand">
+      <div class="sidebar-logo">AF</div>
+      <div><div class="sidebar-brand-text">AdminForge</div><div class="sidebar-brand-sub">Management System</div></div>
+    </div>
+    <div class="sidebar-menu">
+      <p class="sidebar-section">Main</p>
+      <div class="sidebar-item" onclick="location.href='dashboard.html'"><span class="si-icon">⬡</span> Users</div>
+      <p class="sidebar-section">Pages</p>
+      <div class="sidebar-item" onclick="location.href='dashboard.html'"><span class="si-icon">⬡</span> Home</div>
+       <a href="about.html" class="sidebar-item" id="nav-about">
+        <span class="si-icon">ℹ</span> About Us
+      </a>
+            <!-- ★ ADMINISTRATION SIDEBAR ITEM ★ -->
+      <a href="administration.html" class="sidebar-item">
+  <span class="si-icon">⛪</span> Administration
+</a>
+      <a href="parishes.html" class="sidebar-item"><span class="si-icon">⬡</span> Parishes</a>
+      <a href="priests.html" class="sidebar-item"><span class="si-icon">✝</span> Priests</a>
+      <div class="sidebar-item active"><span class="si-icon">🎓</span> Seminarians <span class="si-badge" id="sidebar-total">0</span></div>
+      <p class="sidebar-section" style="margin-top:14px;">Account</p>
+      <div class="sidebar-item" onclick="toast('Coming soon!')"><span class="si-icon">⚙</span> Settings</div>
+    </div>
+    <div class="sidebar-footer">
+      <div class="user-row">
+        <div class="user-row-avatar" id="sidebar-avatar">?</div>
+        <div><div class="user-row-name" id="sidebar-username">Loading…</div><div class="user-row-role" id="sidebar-role">—</div></div>
+      </div>
+    </div>
+  </aside>
+
+  <nav class="topbar">
+    <div class="topbar-left">
+      <button class="sidebar-toggle" id="sidebar-toggle">☰</button>
+      <div class="topbar-rule d-none d-lg-block"></div>
+      <div><div class="topbar-title">Seminarians</div><div class="topbar-sub">Manage all seminarian records</div></div>
+    </div>
+    <div class="topbar-right">
+      <span id="role-badge" class="badge bg-secondary me-2" style="font-size:.8rem;padding:6px 12px;"></span>
+      <button class="btn btn-logout btn-sm" id="btn-logout">⏻ Logout</button>
+    </div>
+  </nav>
+
+  <main class="dash-main">
+    <div id="alert-box" class="alert d-none mb-3" role="alert"></div>
+
+    <div class="sem-header">
+      <div>
+        <p class="sem-title">🎓 Seminarians Management</p>
+        <p class="sem-sub">All changes save to Firestore and reflect instantly on the church website</p>
+      </div>
+    </div>
+
+    <!-- Stats -->
+    <div class="stats-bar">
+      <div class="stat-pill"><span class="stat-num" id="st-t3">0</span><div class="stat-lbl">III Theology</div></div>
+      <div class="stat-pill"><span class="stat-num" id="st-t2">0</span><div class="stat-lbl">II Theology</div></div>
+      <div class="stat-pill"><span class="stat-num" id="st-t1">0</span><div class="stat-lbl">I Theology</div></div>
+      <div class="stat-pill"><span class="stat-num" id="st-rg">0</span><div class="stat-lbl">Regents</div></div>
+      <div class="stat-pill"><span class="stat-num" id="st-hi">0</span><div class="stat-lbl">Higher</div></div>
+      <div class="stat-pill"><span class="stat-num" id="st-p3n">0</span><div class="stat-lbl">Phil 3NG</div></div>
+      <div class="stat-pill"><span class="stat-num" id="st-p3g">0</span><div class="stat-lbl">Phil 3G</div></div>
+      <div class="stat-pill"><span class="stat-num" id="st-p2">0</span><div class="stat-lbl">Phil 2</div></div>
+      <div class="stat-pill"><span class="stat-num" id="st-mn">0</span><div class="stat-lbl">Minor Sem</div></div>
+      <div class="stat-pill"><span class="stat-num" id="st-et">0</span><div class="stat-lbl">Etawah</div></div>
+      <div class="stat-pill" style="border-color:#921a02"><span class="stat-num" id="st-all">0</span><div class="stat-lbl">Total</div></div>
+    </div>
+
+    <!-- Tabs -->
+    <div class="sem-tabs">
+      <button class="sem-tab active" onclick="switchTab('sem-theology-3',this)">III Theology</button>
+      <button class="sem-tab" onclick="switchTab('sem-theology-2',this)">II Theology</button>
+      <button class="sem-tab" onclick="switchTab('sem-theology-1',this)">I Theology</button>
+      <button class="sem-tab" onclick="switchTab('sem-regents',this)">Regents</button>
+      <button class="sem-tab" onclick="switchTab('sem-higher',this)">Higher Studies</button>
+      <button class="sem-tab" onclick="switchTab('sem-philo-3ng',this)">III Phil (NG)</button>
+      <button class="sem-tab" onclick="switchTab('sem-philo-3g',this)">III Phil (G)</button>
+      <button class="sem-tab" onclick="switchTab('sem-philo-2',this)">II Philosophy</button>
+      <button class="sem-tab" onclick="switchTab('sem-minor',this)">Minor Seminary</button>
+      <button class="sem-tab" onclick="switchTab('sem-etawah',this)">Etawah Mission</button>
+    </div>
+
+    <!-- Panels -->
+    <div id="panel-sem-theology-3" class="panel-card"></div>
+    <div id="panel-sem-theology-2" class="panel-card" style="display:none"></div>
+    <div id="panel-sem-theology-1" class="panel-card" style="display:none"></div>
+    <div id="panel-sem-regents"    class="panel-card" style="display:none"></div>
+    <div id="panel-sem-higher"     class="panel-card" style="display:none"></div>
+    <div id="panel-sem-philo-3ng"  class="panel-card" style="display:none"></div>
+    <div id="panel-sem-philo-3g"   class="panel-card" style="display:none"></div>
+    <div id="panel-sem-philo-2"    class="panel-card" style="display:none"></div>
+    <div id="panel-sem-minor"      class="panel-card" style="display:none"></div>
+    <div id="panel-sem-etawah"     class="panel-card" style="display:none"></div>
+  </main>
+</div>
+
+<!-- ADD / EDIT MODAL -->
+<div id="m-sem" class="hm-backdrop">
+  <div class="hm-box">
+    <button class="hm-close" onclick="closeM('m-sem')">✕</button>
+    <h5 id="modal-title">Add Seminarian</h5>
+    <div class="hm-group">
+      <label>Full Name <span style="color:red">*</span></label>
+      <input type="text" id="f-name" placeholder="Pallichira Mathew (Jojo)"/>
+    </div>
+    <div class="hm-group">
+      <label>Parish</label>
+      <input type="text" id="f-parish" placeholder="St. Mary's, Parel"/>
+    </div>
+    <div class="hm-group" id="code-group">
+      <label>Code (VAD / ALW / KUN / SAT / UJN / BNG / PUN)</label>
+      <input type="text" id="f-code" placeholder="VAD" style="text-transform:uppercase;"/>
+    </div>
+    <div class="hm-group">
+      <label>Section <span style="color:red">*</span></label>
+      <select id="f-section">
+        <option value="sem-theology-3">III Theology (Deacons)</option>
+        <option value="sem-theology-2">II Theology (Deacons)</option>
+        <option value="sem-theology-1">I Theology (Deacons)</option>
+        <option value="sem-regents">Regents</option>
+        <option value="sem-higher">Higher Studies</option>
+        <option value="sem-philo-3ng">III Philosophy (Non-Graduate)</option>
+        <option value="sem-philo-3g">III Philosophy (Graduate)</option>
+        <option value="sem-philo-2">II Philosophy</option>
+        <option value="sem-minor-degree">Minor Seminary — Higher Studies (Degree)</option>
+        <option value="sem-minor-4">Minor Seminary — IV Years (Niranam)</option>
+        <option value="sem-minor-3">Minor Seminary — III Years</option>
+        <option value="sem-minor-2">Minor Seminary — II Years</option>
+        <option value="sem-minor-1">Minor Seminary — I Years</option>
+        <option value="sem-etawah-4">Etawah Mission — IV Years</option>
+        <option value="sem-etawah-3">Etawah Mission — III Years</option>
+        <option value="sem-etawah-2">Etawah Mission — II Years</option>
+        <option value="sem-etawah-1">Etawah Mission — I Year</option>
+      </select>
+    </div>
+    <div class="hm-actions">
+      <button class="hm-cancel" onclick="closeM('m-sem')">Cancel</button>
+      <button class="hm-save" id="btn-modal-save" onclick="modalSave()">💾 Save</button>
+      <button id="btn-modal-del" onclick="modalDel()" style="display:none;padding:10px 14px;border-radius:8px;border:none;background:#ef4444;color:#fff;font-size:.82rem;cursor:pointer;">🗑 Delete</button>
+    </div>
+    <div class="hm-status" id="modal-status"></div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script type="module">
+import{initializeApp}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import{getAuth,onAuthStateChanged,signOut}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import{getFirestore,doc,getDoc,setDoc,serverTimestamp}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+const FC={apiKey:"AIzaSyArM8sv7J1RUj4XvAJhJd40tzA7Yc8BGXY",authDomain:"admin-dashboard-ed62c.firebaseapp.com",projectId:"admin-dashboard-ed62c",storageBucket:"admin-dashboard-ed62c.firebasestorage.app",messagingSenderId:"560027475135",appId:"1:560027475135:web:3fae0cb0268729ae79fa0a"};
+const ADMIN="issacnewton1503@gmail.com";
+const app=initializeApp(FC),auth=getAuth(app),db=getFirestore(app);
+
+/* Sections with code column */
+const HAS_CODE=new Set(["sem-theology-3","sem-theology-2","sem-theology-1","sem-philo-3ng","sem-philo-3g","sem-philo-2"]);
+
+/* All section doc IDs in Firestore */
+const ALL_IDS=["sem-theology-3","sem-theology-2","sem-theology-1","sem-regents","sem-higher",
+  "sem-philo-3ng","sem-philo-3g","sem-philo-2",
+  "sem-minor-degree","sem-minor-4","sem-minor-3","sem-minor-2","sem-minor-1",
+  "sem-etawah-4","sem-etawah-3","sem-etawah-2","sem-etawah-1"];
+
+/* GROUPED tabs: Minor Seminary & Etawah */
+const GROUPED={
+  "sem-minor":[
+    {key:"sem-minor-degree",label:"Higher Studies (Degree)"},
+    {key:"sem-minor-4",     label:"IV Years (Niranam)"},
+    {key:"sem-minor-3",     label:"III Years"},
+    {key:"sem-minor-2",     label:"II Years"},
+    {key:"sem-minor-1",     label:"I Years"},
+  ],
+  "sem-etawah":[
+    {key:"sem-etawah-4",label:"IV Years"},
+    {key:"sem-etawah-3",label:"III Years"},
+    {key:"sem-etawah-2",label:"II Years"},
+    {key:"sem-etawah-1",label:"I Year"},
+  ],
+};
+
+/* Default data — exact from your seminarians.html */
+const DEFAULT={
+"sem-theology-3":{rows:[
+  {name:"Ambalathunkal Kurian (Nithin)",    parish:"Holy Magi Forane, Manimala",               code:"VAD"},
+  {name:"Koilparampil Henry (Tony)",         parish:"Little Flower, Kaduvakulam",               code:"ALW"},
+  {name:"Muthumakuzhiyil Mathew (Sanoop)",   parish:"Holy Magi Forane, Manimala",               code:"KUN"},
+  {name:"Ottarackal Chacko (Tibin)",         parish:"St. George Forane, Edathua",               code:"SAT"},
+  {name:"Pallichira Mathew (Jojo)",          parish:"St. Mary's, Parel",                        code:"KUN"},
+  {name:"Panjipuzha Varghese (Binil)",       parish:"St. Mary's, Kumarankary",                  code:"KUN"},
+  {name:"Pulikapadavil Varghese (Tojo)",     parish:"St. George's, Thottackad",                 code:"ALW"},
+  {name:"Puthuveettilkalam Joseph (Tony)",   parish:"St. Joseph's, Punnakkunnathussery",         code:"ALW"},
+  {name:"Srampickal Varkey (Smith)",         parish:"St. Sebastian's, Narbonapuram",             code:"KUN"},
+  {name:"Thathakattupulickal John (Tonymon)",parish:"St. Mary's, Parel",                        code:"SAT"},
+  {name:"Theempalangattu Abraham (Julias)",  parish:"Holy Magi Forane, Manimala",               code:"ALW"},
+]},
+"sem-theology-2":{rows:[
+  {name:"Arackathara Antony (Nikhil)",       parish:"Holy Family, Pullangady",                  code:"ALW"},
+  {name:"Chorettu Joseph (Bony)",            parish:"St. Mary's, Vettimukal",                   code:"VAD"},
+  {name:"Elavummoottil Xavier (Jijo)",       parish:"Assumption, Kurumpanadom",                 code:"KUN"},
+  {name:"Ethirettu Kudilil Antony (Prince)", parish:"St. Mary's Basilica, Champakulam",         code:"SAT"},
+  {name:"Kalathiparampil Sebastian (Ashwin)",parish:"Marth Mariam Forane, Thuruthy",            code:"SAT"},
+  {name:"Kalathiveettil Jacob (Jacob)",      parish:"St. Antony's Forane, Kurumpanadom",        code:"KUN"},
+  {name:"KattatharaYohanan (Vipin)",         parish:"St. Xavier's, Puthukary",                  code:"UJN"},
+  {name:"Kavanattu Mathew (Jerin)",          parish:"St. Mary's Forane, Kudamaloor",            code:"VAD"},
+  {name:"Kurasserry Joseph (Sherin)",        parish:"Our Lady of Dolours, Kainady",             code:"ALW"},
+  {name:"Mammoottil Sebastian (Naveen)",     parish:"St. Mary's, Narickal",                     code:"KUN"},
+  {name:"Manayath Sebastian (Brinto)",       parish:"St. Xavier's Forane, Thrickodithanam",     code:"ALW"},
+  {name:"Marangattu Mathew (Sachin)",        parish:"St. Joseph's, Laikad",                     code:"VAD"},
+  {name:"Munduvelil Joseph (Johnson)",       parish:"St. George Forane, Edathua",               code:"UJN"},
+  {name:"Puthenpurayil Mathew (Justin)",     parish:"St. Mary's, Ithithanam",                   code:"KUN"},
+  {name:"Puthuparampil Joseph (Robin)",      parish:"Holy Family, Mannila",                     code:"VAD"},
+  {name:"Tharakunnel John (Johnykutty)",     parish:"Lourdes Hill, Peroorkada",                 code:"VAD"},
+  {name:"Vadakaetathu Mathew (Nijo)",        parish:"St. Michael's, Thathampally",              code:"ALW"},
+]},
+"sem-theology-1":{rows:[
+  {name:"Chirayil Varghese (Binu)",          parish:"St. Rita's, Thakazhy",                     code:"VAD"},
+  {name:"Elampalasseril Varghese (Justin)",  parish:"St. Gregorios (Kesaria), Veliyanadu N.",   code:"UJN"},
+  {name:"Kalarikkal Jacob (Ciril)",          parish:"St. Sebastian's, Narbonapuram",             code:"VAD"},
+  {name:"Kanjirathummoottil Cyriac (Allen)", parish:"St. Joseph's, Kurichy",                    code:"ALW"},
+  {name:"Kayalilparambil Antony (Sam)",      parish:"Holy Family, Podippara",                   code:"SAT"},
+  {name:"Kollamparampil Joseph (Ajo)",       parish:"St. Joseph's, Kurichy",                    code:"KUN"},
+  {name:"Manakkalam Varkey (Libin)",         parish:"St. George Forane, Edathua",               code:"KUN"},
+  {name:"Manakunnel Antony (Tony)",          parish:"St. Joseph's, Veroor",                     code:"ALW"},
+  {name:"Palackal Joseph (Sibin)",           parish:"Holy Family, Podippara",                   code:"SAT"},
+  {name:"Pallickal Joseph (Tobin)",          parish:"St. Jerome's, Nazareth",                   code:"ALW"},
+]},
+"sem-regents":{rows:[
+  {name:"Azhiparampil Cherian (Cheriachan)", parish:"St. Mary's Metropolitan, Changanacherry",code:""},
+  {name:"Charuvila John (Abin)",             parish:"St. Mary's, Aryankavu",                  code:""},
+  {name:"Karekadu Joseph (Sijith)",          parish:"St. Xavier's, Puthukary",                code:""},
+  {name:"Kazhunnukandathil Joseph (Melbin)", parish:"St. Joseph's, Thellakom Pushpagiri",     code:""},
+  {name:"Kochupurayil Joseph (Tony)",        parish:"St. Joseph's, Manackachira",             code:""},
+  {name:"Kodiyanthara Varghese (Jithin)",    parish:"St. Joseph's, Kayalpuram",               code:""},
+  {name:"Kulangottil Joseph (Abeyson)",      parish:"Little Flower (Cherupushpam), Arpookara",code:""},
+  {name:"Kuzhikuthiyaniyil Thomas (Jithin)", parish:"St. George's Forane, Amboori",           code:""},
+  {name:"Madathissery Joseph (Jibin)",       parish:"St. Mary's, Mayam",                      code:""},
+  {name:"Nampiathu Antony (Jithin)",         parish:"St. Joseph's, Punnakkunnathussery",      code:""},
+  {name:"Neelaparambil Martin (Kurian)",     parish:"Little Flower, Aryad",                   code:""},
+  {name:"Padamattam Jacob (Nobin)",          parish:"St. Mary's Forane, Pulincunnoo",         code:""},
+  {name:"Poonichira Thomas (Yesudas)",       parish:"St. Mary's Basilica, Champakulam",       code:""},
+  {name:"PunnoorPuthenparampil George (Sony)",parish:"St. Joseph's, Karuvatta",               code:""},
+  {name:"Puthenparambil John (Bibin)",       parish:"St. Michael's, Thathampally",            code:""},
+  {name:"Thengampallil Thomas (Darin)",      parish:"St. Thomas, Nalukody - Paippad",         code:""},
+  {name:"Thevercad Thomas (Thomas)",         parish:"St. Mary's, Kainakary",                  code:""},
+  {name:"Thundiyil John (Sinjo)",            parish:"St. John the Baptist Forane, Nedumkunnam",code:""},
+]},
+"sem-higher":{rows:[
+  {name:"Kizhakkeveettil Thomas (Toms)",     parish:"St. Antony's Forane, Kurumpanadom",      code:""},
+]},
+"sem-philo-3ng":{rows:[
+  {name:"Arikudyil Joseph (Dain)",           parish:"St. Mary's Forane, Pulincunnoo",           code:"UJN"},
+  {name:"Cheriyantharayil Mathew (Jerin)",   parish:"St. Joseph's, Philgiri",                   code:"ALW"},
+  {name:"Iykulam Thomas (Christy)",          parish:"St. John the Baptist Forane, Nedumkunnam", code:"UJN"},
+  {name:"Madathummuriyil Joel (Joel)",       parish:"Lourdes Matha, Thazhathuvadakara",         code:"VAD"},
+  {name:"Maroor Joseph (Kevin)",             parish:"St. James, Karikkattoor",                  code:"KUN"},
+  {name:"Moolamkunnam Mathew (Ajo)",         parish:"Fathima Matha, Pallikoottumma",            code:"UJN"},
+  {name:"Mulamoottil Joseph (Justin)",       parish:"St. Antony's Church, Thayamkary",          code:"VAD"},
+  {name:"Puravady Sebastian (Sebastian)",    parish:"St. Mary's, Koothrappally",                code:"VAD"},
+  {name:"Snehatheeram Thomas (Jeffry)",      parish:"St. Joseph's, Karuvatta",                  code:"ALW"},
+  {name:"Thanniyath Varghese (Noyal)",       parish:"St. Joseph's, Punnakkunnathussery",        code:"VAD"},
+  {name:"Thunduparampil Antony (Ashish)",    parish:"Lourdes Matha, Pacha - Chekkidikad",       code:"KUN"},
+  {name:"Valiaparampil Joseph (Akhil)",      parish:"St. Mary's, Mundupalam",                   code:"VAD"},
+  {name:"Valiaparampil Cyril (Nikhil)",      parish:"St. Mary's, Mundupalam",                   code:"ALW"},
+  {name:"Vattapparambil John (Cris)",        parish:"St. Thomas, Puzhavathu",                   code:"ALW"},
+  {name:"Vettuparambpadinjareveedu Martin (Vibin)",parish:"St. Mary's, Parel",                  code:"ALW"},
+]},
+"sem-philo-3g":{rows:[
+  {name:"Attichira Mathew (Tony)",           parish:"St. Antony's, Thayamkary",                 code:"VAD"},
+  {name:"Chalackal Scaria (Tebin)",          parish:"St. Mary's, Ithithanam",                   code:"KUN"},
+  {name:"Illampallil Alex (Alex)",           parish:"St. Thomas, Nalukody - Paippad",           code:"ALW"},
+  {name:"Karimpanmackal Kurian (Nithin)",    parish:"Holy Magi Forane, Manimala",               code:"BNG"},
+  {name:"Kiliyamvelil Mathew (Anumon)",      parish:"St. Joseph's, Kandankary",                 code:"VAD"},
+  {name:"Kottakkattu Joseph (Ebin)",         parish:"St. Thomas, Pazhayeroor",                  code:"VAD"},
+  {name:"Kuttikattu Abraham (Jobin)",        parish:"St. Xavier's Forane, Thrickodithanam",     code:"VAD"},
+  {name:"Nakkara Thomas (Akhil)",            parish:"St. John the Baptist Forane, Nedumkunnam", code:"VAD"},
+  {name:"Onpathilchira Varghese (Jobin)",    parish:"St. Joseph's, Padaharam",                  code:"ALW"},
+  {name:"Kunnel Panthamackal John (Sabin)",  parish:"St. Mary's, Koothrappally",                code:"ALW"},
+  {name:"Puthenparambu Joseph (Sajan)",      parish:"St. Mary's Forane, Pulincunnoo",           code:"ALW"},
+  {name:"Vadakkethadathil Mathew (Mathew)",  parish:"Sacred Heart, Thiruvallam",                code:"ALW"},
+  {name:"Vattakalam Joseph (Blesson)",       parish:"St. Mary's Metropolitan, Changanacherry",  code:"BNG"},
+]},
+"sem-philo-2":{rows:[
+  {name:"Chakkathara Kurian (Gladvin)",      parish:"St. Mary's Basilica, Champakulam",         code:"VAD"},
+  {name:"Chennattucherry Xavier (Alby)",     parish:"St. Joseph's, Ramankary",                  code:"KUN"},
+  {name:"Ezharayil Sebastian (Alan)",        parish:"Fathima Matha, Pandy",                     code:"ALW"},
+  {name:"Kalathiparambil Joseph (Akhil)",    parish:"St. Mary's, Koothrappally",                code:"VAD"},
+  {name:"Kalluvettukuzhyil James (Gerald)",  parish:"St. Xavier's, Kattachira",                 code:"KUN"},
+  {name:"Kanjikara Thomas (Derik)",          parish:"St. Joseph's, Ramankary",                  code:"ALW"},
+  {name:"Naduviletharayil Mathew (Jis)",     parish:"St. George's, Thottackad",                 code:"ALW"},
+  {name:"Naduvileveedu Antony (Alan)",       parish:"St. Thomas, Muttar New",                   code:"VAD"},
+  {name:"Naickarottu Sebastian (Sebin)",     parish:"St. Sebastian's, Chanjody",                code:"VAD"},
+  {name:"Thekkanam Joseph (Sabin)",          parish:"St. Mary's Major Archiepiscopal, Kudamaloor",code:"ALW"},
+  {name:"Mannamthuruthil Mathew (Mathew)",   parish:"Lourdes Matha, Pacha",                     code:"PUN"},
+  {name:"Srampickal Kalathil Mathew (Milan)",parish:"St. Joseph's, Ramankary",                  code:"PUN"},
+  {name:"Valiyaveetil Mathew (Alen)",        parish:"St. Joseph's, Punnakkunnathussery",        code:"UJN"},
+  {name:"Chooranolickal Francis (Sanjay)",   parish:"St. George Forane, Amboori",               code:"UJN"},
+  {name:"Ettiyamparambil Antony (Bichu)",    parish:"St. Antony's, Paduvapuram",                code:"KUN"},
+  {name:"Kaithathara Puthenveedu Joseph (Sachin)",parish:"St. Antony's, Vaisyambhagom",        code:"KUN"},
+  {name:"Kavalakkatt Anthony (Antony)",      parish:"Holy Family, Thirumala",                   code:"ALW"},
+  {name:"Kizhakkepulliyathra Thomas (Sebin)",parish:"St. Rita's, Thakazhy",                     code:"ALW"},
+  {name:"Mammoottil Joseph (Nivin)",         parish:"St. Mary's, Narickal",                     code:"VAD"},
+  {name:"Mlamkuzhyputhenpura Chacko (Jefrin)",parish:"St. Thomas, Nalpathimala",               code:"VAD"},
+  {name:"Mulamoottil Thomas (Jilson)",       parish:"St. Antony's, Thayamkary",                 code:"ALW"},
+  {name:"Palakunnel Cherryan (Cherryn)",     parish:"St. Mary's, Koothrappally",                code:"VAD"},
+  {name:"Pulimparampil Jose (Kevin)",        parish:"St. Mary's, Ithithanam",                   code:"ALW"},
+  {name:"Pullattukala Thomas (Thomaskutty)", parish:"Lourdes Matha, Aruvikuzhy",                code:"KUN"},
+  {name:"Thuravassery Kuriakose (Martin)",   parish:"St. Joseph's, Veroor",                     code:"VAD"},
+  {name:"Thuruthiyil Joseph (Alen)",         parish:"St. Mathew's, Kottackupuram",              code:"UJN"},
+]},
+"sem-minor-degree":{rows:[
+  {name:"Karukakalam Jacob (Jacob)",         parish:"Marth Mariam, Chengannur",                 code:""},
+  {name:"Thondikkakuzhy Joseph (Jaison)",    parish:"Lourdes Matha, Aruvikuzhy",               code:""},
+]},
+"sem-minor-4":{rows:[
+  {name:"Chathuravadayil Joseph (Jimmy)",    parish:"Holy Family, Podippara",                   code:""},
+  {name:"Chembilakam Antony (Sobin)",        parish:"St. Mary's, Koothrappally",               code:""},
+  {name:"Chemmazhikadu Joseph (Ajo)",        parish:"St. Thomas, Muttar New",                  code:""},
+  {name:"Chennikkara Varghese (Midhun)",     parish:"St. Mary's, Koothrappally",               code:""},
+  {name:"Kalathiparampil Thomas (Denim)",    parish:"Marth Mariam Forane, Thuruthy",           code:""},
+  {name:"Kanicheril Cherian (Anshul)",       parish:"Marth Mariam Forane, Thuruthy",           code:""},
+  {name:"Kocharackal George (George)",       parish:"St. Joseph's, Kondakal",                  code:""},
+  {name:"Mappilakunnel Thomas (Vivek)",      parish:"Sacred Heart, Pangada",                   code:""},
+  {name:"Perumprayil Sebastian (Joby)",      parish:"Lourdes Matha, Mampuzhakary",             code:""},
+  {name:"Puthenpurackal Sebastian (Alen)",   parish:"Lourdes Matha, Mammood",                  code:""},
+  {name:"Plackiyil Joseph (Davis)",          parish:"St. Mary's Major Archiepiscopal, Kudamaloor",code:""},
+  {name:"Vaniyapurackal Kuncheria (Jobimon)",parish:"St. Mary's, Vadakkekara",                 code:""},
+]},
+"sem-minor-3":{rows:[
+  {name:"Aerathadathu James (Alan)",         parish:"St. Mary's, Vallamchira",                  code:""},
+  {name:"Attukadavil Alex (Alex)",           parish:"St. Sebastian's, Chanjody",               code:""},
+  {name:"Kachira Joseph (Rojin)",            parish:"St. Joseph's, Kurichy",                   code:""},
+  {name:"Kanjooparambil Jacob (Chacko)",     parish:"Holy Family, Thirumala",                  code:""},
+  {name:"Kunnakattu Aeibal (Aeibal)",        parish:"St. Mary's, Aryankavu",                   code:""},
+  {name:"Kurisummoottil Cherian (Jelvin)",   parish:"St. Joseph's, Veroor",                    code:""},
+  {name:"Mamparampil Thomas (Joffin)",       parish:"St. Xavier's (Kesaria), Veliyanadu",      code:""},
+  {name:"Medayil Kurian (Nithin)",           parish:"Fathima Matha, Pallikkoottumma",          code:""},
+  {name:"Pakkathukunnel Thomas (Abin)",      parish:"Twelve Apostles, Mannanam",               code:""},
+  {name:"Plamparambil Paul (Steeve)",        parish:"Little Flower, Madappally",               code:""},
+  {name:"Pooruthumkalayil Thomas (Alan)",    parish:"St. Mathew's, Kottakkupuram",             code:""},
+  {name:"Thattuthara (Rosevilla) Thomas (Sebin)",parish:"St. Antony's, Vaisyambhagom",        code:""},
+  {name:"Thoppil Scaria (Samson)",           parish:"St. Xavier's Forane, Thrickodithanam",    code:""},
+  {name:"Thuravassery Thomas (Shine)",       parish:"St. Joseph's, Kayalpuram",                code:""},
+  {name:"Thyparambil Antony (Antony)",       parish:"St. Joseph's, Kurichy",                   code:""},
+  {name:"Vengassery Martin (Thomachan)",     parish:"St. George, Vadakke Amichakary",          code:""},
+]},
+"sem-minor-2":{rows:[
+  {name:"Karukayil Varghese (Godwin)",       parish:"St. Joseph's, Kolimuck",                  code:""},
+  {name:"Kattuppara Joseph (Amal)",          parish:"St. Xavier's, Arpookara - Villoonni",     code:""},
+  {name:"Mullamangalam Devasia (Geo)",       parish:"Lourdes Forane, Kottayam",                code:""},
+  {name:"Padinjarekkara Joseph (Abin)",      parish:"St. Joseph's, Philgiri",                  code:""},
+  {name:"Palackal Cheriyan (Shinto)",        parish:"St. Mary's, Koothrappally",               code:""},
+  {name:"Perumtharayil Joseph (Jaison)",     parish:"St. Joseph's, Karuvatta",                 code:""},
+  {name:"Thadathel Joseph (Alfin)",          parish:"Lourdes Hill, Peroorkkada",               code:""},
+  {name:"Vydyasala Joseph (Justin)",         parish:"Lisieux, Kavalam",                        code:""},
+]},
+"sem-minor-1":{rows:[
+  {name:"Aerthedathukizhakkethil Thomas (Amal)",parish:"Holy Magi Forane, Manimala",          code:""},
+  {name:"Chakkalayil Joseph (Blesson)",      parish:"St. Mary Forane, Pulincunnoo",            code:""},
+  {name:"Chalil Thomas (Godwin)",            parish:"Deiva Matha, Pampady",                    code:""},
+  {name:"Chirayil Joseph (Roshan)",          parish:"St. Xavier Forane, Thrickodithanam",      code:""},
+  {name:"Kakkadampally Martin (Stephin)",    parish:"St. Mary's Basilica, Champakulam",        code:""},
+  {name:"Kozhimannil Velleringattu Job (Mobin)",parish:"St. Antony's, Anicadu",               code:""},
+  {name:"Kumbamvely Joseph (Jain)",          parish:"St. Thomas, Pallathuruthy",               code:""},
+  {name:"Kunnel Chacko (Alan)",              parish:"St. Mary's Major Archiepiscopal Kudamaloor",code:""},
+  {name:"Mangalathu Mathew (Martin)",        parish:"Mar Sleeva, Purackadu",                   code:""},
+  {name:"Mullaparmbil Sebastian (Sanoop)",   parish:"St. Francis Assisi, Poonthopu",           code:""},
+  {name:"Naduvilezham Thomas (Sebastian)",   parish:"St. Mary's, Koothrapallly",               code:""},
+  {name:"Nirayath Joseph (Shibin)",          parish:"St. Mary's, Koothrapally",                code:""},
+  {name:"Nooruparayil Alex (Noel)",          parish:"Mar Sleeva, Purackadu",                   code:""},
+  {name:"Padinjareparampil Philip (Philip)", parish:"Immaculate Heart, Kaithavana",            code:""},
+  {name:"Palakkassery Thomas (Aby)",         parish:"Sacred Heart, Arunoottampadam",           code:""},
+  {name:"Panthrandil Thomas (Ashish)",       parish:"St. Joseph's, Koilmuck",                  code:""},
+  {name:"Parappallil Cyriac (Ajil)",         parish:"St. Sebastian's, Kodinattumkunnu",        code:""},
+  {name:"Pazhayamadam Paul (Jain)",          parish:"St. Antony's, Thayamkary",               code:""},
+  {name:"Plamthopil Joseph (Nithin)",        parish:"St. Thomas, Nalukody - Paippad",          code:""},
+  {name:"Pothalil Varghese (Jesson)",        parish:"St. Xavier's, Arpookara - Villoonni",     code:""},
+  {name:"Puthiyaparambil Abraham (Lince)",   parish:"Bethlehem, Parampuzha",                   code:""},
+  {name:"Thathampallil Mathew (Robin)",      parish:"Lourdes Matha, Meenkulam",               code:""},
+  {name:"Thazhoor Sebastian (Sebastian)",    parish:"St. Joseph's, Laikadu",                   code:""},
+  {name:"Velikkalam Joseph (Anooj)",         parish:"St. George Forane, Edathua",              code:""},
+]},
+"sem-etawah-4":{rows:[
+  {name:"Konthiyadachira Joseph (Anjesh)",   parish:"St. George's, Vadakke Amichakary",        code:""},
+  {name:"Mannananickal Joseph (Jais)",       parish:"St. Basil's, Manimala",                   code:""},
+  {name:"Chemmacherry Thomas (Jithin)",      parish:"St. Mary's Basilica, Champakulam",        code:""},
+  {name:"Komparanirappel Cherian (Toms)",    parish:"St. Mary's, Pulickalkavala",              code:""},
+  {name:"Mozhukkunnam Chacko (Jiby)",        parish:"St. Mary's Basilica, Champakulam",        code:""},
+]},
+"sem-etawah-3":{rows:[
+  {name:"Kandathiparampil Thomas (Augustine)",parish:"St. George Forane, Edathua",             code:""},
+  {name:"Mattakottil Thomas (Thomas)",       parish:"St. Mary's, Mayam",                       code:""},
+  {name:"Villuviruthil Joseph (Milan)",      parish:"St. Paul's, Vezhapra",                    code:""},
+  {name:"Pallickal Thomas (Justin)",         parish:"St. Mary's Forane, Athirampuzha",         code:""},
+  {name:"Thonakkaraveedu Geevarghese (Joel)",parish:"St. Sebastian's, Cheriyavelinalloor",     code:""},
+  {name:"Kanjiramparambil Mathew (Mathew)",  parish:"Fathima Matha, Pandy",                    code:""},
+]},
+"sem-etawah-2":{rows:[
+  {name:"Thumpayilchira Joseph (Don)",       parish:"St. Mary's Basilica, Champakulam",        code:""},
+  {name:"Puthenparambil Joseph (Jibi)",      parish:"Christ the King, Rajagiri",               code:""},
+  {name:"Vazheparampil Varghese (Athul)",    parish:"Fathima Matha, Fathimapuram",             code:""},
+]},
+"sem-etawah-1":{rows:[
+  {name:"Vaniyapurackal Mathew (Bibin)",     parish:"Holy Family, Podippara",                  code:""},
+]},
+};
+
+/* ── STATE ── */
+let role=null, allData={}, currentTab="sem-theology-3";
+let editSection=null, editIdx=null;
+
+/* ── UTILS ── */
+const esc=s=>String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+window.toast=function(msg,type="",dur=3000){
+  const t=document.getElementById("dash-toast");
+  t.textContent=msg;t.className="show"+(type?" "+type:"");
+  clearTimeout(t._t);t._t=setTimeout(()=>t.className="",dur);
+};
+window.closeM=id=>document.getElementById(id).classList.remove("show");
+function openM(id){document.getElementById(id).classList.add("show");}
+function busy(id,on){
+  const b=document.getElementById(id);if(!b)return;
+  if(on){b._l=b.innerHTML;b.disabled=true;b.innerHTML=`<span class="spin"></span> Saving…`;}
+  else{b.disabled=false;b.innerHTML=b._l||"Save";}
+}
+
+/* ── AUTH ── */
+document.body.style.display="none";
+onAuthStateChanged(auth,async user=>{
+  if(!user){location.href="index.html";return;}
+  const snap=await getDoc(doc(db,"users",user.uid));
+  if(!snap.exists()){await signOut(auth);location.href="index.html";return;}
+  const prof=snap.data();
+  role=user.email===ADMIN?"Admin":"User";
+  const uname=prof.username||user.displayName||user.email;
+  document.getElementById("sidebar-username").textContent=uname;
+  document.getElementById("sidebar-role").textContent=role;
+  document.getElementById("sidebar-avatar").textContent=uname[0].toUpperCase();
+  const badge=document.getElementById("role-badge");
+  badge.textContent=role;badge.className=role==="Admin"?"badge bg-warning text-dark me-2":"badge bg-primary me-2";
+  document.body.style.display="";
+  await loadAll();
+});
+document.getElementById("btn-logout").addEventListener("click",async()=>{await signOut(auth);location.href="index.html";});
+document.getElementById("sidebar-toggle").addEventListener("click",()=>{
+  document.getElementById("sidebar").classList.toggle("open");
+  document.getElementById("sidebar-overlay").classList.toggle("show");
+});
+document.getElementById("sidebar-overlay").addEventListener("click",()=>{
+  document.getElementById("sidebar").classList.remove("open");
+  document.getElementById("sidebar-overlay").classList.remove("show");
+});
+
+/* ── LOAD ALL ── */
+async function loadAll(){
+  let seeded=false;
+  for(const id of ALL_IDS){
+    try{
+      const snap=await getDoc(doc(db,"seminarians",id));
+      if(snap.exists()&&Array.isArray(snap.data().rows)){
+        allData[id]={rows:snap.data().rows};
+      } else if(DEFAULT[id]){
+        // Seed to Firestore
+        const cleanRows=DEFAULT[id].rows.map(r=>({name:r.name||"",parish:r.parish||"",code:r.code||""}));
+        await setDoc(doc(db,"seminarians",id),{rows:cleanRows,updated_at:serverTimestamp()});
+        allData[id]={rows:[...cleanRows]};
+        seeded=true;
+      }
+    }catch(err){
+      console.warn("Load/seed failed for",id,err.message);
+      if(DEFAULT[id]) allData[id]={rows:DEFAULT[id].rows.map(r=>({...r}))};
+    }
+  }
+  if(seeded) toast("✅ Default data seeded to Firestore!","success",4000);
+  updateStats();
+  renderTab(currentTab);
+}
+
+/* ── STATS ── */
+const STAT_IDS={
+  "sem-theology-3":"st-t3","sem-theology-2":"st-t2","sem-theology-1":"st-t1",
+  "sem-regents":"st-rg","sem-higher":"st-hi",
+  "sem-philo-3ng":"st-p3n","sem-philo-3g":"st-p3g","sem-philo-2":"st-p2",
+};
+function updateStats(){
+  let total=0;
+  Object.entries(STAT_IDS).forEach(([sid,el])=>{
+    const n=(allData[sid]?.rows||[]).length;total+=n;
+    document.getElementById(el).textContent=n;
+  });
+  let mn=0;["sem-minor-degree","sem-minor-4","sem-minor-3","sem-minor-2","sem-minor-1"]
+    .forEach(k=>{mn+=(allData[k]?.rows||[]).length;});
+  total+=mn; document.getElementById("st-mn").textContent=mn;
+  let et=0;["sem-etawah-4","sem-etawah-3","sem-etawah-2","sem-etawah-1"]
+    .forEach(k=>{et+=(allData[k]?.rows||[]).length;});
+  total+=et; document.getElementById("st-et").textContent=et;
+  document.getElementById("st-all").textContent=total;
+  document.getElementById("sidebar-total").textContent=total;
+}
+
+/* ── TABS ── */
+window.switchTab=function(tabId,btn){
+  currentTab=tabId;
+  document.querySelectorAll(".sem-tab").forEach(b=>b.classList.remove("active"));
+  btn.classList.add("active");
+  document.querySelectorAll("[id^='panel-']").forEach(p=>p.style.display="none");
+  document.getElementById("panel-"+tabId).style.display="";
+  renderTab(tabId);
+};
+
+function renderTab(tabId){
+  if(GROUPED[tabId]) renderGrouped(tabId);
+  else renderSimple(tabId);
+}
+
+/* ── RENDER SIMPLE TABLE ── */
+const LABELS={"sem-theology-3":"III Theology","sem-theology-2":"II Theology","sem-theology-1":"I Theology","sem-regents":"Regents","sem-higher":"Higher Studies","sem-philo-3ng":"III Philosophy (Non-Graduate)","sem-philo-3g":"III Philosophy (Graduate)","sem-philo-2":"II Philosophy"};
+function renderSimple(secId){
+  const panel=document.getElementById("panel-"+secId);
+  const rows=allData[secId]?.rows||[];
+  const hasCode=HAS_CODE.has(secId);
+  const isAdmin=role==="Admin";
+  panel.innerHTML=`
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px;">
+      <span style="font-size:.85rem;font-weight:700;color:#1e293b;">${LABELS[secId]||secId}
+        <span style="font-size:.7rem;color:#94a3b8;font-weight:400;">(${rows.length})</span></span>
+      ${isAdmin?`<button class="btn-add-row" onclick="openAdd('${secId}')"><i class="bi bi-plus-lg"></i> Add</button>`:""}
+    </div>
+    ${rows.length===0?`<div class="sem-empty"><i class="bi bi-person-badge"></i>No records yet.</div>`:`
+    <div style="overflow-x:auto;">
+    <table class="sem-table">
+      <thead><tr>
+        <th class="num-cell">#</th><th>Name</th><th>Parish</th>
+        ${hasCode?"<th>Code</th>":""}
+        ${isAdmin?"<th style='width:80px'>Actions</th>":""}
+      </tr></thead>
+      <tbody>
+      ${rows.map((r,i)=>`<tr>
+        <td class="num-cell">${i+1}</td>
+        <td>${esc(r.name)}</td>
+        <td style="color:#64748b;font-size:.75rem;">${esc(r.parish)}</td>
+        ${hasCode?`<td><span class="code-badge">${esc(r.code)}</span></td>`:""}
+        ${isAdmin?`<td><button class="btn-edit" onclick="openEdit('${secId}',${i})">✏️</button>
+          <button class="btn-del2" onclick="delRow('${secId}',${i})">🗑</button></td>`:""}
+      </tr>`).join("")}
+      </tbody>
+    </table></div>`}`;
+}
+
+/* ── RENDER GROUPED TABLE ── */
+function renderGrouped(parentId){
+  const panel=document.getElementById("panel-"+parentId);
+  const grps=GROUPED[parentId]||[];
+  const isAdmin=role==="Admin";
+  panel.innerHTML=grps.map(grp=>{
+    const rows=allData[grp.key]?.rows||[];
+    return `
+    <div class="group-hdr">
+      <span>${grp.label}</span>
+      <div style="display:flex;align-items:center;gap:8px;">
+        <span class="g-badge">${rows.length}</span>
+        ${isAdmin?`<button class="btn-add-sm" onclick="openAdd('${grp.key}')"><i class="bi bi-plus"></i> Add</button>`:""}
+      </div>
+    </div>
+    ${rows.length===0?`<div class="sem-empty" style="padding:12px;"><i class="bi bi-person-badge"></i>No records yet.</div>`:`
+    <div style="overflow-x:auto;">
+    <table class="sem-table" style="margin-bottom:6px;">
+      <thead><tr>
+        <th class="num-cell">#</th><th>Name</th><th>Parish</th>
+        ${isAdmin?"<th style='width:80px'>Actions</th>":""}
+      </tr></thead>
+      <tbody>
+      ${rows.map((r,i)=>`<tr>
+        <td class="num-cell">${i+1}</td>
+        <td>${esc(r.name)}</td>
+        <td style="color:#64748b;font-size:.75rem;">${esc(r.parish)}</td>
+        ${isAdmin?`<td><button class="btn-edit" onclick="openEdit('${grp.key}',${i})">✏️</button>
+          <button class="btn-del2" onclick="delRow('${grp.key}',${i})">🗑</button></td>`:""}
+      </tr>`).join("")}
+      </tbody>
+    </table></div>`}`;
+  }).join("");
+}
+
+/* ── OPEN ADD ── */
+window.openAdd=function(secId){
+  editSection=secId;editIdx=null;
+  document.getElementById("modal-title").textContent="Add Seminarian";
+  document.getElementById("f-name").value="";
+  document.getElementById("f-parish").value="";
+  document.getElementById("f-code").value="";
+  document.getElementById("f-section").value=secId;
+  document.getElementById("code-group").style.display=HAS_CODE.has(secId)?"":"none";
+  document.getElementById("btn-modal-del").style.display="none";
+  document.getElementById("modal-status").textContent="";
+  busy("btn-modal-save",false);
+  openM("m-sem");
+};
+
+/* ── OPEN EDIT ── */
+window.openEdit=function(secId,idx){
+  const row=(allData[secId]?.rows||[])[idx];if(!row)return;
+  editSection=secId;editIdx=idx;
+  document.getElementById("modal-title").textContent="Edit Seminarian";
+  document.getElementById("f-name").value=row.name||"";
+  document.getElementById("f-parish").value=row.parish||"";
+  document.getElementById("f-code").value=row.code||"";
+  document.getElementById("f-section").value=secId;
+  document.getElementById("code-group").style.display=HAS_CODE.has(secId)?"":"none";
+  document.getElementById("btn-modal-del").style.display="";
+  document.getElementById("modal-status").textContent="";
+  busy("btn-modal-save",false);
+  openM("m-sem");
+};
+
+/* Show/hide code field on section change */
+document.getElementById("f-section").addEventListener("change",function(){
+  document.getElementById("code-group").style.display=HAS_CODE.has(this.value)?"":"none";
+});
+
+/* ── SAVE ── */
+window.modalSave=async function(){
+  const name=document.getElementById("f-name").value.trim();
+  const parish=document.getElementById("f-parish").value.trim();
+  const code=document.getElementById("f-code").value.trim().toUpperCase();
+  const newSec=document.getElementById("f-section").value;
+  const st=document.getElementById("modal-status");
+  if(!name){st.textContent="Name is required.";st.style.color="#ef4444";return;}
+  busy("btn-modal-save",true);st.textContent="";
+  try{
+    const row={name,parish,code};
+    if(!allData[newSec]) allData[newSec]={rows:[]};
+    if(editIdx!==null){
+      if(editSection===newSec){
+        allData[newSec].rows[editIdx]=row;
+      } else {
+        // moved to different section
+        allData[editSection].rows.splice(editIdx,1);
+        await saveSection(editSection);
+        allData[newSec].rows.push(row);
+      }
+    } else {
+      allData[newSec].rows.push(row);
+    }
+    await saveSection(newSec);
+    updateStats();
+    // re-render both affected tabs
+    if(currentTab===newSec||currentTab===editSection||
+       GROUPED[currentTab]?.some(g=>g.key===newSec||g.key===editSection)){
+      renderTab(currentTab);
+    }
+    closeM("m-sem");
+    toast("✅ Saved and synced to Firestore!","success");
+  }catch(err){
+    st.textContent="❌ "+err.message;st.style.color="#ef4444";
+    busy("btn-modal-save",false);
+  }
+};
+
+/* ── DELETE ROW ── */
+window.delRow=async function(secId,idx){
+  const row=(allData[secId]?.rows||[])[idx];
+  if(!row||!confirm(`Delete "${row.name}"?`))return;
+  allData[secId].rows.splice(idx,1);
+  try{
+    await saveSection(secId);
+    updateStats();renderTab(currentTab);
+    toast("Deleted.","success");
+  }catch(err){toast("❌ "+err.message,"error");}
+};
+
+window.modalDel=async function(){
+  if(editIdx===null)return;
+  const row=(allData[editSection]?.rows||[])[editIdx];
+  if(!row||!confirm(`Delete "${row.name}"?`))return;
+  allData[editSection].rows.splice(editIdx,1);
+  try{
+    await saveSection(editSection);
+    updateStats();renderTab(currentTab);
+    closeM("m-sem");toast("Deleted.","success");
+  }catch(err){toast("❌ "+err.message,"error");}
+};
+
+/* ── SAVE SECTION TO FIRESTORE ── */
+async function saveSection(secId){
+  const rows=(allData[secId]?.rows||[]).map(r=>({
+    name:String(r.name||""),parish:String(r.parish||""),code:String(r.code||"")
+  }));
+  await setDoc(doc(db,"seminarians",secId),{rows,updated_at:serverTimestamp()});
+}
+
+document.querySelectorAll(".hm-backdrop").forEach(bd=>{
+  bd.addEventListener("click",ev=>{if(ev.target===bd)bd.classList.remove("show");});
+});
+</script>
+</body>
+</html>
