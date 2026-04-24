@@ -1,0 +1,401 @@
+{
+  "B1_higher_education_colleges": [
+    {
+      "id": 1,
+      "name": "Bishop Kurialacherry College for Women (BK)",
+      "year_established": 1965,
+      "ownership": "SABS",
+      "location": "Amalagiri, Amalagiri P.O., Kottayam, 686561",
+      "affiliation": "MG University (Aided)",
+      "contact": {
+        "phone": ["0481-2597384", "0481-2596384", "0481-2598677"],
+        "mobile": ["7559097384"],
+        "website": "https://www.bkcollege.ac.in",
+        "email": "bkcamala@yahoo.com"
+      },
+      "management": {
+        "manager": {
+          "name": "Sr. Dr. Lilly Rose SABS",
+          "phone": "9495047760"
+        },
+        "principal": {
+          "name": "Prof. Dr. Leena Mathew",
+          "phone": "9947152070"
+        },
+        "vice_principal": {
+          "name": "Sr. Merin Varikanikal SABS",
+          "phone": "9061494763"
+        },
+        "bursar": {
+          "name": "Sr. Moncitta SABS",
+          "phone": "9947378437"
+        }
+      }
+    },
+    {
+      "id": 2,
+      "name": "Bishop Kurialassery Community College (BKCC)",
+      "year_established": 2015,
+      "ownership": "SABS",
+      "location": "Amalagiri, Amalagiri P.O., Kottayam, 686036",
+      "contact": {
+        "phone": "0481-2597384",
+        "email": "bkcommunity2020@gmail.com"
+      },
+      "management": {
+        "manager": {
+          "name": "Sr. Dr. Lilly Rose SABS",
+          "phone": "9495047760"
+        },
+        "chairman": {
+          "name": "Prof. Dr. Leena Mathew",
+          "phone": "9947152070"
+        },
+        "director": {
+          "name": "Dr. Mini Thomas",
+          "phone": "9447355729"
+        }
+      }
+    },
+    {
+      "id": 3,
+      "name": "Fr. Porukara College for Advanced Studies",
+      "year_established": 2012,
+      "ownership": "CMI",
+      "location": "Champakulam, Champakulam P.O., Alappuzha, 688505",
+      "affiliation": "MG University (Self Financing)",
+      "contact": {
+        "phone": ["0477-2737399", "0477-2736560"],
+        "website": "https://www.porukaracmicollege.org",
+        "email": "porukaracmicollege@gmail.com"
+      },
+      "management": {
+        "manager": {
+          "name": "Rev. Fr. Chacko Akkathara CMI",
+          "phone": "9486085579"
+        },
+        "principal": {
+          "name": "Rev. Fr. Saji Chiramukhathu CMI",
+          "phone": "9447912189"
+        }
+      }
+    },
+    {
+      "id": 4,
+      "name": "Assumption College",
+      "year_established": 1950,
+      "ownership": "AEPA",
+      "location": "Changanacherry P.O., Kottayam, 686101",
+      "affiliation": "Autonomous – Aided – MG University",
+      "contact": {
+        "phone": ["0481-2420109", "0481-2401036"],
+        "website": "https://www.assumptioncollege.in",
+        "email": "ac@assumptioncollege.in"
+      },
+      "management": {
+        "manager": {
+          "name": "Very Rev. Dr. Thomas Padiyath",
+          "phone": "9446201820"
+        },
+        "principal": {
+          "name": "Dr. Anitha Jose",
+          "phone": "9446402408"
+        },
+        "vice_principals": [
+          {
+            "name": "Rev. Dr. Thomas Parathara",
+            "phone": "9447355840"
+          },
+          {
+            "name": "Ms. Ann Mary Joseph",
+            "phone": "9847293851"
+          }
+        ],
+        "bursar": {
+          "name": "Rev. Fr. Joseph Purackal",
+          "phone": "9947224233"
+        }
+      }
+    },
+    {
+      "id": 5,
+      "name": "St. Berchmans College",
+      "year_established": 1922,
+      "ownership": "AEPA",
+      "location": "Changanacherry P.O., Kottayam, 686101",
+      "affiliation": "Autonomous – Aided – MG University",
+      "contact": {
+        "phone": ["0481-2411891"],
+        "website": "https://www.sbcollege.ac.in",
+        "email": "sbc@sbcollege.ac.in"
+      },
+      "management": {
+        "manager": {
+          "name": "Very Rev. Dr. Thomas Padiyath",
+          "phone": "9446201820"
+        },
+        "principal": {
+          "name": "Rev. Fr. Joseph Plathottam",
+          "phone": "9447598175"
+        }
+      }
+    },
+    {
+      "id": 6,
+      "name": "Kristujyoti College of Management & Technology",
+      "year_established": 2002,
+      "ownership": "CMI",
+      "location": "Kurisummoodu P.O., Changanacherry, Kottayam, 686104",
+      "affiliation": "MG University (Self Financing)",
+      "contact": {
+        "phone": ["0481-2721980", "0481-2720696", "0481-2720032"],
+        "website": "https://www.kristujyoticollege.com",
+        "email": "kristujyoti@gmail.com"
+      },
+      "management": {
+        "manager": {
+          "name": "Rev. Fr. Thomas Choolaparampil CMI",
+          "phone": "9447464995"
+        },
+        "principal": {
+          "name": "Rev. Fr. Joshy Cheeramkuzhy CMI",
+          "phone": "9496101681"
+        }
+      }
+    },
+    {
+      "id": 7,
+      "name": "St. Aloysius College",
+      "year_established": 1965,
+      "ownership": "Parish",
+      "location": "Edathua P.O., Alappuzha, 689573",
+      "affiliation": "MG University (Aided & Self Financing)",
+      "contact": {
+        "phone": "0477-2962262",
+        "website": "https://www.aloysiuscollege.ac.in",
+        "email": "sacedathua@gmail.com"
+      }
+    },
+    {
+      "id": 8,
+      "name": "Mater Dei College",
+      "year_established": 2014,
+      "ownership": "CMI",
+      "location": "Enathu P.O., Via Adoor, Pathanamthitta, 691526",
+      "affiliation": "Kerala University (Self Financing)",
+      "contact": {
+        "phone": ["0474-2964032", "0473-4212535"],
+        "website": "https://mdcmi.ac.in",
+        "email": "materdeicollegeenathu@gmail.com"
+      }
+    },
+    {
+      "id": 9,
+      "name": "Christ College, Vizhinjam (St. Peter’s)",
+      "year_established": 2014,
+      "ownership": "CMI",
+      "location": "Vizhinjam P.O., Thiruvananthapuram, 695021",
+      "affiliation": "University of Kerala (Self Financing)",
+      "contact": {
+        "phone": "0471-2487333",
+        "website": "https://christcollegevizhinjam.com",
+        "email": "christcollegevizhinjam@gmail.com"
+      }
+    },
+    {
+  "id": 10,
+  "name": "St. Joseph College of Communication - Media Village",
+  "year_established": 2004,
+  "ownership": "AEPA",
+  "location": "Kurisummoodu P.O., Changanacherry, Kottayam, 686104",
+  "affiliation": "MG University (Self Financing)",
+  "contact": {
+    "phone": ["0481-2722225", "0481-2721085", "0481-2729070"],
+    "mobile": ["8921771044", "8547372225", "9496385400"],
+    "website": "https://www.sjcc.ac.in",
+    "email": ["admission@sjcc.ac.in", "mail@sjcc.ac.in", "info@lmihmct.org"]
+  },
+  "management": {
+    "president": {
+      "name": "Very Rev. Dr. Thomas Padiyath",
+      "phone": "9446201820"
+    },
+    "manager_director": {
+      "name": "Rev. Dr. Joseph Padinjareveettil",
+      "phone": "9446120751"
+    },
+    "executive_director": {
+      "name": "Rev. Dr. Isaac Mundunadackal",
+      "phone": "9961049933"
+    },
+    "principal": {
+      "name": "Mr. Ranjith Pillai",
+      "phone": "8139896800"
+    },
+    "bursar": {
+      "name": "Rev. Dr. Emmanuel Neriyamparampil",
+      "phone": "9633234907"
+    },
+    "warden": {
+      "name": "Rev. Fr. Varghese Nambimadom",
+      "phone": "9633521483"
+    }
+  }
+},
+{
+  "id": 11,
+  "name": "Lourdes Matha College (MBA & MCA)",
+  "year_established": 2002,
+  "ownership": "AEPA",
+  "location": "Kuttichal P.O., Thiruvananthapuram, 695574",
+  "affiliation": "Kerala University (Self Financing, AICTE)",
+  "contact": {
+    "phone": ["0472-2851348", "0471-2302481"],
+    "mobile": ["9495186370", "8921771043"]
+  }
+},
+{
+  "id": 12,
+  "name": "KE College, Mannanam",
+  "year_established": 1964,
+  "ownership": "CMI",
+  "location": "Mannanam P.O., Kottayam, 686561",
+  "affiliation": "MG University (Aided & Self Financing)",
+  "contact": {
+    "phone": ["0481-2597374", "0481-2597074"],
+    "website": "https://www.kecollege.ac.in",
+    "email": "kecollegemnm@gmail.com"
+  },
+  "management": {
+    "manager": {
+      "name": "Rev. Fr. Mathew Chackalackal CMI",
+      "phone": "9447115828"
+    },
+    "principal": {
+      "name": "Prof. Dr. Ison V Vanchipurackal",
+      "phone": "9446126926"
+    },
+    "bursar": {
+      "name": "Rev. Fr. Biju Thekkekuttu CMI",
+      "phone": "9656245756"
+    }
+  }
+},
+{
+  "id": 13,
+  "name": "Christ Nagar College",
+  "year_established": 2012,
+  "ownership": "CMI",
+  "location": "Koovalassery P.O., Maranalloor, Thiruvananthapuram, 695512",
+  "affiliation": "Kerala University (Self Financing)",
+  "contact": {
+    "phone": ["0471-2298483", "0471-2298484"],
+    "mobile": ["7034918779", "9495880844"],
+    "website": "https://www.christnagarcollege.com",
+    "email": "christnagarcollege@gmail.com"
+  },
+  "management": {
+    "manager": {
+      "name": "Rev. Dr. Titto Vallavanthara CMI",
+      "phone": "9497264842"
+    },
+    "principal": {
+      "name": "Dr. Jolly Jacob",
+      "phone": "9447369984"
+    },
+    "bursar": {
+      "name": "Rev. Fr. Subin Kottoor CMI",
+      "phone": "7012917135"
+    }
+  }
+},
+{
+  "id": 14,
+  "name": "Carmel College, Muhamma",
+  "year_established": 2014,
+  "ownership": "CMI",
+  "location": "Muhamma P.O., Alappuzha, 688525",
+  "affiliation": "Self Financing",
+  "contact": {
+    "phone": ["0478-2868730"],
+    "mobile": ["7594054397", "7594054398"],
+    "website": "https://www.carmelcollege.edu.in",
+    "email": "carmelcollegemuhamma@gmail.com"
+  },
+  "management": {
+    "manager": {
+      "name": "Rev. Fr. Robin Anandakattu CMI",
+      "phone": "9474673194"
+    },
+    "principal": {
+      "name": "Dr. B Ushakumari",
+      "phone": "9447104548"
+    },
+    "vice_principal": {
+      "name": "Rev. Fr. Gino Kanekonnil CMI",
+      "phone": "9400334248"
+    }
+  }
+},
+{
+  "id": 15,
+  "name": "Mar Gregorios College, Punnapra",
+  "year_established": 2014,
+  "ownership": "AEPA",
+  "location": "Punnapra P.O., Alappuzha, 688004",
+  "affiliation": "Kerala University (Self Financing)",
+  "contact": {
+    "phone": ["0477-2288600"],
+    "mobile": ["9447051585"],
+    "website": "https://www.mgcollegepunnapra.ac.in",
+    "email": "margregoriosp@gmail.com"
+  },
+  "management": {
+    "manager": {
+      "name": "Very Rev. Dr. Thomas Padiyath",
+      "phone": "9446201820"
+    },
+    "principal": {
+      "name": "Prof. Cherian Alexander",
+      "phone": "9447728151"
+    },
+    "vice_principal": {
+      "name": "Rev. Fr. Philip Kanchickal",
+      "phone": "9447567231"
+    },
+    "bursar": {
+      "name": "Rev. Fr. Varghese Arackal (Bejoy)",
+      "phone": "9747717666"
+    }
+  }
+},
+{
+  "id": 16,
+  "name": "Christ College, Vizhinjam (St. Peter’s)",
+  "year_established": 2014,
+  "ownership": "CMI",
+  "location": "Vizhinjam P.O., Thiruvananthapuram, 695021",
+  "affiliation": "University of Kerala (Self Financing)",
+  "contact": {
+    "phone": ["0471-2487333"],
+    "mobile": ["7356086252", "9447131089"],
+    "website": "https://christcollegevizhinjam.com",
+    "email": "christcollegevizhinjam@gmail.com"
+  },
+  "management": {
+    "manager": {
+      "name": "Rev. Fr. Thomas Cheppila CMI",
+      "phone": "9496546660"
+    },
+    "principal": {
+      "name": "Dr. Cherian Panicker",
+      "phone": "9447258046"
+    }
+  }
+}
+
+
+  ]
+
+
+}

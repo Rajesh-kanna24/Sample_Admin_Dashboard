@@ -1,0 +1,1136 @@
+{
+  "professional_education": {
+  "B1_teacher_education": [
+    {
+      "id": 1,
+      "name": "St. John of God College for Special Education",
+      "year_established": 2013,
+      "ownership": "OH",
+      "location": "Annadivayal, Velloor P.O., Via Pampady, Kottayam",
+      "pin_code": "686501",
+      "type": "Self Financing",
+      "affiliation": "MG University",
+      "phone": "0481-2373222",
+      "mobile": "",
+      "fax": "",
+      "website": "https://www.stjohnofgodcentre.org",
+      "email": "stjohngodcollege@gmail.com",
+      "management": {
+        "director": {
+          "name": "Bro. George Kizhakkenath OH",
+          "phone": "8129906050"
+        },
+        "principal": {
+          "name": "Ms. Rittymol Mathew",
+          "phone": "7012173905"
+        },
+        "manager": "",
+        "bursar": "",
+        "assistant_professor": ""
+      }
+    },
+    {
+      "id": 2,
+      "name": "Porukara College of Education",
+      "year_established": 2012,
+      "ownership": "CMI",
+      "location": "Champakulam P.O., Alappuzha",
+      "pin_code": "688505",
+      "type": "Self Financing",
+      "affiliation": "",
+      "phone": "0477-2736996",
+      "mobile": "8281177796",
+      "fax": "",
+      "website": "https://www.porukara.edu.in",
+      "email": "porukarabedcollege@gmail.com",
+      "management": {
+        "manager": {
+          "name": "Rev. Fr. Chacko Akkathara CMI",
+          "phone": "9486085579"
+        },
+        "principal": {
+          "name": "Rev. Fr. Saji Chiramukath CMI",
+          "phone": "9447912189"
+        },
+        "director": "",
+        "bursar": "",
+        "assistant_professor": ""
+      }
+    },
+    {
+      "id": 3,
+      "name": "St. Joseph’s Training College",
+      "year_established": 1957,
+      "ownership": "CMI",
+      "location": "Mannanam P.O., Kottayam",
+      "pin_code": "686561",
+      "type": "Aided",
+      "affiliation": "MG University",
+      "phone": "0481-2597347",
+      "mobile": "",
+      "fax": "0481-2598390",
+      "website": "https://www.stjosephstrainingcollege.org",
+      "email": "stjosephstrainingcollege@gmail.com",
+      "management": {
+        "manager": {
+          "name": "Rev. Fr. Mathew Chackalackal CMI",
+          "phone": "9447115828"
+        },
+        "principal": {
+          "name": "Dr. Varghese K Cherian",
+          "phone": "9447353546"
+        },
+        "director": "",
+        "bursar": "",
+        "assistant_professor": ""
+      }
+    },
+    {
+      "id": 4,
+      "name": "Central Institute on Mental Retardation (CIMR)",
+      "year_established": 1980,
+      "ownership": "CMI",
+      "location": "Murinjapalam, Medical College P.O., Thiruvananthapuram",
+      "pin_code": "695011",
+      "type": "",
+      "affiliation": "",
+      "phone": "0471-2445796",
+      "mobile": "",
+      "fax": "",
+      "website": "https://www.cimr.info",
+      "email": "cimrdirector@gmail.com",
+      "management": {
+        "director": {
+          "name": "Rev. Fr. Thomas Felix CMI",
+          "phone": "9447055398"
+        },
+        "principal": {
+          "name": "Rev. Sr. Elise Mary DSC",
+          "phone": "9446063140"
+        },
+        "manager": "",
+        "bursar": "",
+        "assistant_professor": "",
+        "course_coordinator": ""
+      }
+    },
+    {
+      "id": 5,
+      "name": "St. John the Baptist College of Education",
+      "year_established": 1995,
+      "ownership": "AEPA",
+      "location": "Nedumkunnam P.O., Via Karukachal, Kottayam",
+      "pin_code": "686542",
+      "type": "Non Corporate - Self Financing",
+      "affiliation": "",
+      "phone": "0481-2485048",
+      "mobile": "",
+      "fax": "0481-2486255",
+      "website": "https://www.sjbcollege.org",
+      "email": "sjbcollege@gmail.com",
+      "management": {
+        "manager": {
+          "name": "Very Rev. Dr. Thomas Padiyath",
+          "phone": "9446201820"
+        },
+        "principal": {
+          "name": "Rev. Dr. Joseph Mammoottil (Jogimon George)",
+          "phone": "9447121927"
+        },
+        "bursar": {
+          "name": "Rev. Fr. Sebastian Chalackal",
+          "phone": "9847490692"
+        },
+        "assistant_professor": ""
+      }
+    },
+    {
+      "id": 6,
+      "name": "St. John the Baptist College of Special Education",
+      "year_established": 2006,
+      "ownership": "AEPA",
+      "location": "Nedumkunnam P.O., Kottayam",
+      "pin_code": "686542",
+      "type": "Non Corporate - Self Financing",
+      "affiliation": "",
+      "phone": "0481-2485048",
+      "mobile": "",
+      "fax": "0481-2486255",
+      "website": "https://www.sjbspecialeducation.org",
+      "email": "sjbspecialeducation@gmail.com",
+      "management": {
+        "manager": {
+          "name": "Very Rev. Dr. Thomas Padiyath",
+          "phone": "9446201820"
+        },
+        "principal": {
+          "name": "Rev. Fr. Johnson Thundiyil (Johnson Mathew)",
+          "phone": "9447213103"
+        },
+        "bursar": {
+          "name": "Rev. Fr. Sebastian Chalackal",
+          "phone": "9847490692"
+        },
+        "assistant_professor": {
+          "name": "Rev. Fr. Mathew Karattu",
+          "phone": "8500875294"
+        }
+      }
+    },
+    {
+      "id": 7,
+      "name": "Christ Nagar College of Education",
+      "year_established": 2005,
+      "ownership": "CMI",
+      "location": "Thiruvallam P.O., Thiruvananthapuram",
+      "pin_code": "695027",
+      "type": "Self Financing",
+      "affiliation": "",
+      "phone": "0471-2380413",
+      "mobile": "9447680216",
+      "fax": "0471-2380216",
+      "website": "https://www.christnagarcollege.edu.in",
+      "email": "christnagarcollegeofeducation@hotmail.com",
+      "management": {
+        "manager": {
+          "name": "Rev. Fr. Joseph Vattaparampil CMI",
+          "phone": "9447258005"
+        },
+        "principal": {
+          "name": "Dr. Preetha TL",
+          "phone": "9496317446"
+        },
+        "bursar": "",
+        "assistant_professor": ""
+      }
+    },
+    {
+      "id": 8,
+      "name": "St. Teresa’s TTI",
+      "year_established": 1919,
+      "ownership": "SABS",
+      "location": "Vazhappally P.O., Changanacherry, Kottayam",
+      "pin_code": "686103",
+      "type": "Corporate Management",
+      "affiliation": "",
+      "phone": "0481-2427509",
+      "mobile": "",
+      "fax": "",
+      "website": "",
+      "email": "stteresasttichry@gmail.com",
+      "management": {
+        "manager": {
+          "name": "Rev. Sr. Therese Muttathupara SABS",
+          "phone": "9744634147"
+        },
+        "principal": {
+          "name": "Rev. Sr. Lizy Kaniyamparampil SABS",
+          "phone": "9495749485"
+        },
+        "bursar": "",
+        "assistant_professor": ""
+      }
+    }
+  ],
+
+
+
+ 
+  "B2_medical_education": [
+    {
+      "id": 1,
+      "name": "St. Thomas Academy of Allied Health Sciences",
+      "year_established": 2002,
+      "ownership": "AEPA",
+      "location": "Chethipuzha, Kurisummoodu P.O., Changanacherry, Kottayam",
+      "pin_code": "686104",
+      "type": "Self Financing",
+      "affiliation": "CMAI, WHRDE",
+      "phone": "0481-2723952",
+      "mobile": "9526889111",
+      "fax": "",
+      "website": "",
+      "email": "stthomascollegechry@gmail.com",
+      "management": {
+        "manager": {
+          "name": "Very Rev. Fr. Joseph Vaniapurackal",
+          "phone": "9495268877"
+        },
+        "director": {
+          "name": "Rev. Fr. James P Kunnath",
+          "phone": "9947229187"
+        },
+        "principal": {
+          "name": "Rev. Sr. Lincy SD",
+          "phone": "9526889111"
+        }
+      }
+    },
+    {
+      "id": 2,
+      "name": "St. Thomas College of Allied Health Sciences",
+      "year_established": 2002,
+      "ownership": "AEPA",
+      "location": "Chethipuzha, Kurisummoodu P.O., Changanacherry, Kottayam",
+      "pin_code": "686104",
+      "type": "Self Financing",
+      "affiliation": "Kerala University of Health Sciences (KUHS)",
+      "phone": "0481-2723952",
+      "mobile": "9633228111",
+      "fax": "",
+      "website": "https://www.st-thomasahs.com",
+      "email": "alliedcollege@st-thomashospital.com",
+      "management": {
+        "manager": {
+          "name": "Very Rev. Fr. Joseph Vaniapurackal",
+          "phone": "9495268877"
+        },
+        "director": {
+          "name": "Rev. Fr. James P Kunnath",
+          "phone": "9947229187"
+        },
+        "principal": {
+          "name": "Dr. Prof. Sagi TM",
+          "phone": "9633228111"
+        }
+      }
+    },
+    {
+      "id": 3,
+      "name": "St. Thomas College of Nursing",
+      "year_established": 2002,
+      "ownership": "AEPA",
+      "location": "Chethipuzha, Kurisummoodu P.O., Changanacherry, Kottayam",
+      "pin_code": "686104",
+      "type": "Self Financing",
+      "affiliation": "Kerala University of Health Sciences (KUHS)",
+      "phone": "0481-2720947",
+      "mobile": "",
+      "fax": "",
+      "website": "https://www.st-thomasnursingcollege.com",
+      "email": "nursingcollege@st-thomashospital.com",
+      "management": {
+        "manager": {
+          "name": "Very Rev. Fr. Joseph Vaniapurackal",
+          "phone": "9495268877"
+        },
+        "director": {
+          "name": "Rev. Fr. James P Kunnath",
+          "phone": "9947229187"
+        },
+        "principal": {
+          "name": "Prof. Shyla Ipe Varghese",
+          "phone": "8606998393"
+        }
+      }
+    },
+    {
+      "id": 4,
+      "name": "Ayushya (Holistic Training Centre)",
+      "year_established": 1961,
+      "ownership": "MMS",
+      "location": "Ithithanam, Veroor P.O., Changanacherry, Kottayam",
+      "pin_code": "686104",
+      "type": "",
+      "affiliation": "",
+      "phone": "0481-2720544",
+      "mobile": "9946405102",
+      "fax": "",
+      "website": "",
+      "email": "ayushyamms@gmail.com",
+      "management": {}
+    },
+    {
+      "id": 5,
+      "name": "Thiruhrudaya College of Nursing",
+      "year_established": 2015,
+      "ownership": "SH",
+      "location": "Kattampak, Poovanthuruth P.O., Kaduvakulam, Kottayam",
+      "pin_code": "686012",
+      "type": "Self Financing",
+      "affiliation": "Kerala University",
+      "phone": "0481-2341740",
+      "mobile": "9446286599",
+      "fax": "0481-2341741",
+      "website": "https://www.tcnktm.com",
+      "email": "thiruhrudayacollegeofnursing@gmail.com, tconsh@gmail.com",
+      "management": {
+        "manager": {
+          "name": "Rev. Sr. Amala Jose SH",
+          "phone": "9526699629"
+        },
+        "principal": {
+          "name": "Rev. Sr. Alice Maniyangattu SH",
+          "phone": "9446286599"
+        }
+      }
+    },
+    {
+      "id": 6,
+      "name": "St. Rita’s School of Nursing",
+      "year_established": 2000,
+      "ownership": "CMI",
+      "location": "Nalukody P.O., Changanacherry, Kottayam",
+      "pin_code": "686548",
+      "type": "Charitable Trust",
+      "affiliation": "INC & KNC",
+      "phone": "0481-2447084",
+      "mobile": "",
+      "fax": "",
+      "website": "",
+      "email": "st.ritasnursingschool@gmail.com",
+      "management": {
+        "director": {
+          "name": "Rev. Fr. Antony Elamthottam CMI",
+          "phone": "9497014104"
+        },
+        "principal": {
+          "name": "Mrs. Smitha P",
+          "phone": "9207637692"
+        }
+      }
+    },
+    {
+      "id": 7,
+      "name": "KCM School of Nursing",
+      "year_established": 2002,
+      "ownership": "CMC",
+      "location": "Nooranad, Leprosy Sanitorium P.O., Alappuzha",
+      "pin_code": "690571",
+      "type": "Self Financing",
+      "affiliation": "INC & Kerala Nurses & Midwives Council",
+      "phone": "0479-2382348",
+      "mobile": "9447184534",
+      "fax": "0479-2382848",
+      "website": "https://www.kcmhospital.org",
+      "email": "kcmson@gmail.com; kcmhnooranad@yahoo.co.in",
+      "management": {
+        "manager": {
+          "name": "Sr. Annunciate CMC",
+          "phone": "9188849587"
+        },
+        "principal": {
+          "name": "Sr. Ancilin CMC",
+          "phone": "8281039122"
+        }
+      }
+    },
+    {
+      "id": 8,
+      "name": "Mother Chantal’s School of Nursing",
+      "year_established": 2000,
+      "ownership": "SABS",
+      "location": "Pacha, Chekkidikad P.O., Alappuzha",
+      "pin_code": "689573",
+      "type": "",
+      "affiliation": "",
+      "phone": "0477-2215305",
+      "mobile": "",
+      "fax": "",
+      "website": "",
+      "email": "mcng40@yahoo.com",
+      "management": {
+        "manager": {
+          "name": "Rev. Sr. Ans Erupathil SABS",
+          "phone": "8113841030"
+        },
+        "principal": {
+          "name": "Rev. Sr. Rose Poovathummoottil SABS",
+          "phone": "9526697970"
+        }
+      }
+    }
+  ],
+  
+  "B3_media_education": [
+    {
+      "id": 1,
+      "name": "Thanmaya Media Centre",
+      "year_established": 1998,
+      "ownership": "SJ",
+      "location": "Kumaranalloor P.O., Kottayam",
+      "pin_code": "686016",
+      "type": "",
+      "affiliation": "",
+      "phone": "",
+      "mobile": "9656250234",
+      "fax": "",
+      "website": "",
+      "email": "thanmayamedia@gmail.com",
+      "management": {
+        "director": {
+          "name": "Rev. Fr. Roy Mathew Thottathil SJ",
+          "phone": "9656250234"
+        }
+      }
+    },
+    {
+      "id": 2,
+      "name": "St. Joseph College of Communication",
+      "year_established": 2004,
+      "ownership": "AEPA",
+      "location": "Media Village, Kurisummoodu P.O., Changanacherry, Kottayam",
+      "pin_code": "686104",
+      "type": "",
+      "affiliation": "",
+      "phone": "0481-2722225",
+      "mobile": "8547372225",
+      "fax": "",
+      "website": "https://www.sjcc.ac.in",
+      "email": "admission@sjcc.ac.in; mail@sjacc.ac.in",
+      "management": {
+        "manager": {
+          "name": "Very Rev. Dr. Thomas Padiyath",
+          "phone": "9446201820"
+        },
+        "executive_director": {
+          "name": "Rev. Fr. Antony Ethackad",
+          "phone": "9446194320"
+        },
+        "principal": {
+          "name": "Rev. Dr. Joseph Parackal",
+          "phone": "9544120698"
+        },
+        "academic_director": {
+          "name": "Rev. Fr. Joseph Elanjimattom",
+          "phone": "9447036095"
+        },
+        "assistant_professor": {
+          "name": "Rev. Fr. Varghese Kanicherril",
+          "phone": "9496802254"
+        },
+        "bursar": {
+          "name": "Rev. Fr. Devasia Puthuparampu",
+          "phone": "9496935651"
+        }
+      }
+    }
+  ],
+  
+
+
+  "B4_technical_education": [
+    {
+      "id": 1,
+      "name": "Pius X Private ITI",
+      "year_established": 1962,
+      "ownership": "SJ",
+      "location": "PB No. 3, Edathua P.O., Alappuzha",
+      "pin_code": "689573",
+      "type": "Self Financing",
+      "affiliation": "",
+      "phone": "0477-2212279",
+      "mobile": "9446812229",
+      "fax": "",
+      "website": "",
+      "email": "piusxitc@gmail.com",
+      "management": {
+        "manager": {
+          "name": "Rev. Fr. Jose Pulinthanathu SJ",
+          "phone": "9447126311"
+        },
+        "principal": {
+          "name": "Mr. Prasannakumar",
+          "phone": "9446066769"
+        }
+      }
+    },
+    {
+      "id": 2,
+      "name": "Lourdes Matha College of Science & Technology",
+      "year_established": 2002,
+      "ownership": "AEPA",
+      "location": "Lourdes Hills, Kuttichal P.O., Thiruvananthapuram",
+      "pin_code": "695574",
+      "type": "Self Financing",
+      "affiliation": "APJ Abdul Kalam Technological University; Kerala University",
+      "phone": "0472-2853550",
+      "mobile": "9400197778",
+      "fax": "0472-2851544",
+      "website": "https://www.lmcst.ac.in",
+      "email": "lourdesmathaoffice@gmail.com",
+      "management": {
+        "president": {
+          "name": "Very Rev. Dr. Thomas Padiyath",
+          "phone": "9446201820"
+        },
+        "director": {
+          "name": "Rev. Dr. Joseph Padinjareveettil",
+          "phone": "9446120751"
+        },
+        "executive_director": {
+          "name": "Rev. Dr. Isaac Mundunadackal",
+          "phone": "9961049933"
+        },
+        "principal": {
+          "name": "Dr. P. P. Mohanlal",
+          "phone": "9447761085"
+        },
+        "bursar": {
+          "name": "Rev. Dr. Emmanuel Neriyamparampil",
+          "phone": "9633234907"
+        },
+        "warden": {
+          "name": "Rev. Fr. Varghese Nambimadom",
+          "phone": "9633521483"
+        }
+      }
+    },
+    {
+      "id": 3,
+      "name": "Lourdes Matha Institute of Management & Catering Technology",
+      "year_established": 2002,
+      "ownership": "AEPA",
+      "location": "Kuttichal P.O., Thiruvananthapuram",
+      "pin_code": "695574",
+      "type": "Self Financing",
+      "affiliation": "AICTE; Kerala University",
+      "phone": "0472-2851348",
+      "mobile": "9495186370",
+      "fax": "",
+      "website": "https://www.lmihmct.org",
+      "email": "info@lmihmct.org",
+      "management": {
+        "president": {
+          "name": "Very Rev. Dr. Thomas Padiyath",
+          "phone": "9446201820"
+        },
+        "director": {
+          "name": "Rev. Dr. Joseph Padinjareveettil",
+          "phone": "9446120751"
+        },
+        "executive_director": {
+          "name": "Rev. Dr. Isaac Mundunadackal",
+          "phone": "9961049933"
+        },
+        "principal": {
+          "name": "Mr. Ranjith Pillai",
+          "phone": "8139896800"
+        },
+        "bursar": {
+          "name": "Rev. Dr. Emmanuel Neriyamparampil",
+          "phone": "9633234907"
+        },
+        "warden": {
+          "name": "Rev. Fr. Varghese Nambimadom",
+          "phone": "9633521483"
+        }
+      }
+    },
+    {
+      "id": 4,
+      "name": "St. John’s Private ITI",
+      "year_established": 1978,
+      "ownership": "VC",
+      "location": "Nedumkunnam P.O., Kottayam",
+      "pin_code": "686542",
+      "type": "",
+      "affiliation": "",
+      "phone": "0481-2416346",
+      "mobile": "",
+      "fax": "",
+      "website": "",
+      "email": "stjohnsitcmyladi@gmail.com",
+      "management": {
+        "director": {
+          "name": "Rev. Fr. Thomas Pananal VC",
+          "phone": "9846369301"
+        },
+        "principal": {
+          "name": "Mr. Michael Xavier",
+          "phone": "9447565948"
+        }
+      }
+    },
+    {
+      "id": 5,
+      "name": "De Paul Institute of Management & Technology",
+      "year_established": 2015,
+      "ownership": "VC",
+      "location": "Mulayamvely Road, Nedumkunnam P.O., Kottayam",
+      "pin_code": "686542",
+      "type": "",
+      "affiliation": "",
+      "phone": "",
+      "mobile": "9497156278",
+      "fax": "",
+      "website": "",
+      "email": "mail@depaul.edu.in; admission@depaul.edu.in",
+      "management": {
+        "director": {
+          "name": "Rev. Fr. Thomas Pananal VC",
+          "phone": "9846369301"
+        },
+        "principal": {
+          "name": "Mr. Michael Xavier",
+          "phone": "9447565948"
+        }
+      }
+    },
+    {
+      "id": 6,
+      "name": "St. Mary’s Private ITI",
+      "year_established": 1978,
+      "ownership": "Parish",
+      "location": "Pulincunnoo P.O., Alappuzha",
+      "pin_code": "688504",
+      "type": "",
+      "affiliation": "",
+      "phone": "0477-2707748",
+      "mobile": "9447272475",
+      "fax": "",
+      "website": "",
+      "email": "stmarysitcpulikunnu@gmail.com",
+      "management": {
+        "manager": {
+          "name": "Very Rev. Fr. Mathew Puthenangady",
+          "phone": "9446194187"
+        },
+        "principal": {
+          "name": "KC Joseph Koippally",
+          "phone": "9447362997"
+        }
+      }
+    },
+    {
+      "id": 7,
+      "name": "Carmel College of Engineering & Technology",
+      "year_established": 2014,
+      "ownership": "CMI",
+      "location": "Punnapra P.O., Alappuzha",
+      "pin_code": "688004",
+      "type": "Self Financing",
+      "affiliation": "",
+      "phone": "0477-2287248",
+      "mobile": "8330807240",
+      "fax": "",
+      "website": "https://www.carmelcet.in",
+      "email": "ccetalappuzha@gmail.com",
+      "management": {
+        "chairman": {
+          "name": "Rev. Fr. Mathew Arekalam CMI",
+          "phone": "9497154433"
+        },
+        "director": {
+          "name": "Rev. Fr. Justin Alukkal CMI",
+          "phone": "9497589058"
+        },
+        "principal": {
+          "name": "Dr. Paul K. Mathew",
+          "phone": "9495254142"
+        }
+      }
+    },
+    {
+      "id": 8,
+      "name": "Carmel Polytechnic College",
+      "year_established": 1958,
+      "ownership": "CMI",
+      "location": "Punnapra P.O., Alappuzha",
+      "pin_code": "688004",
+      "type": "Self Financing - Aided",
+      "affiliation": "",
+      "phone": "0477-2287825",
+      "mobile": "8547714283",
+      "fax": "0477-2286048",
+      "website": "https://www.carmelpoly.in",
+      "email": "info@carmelpoly.in",
+      "management": {
+        "chairman": {
+          "name": "Rev. Fr. Mathew Arekalam CMI",
+          "phone": "9497154433"
+        },
+        "principal": {
+          "name": "Rev. Fr. Josekutty Chacko CMI",
+          "phone": "9496417825"
+        }
+      }
+    }
+  ],
+
+  
+
+  "C_cultural_academies": [
+    {
+      "id": 1,
+      "name": "SADAS",
+      "year_established": 1989,
+      "ownership": "AEPA",
+      "location": "PP Jose Road, Changanacherry P.O., Kottayam",
+      "pin_code": "686101",
+      "type": "",
+      "affiliation": "",
+      "phone": "",
+      "mobile": "9447464457",
+      "fax": "",
+      "website": "",
+      "email": "",
+      "management": {}
+    },
+    {
+      "id": 2,
+      "name": "Sargakshetra Academy",
+      "year_established": 2002,
+      "ownership": "CMI",
+      "location": "Kurisummoodu P.O., Kottayam",
+      "pin_code": "686104",
+      "type": "",
+      "affiliation": "",
+      "phone": "0481-2726481",
+      "mobile": "9496189111",
+      "fax": "",
+      "website": "",
+      "email": "sargakshetra@gmail.com",
+      "management": {}
+    },
+    {
+      "id": 3,
+      "name": "Kalaasaadhaka – MCBS Academy of Music & Arts",
+      "year_established": 2011,
+      "ownership": "MCBS",
+      "location": "High School Jn., Cutcherry P.O., Kollam",
+      "pin_code": "691013",
+      "type": "",
+      "affiliation": "",
+      "phone": "",
+      "mobile": "8075737971",
+      "fax": "",
+      "website": "",
+      "email": "",
+      "management": {}
+    },
+    {
+      "id": 4,
+      "name": "Darsana Cultural Centre",
+      "year_established": 1984,
+      "ownership": "CMI",
+      "location": "Sastri Road, Kottayam",
+      "pin_code": "686001",
+      "type": "",
+      "affiliation": "",
+      "phone": "",
+      "mobile": "9188520400",
+      "fax": "",
+      "website": "",
+      "email": "",
+      "management": {}
+    },
+    {
+      "id": 5,
+      "name": "Freedom Centre (Performing Arts Centre by & for the Mentally Challenged)",
+      "year_established": 2000,
+      "ownership": "CMI",
+      "location": "Beach Road, Thiruvananthapuram",
+      "pin_code": "695527",
+      "type": "",
+      "affiliation": "",
+      "phone": "0471-2445796",
+      "mobile": "7306391717",
+      "fax": "",
+      "website": "",
+      "email": "",
+      "management": {}
+    },
+    {
+      "id": 6,
+      "name": "MCBS Kalagramam",
+      "year_established": 1997,
+      "ownership": "MCBS",
+      "location": "Lakshmi Nagar, TC 3/2061, LIC Lane, Pattom P.O., Thiruvananthapuram",
+      "pin_code": "695004",
+      "type": "",
+      "affiliation": "",
+      "phone": "0471-2541177",
+      "mobile": "9037667226",
+      "fax": "",
+      "website": "",
+      "email": "kalagramamcbs@gmail.com",
+      "management": {}
+    },
+    {
+      "id": 7,
+      "name": "MCBS Cristone Media",
+      "year_established": 2011,
+      "ownership": "MCBS",
+      "location": "Ponmankal Tower, Caritas Junction, Thellakom P.O., Kottayam",
+      "pin_code": "686630",
+      "type": "",
+      "affiliation": "",
+      "phone": "",
+      "mobile": "9446194671",
+      "fax": "",
+      "website": "",
+      "email": "mcbscristone@gmail.com",
+      "management": {}
+    }
+  ],
+
+    "D_religious_studies_institutes": [
+    {
+      "id": 1,
+      "name": "Marios (Mar Aprem) Research Institute of Oriental Sciences",
+      "year_established": 2016,
+      "ownership": "AEPA",
+      "location": "Archbishop House, Changanacherry P.O., Kottayam",
+      "pin_code": "686101",
+      "type": "",
+      "affiliation": "",
+      "phone": "",
+      "mobile": "",
+      "fax": "",
+      "website": "",
+      "email": "",
+      "management": {
+        "director": {
+          "name": "Very Rev. Dr. Thomas Padiyath",
+          "phone": "9446201820"
+        }
+      }
+    },
+    {
+      "id": 2,
+      "name": "Marthoma Vidyanikethan & Fr. Placid Memorial Archdiocesan Library",
+      "year_established": 1990,
+      "ownership": "AEPA",
+      "location": "Archbishop House, Changanacherry P.O., Kottayam",
+      "pin_code": "686101",
+      "type": "Higher Institute of Religious Sciences for the Laity",
+      "affiliation": "",
+      "phone": "0481-2421891",
+      "mobile": "8281876993",
+      "fax": "",
+      "website": "https://www.sathyadarsanam.com",
+      "email": "sathyadarsanam@gmail.com",
+      "management": {
+        "director": {
+          "name": "Rev. Dr. Thomas Karukakkalam",
+          "phone": "9496062129"
+        },
+        "assistant_director": {
+          "name": "Rev. Fr. James Kokkavayalil",
+          "phone": "6238214912"
+        }
+      }
+    },
+    {
+      "id": 3,
+      "name": "Jeevadhara Theology Centre",
+      "year_established": 1971,
+      "ownership": "CMI",
+      "location": "Malloossery P.O., Kottayam",
+      "pin_code": "686041",
+      "type": "",
+      "affiliation": "",
+      "phone": "0481-2392530",
+      "mobile": "9495519775",
+      "fax": "",
+      "website": "",
+      "email": "kuncheriap@gmail.com",
+      "management": {}
+    },
+    {
+      "id": 4,
+      "name": "Missionary Orientation Centre (MOC) – Paurasthya Vidya Nikethan",
+      "year_established": 1972,
+      "ownership": "AEPA",
+      "location": "Vidyanagar, Manganam P.O., Kottayam",
+      "pin_code": "686018",
+      "type": "Higher Institute of Oriental Theology for Sisters",
+      "affiliation": "",
+      "phone": "",
+      "mobile": "8547023339",
+      "fax": "",
+      "website": "https://www.mocmanganam.org",
+      "email": "mocvidyanagar@gmail.com",
+      "management": {
+        "director": {
+          "name": "Rev. Dr. Jacob Karukayil",
+          "phone": "8848303145"
+        },
+        "assistant_director": {
+          "name": "Rev. Dr. Antony Thattassery",
+          "phone": "7902420680"
+        },
+        "spiritual_director": {
+          "name": "Rev. Dr. Antony Kamukumpallil",
+          "phone": "9495324726"
+        },
+        "bursar": {
+          "name": "Rev. Fr. George Vallayil",
+          "phone": "9497325672"
+        }
+      }
+    },
+    {
+      "id": 5,
+      "name": "Amala Theological College",
+      "year_established": 1986,
+      "ownership": "AEPA",
+      "location": "Kurisummoodu P.O., Changanacherry, Kottayam",
+      "pin_code": "686104",
+      "type": "",
+      "affiliation": "",
+      "phone": "0481-2410850",
+      "mobile": "",
+      "fax": "",
+      "website": "",
+      "email": "amalaparel@gmail.com",
+      "management": {
+        "director": {
+          "name": "Rev. Dr. Mathew Thekkedathu",
+          "phone": "9447010240"
+        }
+      }
+    },
+    {
+      "id": 6,
+      "name": "Centre for Church Art & Architecture and Marios Institute of Iconography",
+      "year_established": 2016,
+      "ownership": "AEPA",
+      "location": "Kurisummoodu P.O., Changanacherry, Kottayam",
+      "pin_code": "686104",
+      "type": "",
+      "affiliation": "",
+      "phone": "",
+      "mobile": "",
+      "fax": "",
+      "website": "",
+      "email": "",
+      "management": {
+        "director": {
+          "name": "Rev. Dr. Jacob Kooroth",
+          "phone": "9497331228"
+        }
+      }
+    },
+    {
+      "id": 7,
+      "name": "Denahalaya – Institute of Formation and Counselling",
+      "year_established": 1992,
+      "ownership": "AEPA",
+      "location": "Punnapra P.O., Alappuzha",
+      "pin_code": "688004",
+      "type": "",
+      "affiliation": "",
+      "phone": "0477-2287808",
+      "mobile": "",
+      "fax": "",
+      "website": "https://www.denahalaya.com",
+      "email": "danahalaya@gmail.com",
+      "management": {
+        "director": {
+          "name": "Rev. Fr. John Pathalil",
+          "phone": "9747836772"
+        }
+      }
+    },
+    {
+      "id": 8,
+      "name": "CANA – National Centre for Family Life Promotion",
+      "year_established": 1993,
+      "ownership": "AEPA",
+      "location": "Thuruthy P.O., Kottayam",
+      "pin_code": "686535",
+      "type": "",
+      "affiliation": "",
+      "phone": "0481-2321144",
+      "mobile": "8289833641",
+      "fax": "",
+      "website": "https://www.stjohnpaul2institute.org",
+      "email": "johnpaulismf1998@gmail.com",
+      "management": {
+        "director": {
+          "name": "Rev. Dr. Philips Wadakkekalam",
+          "phone": "9048363040"
+        },
+        "assistant_director": {
+          "name": "Rev. Dr. Philip Kavithazhe",
+          "phone": "9447127568"
+        }
+      }
+    },
+    {
+      "id": 9,
+      "name": "John Paul II Pontifical Institute for Marriage and Family Sciences",
+      "year_established": 1981,
+      "ownership": "AEPA",
+      "location": "Thuruthy P.O., Kottayam",
+      "pin_code": "686535",
+      "type": "",
+      "affiliation": "",
+      "phone": "0481-2321144",
+      "mobile": "8289833641",
+      "fax": "",
+      "website": "https://www.stjohnpaul2institute.org",
+      "email": "johnpaulismf1998@gmail.com",
+      "management": {
+        "president": {
+          "name": "Msgr. Philippe Bordeyn",
+          "phone": ""
+        },
+        "vice_president": {
+          "name": "Rev. Dr. Jacob Koipally",
+          "phone": "9447662034"
+        },
+        "dean_of_studies": {
+          "name": "Rev. Dr. Tom Kainikkara",
+          "phone": "9447751276"
+        }
+      }
+    },
+    {
+      "id": 10,
+      "name": "St. Thomas Apostolic Seminary",
+      "year_established": 1962,
+      "ownership": "Synod",
+      "location": "Vadavathoor P.O., Kottayam",
+      "pin_code": "686010",
+      "type": "",
+      "affiliation": "",
+      "phone": "0481-2578315",
+      "mobile": "9188543331",
+      "fax": "",
+      "website": "",
+      "email": "",
+      "management": {
+        "rector": {
+          "name": "Very Rev. Dr. Scaria Kanniyakonil",
+          "phone": "9446714468"
+        },
+        "vice_rector": {
+          "name": "Rev. Dr. Lindo Kuttikadan",
+          "phone": "8281610424"
+        }
+      }
+    },
+    {
+      "id": 11,
+      "name": "Paurasthya Vidyapitham",
+      "year_established": 1982,
+      "ownership": "",
+      "location": "Vadavathoor P.O., Kottayam",
+      "pin_code": "686010",
+      "type": "",
+      "affiliation": "",
+      "phone": "0481-2578319",
+      "mobile": "",
+      "fax": "",
+      "website": "https://www.pvpkottayam.in",
+      "email": "pvpkottayam@gmail.com",
+      "management": {
+        "president": {
+          "name": "Rev. Dr. Andrews Mekkattukunnel",
+          "phone": "9447112104"
+        }
+      }
+    }
+  ]
+
+
+
+  }
+
+
+ 
+
+}
