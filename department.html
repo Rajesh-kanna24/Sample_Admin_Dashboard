@@ -1,0 +1,1127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Departments — AdminForge</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"/>
+  <link rel="stylesheet" href="style.css"/>
+  <style>
+    :root{--brand:#921a02;--brand-dark:#6e1301;--brand-gold:#c9a84c;--brand-border:rgba(217,35,45,0.18);}
+    .dept-stat-card{background:#fff;border:1px solid #e2e8f0;border-radius:14px;padding:18px 20px;display:flex;align-items:center;gap:14px;box-shadow:0 2px 8px rgba(0,0,0,.05);}
+    .dept-stat-icon{width:42px;height:42px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0;}
+    .dept-stat-icon.red{background:#fff1f0;color:#921a02;}.dept-stat-icon.blue{background:#eff6ff;color:#2563eb;}.dept-stat-icon.green{background:#f0fdf4;color:#16a34a;}.dept-stat-icon.gold{background:#fffbeb;color:#d97706;}
+    .dept-stat-value{font-size:1.4rem;font-weight:800;color:#1e293b;line-height:1;}.dept-stat-label{font-size:.7rem;color:#64748b;margin-top:2px;}
+    .dept-admin-layout{display:flex;gap:20px;align-items:flex-start;}
+    .dept-admin-sidebar{width:240px;flex-shrink:0;position:sticky;top:80px;}
+    .dept-admin-content{flex:1;min-width:0;}
+    .dept-nav-card{border-radius:12px;overflow:hidden;box-shadow:0 4px 20px rgba(217,35,45,0.10);border:1px solid var(--brand-border);}
+    .nav-section-label{font-size:.65rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--brand);padding:10px 16px 8px;background:#fff;border-bottom:1px solid var(--brand-border);}
+    .dept-nav{list-style:none;padding:0;margin:0;}.dept-nav .nav-item{border-bottom:1px solid rgba(217,35,45,0.07);}.dept-nav .nav-item:last-child{border-bottom:none;}
+    .dept-nav .nav-link{display:flex;align-items:center;gap:8px;padding:11px 14px;color:#555;font-size:.8rem;font-weight:600;text-decoration:none;background:#fff;border-left:4px solid transparent;cursor:pointer;transition:all .22s;position:relative;user-select:none;}
+    .dept-nav .nav-link:hover{color:var(--brand);border-left-color:rgba(217,35,45,0.35);background:rgba(217,35,45,0.04);}
+    .dept-nav .nav-link.active{color:var(--brand);font-weight:700;border-left-color:var(--brand);background:linear-gradient(90deg,rgba(217,35,45,0.09),rgba(217,35,45,0.02));}
+    .dept-nav .nav-link .nav-badge{margin-left:auto;background:var(--brand);color:#fff;font-size:.6rem;font-weight:700;padding:1px 6px;border-radius:20px;}
+    .dept-nav .nav-link .nav-arrow{margin-left:auto;font-size:.65rem;color:#aaa;transition:transform .25s;}.dept-nav .nav-link.open .nav-arrow{transform:rotate(90deg);}
+    .dept-subnav{list-style:none;padding:0;margin:0;max-height:0;overflow:hidden;transition:max-height .35s cubic-bezier(0.4,0,0.2,1);background:#fafafa;}.dept-subnav.open{max-height:600px;}
+    .dept-subnav .sub-item{border-top:1px solid rgba(217,35,45,0.05);}
+    .dept-subnav .sub-link{display:flex;align-items:center;gap:6px;padding:9px 14px 9px 26px;color:#666;font-size:.75rem;font-weight:600;text-decoration:none;background:transparent;border-left:3px solid transparent;cursor:pointer;transition:all .2s;}
+    .dept-subnav .sub-link:hover{color:var(--brand);background:rgba(217,35,45,0.04);border-left-color:rgba(217,35,45,0.3);}
+    .dept-subnav .sub-link.active{color:var(--brand);font-weight:700;border-left-color:var(--brand);background:rgba(217,35,45,0.06);}
+    .tab-pane-dept{animation:tabSlideIn .28s cubic-bezier(0.4,0,0.2,1) both;}
+    @keyframes tabSlideIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+    .section-header{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:16px;padding-bottom:12px;border-bottom:2px solid var(--brand-border);}
+    .section-header h3{font-size:1rem;font-weight:700;color:#1e293b;margin:0;}
+    .btn-add{background:var(--brand);color:#fff;border:none;border-radius:8px;padding:7px 16px;font-size:.76rem;font-weight:700;cursor:pointer;transition:background .15s;}
+    .btn-add:hover{background:var(--brand-dark);}
+    .subsection-header{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:20px 0 10px;padding:8px 12px;background:rgba(146,26,2,0.04);border-radius:8px;border:1px solid var(--brand-border);}
+    .subsection-header h4{font-size:.85rem;font-weight:700;color:var(--brand);margin:0;}.subsection-header h5{font-size:.8rem;font-weight:700;color:#444;margin:0;}
+    .btn-add-sub{background:transparent;color:var(--brand);border:1.5px solid var(--brand-border);border-radius:7px;padding:4px 12px;font-size:.72rem;font-weight:700;cursor:pointer;transition:all .15s;white-space:nowrap;}
+    .btn-add-sub:hover{background:var(--brand);color:#fff;border-color:var(--brand);}
+    .dept-admin-table{width:100%;border-collapse:collapse;font-size:.78rem;margin-bottom:8px;}
+    .dept-admin-table thead th{background:var(--brand);color:#fff;padding:9px 12px;font-weight:600;font-size:.72rem;text-align:left;white-space:nowrap;}
+    .dept-admin-table tbody tr{border-bottom:1px solid #f1f5f9;transition:background .15s;}.dept-admin-table tbody tr:hover{background:#fafafa;}
+    .dept-admin-table tbody td{padding:9px 12px;vertical-align:top;color:#374151;}
+    .tbl-name{font-weight:600;color:#1e293b;font-size:.8rem;}.tbl-sub{font-size:.72rem;color:#64748b;margin-top:2px;}
+    .tbl-badge{display:inline-block;padding:2px 8px;border-radius:20px;font-size:.65rem;font-weight:600;background:rgba(146,26,2,0.08);color:var(--brand);margin:2px;}
+    .btn-edit{background:#4f46e5;color:#fff;border:none;border-radius:6px;padding:4px 10px;font-size:.7rem;cursor:pointer;transition:background .15s;}
+    .btn-edit:hover{background:#4338ca;}
+    .btn-del{background:#ef4444;color:#fff;border:none;border-radius:6px;padding:4px 10px;font-size:.7rem;cursor:pointer;transition:background .15s;margin-left:4px;}
+    .btn-del:hover{background:#dc2626;}
+    .import-banner{background:linear-gradient(135deg,#fff7ed,#fef3c7);border:1px solid #fcd34d;border-radius:12px;padding:16px 20px;margin-bottom:16px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;}
+    .import-banner p{font-size:.84rem;font-weight:700;color:#92400e;margin:0 0 2px;}.import-banner small{font-size:.74rem;color:#b45309;}
+    .btn-import{background:#d97706;color:#fff;border:none;border-radius:8px;padding:8px 16px;font-size:.78rem;font-weight:700;cursor:pointer;white-space:nowrap;transition:background .15s;}
+    .btn-import:hover:not(:disabled){background:#b45309;}.btn-import:disabled{opacity:.6;cursor:not-allowed;}
+    #dept-toast{position:fixed;bottom:24px;right:24px;z-index:99999;background:#1e293b;color:#fff;padding:12px 20px;border-radius:10px;font-size:.82rem;font-weight:600;box-shadow:0 8px 24px rgba(0,0,0,.25);opacity:0;transform:translateY(10px);transition:opacity .25s,transform .25s;pointer-events:none;max-width:320px;}
+    #dept-toast.show{opacity:1;transform:translateY(0);}#dept-toast.success{background:#16a34a;}#dept-toast.error{background:#dc2626;}
+    .hm-backdrop{display:none;position:fixed;inset:0;z-index:9998;background:rgba(0,0,0,.55);backdrop-filter:blur(3px);align-items:center;justify-content:center;}
+    .hm-backdrop.show{display:flex;animation:hmFadeIn .2s ease;}
+    @keyframes hmFadeIn{from{opacity:0}to{opacity:1}}
+    .hm-box{background:#fff;border-radius:16px;padding:24px;width:100%;max-width:560px;max-height:92vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.25);position:relative;animation:hmUp .25s ease;}
+    @keyframes hmUp{from{transform:translateY(20px);opacity:0}to{transform:translateY(0);opacity:1}}
+    .hm-box h5{font-size:1rem;font-weight:700;margin:0 0 16px;}.hm-close{position:absolute;top:14px;right:16px;background:none;border:none;font-size:1.2rem;cursor:pointer;color:#6b7280;}.hm-close:hover{color:#1e293b;}
+    .hm-group{margin-bottom:11px;}.hm-group label{display:block;font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#64748b;margin-bottom:4px;}
+    .hm-group input,.hm-group textarea,.hm-group select{width:100%;border:1px solid #e2e8f0;border-radius:8px;padding:8px 11px;font-size:.83rem;outline:none;transition:border-color .2s;font-family:inherit;}
+    .hm-group input:focus,.hm-group select:focus,.hm-group textarea:focus{border-color:var(--brand);}
+    .hm-group textarea{resize:vertical;min-height:64px;}
+    .hm-row{display:grid;grid-template-columns:1fr 1fr;gap:11px;}
+    .hm-save{flex:1;padding:9px;border-radius:8px;border:none;background:var(--brand);color:#fff;font-weight:600;font-size:.84rem;cursor:pointer;transition:background .15s;display:flex;align-items:center;justify-content:center;gap:6px;}
+    .hm-save:hover:not(:disabled){background:var(--brand-dark);}.hm-save:disabled{opacity:.6;cursor:not-allowed;}
+    .hm-cancel{padding:9px 16px;border-radius:8px;border:1px solid #e2e8f0;background:#f8fafc;font-size:.84rem;cursor:pointer;}.hm-cancel:hover{background:#f1f5f9;}
+    .hm-del-btn{padding:9px 14px;border-radius:8px;border:none;background:#ef4444;color:#fff;font-size:.82rem;cursor:pointer;}.hm-del-btn:hover{background:#dc2626;}
+    .hm-status{font-size:.76rem;text-align:center;margin-top:8px;min-height:16px;}
+    .spin{width:13px;height:13px;border:2px solid rgba(255,255,255,.4);border-top-color:#fff;border-radius:50%;animation:spinAnim .6s linear infinite;display:inline-block;}
+    @keyframes spinAnim{to{transform:rotate(360deg)}}
+    .skel{background:linear-gradient(90deg,#f1f5f9 25%,#e2e8f0 50%,#f1f5f9 75%);background-size:200% 100%;animation:skelShimmer 1.4s infinite;border-radius:8px;}
+    @keyframes skelShimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+    .tbl-empty{text-align:center;padding:32px;color:#94a3b8;font-size:.82rem;}
+    .admin-breadcrumb{display:flex;align-items:center;gap:6px;font-size:.72rem;color:#999;margin-bottom:12px;padding:5px 10px;background:rgba(217,35,45,0.04);border-radius:6px;border:1px solid var(--brand-border);}
+    .admin-breadcrumb span{color:var(--brand);font-weight:600;}
+    .migrate-banner{background:linear-gradient(135deg,#eff6ff,#dbeafe);border:1px solid #93c5fd;border-radius:12px;padding:16px 20px;margin-bottom:16px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;}
+    .migrate-banner p{font-size:.84rem;font-weight:700;color:#1e40af;margin:0 0 2px;}.migrate-banner small{font-size:.74rem;color:#3b82f6;}
+    .btn-migrate{background:#2563eb;color:#fff;border:none;border-radius:8px;padding:8px 16px;font-size:.78rem;font-weight:700;cursor:pointer;white-space:nowrap;transition:background .15s;}
+    .btn-migrate:hover:not(:disabled){background:#1d4ed8;}.btn-migrate:disabled{opacity:.6;cursor:not-allowed;}
+    @media(max-width:991px){
+      .dept-admin-layout{flex-direction:column;}.dept-admin-sidebar{width:100%;position:relative;top:0;}
+      .dept-nav{display:flex;overflow-x:auto;scrollbar-width:none;}.dept-nav::-webkit-scrollbar{display:none;}
+      .dept-nav .nav-item{border-bottom:none;border-right:1px solid rgba(217,35,45,0.2);flex-shrink:0;}
+      .dept-nav .nav-link{flex-direction:column;gap:2px;padding:8px 10px;border-left:none;border-bottom:3px solid transparent;font-size:.68rem;white-space:nowrap;text-align:center;}
+      .dept-nav .nav-link.active{border-left-color:transparent;border-bottom-color:var(--brand);}
+      .dept-nav .nav-link .nav-badge{margin:0;}
+      .dept-subnav{max-height:none!important;display:none;flex-wrap:nowrap;overflow-x:auto;background:#f8f8f8;border-top:1px solid var(--brand-border);}
+      .dept-subnav.open{display:flex;}.dept-subnav .sub-link{padding:7px 10px;font-size:.66rem;white-space:nowrap;}
+      .hm-row{grid-template-columns:1fr;}
+    }
+  </style>
+</head>
+<body>
+<div id="dept-toast"></div>
+<div class="sidebar-overlay" id="sidebar-overlay"></div>
+<div class="dash-layout">
+
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-brand">
+      <div class="sidebar-logo">AF</div>
+      <div><div class="sidebar-brand-text">AdminForge</div><div class="sidebar-brand-sub">Management System</div></div>
+    </div>
+    <div class="sidebar-menu">
+      <p class="sidebar-section">Main</p>
+      <a href="dashboard.html" class="sidebar-item"><span class="si-icon">⬡</span> Home</a>
+      <a href="about.html" class="sidebar-item"><span class="si-icon">ℹ</span> About Us</a>
+      <a href="administration.html" class="sidebar-item"><span class="si-icon">⛪</span> Administration</a>
+      <a href="parishes.html" class="sidebar-item"><span class="si-icon">⛪</span> Parishes</a>
+      <a href="priests.html" class="sidebar-item"><span class="si-icon">✝</span> Priests</a>
+      <a href="seminarians.html" class="sidebar-item"><span class="si-icon">🎓</span> Seminarians</a>
+      <a href="department.html" class="sidebar-item active"><span class="si-icon">🏢</span> Departments
+        <span class="si-badge" id="sidebar-dept-count">0</span>
+      </a>
+      <p class="sidebar-section" style="margin-top:14px;">Account</p>
+      <div class="sidebar-item" onclick="deptToast('Settings — coming soon!')"><span class="si-icon">⚙</span> Settings</div>
+      <div class="sidebar-item" onclick="deptToast('Profile editor — coming soon!')"><span class="si-icon">◉</span> My Profile</div>
+    </div>
+    <div class="sidebar-footer">
+      <div class="user-row">
+        <div class="user-row-avatar" id="sidebar-avatar">?</div>
+        <div><div class="user-row-name" id="sidebar-username">Loading…</div><div class="user-row-role" id="sidebar-role">—</div></div>
+      </div>
+    </div>
+  </aside>
+
+  <nav class="topbar">
+    <div class="topbar-left">
+      <button class="sidebar-toggle" id="sidebar-toggle">☰</button>
+      <div class="topbar-rule d-none d-lg-block"></div>
+      <div><div class="topbar-title">Departments</div><div class="topbar-sub">Manage Departments &amp; Institutions</div></div>
+    </div>
+    <div class="topbar-right">
+      <span id="role-badge" class="badge bg-secondary me-2" style="font-size:.8rem;padding:6px 12px;"></span>
+      <button class="btn btn-logout btn-sm" id="btn-logout">⏻ Logout</button>
+    </div>
+  </nav>
+
+  <main class="dash-main">
+
+    <!-- Stats -->
+    <div class="row g-3 mb-4">
+      <div class="col-6 col-xl-3"><div class="dept-stat-card"><div class="dept-stat-icon red"><i class="bi bi-building"></i></div><div><div class="dept-stat-value" id="st-depts">—</div><div class="dept-stat-label">Dept Entries</div></div></div></div>
+      <div class="col-6 col-xl-3"><div class="dept-stat-card"><div class="dept-stat-icon blue"><i class="bi bi-bank2"></i></div><div><div class="dept-stat-value" id="st-colleges">—</div><div class="dept-stat-label">Colleges</div></div></div></div>
+      <div class="col-6 col-xl-3"><div class="dept-stat-card"><div class="dept-stat-icon green"><i class="bi bi-book-half"></i></div><div><div class="dept-stat-value" id="st-schools">—</div><div class="dept-stat-label">Schools</div></div></div></div>
+      <div class="col-6 col-xl-3"><div class="dept-stat-card"><div class="dept-stat-icon gold"><i class="bi bi-hospital-fill"></i></div><div><div class="dept-stat-value" id="st-health">—</div><div class="dept-stat-label">Health Institutions</div></div></div></div>
+    </div>
+
+    <!-- Migrate Banner: old dept_* collections → new structure -->
+    <div class="migrate-banner" id="banner-migrate" style="display:none;">
+      <i class="bi bi-arrow-left-right" style="font-size:1.5rem;color:#2563eb;flex-shrink:0;"></i>
+      <div style="flex:1;">
+        <p>Migrate old collections → New single collection structure</p>
+        <small>Moves data from dept_departments, dept_colleges, etc. → departments/{section}/entries. Won't overwrite existing.</small>
+      </div>
+      <button id="btn-migrate" class="btn-migrate" onclick="migrateOldCollections()">⬆ Migrate Old Data</button>
+    </div>
+
+    <!-- Import Static Banner -->
+    <div class="import-banner" id="banner-static" style="border-color:#86efac;">
+      <i class="bi bi-clipboard-data-fill" style="font-size:1.5rem;color:#16a34a;flex-shrink:0;"></i>
+      <div style="flex:1;">
+        <p style="color:#14532d;">Import Departments, Movements &amp; Associations (hardcoded data)</p>
+        <small style="color:#166534;">Directly writes to new structure. One-time import.</small>
+      </div>
+      <button id="btn-import-static" class="btn-import" style="background:#16a34a;" onclick="importStaticData()">⬆ Import Static Data</button>
+    </div>
+
+    <!-- Import JSON Banner -->
+    <div class="import-banner" id="banner-json">
+      <i class="bi bi-database-fill-up" style="font-size:1.5rem;color:#d97706;flex-shrink:0;"></i>
+      <div style="flex:1;">
+        <p>Import Colleges, Schools, Health &amp; Other (institutions.json, schools.json)</p>
+        <small>One-time import to new structure. Existing records won't be overwritten.</small>
+      </div>
+      <button id="btn-import-json" class="btn-import" onclick="importAllJSON()">⬆ Import JSON Files</button>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-header-title"><div class="card-header-pill">🏢</div><span>Departments &amp; Institutions</span></div>
+      </div>
+      <div class="card-body">
+        <div class="dept-admin-layout">
+
+          <!-- Sidebar Nav -->
+          <div class="dept-admin-sidebar">
+            <div class="dept-nav-card">
+              <div class="nav-section-label">Sections</div>
+              <ul class="dept-nav" id="deptNav">
+                <li class="nav-item"><a class="nav-link active" data-tab="tab-departments" href="#"><i class="bi bi-diagram-3"></i><span>Departments</span><span class="nav-badge" id="nb-departments">0</span></a></li>
+                <li class="nav-item"><a class="nav-link" data-tab="tab-movements" href="#"><i class="bi bi-people"></i><span>Movements</span><span class="nav-badge" id="nb-movements">0</span></a></li>
+                <li class="nav-item"><a class="nav-link" data-tab="tab-associations" href="#"><i class="bi bi-link-45deg"></i><span>Associations</span><span class="nav-badge" id="nb-associations">0</span></a></li>
+                <li class="nav-item"><a class="nav-link" data-tab="tab-education" data-expandable="true" href="#"><i class="bi bi-mortarboard"></i><span>Educational</span><i class="nav-arrow bi bi-chevron-right"></i></a>
+                  <ul class="dept-subnav" id="subnav-education">
+                    <li class="sub-item"><a class="sub-link" data-tab="tab-edu-colleges" href="#">Colleges</a></li>
+                    <li class="sub-item"><a class="sub-link" data-tab="tab-edu-schools" href="#">Schools</a></li>
+                    <li class="sub-item"><a class="sub-link" data-tab="tab-edu-hostels" href="#">Hostels</a></li>
+                  </ul>
+                </li>
+                <li class="nav-item"><a class="nav-link" data-tab="tab-health" data-expandable="true" href="#"><i class="bi bi-hospital"></i><span>Health Care</span><i class="nav-arrow bi bi-chevron-right"></i></a>
+                  <ul class="dept-subnav" id="subnav-health">
+                    <li class="sub-item"><a class="sub-link" data-tab="tab-health-p1" href="#">Hospitals &amp; Care Homes</a></li>
+                    <li class="sub-item"><a class="sub-link" data-tab="tab-health-p2" href="#">Specialized Care</a></li>
+                  </ul>
+                </li>
+                <li class="nav-item"><a class="nav-link" data-tab="tab-other" data-expandable="true" href="#"><i class="bi bi-grid-3x3-gap"></i><span>Family &amp; Other</span><i class="nav-arrow bi bi-chevron-right"></i></a>
+                  <ul class="dept-subnav" id="subnav-other">
+                    <li class="sub-item"><a class="sub-link" data-tab="tab-other-p1" href="#">Counselling &amp; Retreat</a></li>
+                    <li class="sub-item"><a class="sub-link" data-tab="tab-other-p2" href="#">Social &amp; Media</a></li>
+                  </ul>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Content -->
+          <div class="dept-admin-content" id="deptContent">
+            <div id="dept-skeleton"><div class="skel" style="height:40px;margin-bottom:14px;"></div><div class="skel" style="height:200px;margin-bottom:12px;opacity:.7;"></div><div class="skel" style="height:160px;opacity:.4;"></div></div>
+
+            <div id="tab-departments" class="tab-pane-dept" style="display:none;">
+              <div class="section-header"><h3>Departments</h3><button class="btn-add admin-only" onclick="openAddDept()" style="display:none;">+ Add Entry</button></div>
+              <div id="departments-list"></div>
+            </div>
+
+            <div id="tab-movements" class="tab-pane-dept" style="display:none;">
+              <div class="section-header"><h3>Movements &amp; Apostolates</h3><button class="btn-add admin-only" onclick="openAddRecord('movements','Movement')" style="display:none;">+ Add</button></div>
+              <div id="movements-list"></div>
+            </div>
+
+            <div id="tab-associations" class="tab-pane-dept" style="display:none;">
+              <div class="section-header"><h3>Associations</h3><button class="btn-add admin-only" onclick="openAddRecord('associations','Association')" style="display:none;">+ Add</button></div>
+              <div id="associations-list"></div>
+            </div>
+
+            <div id="tab-education" class="tab-pane-dept" style="display:none;">
+              <div class="section-header"><h3>Educational Institutions</h3></div>
+              <p style="color:#64748b;font-size:.85rem;">Select a sub-section from the sidebar.</p>
+              <div class="row g-3 mt-1">
+                <div class="col-4"><div class="dept-stat-card" style="cursor:pointer;flex-direction:column;text-align:center;padding:20px 10px;" onclick="activateTab('tab-edu-colleges')"><i class="bi bi-bank2" style="font-size:1.6rem;color:var(--brand);"></i><div style="font-size:.78rem;font-weight:600;margin-top:6px;">Colleges</div></div></div>
+                <div class="col-4"><div class="dept-stat-card" style="cursor:pointer;flex-direction:column;text-align:center;padding:20px 10px;" onclick="activateTab('tab-edu-schools')"><i class="bi bi-book-half" style="font-size:1.6rem;color:var(--brand);"></i><div style="font-size:.78rem;font-weight:600;margin-top:6px;">Schools</div></div></div>
+                <div class="col-4"><div class="dept-stat-card" style="cursor:pointer;flex-direction:column;text-align:center;padding:20px 10px;" onclick="activateTab('tab-edu-hostels')"><i class="bi bi-house-door" style="font-size:1.6rem;color:var(--brand);"></i><div style="font-size:.78rem;font-weight:600;margin-top:6px;">Hostels</div></div></div>
+              </div>
+            </div>
+
+            <div id="tab-edu-colleges" class="tab-pane-dept" style="display:none;">
+              <div class="admin-breadcrumb"><span>Educational</span><i class="bi bi-chevron-right" style="font-size:.65rem;"></i>Colleges</div>
+              <div class="section-header"><h3>Colleges</h3><button class="btn-add admin-only" onclick="openAddRecord('colleges','College')" style="display:none;">+ Add College</button></div>
+              <div id="colleges-list"></div>
+            </div>
+
+            <div id="tab-edu-schools" class="tab-pane-dept" style="display:none;">
+              <div class="admin-breadcrumb"><span>Educational</span><i class="bi bi-chevron-right" style="font-size:.65rem;"></i>Schools</div>
+              <div class="section-header"><h3>Schools</h3><button class="btn-add admin-only" onclick="openAddRecord('schools','School')" style="display:none;">+ Add School</button></div>
+              <div id="schools-list"></div>
+            </div>
+
+            <div id="tab-edu-hostels" class="tab-pane-dept" style="display:none;">
+              <div class="admin-breadcrumb"><span>Educational</span><i class="bi bi-chevron-right" style="font-size:.65rem;"></i>Hostels</div>
+              <div class="section-header"><h3>Hostels &amp; Boarding Houses</h3><button class="btn-add admin-only" onclick="openAddRecord('hostels','Hostel')" style="display:none;">+ Add Hostel</button></div>
+              <div id="hostels-list"></div>
+            </div>
+
+            <div id="tab-health" class="tab-pane-dept" style="display:none;">
+              <div class="section-header"><h3>Health Care &amp; Charitable</h3></div>
+              <p style="color:#64748b;font-size:.85rem;">Select a sub-section from the sidebar.</p>
+              <div class="row g-3 mt-1">
+                <div class="col-6"><div class="dept-stat-card" style="cursor:pointer;flex-direction:column;text-align:center;padding:20px;" onclick="activateTab('tab-health-p1')"><i class="bi bi-hospital-fill" style="font-size:1.6rem;color:var(--brand);"></i><div style="font-size:.78rem;font-weight:600;margin-top:6px;">Hospitals &amp; Care Homes</div></div></div>
+                <div class="col-6"><div class="dept-stat-card" style="cursor:pointer;flex-direction:column;text-align:center;padding:20px;" onclick="activateTab('tab-health-p2')"><i class="bi bi-heart-pulse-fill" style="font-size:1.6rem;color:var(--brand);"></i><div style="font-size:.78rem;font-weight:600;margin-top:6px;">Specialized Care</div></div></div>
+              </div>
+            </div>
+
+            <div id="tab-health-p1" class="tab-pane-dept" style="display:none;">
+              <div class="admin-breadcrumb"><span>Health Care</span><i class="bi bi-chevron-right" style="font-size:.65rem;"></i>Hospitals &amp; Care Homes</div>
+              <div class="section-header"><h3>Hospitals &amp; Care Homes</h3><button class="btn-add admin-only" onclick="openAddRecord('health_p1','Health Institution')" style="display:none;">+ Add</button></div>
+              <div id="health-p1-list"></div>
+            </div>
+
+            <div id="tab-health-p2" class="tab-pane-dept" style="display:none;">
+              <div class="admin-breadcrumb"><span>Health Care</span><i class="bi bi-chevron-right" style="font-size:.65rem;"></i>Specialized Care</div>
+              <div class="section-header"><h3>Specialized Care</h3><button class="btn-add admin-only" onclick="openAddRecord('health_p2','Specialized Care')" style="display:none;">+ Add</button></div>
+              <div id="health-p2-list"></div>
+            </div>
+
+            <div id="tab-other" class="tab-pane-dept" style="display:none;">
+              <div class="section-header"><h3>Family &amp; Other Services</h3></div>
+              <p style="color:#64748b;font-size:.85rem;">Select a sub-section from the sidebar.</p>
+              <div class="row g-3 mt-1">
+                <div class="col-6"><div class="dept-stat-card" style="cursor:pointer;flex-direction:column;text-align:center;padding:20px;" onclick="activateTab('tab-other-p1')"><i class="bi bi-people-fill" style="font-size:1.6rem;color:var(--brand);"></i><div style="font-size:.78rem;font-weight:600;margin-top:6px;">Counselling &amp; Retreat</div></div></div>
+                <div class="col-6"><div class="dept-stat-card" style="cursor:pointer;flex-direction:column;text-align:center;padding:20px;" onclick="activateTab('tab-other-p2')"><i class="bi bi-broadcast-pin" style="font-size:1.6rem;color:var(--brand);"></i><div style="font-size:.78rem;font-weight:600;margin-top:6px;">Social &amp; Media</div></div></div>
+              </div>
+            </div>
+
+            <div id="tab-other-p1" class="tab-pane-dept" style="display:none;">
+              <div class="admin-breadcrumb"><span>Family &amp; Other</span><i class="bi bi-chevron-right" style="font-size:.65rem;"></i>Counselling &amp; Retreat</div>
+              <div class="section-header"><h3>Counselling &amp; Retreat Centres</h3><button class="btn-add admin-only" onclick="openAddRecord('other_p1','Counselling/Retreat')" style="display:none;">+ Add</button></div>
+              <div id="other-p1-list"></div>
+            </div>
+
+            <div id="tab-other-p2" class="tab-pane-dept" style="display:none;">
+              <div class="admin-breadcrumb"><span>Family &amp; Other</span><i class="bi bi-chevron-right" style="font-size:.65rem;"></i>Social &amp; Media</div>
+              <div class="section-header"><h3>Social &amp; Media Services</h3><button class="btn-add admin-only" onclick="openAddRecord('other_p2','Social/Media')" style="display:none;">+ Add</button></div>
+              <div id="other-p2-list"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- Department Modal -->
+<div id="m-dept" class="hm-backdrop">
+  <div class="hm-box">
+    <button class="hm-close" onclick="closeDeptM()">✕</button>
+    <h5 id="deptm-title">Add Department Entry</h5>
+    <div class="hm-group"><label>Department Name *</label><input type="text" id="deptm-deptname" placeholder="e.g. Department of Finance"/></div>
+    <div class="hm-group"><label>Sub-unit / Office Name</label><input type="text" id="deptm-unitname" placeholder="e.g. Liturgy Commission"/></div>
+    <div class="hm-row">
+      <div class="hm-group"><label>Role</label><input type="text" id="deptm-role" placeholder="e.g. Director"/></div>
+      <div class="hm-group"><label>Person Name</label><input type="text" id="deptm-person" placeholder="e.g. Rev. Fr. Thomas Joseph"/></div>
+    </div>
+    <div class="hm-row">
+      <div class="hm-group"><label>Phone</label><input type="text" id="deptm-phone" placeholder="e.g. 94477 76920"/></div>
+      <div class="hm-group"><label>Email</label><input type="email" id="deptm-email" placeholder="e.g. info@example.org"/></div>
+    </div>
+    <div class="hm-group"><label>Website</label><input type="text" id="deptm-website" placeholder="e.g. www.example.org"/></div>
+    <div style="display:flex;gap:10px;margin-top:16px;flex-wrap:wrap;">
+      <button class="hm-cancel" onclick="closeDeptM()">Cancel</button>
+      <button class="hm-save" id="btn-deptm-save" onclick="saveDeptEntry()">💾 Save</button>
+      <button class="hm-del-btn" id="btn-deptm-del" onclick="deleteDeptEntry()" style="display:none;">🗑 Delete</button>
+    </div>
+    <div class="hm-status" id="deptm-status"></div>
+  </div>
+</div>
+
+<!-- Generic Record Modal -->
+<div id="m-record" class="hm-backdrop">
+  <div class="hm-box">
+    <button class="hm-close" onclick="closeRecM()">✕</button>
+    <h5 id="recm-title">Add Record</h5>
+    <div class="hm-group"><label>Name / Title *</label><input type="text" id="recm-name" placeholder="e.g. St. Thomas Hospital"/></div>
+    <div class="hm-row">
+      <div class="hm-group"><label>Section</label><input type="text" id="recm-section" placeholder="e.g. Arts & Science"/></div>
+      <div class="hm-group"><label>Sub-section</label><input type="text" id="recm-subsection" placeholder="e.g. Hospitals"/></div>
+    </div>
+    <div class="hm-row">
+      <div class="hm-group"><label>Location</label><input type="text" id="recm-location" placeholder="e.g. Changanacherry"/></div>
+      <div class="hm-group"><label>Year Established</label><input type="text" id="recm-year" placeholder="e.g. 1953"/></div>
+    </div>
+    <div class="hm-row">
+      <div class="hm-group"><label>Phone</label><input type="text" id="recm-phone" placeholder="e.g. 0481 2420040"/></div>
+      <div class="hm-group"><label>Mobile</label><input type="text" id="recm-mobile" placeholder="e.g. 94477 76920"/></div>
+    </div>
+    <div class="hm-row">
+      <div class="hm-group"><label>Email</label><input type="email" id="recm-email" placeholder="e.g. info@example.com"/></div>
+      <div class="hm-group"><label>Website</label><input type="text" id="recm-website" placeholder="e.g. www.example.com"/></div>
+    </div>
+    <div class="hm-group"><label>Ownership / Affiliation</label><input type="text" id="recm-ownership" placeholder="e.g. Archeparchy of Changanacherry"/></div>
+    <div class="hm-group"><label>Management (role: name: phone — one per line)</label><textarea id="recm-management" placeholder="Director: Rev. Fr. Thomas Joseph: 9447776920&#10;Secretary: Mr. John Mathew: 9447812345"></textarea></div>
+    <div class="hm-group"><label>Notes</label><textarea id="recm-notes" placeholder="Any additional information…"></textarea></div>
+    <div style="display:flex;gap:10px;margin-top:16px;flex-wrap:wrap;">
+      <button class="hm-cancel" onclick="closeRecM()">Cancel</button>
+      <button class="hm-save" id="btn-recm-save" onclick="saveRecord()">💾 Save</button>
+      <button class="hm-del-btn" id="btn-recm-del" onclick="deleteRecord()" style="display:none;">🗑 Delete</button>
+    </div>
+    <div class="hm-status" id="recm-status"></div>
+  </div>
+</div>
+
+<!-- Delete Confirm -->
+<div id="m-del-confirm" class="hm-backdrop">
+  <div class="hm-box" style="max-width:380px;">
+    <h5>⚠️ Confirm Delete</h5>
+    <p style="font-size:.84rem;color:#374151;" id="del-confirm-text">Are you sure?</p>
+    <div style="display:flex;gap:10px;margin-top:16px;">
+      <button class="hm-cancel" onclick="document.getElementById('m-del-confirm').classList.remove('show')">Cancel</button>
+      <button id="btn-del-confirm" style="flex:1;padding:9px;border-radius:8px;border:none;background:#ef4444;color:#fff;font-weight:600;font-size:.84rem;cursor:pointer;" onclick="confirmDelete()">Yes, Delete</button>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import {
+  getFirestore, doc, getDoc, setDoc,
+  collection, addDoc, getDocs, updateDoc, deleteDoc,
+  serverTimestamp, query, orderBy
+} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+const FC = {
+  apiKey:"AIzaSyArM8sv7J1RUj4XvAJhJd40tzA7Yc8BGXY",
+  authDomain:"admin-dashboard-ed62c.firebaseapp.com",
+  projectId:"admin-dashboard-ed62c",
+  storageBucket:"admin-dashboard-ed62c.firebasestorage.app",
+  messagingSenderId:"560027475135",
+  appId:"1:560027475135:web:3fae0cb0268729ae79fa0a"
+};
+const ADMIN_EMAIL = "issacnewton1503@gmail.com";
+const app = initializeApp(FC);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+// ═══════════════════════════════════════════════
+// NEW PATH HELPERS
+// departments/{section}/entries/{entryId}
+// ═══════════════════════════════════════════════
+const SECTIONS = ['departments','movements','associations','colleges','schools','hostels','health_p1','health_p2','other_p1','other_p2'];
+
+function entriesCol(section) {
+  return collection(db, 'departments', section, 'entries');
+}
+function entryDoc(section, id) {
+  return doc(db, 'departments', section, 'entries', id);
+}
+
+// Tab → section key map
+const TAB_SECTION = {
+  'tab-departments':  'departments',
+  'tab-movements':    'movements',
+  'tab-associations': 'associations',
+  'tab-edu-colleges': 'colleges',
+  'tab-edu-schools':  'schools',
+  'tab-edu-hostels':  'hostels',
+  'tab-health-p1':    'health_p1',
+  'tab-health-p2':    'health_p2',
+  'tab-other-p1':     'other_p1',
+  'tab-other-p2':     'other_p2',
+};
+
+// List container map
+const TAB_LIST = {
+  'tab-departments':  'departments-list',
+  'tab-movements':    'movements-list',
+  'tab-associations': 'associations-list',
+  'tab-edu-colleges': 'colleges-list',
+  'tab-edu-schools':  'schools-list',
+  'tab-edu-hostels':  'hostels-list',
+  'tab-health-p1':    'health-p1-list',
+  'tab-health-p2':    'health-p2-list',
+  'tab-other-p1':     'other-p1-list',
+  'tab-other-p2':     'other-p2-list',
+};
+
+let userRole = null, editId = null, editSection = null;
+let pendingDelId = null, pendingDelSection = null;
+let currentTab = 'tab-departments';
+let allData = {}; // { section: [...docs] }
+
+const esc = s => String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+
+// ── Toast ──
+window.deptToast = function(msg, type="", dur=3000){
+  const t = document.getElementById("dept-toast");
+  t.textContent = msg; t.className = "show" + (type ? " "+type : "");
+  clearTimeout(t._t); t._t = setTimeout(() => t.className = "", dur);
+};
+
+function busyBtn(id, on){
+  const b = document.getElementById(id); if(!b) return;
+  if(on){ b._lbl = b.innerHTML; b.disabled = true; b.innerHTML = `<span class="spin"></span> Saving…`; }
+  else { b.disabled = false; b.innerHTML = b._lbl || "Save"; }
+}
+
+// ── Auth ──
+document.body.style.display = "none";
+onAuthStateChanged(auth, async user => {
+  if(!user){ window.location.href = "index.html"; return; }
+  const snap = await getDoc(doc(db, "users", user.uid));
+  if(!snap.exists()){ await signOut(auth); window.location.href = "index.html"; return; }
+  const prof = snap.data();
+  userRole = user.email === ADMIN_EMAIL ? "Admin" : "User";
+  const uname = prof.username || user.displayName || user.email;
+  document.getElementById("sidebar-username").textContent = uname;
+  document.getElementById("sidebar-role").textContent = userRole;
+  document.getElementById("sidebar-avatar").textContent = uname[0].toUpperCase();
+  const badge = document.getElementById("role-badge");
+  badge.textContent = userRole;
+  badge.className = userRole === "Admin" ? "badge bg-warning text-dark me-2" : "badge bg-primary me-2";
+  if(userRole === "Admin") document.querySelectorAll(".admin-only").forEach(el => el.style.display = "");
+  document.body.style.display = "";
+  await loadAllData();
+});
+
+document.getElementById("btn-logout").addEventListener("click", async () => { await signOut(auth); window.location.href = "index.html"; });
+document.getElementById("sidebar-toggle").addEventListener("click", () => { document.getElementById("sidebar").classList.toggle("open"); document.getElementById("sidebar-overlay").classList.toggle("show"); });
+document.getElementById("sidebar-overlay").addEventListener("click", () => { document.getElementById("sidebar").classList.remove("open"); document.getElementById("sidebar-overlay").classList.remove("show"); });
+
+// ── Load All Data ──
+async function loadAllData(){
+  document.getElementById("dept-skeleton").style.display = "";
+  try {
+    // Ensure parent docs exist (needed for subcollections to be readable)
+    await Promise.all(SECTIONS.map(async sec => {
+      const parentRef = doc(db, 'departments', sec);
+      const parentSnap = await getDoc(parentRef);
+      if(!parentSnap.exists()){
+        await setDoc(parentRef, { section: sec, createdAt: serverTimestamp() });
+      }
+    }));
+
+    await Promise.all(SECTIONS.map(async sec => {
+      try {
+        const sn = await getDocs(query(entriesCol(sec), orderBy("order","asc")));
+        allData[sec] = sn.docs.map(d => ({ id: d.id, ...d.data() }));
+      } catch(e) {
+        const sn = await getDocs(entriesCol(sec));
+        allData[sec] = sn.docs.map(d => ({ id: d.id, ...d.data() }));
+      }
+    }));
+    updateStats();
+    renderCurrentTab();
+  } catch(err) {
+    deptToast("❌ Load failed: " + err.message, "error");
+  } finally {
+    document.getElementById("dept-skeleton").style.display = "none";
+    document.getElementById(currentTab).style.display = "";
+  }
+}
+
+function updateStats(){
+  document.getElementById("st-depts").textContent = (allData['departments']||[]).length;
+  document.getElementById("st-colleges").textContent = (allData['colleges']||[]).length;
+  document.getElementById("st-schools").textContent = (allData['schools']||[]).length;
+  document.getElementById("st-health").textContent = ((allData['health_p1']||[]).length + (allData['health_p2']||[]).length);
+  document.getElementById("nb-departments").textContent = (allData['departments']||[]).length;
+  document.getElementById("nb-movements").textContent = (allData['movements']||[]).length;
+  document.getElementById("nb-associations").textContent = (allData['associations']||[]).length;
+  document.getElementById("sidebar-dept-count").textContent = SECTIONS.reduce((s,sec) => s + (allData[sec]||[]).length, 0);
+}
+
+// ── Tab Navigation ──
+window.activateTab = function(tabId){
+  document.querySelectorAll('.tab-pane-dept').forEach(p => p.style.display = 'none');
+  const target = document.getElementById(tabId);
+  if(target){ target.style.display = ""; target.style.animation = "none"; void target.offsetWidth; target.style.animation = ""; }
+  currentTab = tabId;
+
+  document.querySelectorAll('#deptNav .nav-link').forEach(l => l.classList.remove('active','open'));
+  document.querySelectorAll('.dept-subnav .sub-link').forEach(l => l.classList.remove('active'));
+  document.querySelectorAll('.dept-subnav').forEach(n => n.classList.remove('open'));
+
+  const subnavMap = {'tab-edu-colleges':'subnav-education','tab-edu-schools':'subnav-education','tab-edu-hostels':'subnav-education','tab-health-p1':'subnav-health','tab-health-p2':'subnav-health','tab-other-p1':'subnav-other','tab-other-p2':'subnav-other'};
+  const parentTabMap = {'tab-edu-colleges':'tab-education','tab-edu-schools':'tab-education','tab-edu-hostels':'tab-education','tab-health-p1':'tab-health','tab-health-p2':'tab-health','tab-other-p1':'tab-other','tab-other-p2':'tab-other'};
+
+  if(subnavMap[tabId]){
+    const sn = document.getElementById(subnavMap[tabId]); if(sn) sn.classList.add('open');
+    const pl = document.querySelector(`#deptNav > li > .nav-link[data-tab="${parentTabMap[tabId]}"]`); if(pl) pl.classList.add('active','open');
+    const sl = document.querySelector(`.dept-subnav .sub-link[data-tab="${tabId}"]`); if(sl) sl.classList.add('active');
+  } else {
+    const tl = document.querySelector(`#deptNav > li > .nav-link[data-tab="${tabId}"]`); if(tl) tl.classList.add('active');
+    if(['tab-education','tab-health','tab-other'].includes(tabId)){
+      tl && tl.classList.add('open');
+      const snId = tabId==='tab-education'?'subnav-education':tabId==='tab-health'?'subnav-health':'subnav-other';
+      const sn = document.getElementById(snId); if(sn) sn.classList.add('open');
+    }
+  }
+  renderCurrentTab();
+};
+
+document.querySelectorAll('#deptNav > li > .nav-link').forEach(link => {
+  link.addEventListener('click', function(e){
+    e.preventDefault();
+    const tabId = this.dataset.tab, isExp = this.dataset.expandable === 'true';
+    if(isExp){
+      const isOpen = this.classList.contains('open');
+      document.querySelectorAll('.dept-subnav').forEach(n => n.classList.remove('open'));
+      document.querySelectorAll('#deptNav > li > .nav-link').forEach(l => l.classList.remove('open'));
+      if(!isOpen){ this.classList.add('open'); const sn = this.closest('.nav-item').querySelector('.dept-subnav'); if(sn) sn.classList.add('open'); }
+    }
+    activateTab(tabId);
+  });
+});
+document.querySelectorAll('.dept-subnav .sub-link').forEach(link => { link.addEventListener('click', function(e){ e.preventDefault(); activateTab(this.dataset.tab); }); });
+
+// ── Render ──
+function renderCurrentTab(){
+  const section = TAB_SECTION[currentTab]; if(!section) return;
+  const data = allData[section] || [];
+  if(currentTab === 'tab-departments') renderDepartmentsTab(data);
+  else renderGenericTab(currentTab, section, data);
+}
+
+function renderDepartmentsTab(data){
+  const container = document.getElementById("departments-list");
+  if(!data.length){ container.innerHTML = '<div class="tbl-empty">No entries yet. Use Import button above.</div>'; return; }
+  const groups = {};
+  data.forEach(row => { const g = row.deptName||"Uncategorized"; if(!groups[g]) groups[g]=[]; groups[g].push(row); });
+  let html = '';
+  Object.entries(groups).forEach(([gname, rows]) => {
+    html += `<div class="subsection-header"><h4>${esc(gname)}</h4>${userRole==='Admin'?`<button class="btn-add-sub" onclick="openAddDept('${esc(gname)}')">+ Add Entry</button>`:''}</div>
+    <div class="table-responsive"><table class="dept-admin-table">
+      <thead><tr><th>#</th><th>Sub-unit</th><th>Role</th><th>Person</th><th>Phone</th><th>Website/Email</th>${userRole==='Admin'?'<th>Actions</th>':''}</tr></thead><tbody>`;
+    rows.forEach((row,i) => {
+      html += `<tr><td style="color:#94a3b8;">${i+1}</td>
+        <td><div class="tbl-name">${esc(row.unitName||'—')}</div></td>
+        <td>${esc(row.role||'—')}</td><td>${esc(row.person||'—')}</td><td>${esc(row.phone||'—')}</td>
+        <td style="font-size:.72rem;">${row.website?`<div><a href="https://${esc(row.website)}" target="_blank">${esc(row.website)}</a></div>`:''}${row.email?`<div>${esc(row.email)}</div>`:''}</td>
+        ${userRole==='Admin'?`<td><button class="btn-edit" onclick="openEditDept('${row.id}')">✏️ Edit</button><button class="btn-del" onclick="askDelete('${row.id}','departments','${esc(row.person||gname)}')">🗑</button></td>`:''}</tr>`;
+    });
+    html += `</tbody></table></div>`;
+  });
+  container.innerHTML = html;
+}
+
+function renderGenericTab(tabId, section, data){
+  const container = document.getElementById(TAB_LIST[tabId]); if(!container) return;
+  if(!data.length){ container.innerHTML = '<div class="tbl-empty">No records yet. Use Import button above.</div>'; return; }
+  const groups = {};
+  data.forEach(row => { const g = row.subsection||row.section||"General"; if(!groups[g]) groups[g]=[]; groups[g].push(row); });
+  let html = '';
+  Object.entries(groups).forEach(([gname, rows]) => {
+    html += `<div class="subsection-header"><h5>${esc(gname)}</h5></div>
+    <div class="table-responsive"><table class="dept-admin-table">
+      <thead><tr><th>#</th><th>Name</th><th>Location / Year</th><th>Contact</th><th>Management</th>${userRole==='Admin'?'<th>Actions</th>':''}</tr></thead><tbody>`;
+    rows.forEach((row,i) => {
+      html += `<tr><td style="color:#94a3b8;">${i+1}</td>
+        <td><div class="tbl-name">${esc(row.name||'—')}</div>${row.website?`<div class="tbl-sub"><a href="https://${esc(row.website)}" target="_blank">${esc(row.website)}</a></div>`:''}${row.ownership?`<span class="tbl-badge">${esc(row.ownership)}</span>`:''}</td>
+        <td>${row.location?`<div>${esc(row.location)}</div>`:''}${row.year?`<div class="tbl-sub">Est. ${esc(row.year)}</div>`:''}</td>
+        <td style="font-size:.74rem;">${row.phone?`<div>📞 ${esc(row.phone)}</div>`:''}${row.mobile?`<div>📱 ${esc(row.mobile)}</div>`:''}${row.email?`<div>✉ ${esc(row.email)}</div>`:''}</td>
+        <td style="font-size:.73rem;">${esc(row.management||'').replace(/\n/g,'<br>')}</td>
+        ${userRole==='Admin'?`<td><button class="btn-edit" onclick="openEditRecord('${row.id}','${section}')">✏️ Edit</button><button class="btn-del" onclick="askDelete('${row.id}','${section}','${esc(row.name||'')}')">🗑</button></td>`:''}</tr>`;
+    });
+    html += `</tbody></table></div>`;
+  });
+  container.innerHTML = html;
+}
+
+// ── Department Modal ──
+window.openAddDept = function(prefill=''){
+  if(userRole!=='Admin'){ deptToast('⛔ Admin only'); return; }
+  editId = null; editSection = 'departments';
+  document.getElementById('deptm-title').textContent = 'Add Department Entry';
+  ['deptm-deptname','deptm-unitname','deptm-role','deptm-person','deptm-phone','deptm-email','deptm-website'].forEach(id => { const el = document.getElementById(id); if(el) el.value = ''; });
+  document.getElementById('deptm-deptname').value = prefill;
+  document.getElementById('deptm-status').textContent = '';
+  document.getElementById('btn-deptm-del').style.display = 'none';
+  busyBtn('btn-deptm-save', false);
+  document.getElementById('m-dept').classList.add('show');
+};
+window.openEditDept = function(id){
+  if(userRole!=='Admin'){ deptToast('⛔ Admin only'); return; }
+  const row = (allData['departments']||[]).find(x => x.id === id); if(!row) return;
+  editId = id; editSection = 'departments';
+  document.getElementById('deptm-title').textContent = 'Edit Department Entry';
+  document.getElementById('deptm-deptname').value = row.deptName||'';
+  document.getElementById('deptm-unitname').value = row.unitName||'';
+  document.getElementById('deptm-role').value = row.role||'';
+  document.getElementById('deptm-person').value = row.person||'';
+  document.getElementById('deptm-phone').value = row.phone||'';
+  document.getElementById('deptm-email').value = row.email||'';
+  document.getElementById('deptm-website').value = row.website||'';
+  document.getElementById('deptm-status').textContent = '';
+  document.getElementById('btn-deptm-del').style.display = '';
+  busyBtn('btn-deptm-save', false);
+  document.getElementById('m-dept').classList.add('show');
+};
+window.closeDeptM = function(){ document.getElementById('m-dept').classList.remove('show'); };
+document.getElementById('m-dept').addEventListener('click', e => { if(e.target===e.currentTarget) window.closeDeptM(); });
+
+window.saveDeptEntry = async function(){
+  const deptName = document.getElementById('deptm-deptname').value.trim();
+  const st = document.getElementById('deptm-status');
+  if(!deptName){ st.textContent = '⚠ Department name required.'; st.style.color='#ef4444'; return; }
+  busyBtn('btn-deptm-save', true); st.textContent = '';
+  const payload = {
+    deptName,
+    unitName: document.getElementById('deptm-unitname').value.trim(),
+    role: document.getElementById('deptm-role').value.trim(),
+    person: document.getElementById('deptm-person').value.trim(),
+    phone: document.getElementById('deptm-phone').value.trim(),
+    email: document.getElementById('deptm-email').value.trim(),
+    website: document.getElementById('deptm-website').value.trim(),
+    updated_at: serverTimestamp()
+  };
+  try {
+    if(editId){ await updateDoc(entryDoc('departments', editId), payload); deptToast('✅ Updated!','success'); }
+    else { payload.order = (allData['departments']||[]).length; payload.created_at = serverTimestamp(); await addDoc(entriesCol('departments'), payload); deptToast('✅ Added!','success'); }
+    window.closeDeptM(); await refreshSection('departments'); renderCurrentTab();
+  } catch(err){ st.textContent = '❌ ' + err.message; st.style.color='#ef4444'; busyBtn('btn-deptm-save', false); }
+};
+window.deleteDeptEntry = function(){ if(!editId) return; const row=(allData['departments']||[]).find(x=>x.id===editId); askDelete(editId,'departments',row?.person||'this entry'); window.closeDeptM(); };
+
+// ── Generic Modal ──
+window.openAddRecord = function(section, label){
+  if(userRole!=='Admin'){ deptToast('⛔ Admin only'); return; }
+  editId = null; editSection = section;
+  document.getElementById('recm-title').textContent = 'Add ' + label;
+  ['recm-name','recm-section','recm-subsection','recm-location','recm-year','recm-phone','recm-mobile','recm-email','recm-website','recm-ownership','recm-management','recm-notes'].forEach(id => { const el = document.getElementById(id); if(el) el.value = ''; });
+  document.getElementById('recm-status').textContent = '';
+  document.getElementById('btn-recm-del').style.display = 'none';
+  busyBtn('btn-recm-save', false);
+  document.getElementById('m-record').classList.add('show');
+};
+window.openEditRecord = function(id, section){
+  if(userRole!=='Admin'){ deptToast('⛔ Admin only'); return; }
+  const row = (allData[section]||[]).find(x => x.id === id); if(!row) return;
+  editId = id; editSection = section;
+  document.getElementById('recm-title').textContent = 'Edit Record';
+  document.getElementById('recm-name').value = row.name||'';
+  document.getElementById('recm-section').value = row.section||'';
+  document.getElementById('recm-subsection').value = row.subsection||'';
+  document.getElementById('recm-location').value = row.location||'';
+  document.getElementById('recm-year').value = row.year||'';
+  document.getElementById('recm-phone').value = row.phone||'';
+  document.getElementById('recm-mobile').value = row.mobile||'';
+  document.getElementById('recm-email').value = row.email||'';
+  document.getElementById('recm-website').value = row.website||'';
+  document.getElementById('recm-ownership').value = row.ownership||'';
+  document.getElementById('recm-management').value = row.management||'';
+  document.getElementById('recm-notes').value = row.notes||'';
+  document.getElementById('recm-status').textContent = '';
+  document.getElementById('btn-recm-del').style.display = '';
+  busyBtn('btn-recm-save', false);
+  document.getElementById('m-record').classList.add('show');
+};
+window.closeRecM = function(){ document.getElementById('m-record').classList.remove('show'); };
+document.getElementById('m-record').addEventListener('click', e => { if(e.target===e.currentTarget) window.closeRecM(); });
+
+window.saveRecord = async function(){
+  const name = document.getElementById('recm-name').value.trim();
+  const st = document.getElementById('recm-status');
+  if(!name){ st.textContent = '⚠ Name is required.'; st.style.color='#ef4444'; return; }
+  busyBtn('btn-recm-save', true); st.textContent = '';
+  const payload = {
+    name,
+    section: document.getElementById('recm-section').value.trim(),
+    subsection: document.getElementById('recm-subsection').value.trim(),
+    location: document.getElementById('recm-location').value.trim(),
+    year: document.getElementById('recm-year').value.trim(),
+    phone: document.getElementById('recm-phone').value.trim(),
+    mobile: document.getElementById('recm-mobile').value.trim(),
+    email: document.getElementById('recm-email').value.trim(),
+    website: document.getElementById('recm-website').value.trim(),
+    ownership: document.getElementById('recm-ownership').value.trim(),
+    management: document.getElementById('recm-management').value.trim(),
+    notes: document.getElementById('recm-notes').value.trim(),
+    updated_at: serverTimestamp()
+  };
+  try {
+    if(editId){ await updateDoc(entryDoc(editSection, editId), payload); deptToast('✅ Updated!','success'); }
+    else { payload.order = (allData[editSection]||[]).length; payload.created_at = serverTimestamp(); await addDoc(entriesCol(editSection), payload); deptToast('✅ Added!','success'); }
+    window.closeRecM(); await refreshSection(editSection); renderCurrentTab();
+  } catch(err){ st.textContent = '❌ ' + err.message; st.style.color='#ef4444'; busyBtn('btn-recm-save', false); }
+};
+window.deleteRecord = function(){ if(!editId) return; const row=(allData[editSection]||[]).find(x=>x.id===editId); askDelete(editId,editSection,row?.name||'this record'); window.closeRecM(); };
+
+// ── Delete ──
+function askDelete(id, section, label){
+  pendingDelId = id; pendingDelSection = section;
+  document.getElementById('del-confirm-text').textContent = `Delete "${label}"? This cannot be undone.`;
+  document.getElementById('m-del-confirm').classList.add('show');
+}
+window.askDelete = askDelete;
+document.getElementById('m-del-confirm').addEventListener('click', e => { if(e.target===e.currentTarget) e.currentTarget.classList.remove('show'); });
+
+window.confirmDelete = async function(){
+  if(!pendingDelId || !pendingDelSection) return;
+  const btn = document.getElementById('btn-del-confirm');
+  btn.disabled = true; btn.textContent = "Deleting…";
+  try {
+    await deleteDoc(entryDoc(pendingDelSection, pendingDelId));
+    document.getElementById('m-del-confirm').classList.remove('show');
+    deptToast('Deleted.','success');
+    await refreshSection(pendingDelSection); renderCurrentTab(); updateStats();
+  } catch(err){ deptToast('❌ Delete failed: '+err.message,'error'); }
+  finally { btn.disabled=false; btn.textContent="Yes, Delete"; pendingDelId=null; pendingDelSection=null; }
+};
+
+async function refreshSection(section){
+  try {
+    const sn = await getDocs(query(entriesCol(section), orderBy("order","asc")));
+    allData[section] = sn.docs.map(d => ({ id: d.id, ...d.data() }));
+  } catch(e) {
+    const sn = await getDocs(entriesCol(section));
+    allData[section] = sn.docs.map(d => ({ id: d.id, ...d.data() }));
+  }
+  updateStats();
+}
+
+// ══════════════════════════════════════════════════════════════
+// MIGRATE: old dept_* collections → new departments/{sec}/entries
+// ══════════════════════════════════════════════════════════════
+window.migrateOldCollections = async function(){
+  if(userRole !== 'Admin'){ deptToast('⛔ Admin only'); return; }
+  if(!confirm("Migrate old dept_* collections → new structure?\nExisting records in new structure won't be overwritten.")) return;
+
+  const btn = document.getElementById('btn-migrate');
+  btn.disabled = true; btn.textContent = '⏳ Migrating…';
+
+  const OLD_TO_NEW = {
+    'dept_departments':  'departments',
+    'dept_movements':    'movements',
+    'dept_associations': 'associations',
+    'dept_colleges':     'colleges',
+    'dept_schools':      'schools',
+    'dept_hostels':      'hostels',
+    'dept_health_p1':    'health_p1',
+    'dept_health_p2':    'health_p2',
+    'dept_other_p1':     'other_p1',
+    'dept_other_p2':     'other_p2',
+  };
+
+  let total = 0;
+  try {
+    for(const [oldCol, newSection] of Object.entries(OLD_TO_NEW)){
+      deptToast(`Migrating ${oldCol}…`);
+      let oldDocs = [];
+      try {
+  const sn = await getDocs(collection(db, oldCol));
+  oldDocs = sn.docs.map(d => ({ id: d.id, ...d.data() }));
+  if (!oldDocs.length) continue; // nothing to migrate
+} catch(e) {
+  if (e.code === 'permission-denied') {
+    console.info(`Skipping ${oldCol}: no read permission (collection may not exist).`);
+  } else {
+    console.warn(`Skipping ${oldCol}:`, e.message);
+  }
+  continue;
+} 
+
+      // Get existing in new structure to avoid duplicates
+      const existSn = await getDocs(entriesCol(newSection));
+      const existKeys = new Set(existSn.docs.map(d => {
+        const data = d.data();
+        return `${data.name||data.deptName||''}|${data.role||''}|${data.person||''}`;
+      }));
+
+      for(let i = 0; i < oldDocs.length; i++){
+        const old = oldDocs[i];
+        const key = `${old.name||old.deptName||''}|${old.role||''}|${old.person||''}`;
+        if(existKeys.has(key)) continue;
+        const { id: _id, ...payload } = old;
+        payload.migrated_from = oldCol;
+        payload.updated_at = serverTimestamp();
+        if(payload.order === undefined) payload.order = i;
+        await addDoc(entriesCol(newSection), payload);
+        total++;
+      }
+    }
+    deptToast(`✅ Migration complete! ${total} records moved.`, 'success', 5000);
+    await loadAllData();
+    document.getElementById('banner-migrate').style.display = 'none';
+  } catch(err){
+    deptToast('❌ Migration error: ' + err.message, 'error');
+    console.error(err);
+  } finally {
+    btn.disabled = false; btn.textContent = '⬆ Migrate Old Data';
+  }
+};
+
+// ══════════════════════════════════════════════════════════════
+// IMPORT STATIC DATA (Departments / Movements / Associations)
+// ══════════════════════════════════════════════════════════════
+window.importStaticData = async function(){
+  if(userRole !== 'Admin'){ deptToast('⛔ Admin only'); return; }
+  if(!confirm("Import hardcoded Departments, Movements & Associations?\nWon't overwrite existing records.")) return;
+  const btn = document.getElementById('btn-import-static');
+  btn.disabled = true; btn.textContent = '⏳ Importing…';
+  try {
+    let total = 0;
+
+    const deptsData = [
+      {deptName:"Department of Finance",unitName:"",role:"Finance Officer (Procurator)",person:"Very Rev. Fr. Cherian Karikompil",phone:"94462 01981",email:"",website:""},
+      {deptName:"Department of Finance",unitName:"",role:"House Procurator",person:"Rev. Fr. George Veliyathu",phone:"94005 08582",email:"",website:""},
+      {deptName:"Department of Liturgy",unitName:"Liturgy Commission",role:"Secretary",person:"Rev. Dr. Jose Kochuparampil",phone:"94473 59521",email:"",website:""},
+      {deptName:"Department of Liturgy",unitName:"Archbishop Joseph Powathil Liturgical Research Centre",role:"Director",person:"Rev. Dr. Jose Kochuparampil",phone:"94473 59521",email:"",website:""},
+      {deptName:"Department of Liturgy",unitName:"Archbishop Joseph Powathil Liturgical Research Centre",role:"Asst Director",person:"Rev. Dr. Mathew Thekkedathu",phone:"94470 10240",email:"",website:""},
+      {deptName:"Department of Liturgy",unitName:"Liturgical Apostolate",role:"Director",person:"Rev. Dr. Jacob Kizhakkeveedu",phone:"62387 09547",email:"",website:""},
+      {deptName:"Department of Liturgy",unitName:"Liturgical Music",role:"Director",person:"Rev. Fr. Joseph Kayamkulathusserry",phone:"94968 03216",email:"",website:""},
+      {deptName:"Department of Liturgy",unitName:"Liturgical Art & Architecture",role:"Director",person:"Rev. Dr. Jacob Kooroth",phone:"94973 31228",email:"",website:""},
+      {deptName:"Department of Education",unitName:"",role:"Vicar General",person:"Very Rev. Dr. Thomas Padiyath",phone:"94462 01820",email:"",website:""},
+      {deptName:"Department of Education",unitName:"Higher Education – ArchEparchial HRD Trust",role:"Secretary",person:"Prof. Dr. Jacob Mathew",phone:"94463 85365",email:"",website:""},
+      {deptName:"Department of Education",unitName:"Changanacherry Civil Service Institute",role:"Director",person:"Prof. Dr. Jacob Mathew",phone:"94463 85365",email:"",website:""},
+      {deptName:"Department of Education",unitName:"Higher Education Centre",role:"Director",person:"Dr. PC Aniyankunju",phone:"94476 60363",email:"",website:""},
+      {deptName:"Department of Education",unitName:"General Education",role:"",person:"",phone:"0481 2420378",email:"info@corporateschoolchry.org",website:"www.corporateschoolchry.org"},
+      {deptName:"Department of Education",unitName:"General Education",role:"Manager",person:"Rev. Fr. Joseph Karukayil",phone:"94004 20378",email:"",website:""},
+      {deptName:"Department of Education",unitName:"General Education",role:"Asst Manager",person:"Rev. Dr. Jacob Chethipuzha",phone:"94474 80121",email:"",website:""},
+      {deptName:"Department of Education",unitName:"General Education",role:"Asst Manager",person:"Rev. Dr. Emmanuel Neriamparampil",phone:"96332 34907",email:"",website:""},
+      {deptName:"Department of Education",unitName:"Catholic Teachers Guild (1956)",role:"Chaplain",person:"Rev. Dr. Emmanuel Neriamparampil",phone:"96332 34907",email:"",website:""},
+      {deptName:"Department of Education",unitName:"KCSL (Kerala Catholic Students League - 1917)",role:"Director",person:"Rev. Fr. Joseph Velangattusserry",phone:"94971 97119",email:"",website:""},
+      {deptName:"Department of Catechism",unitName:"Sandesanilayam Catechetical Centre (1958)",role:"Director",person:"Rev. Dr. Andrews Panamparambil",phone:"72934 16143",email:"info@sandesanilayam.org",website:"www.sandesanilayam.org"},
+      {deptName:"Department of Catechism",unitName:"Sandesanilayam Catechetical Centre (1958)",role:"Asst Director",person:"Rev. Fr. Joseph Ettolil",phone:"94004 21086",email:"",website:""},
+      {deptName:"Department of Catechism",unitName:"Sandesanilayam Catechetical Centre (1958)",role:"Asst Director (Thekkan Mekhala)",person:"Rev. Fr. Varghese Pazhayamadam",phone:"94975 42126",email:"",website:""},
+      {deptName:"Department of Catechism",unitName:"Sandesanilayam Catechetical Centre (1958)",role:"Secretary",person:"Sri. KT Raju Kannattumadom",phone:"94970 92529",email:"",website:""},
+      {deptName:"Department of Catechism",unitName:"CML (Cherupushpa Mission League - 1947)",role:"Director",person:"Rev. Dr. Andrews Panamparambil",phone:"90374 90380",email:"info@cml.org",website:""},
+      {deptName:"Department of Catechism",unitName:"CML (Cherupushpa Mission League - 1947)",role:"Vocation Bureau Director",person:"Rev. Fr. Joseph Ettolil",phone:"94004 21086",email:"",website:""},
+      {deptName:"Department of Bible Apostolate & Kudumbakkoottayma",unitName:"",role:"Director",person:"Rev. Fr. Thomas Kayamkulathusserry",phone:"94477 76920",email:"info@sathyadarsanam.org",website:"www.sathyadarsanam.org"},
+      {deptName:"Department of Bible Apostolate & Kudumbakkoottayma",unitName:"",role:"Secretary",person:"Sri. Tomy Antony Kaithakalam",phone:"88484 92369",email:"",website:""},
+      {deptName:"Department of Bible Apostolate & Kudumbakkoottayma",unitName:"",role:"Chief Editor",person:"Sri. John J Puthuchira",phone:"97479 29761",email:"",website:""},
+      {deptName:"Department of Youth Apostolate",unitName:"Yuvadeepti – SMYM (1972)",role:"Director",person:"Rev. Fr. Antony Anakkallumkal",phone:"82817 46624",email:"",website:"www.yuvadeepti.org"},
+      {deptName:"Department of Youth Apostolate",unitName:"Yuvadeepti – SMYM (1972)",role:"Animator",person:"Sr. Theresina Augustine LWSH",phone:"82812 17189",email:"",website:""},
+      {deptName:"Department of Youth Apostolate",unitName:"CSM (Catholic Students' Movement)",role:"Regional Co-ordinator",person:"Rev. Fr. Kuriakose Kappiliparampil",phone:"94951 88517",email:"",website:""},
+      {deptName:"Department of Family Apostolate",unitName:"",role:"Director",person:"Rev. Fr. Sebastian Chamakala",phone:"94479 57272",email:"",website:""},
+      {deptName:"Department of Family Apostolate",unitName:"",role:"Asst Director",person:"Rev. Fr. Thomas Puthenparampil (Tijo)",phone:"97448 49705",email:"",website:""},
+      {deptName:"Department of Family Apostolate",unitName:"Kudumba Jyothi (Monthly)",role:"Chief Editor",person:"Rev. Dr. Jose Thekkepurathu",phone:"94475 69577",email:"",website:""},
+      {deptName:"Department of Cultural Heritage",unitName:"CICAR (Centre for Indian Christian Archeological Research – 1995)",role:"Director",person:"Rev. Fr. Jacob Varikatt",phone:"97447 99717",email:"",website:""},
+      {deptName:"Department of Cultural Heritage",unitName:"Mar Mathew Kavukatt Museum, Changanacherry",role:"Curator",person:"Rev. Fr. Varghese Vettukuzhiyil",phone:"94973 36112",email:"",website:""},
+      {deptName:"Department of Cultural Heritage",unitName:"SADAS (School of Arts, Drama, Architecture and Singing Academy – 1989)",role:"Director",person:"Rev. Fr. Thomas Thaikkattusseril",phone:"94474 64457",email:"",website:""},
+      {deptName:"Department of Community Awareness and Rights' Protection (CARP - 2019)",unitName:"",role:"Director",person:"Rev. Fr. James Kokkavayalil",phone:"62382 14912",email:"",website:"www.darsanam.online"},
+      {deptName:"Department of Community Awareness and Rights' Protection (CARP - 2019)",unitName:"",role:"Co-ordinator",person:"Mr. Baby Vattakkara",phone:"91421 21717",email:"",website:""},
+      {deptName:"Department of Pravasi Apostolate & Tourism Ministry",unitName:"",role:"Director",person:"Rev. Fr. Joseph Puthuveettilkalam (Teji)",phone:"94478 03634",email:"",website:"www.pravasiapostolate.org"},
+      {deptName:"Department of Social Development",unitName:"CHASS (Changanacherry Social Service Society – 1966)",role:"President",person:"Very Rev. Fr. Joseph Vaniapurackal",phone:"94952 68877",email:"",website:"www.chasschry.org"},
+      {deptName:"Department of Social Development",unitName:"CHASS (Changanacherry Social Service Society – 1966)",role:"Secretary",person:"Rev. Fr. Thomas Kulathumkal",phone:"94552 11827",email:"",website:""},
+      {deptName:"Department of Health Care",unitName:"St. Thomas Hospital (STH – 1953)",role:"Director",person:"Rev. Fr. Thomas Mangalathu",phone:"94478 66746",email:"",website:"www.st-thomashospital.com"},
+      {deptName:"Department of Health Care",unitName:"Sahrudaya Hospital (SAH – 1967)",role:"Director",person:"Rev. Fr. Thomas Malieckal",phone:"94474 94411",email:"",website:"www.sahrudayahospital.com"},
+      {deptName:"Department of Social Communications",unitName:"Media Village Group of Institutions",role:"Executive Director",person:"Rev. Fr. Antony Ethackad",phone:"94461 94320",email:"",website:"www.mediavillageindia.com"},
+      {deptName:"Department of Social Communications",unitName:"ST. JOSEPH COLLEGE OF COMMUNICATION (2004)",role:"Principal",person:"Rev. Dr. Joseph Parackal",phone:"95441 20698",email:"",website:""},
+      {deptName:"Department of Ecumenism and Dialogue",unitName:"",role:"Vicar General",person:"Very Rev. Dr. Thomas Padiyath",phone:"94462 01820",email:"",website:""},
+      {deptName:"Department of Ecumenism and Dialogue",unitName:"",role:"Director",person:"Rev. Fr. Joseph Ettolil",phone:"94004 21086",email:"",website:""},
+    ];
+
+    const movementsData = [
+      {name:"Holy Childhood Society",subsection:"Apostolates for Children",role:"Director",person:"Rev. Fr. Sebastian Chamakala",phone:"94479 57272"},
+      {name:"Holy Childhood Society",subsection:"Apostolates for Children",role:"Asst. Director",person:"Rev. Fr. Thomas Puthenparampil",phone:"97448 49705"},
+      {name:"CML (Cherupushpa Mission League – 1947)",subsection:"Apostolates for Children",role:"Director",person:"Rev. Dr. Andrews Panamparambil",phone:"90374 90380"},
+      {name:"CML (Cherupushpa Mission League – 1947)",subsection:"Apostolates for Children",role:"Joint Director",person:"Rev. Sr. Jeslin Thomas JS",phone:"99868 86032"},
+      {name:"KCSL (Kerala Catholic Students' League – 1917)",subsection:"Apostolates for Children",role:"Director",person:"Rev. Fr. Joseph Velangattusserry",phone:"94971 97119"},
+      {name:"Renewal Retreats",subsection:"Special Apostolates",role:"Director",person:"Rev. Fr. Abraham Perumbalathussery",phone:"94002 85923"},
+      {name:"Vayojanavedi",subsection:"Special Apostolates",role:"Director",person:"Rev. Fr. Thomas Plaparampil",phone:"94951 07045"},
+      {name:"Jeevakarunyanidhi Trust – 2004",subsection:"Special Apostolates",role:"President",person:"Very Rev. Fr. Joseph Vaniapurackal",phone:"94952 68877"},
+      {name:"Jeevakarunyanidhi Trust – 2004",subsection:"Special Apostolates",role:"Secretary",person:"Rev. Fr. Gregory Onamkulam",phone:"94962 13051"},
+      {name:"Jeevakarunyanidhi Trust – 2004",subsection:"Special Apostolates",role:"Treasurer",person:"Very Rev. Fr. Cherian Karikompil",phone:"94462 01981"},
+      {name:"Sebastian Kunnath (SK) Jubilee Trust – 2011",subsection:"Special Apostolates",role:"Managing Trustee",person:"Very Rev. Fr. Joseph Vaniapurackal",phone:"94952 68877"},
+      {name:"Sebastian Kunnath (SK) Jubilee Trust – 2011",subsection:"Special Apostolates",role:"Secretary",person:"Rev. Fr. Gregory Onamkulam",phone:"94962 13051"},
+    ];
+
+    const associationsData = [
+      {name:"Society of St. Vincent de Paul – 1947, 1954",role:"Spiritual Advisor",person:"Rev. Fr. Chacko Puthiyaparampil",phone:"94479 12357"},
+      {name:"Legion of Mary",role:"",person:"",phone:""},
+      {name:"SFO (Secular Franciscan Order)",role:"Director",person:"Rev. Fr. Michael Paroosseril OFM Cap.",phone:"94475 55234"},
+      {name:"PPFA (St. Joseph's Priests Provident Fund Association – 1929)",role:"Secretary",person:"Rev. Fr. Thomas Aryankala",phone:"94475 67597"},
+      {name:"PPFA (St. Joseph's Priests Provident Fund Association – 1929)",role:"Treasurer",person:"Rev. Fr. Augustine Thyparampil",phone:"94954 73046"},
+      {name:"AKCC (All Kerala Catholic Congress – 1918)",role:"Spiritual Advisor",person:"Rev. Fr. Sebastian Chamakala",phone:"94479 57272"},
+      {name:"EASA (Ecclesial Association of Social Animators)",role:"Co-Founder & Director (India)",person:"Malpan Rev. Dr. Mathew Vellanickal",phone:"98478 24702"},
+      {name:"Catholic Teachers' Guild – 1956",role:"Chaplain",person:"Rev. Dr. Emmanuel Neriamparampil",phone:"96332 34907"},
+      {name:"CNGI (Catholic Nurses' Guild – 1956)",role:"Chaplain",person:"Rev. Fr. James P. Kunnath",phone:"99472 29187"},
+      {name:"ETAI (Eastern Theological Association of India – 1997)",role:"Director",person:"Rev. Dr. Thomas Karukakalam",phone:"94960 62129"},
+      {name:"ECA (Eastern Catholic Association – 1997)",role:"Chaplain",person:"Rev. Dr. Thomas Karukakalam",phone:"94960 62129"},
+      {name:"Madya Virudha Samithy – 1989",role:"Director",person:"Rev. Fr. John Vadakkekalam",phone:"94968 28593"},
+    ];
+
+    // Import departments
+    const existDepts = new Set((allData['departments']||[]).map(d => `${d.deptName}|${d.person}|${d.role}`));
+    for(let i=0;i<deptsData.length;i++){
+      const d = deptsData[i];
+      if(existDepts.has(`${d.deptName}|${d.person}|${d.role}`)) continue;
+      await addDoc(entriesCol('departments'), {...d, order:i, created_at:serverTimestamp(), updated_at:serverTimestamp()});
+      total++;
+    }
+
+    // Import movements
+    const existMov = new Set((allData['movements']||[]).map(d => `${d.name}|${d.role}|${d.person}`));
+    for(let i=0;i<movementsData.length;i++){
+      const d = movementsData[i];
+      if(existMov.has(`${d.name}|${d.role}|${d.person}`)) continue;
+      await addDoc(entriesCol('movements'), {
+        name:d.name, subsection:d.subsection,
+        management:`${d.role}: ${d.person}: ${d.phone}`.trim(),
+        phone:d.phone, order:i, created_at:serverTimestamp(), updated_at:serverTimestamp()
+      });
+      total++;
+    }
+
+    // Import associations
+    const existAssoc = new Set((allData['associations']||[]).map(d => `${d.name}|${d.role}|${d.person}`));
+    for(let i=0;i<associationsData.length;i++){
+      const d = associationsData[i];
+      if(existAssoc.has(`${d.name}|${d.role}|${d.person}`)) continue;
+      await addDoc(entriesCol('associations'), {
+        name:d.name, subsection:'Associations',
+        management:d.role?`${d.role}: ${d.person}: ${d.phone}`.trim():'',
+        phone:d.phone, order:i, created_at:serverTimestamp(), updated_at:serverTimestamp()
+      });
+      total++;
+    }
+
+    deptToast(`✅ Imported ${total} records!`, 'success', 5000);
+    await loadAllData();
+    document.getElementById('banner-static').style.display = 'none';
+  } catch(err){
+    deptToast('❌ Import error: '+err.message,'error'); console.error(err);
+  } finally {
+    btn.disabled=false; btn.textContent='⬆ Import Static Data';
+  }
+};
+
+// ══════════════════════════════════════════════
+// IMPORT JSON FILES → new structure
+// ══════════════════════════════════════════════
+window.importAllJSON = async function(){
+  if(userRole !== 'Admin'){ deptToast('⛔ Admin only'); return; }
+  if(!confirm("Import JSON files to new structure?\nExisting records won't be overwritten.")) return;
+  const btn = document.getElementById('btn-import-json');
+  btn.disabled=true; btn.textContent='⏳ Importing…';
+  try {
+    let total = 0;
+
+    deptToast("Fetching institutions.json…");
+    const instData = await (await fetch('institutions.json')).json();
+    const colleges = instData.B1_higher_education_colleges||[];
+    total += await importItemsToSection(colleges,'colleges',(item,i)=>makeCollegePayload(item,'Arts & Science',i));
+
+    deptToast("Fetching professional.json…");
+    const profData = await (await fetch('professional.json')).json();
+    const pe = profData.professional_education||{};
+    const profGroups = {
+      'B1_teacher_education':'Teacher Education','B2_medical_education':'Medical Education',
+      'B3_media_education':'Media Education','B4_technical_education':'Technical Education',
+      'C_cultural_academies':'Cultural Academies','D_religious_studies_institutes':'Institutes for Religious Sciences'
+    };
+    let offset = colleges.length;
+    for(const [key,label] of Object.entries(profGroups)){
+      const items = pe[key]||[];
+      total += await importItemsToSection(items,'colleges',(item,i)=>makeCollegePayload(item,label,offset+i));
+      offset += items.length;
+    }
+
+    deptToast("Fetching schools.json…");
+    const schData = await (await fetch('schools.json')).json();
+    const schoolMap = [
+      {key:'A1_Corporate_Management_Aided',sec:'schools',sub:'Higher Secondary — Corporate Aided'},
+      {key:'A2_Non_Corporate_Aided',sec:'schools',sub:'Higher Secondary — Non-Corporate Aided'},
+      {key:'A3_Non_Corporate_Unaided',sec:'schools',sub:'Higher Secondary — Non-Corporate Unaided'},
+      {key:'Corporate_Management_Aided',sec:'schools',sub:'High School — Corporate Aided'},
+      {key:'Non_Corporate_Management_Aided',sec:'schools',sub:'High School — Non-Corporate Aided'},
+      {key:'Non_Corporate_Unaided',sec:'schools',sub:'High School — Non-Corporate Unaided'},
+      {key:'Up_Corporate_Management_Aided',sec:'schools',sub:'Upper Primary — Corporate Aided'},
+      {key:'Up_Non_Corporate_Aided',sec:'schools',sub:'Upper Primary — Non-Corporate Aided'},
+      {key:'Up_Non_Corporate_Unaided',sec:'schools',sub:'Upper Primary — Non-Corporate Unaided'},
+      {key:'Lower_Corporate_Management_Aided',sec:'schools',sub:'Lower Primary — Corporate Aided'},
+      {key:'Lower_Non_Corporate_Aided',sec:'schools',sub:'Lower Primary — Non-Corporate Aided'},
+      {key:'Lower_Non_Corporate_Unaided',sec:'schools',sub:'Lower Primary — Non-Corporate Unaided'},
+      {key:'Nursery_Schools',sec:'schools',sub:'Nursery Schools'},
+      {key:'Kinder_Gardens',sec:'schools',sub:'Kinder Gartens / Play Schools'},
+      {key:'Mentally_Challenged_Schools',sec:'schools',sub:'Special — Mentally Challenged'},
+      {key:'Physically_Challenged_Schools',sec:'schools',sub:'Special — Physically Challenged'},
+      {key:'For_the_Autistic',sec:'schools',sub:'Special — Autistic'},
+      {key:'Hostels',sec:'hostels',sub:'Hostels'},
+      {key:'Boarding_Houses',sec:'hostels',sub:'Boarding Houses (paid)'},
+      {key:'Boarding_Houses_Free',sec:'hostels',sub:'Boarding Houses (free) — Orphanages'},
+      {key:'Boarding_Houses_Tribal_Girls',sec:'hostels',sub:'Boarding House For Tribal Girls'},
+      {key:'Catholic_Council_For_Children_Homes_India',sec:'hostels',sub:'CCCHI'},
+      {key:'Special_Adoption_Agency',sec:'hostels',sub:'Special Adoption Agency (SAA)'},
+      {key:'Health_Care_Institutions',sec:'health_p1',sub:'Hospitals / Clinics / Laboratories'},
+      {key:'Care_Homes',sec:'health_p1',sub:'Care Homes for Long Term Patients'},
+      {key:'Old_Age_Homes',sec:'health_p1',sub:'Old Age Homes'},
+      {key:'Homes_for_terminally_ill',sec:'health_p2',sub:'Homes for the Terminally Ill'},
+      {key:'Centers_for_mental_health',sec:'health_p2',sub:'Centres for Mental Health Care'},
+      {key:'Paliative_Care_Centres',sec:'health_p2',sub:'Palliative Care Centres'},
+      {key:'De_addiction_Centers',sec:'health_p2',sub:'De Addiction Centres'},
+      {key:'Homes_for_physically_challenged',sec:'health_p2',sub:'Homes for the Physically Challenged'},
+      {key:'Homes_for_Cancer_and_terminal_diesease_patients',sec:'health_p2',sub:'Homes for Cancer Patients'},
+      {key:'Family_counselling_Centers',sec:'other_p1',sub:'Family Counselling Centres'},
+      {key:'Museums',sec:'other_p1',sub:'Museums'},
+      {key:'Retreat_Centres',sec:'other_p1',sub:'Retreat Centres'},
+      {key:'Social_Work_and_Welfare_Centres',sec:'other_p2',sub:'Social Work & Welfare Centres'},
+      {key:'Liturgical_Art_Centres',sec:'other_p2',sub:'Liturgical Art Centres'},
+      {key:'Printing_Presses',sec:'other_p2',sub:'Printing Presses'},
+      {key:'Book_Stalls',sec:'other_p2',sub:'Book Stalls'},
+      {key:'Publishing_Houses',sec:'other_p2',sub:'Publishing Houses'},
+      {key:'Malpanate',sec:'other_p2',sub:'Malpanate'},
+      {key:'Seminaries',sec:'other_p2',sub:'Seminaries'},
+      {key:'Matrimonial_Website',sec:'other_p2',sub:'Matrimonial Website'},
+    ];
+    const secOffsets = {};
+    for(const {key,sec,sub} of schoolMap){
+      if(!secOffsets[sec]) secOffsets[sec] = (allData[sec]||[]).length;
+      const items = schData[key]||[];
+      total += await importItemsToSection(items, sec, (item,i) => ({
+        name: item.name||'', location: item.place||'', year: String(item.year_established||''),
+        ownership: item.ownership||'',
+        phone: Array.isArray(item.contacts?.phone)?item.contacts.phone.join(', '):(item.contacts?.phone||''),
+        mobile:'', email: item.contacts?.email||'', website:'',
+        management: rolesStr(item.roles), streams: streamsStr(item.streams),
+        subsection: sub, order: secOffsets[sec]+i
+      }));
+      secOffsets[sec] += items.length;
+    }
+
+    deptToast(`✅ JSON Import complete! ${total} records added.`, 'success', 5000);
+    await loadAllData();
+    document.getElementById('banner-json').style.display = 'none';
+  } catch(err){ deptToast('❌ Import error: '+err.message,'error'); console.error(err); }
+  finally { btn.disabled=false; btn.textContent='⬆ Import JSON Files'; }
+};
+
+async function importItemsToSection(items, section, mapFn){
+  const existSn = await getDocs(entriesCol(section));
+  const existing = new Set(existSn.docs.map(d => `${d.data().name||''}|${d.data().subsection||''}`));
+  let count = 0;
+  for(let i=0;i<items.length;i++){
+    const payload = mapFn(items[i], i);
+    if(existing.has(`${payload.name}|${payload.subsection||''}`)) continue;
+    await addDoc(entriesCol(section), {...payload, created_at:serverTimestamp(), updated_at:serverTimestamp()});
+    count++;
+  }
+  return count;
+}
+
+function makeCollegePayload(item, subsection, order){
+  return {
+    name: item.name||'', location: item.location||'', year: String(item.year_established||''),
+    ownership: item.ownership||'', affiliation: item.affiliation||'', type: item.type||'',
+    phone: Array.isArray(item.contact?.phone)?item.contact.phone.join(', '):(item.contact?.phone||item.phone||''),
+    mobile: item.contact?.mobile||item.mobile||'',
+    email: item.contact?.email||item.email||'',
+    website: item.contact?.website||item.website||'',
+    management: mgmtStr(item.management),
+    section:'Colleges', subsection, order
+  };
+}
+function mgmtStr(mgmt){ if(!mgmt||typeof mgmt!=='object') return ''; return Object.entries(mgmt).map(([role,val])=>{ if(Array.isArray(val)) return val.map(v=>`${role}: ${v.name||''}${v.phone?' ('+v.phone+')':''}`).join('\n'); if(typeof val==='object'&&val?.name) return `${role}: ${val.name}${val.phone?' ('+val.phone+')':''}`; return ''; }).filter(Boolean).join('\n'); }
+function rolesStr(roles){ if(!roles||typeof roles!=='object') return ''; return Object.entries(roles).map(([role,val])=>{ if(typeof val==='object'&&val?.name) return `${role}: ${val.name}${val.phone?' ('+val.phone+')':''}`; return `${role}: ${val||''}`; }).filter(Boolean).join('\n'); }
+function streamsStr(streams){ if(!streams||typeof streams!=='object') return ''; return Object.entries(streams).map(([k,v])=>`${k}: ${v||''}`).join(', '); }
+
+// ── Init ──
+activateTab('tab-departments');
+</script>
+</body>
+</html>

@@ -1,0 +1,7912 @@
+{
+ 
+            "A1_Corporate_Management_Aided": [
+        {
+          "id": 1,
+          "name": "St. Thomas HSS",
+          "place": "Amboori P.O., Thiruvananthapuram",
+          "year_established": 2000,
+          "ownership": "Parish",
+          "pin_code": "695505",
+          "contacts": {
+            "phone": ["0471-2245343"],
+            "email": "stthomas20a2011@gmail.com"
+          },
+          "roles":{
+          "manager": "0471-2246185",
+          "principal": "9447569629"
+          },
+          "streams": {
+            "science": 2,
+            "humanities": 1
+          }
+        },
+        {
+          "id": 2,
+          "name": "St. Aloysius HSS (B)",
+          "place": "Athirampuzha P.O., Kottayam",
+          "year_established": 2000,
+          "ownership": "Parish",
+          "pin_code": "686562",
+          "contacts": {
+            "phone": ["0481-2537944","0481-2535559","0481-2730154"],
+            "email": "staloysiushss.5065@gmail.com"
+          },
+          "roles":{
+            "manager": "0481-2535559",
+            "principal": "9446418332"
+          },
+          "streams": {
+            "science": 2,
+            "commerce": 1,
+            "humanities": 1
+          }
+        },
+        {
+          "id": 3,
+          "name": "St. Sebastian’s HSS",
+          "place": "Ayarkunnam P.O., Kottayam",
+          "year_established": 2014,
+          "ownership": "Parish",
+          "pin_code": "686564",
+          "contacts": {
+            "phone": ["0481-2541111","0481-2542274"],
+            "email": "sshssakm@gmail.com"
+          },
+            "roles":{       
+          "manager": "0481-2542274",
+          "principal": "9447580323"
+            },
+          "streams": {
+            "science": 1,
+            "commerce": 1
+          }
+        },
+        {
+          "id": 4,
+          "name": "St. Mary's HSS",
+          "place": "Champakulam P.O., Alappuzha",
+          "year_established": 1998,
+          "ownership": "Parish",
+          "pin_code": "688505",
+          "contacts": {
+            "phone": ["0477-2736239","0477-2736708","0477-2736252"],
+            "email": "smhssckm@gmail.com"
+          },
+            "roles":{
+          "manager": "0477-2736252",
+          "principal": "9447946330"
+            },
+          "streams": {
+            "science": 3,
+            "commerce": 1,
+            "humanities": 1
+          }
+        },
+        {
+          "id": 5,
+          "name": "St. Berchmans HSS (B-BH)",
+          "place": "Changanacherry P.O., Kottayam",
+          "year_established": 1998,
+          "ownership": "AEPA",
+          "pin_code": "686101",
+          "contacts": {
+            "phone": ["0481-2420269","0481-2421347"],
+            "email": "sb5056@gmail.com"
+          },
+            "roles":{
+          "manager": "9446985151",
+          "principal": "9447212869"
+            },
+          "streams": {
+            "science": 4,
+            "commerce": 2
+          }
+        },
+        {
+          "id": 6,
+          "name": "St. Joseph’s HSS (G)",
+          "place": "Changanacherry P.O., Kottayam",
+          "year_established": 2000,
+          "ownership": "CMC",
+          "pin_code": "686101",
+          "contacts": {
+            "phone": ["0481-2425432","0481-2425433","0481-2420458"],
+            "email": "stjosephsghss@gmail.com"
+          },
+            "roles":{
+          "manager": "0481-2420458",
+          "principal": "9562566716"
+            },
+          "streams": {
+            "science": 2,
+            "commerce": 1
+          }
+        },
+        {
+          "id": 7,
+          "name": "St. Aloysius HSS (B)",
+          "place": "Edathua P.O., Alappuzha",
+          "year_established": 1998,
+          "ownership": "Parish",
+          "pin_code": "689573",
+          "contacts": {
+            "phone": ["0477-2210606","0477-2212234"],
+            "email": "sahssedathua@gmail.com"
+          },
+          "roles":{
+            "manager": "0477-2212234",
+            "principal": "9447463315"
+          },
+          "streams": {
+            "science": 5,
+            "commerce": 1
+          }
+        },
+        {
+          "id": 8,
+          "name": "AJ John Memorial HSS",
+          "place": "Kainady P.O., Alappuzha",
+          "year_established": 2014,
+          "ownership": "Parish",
+          "pin_code": "686534",
+          "contacts": {
+            "phone": ["0477-2710153","0477-2710255"],
+            "email": "ajjohnhsskainady@gmail.com"
+          },
+            "roles":{
+          "manager": "0477-2710255",
+          "principal": "9495517387"
+            },
+          "streams": {
+            "science": 1,
+            "commerce": 1
+          }
+        },
+        {
+          "id": 9,
+          "name": "St. Peter's HSS",
+          "place": "Kurumpanadom P.O., Kottayam",
+          "year_established": 1998,
+          "ownership": "Parish",
+          "pin_code": "686536",
+          "contacts": {
+            "phone": ["0481-2472077","0481-2472070","0481-2474000"],
+            "email": "sphsskurumpanadom@gmail.com"
+          },
+            "roles":{
+          "manager": "0481-2472070",
+          "principal": "9447570972"
+            },
+          "streams": {
+            "science": 4,
+            "commerce": 1,
+            "humanities": 1
+          }
+        },
+        {
+          "id": 10,
+          "name": "St. George’s HSS",
+          "place": "Muttar P.O., Alappuzha",
+          "year_established": 2000,
+          "ownership": "Parish",
+          "pin_code": "686574",
+          "contacts": {
+            "phone": ["0477-2219566","0477-2212615"],
+            "email": "principal04067@gmail.com"
+          },
+            "roles":{
+          "manager": "0477-2212615",
+          "principal": "9497460776"
+            },
+          "streams": {
+            "science": 3,
+            "commerce": 1
+          }
+        },
+        {
+          "id": 11,
+          "name": "St. John the Baptist HSS",
+          "place": "Nedumkunnam P.O., Kottayam",
+          "year_established": 1998,
+          "ownership": "Parish",
+          "pin_code": "686542",
+          "contacts": {
+            "phone": ["0481-2486500","0481-2416595"],
+            "email": "sjbhssnedumkunnam@gmail.com"
+          },
+            "roles":{
+          "manager": "0481-2416595",
+          "principal": "9496272899"
+            },
+          "streams": {
+            "science": 3,
+            "commerce": 1
+          }
+        },
+        {
+          "id": 12,
+          "name": "Lourdes Matha HSS",
+          "place": "Pacha - Chekkidikadu P.O., Alappuzha",
+          "year_established": 2000,
+          "ownership": "Parish",
+          "pin_code": "689580",
+          "contacts": {
+            "phone": ["0477-2210740","0477-2212302"],
+            "email": "lmhss04049@gmail.com"
+          },
+            "roles":{
+          "manager": "0477-2212302",
+          "principal": "9447145263"
+            },
+          "streams": {
+            "science": 3,
+            "commerce": 1
+          }
+        },
+        {
+          "id": 13,
+          "name": "St. Teresa’s HSS",
+          "place": "Vazhapally P.O., Kottayam",
+          "year_established": 2000,
+          "ownership": "SABS",
+          "pin_code": "686103",
+          "contacts": {
+            "phone": ["0481-2412036","0481-2420306","0481-2412036"],
+            "email": "principal05069@gmail.com"
+          },
+            "roles":{
+          "manager": "0481-2420306",
+          "principal": "9496543977"
+            },
+          "streams": {
+            "science": 2,
+            "humanities": 1
+          }
+        }
+      ],
+
+            "A2_Non_Corporate_Aided": [
+        {
+          "id": 1,
+          "name": "CC Memorial HSS",
+          "place": "Karikkattoor P.O., Kottayam",
+          "year_established": 2000,
+          "ownership": "CMI",
+          "pin_code": "686554",
+          "contacts": {
+            "phone": ["04828-248242"],
+            "email": "ccmhss@gmail.com"
+          },
+          "roles": {
+            "manager": "9946241675",
+            "principal": "9447359258"
+          },
+          "streams": {
+            "science": 4,
+            "humanities": 2
+          }
+        },
+        {
+          "id": 2,
+          "name": "St. Ephrem's HSS (BH)",
+          "place": "Mannanam P.O., Kottayam",
+          "year_established": 1998,
+          "ownership": "CMI",
+          "pin_code": "686561",
+          "contacts": {
+            "phone": ["0481-2590849","0481-2597237"],
+            "email": "stephremsmnm@gmail.com"
+          },
+          "roles": {
+            "manager": "0481-2597237",
+            "principal": "9447567728"
+          },
+          "streams": {
+            "biology": 3,
+            "computer": 1,
+            "commerce": 2
+          }
+        },
+        {
+          "id": 3,
+          "name": "St. Joseph's HSS (Boys - BH)",
+          "place": "Pulincunnoo P.O., Alappuzha",
+          "year_established": 1898,
+          "ownership": "CMI",
+          "pin_code": "688564",
+          "contacts": {
+            "phone": ["0477-2707088","0477-2702375"],
+            "email": "sjpprincipal@gmail.com"
+          },
+          "roles": {
+            "manager": "0477-2702375",
+            "principal": "9446177579"
+          },
+          "streams": {
+            "science": 2,
+            "biology": 1,
+            "computer": 1,
+            "commerce": 1,
+            "humanities": 1
+          }
+        }
+      ],
+      
+     "A3_Non_Corporate_Unaided": [
+    {
+      "id": 1,
+      "name": "Carmel Academy (EM)",
+      "place": "Pazhavangadi, Iron Bridge P.O., Alappuzha",
+      "year_established": 1980,
+      "ownership": "Parish",
+      "pin_code": "688001",
+      "contacts": {
+        "phone": ["0477-2261145", "0477-2251746"],
+        "email": "carmelacadem08@rediffmail.com;35016alappuzha@gmail.com"
+      },
+      "roles": {
+        "manager": "0477-2251746",
+        "principal": "9497109003"
+      },
+      "streams": {
+        "science": 1
+      }
+    },
+    {
+      "id": 2,
+      "name": "Porukara Senior Secondary School",
+      "place": "Champakulam P.O., Alappuzha",
+      "year_established": 1994,
+      "ownership": "CMI",
+      "pin_code": "688505",
+      "contacts": {
+        "phone": ["0477-2737276", "0477-2737819", "0477-2736076"],
+        "email": "frporukara@gmail.com"
+      },
+      "roles": {
+        "manager": "0477-2736076",
+        "principal": "9495240677"
+      },
+      "streams": {
+        "science": 1,
+        "commerce": 1
+      }
+    },
+    {
+      "id": 3,
+      "name": "Cluny School (CBSE)",
+      "place": "Changanacherry P.O., Kottayam",
+      "year_established": 1998,
+      "ownership": "SJC",
+      "pin_code": "686101",
+      "contacts": {
+        "phone": ["0481-2420198", "0481-2420148"],
+        "email": "clunyschool@gmail.com"
+      },
+      "roles": {
+        "manager": "0481-2420148",
+        "principal": "9895070198"
+      },
+      "streams": {
+        "science": 1,
+        "commerce": 1
+      }
+    },
+    {
+      "id": 4,
+      "name": "St. Annes' HSS",
+      "place": "Changanacherry P.O., Kottayam",
+      "year_established": 2002,
+      "ownership": "FCC",
+      "pin_code": "686101",
+      "contacts": {
+        "phone": ["0481-2954647", "0481-2954433"],
+        "email": "stanneshss@gmail.com"
+      },
+      "roles": {
+        "manager": "0481-2954433",
+        "principal": "7034316072"
+      },
+      "streams": {
+        "science": 1
+      }
+    },
+    {
+      "id": 5,
+      "name": "Sacred Heart HSS & CISCE Junior College",
+      "place": "Perunnai P.O., Changanacherry, Kottayam",
+      "year_established": 1964,
+      "ownership": "AEPA",
+      "pin_code": "686102",
+      "contacts": {
+        "phone": ["0481-2420534", "0481-2427534"],
+        "email": "shchanganassery@gmail.com"
+      },
+      "roles": {
+        "manager": "9447763344",
+        "principal": "9446020534"
+      },
+      "streams": {
+        "commerce": 1,
+        "biology": 1,
+        "computer": 1
+      }
+    },
+    {
+      "id": 6,
+      "name": "Kristu Jyoti HSS (State)",
+      "place": "Kurisummoodu P.O., Changanacherry, Kottayam",
+      "year_established": 1982,
+      "ownership": "CMI",
+      "pin_code": "686104",
+      "contacts": {
+        "phone": ["0481-2721980", "0481-2720314"],
+        "email": "christujyotihss@gmail.com"
+      },
+      "roles": {
+        "manager": "0481-2720314",
+        "principal": "9400777529"
+      },
+      "streams": {
+        "biology": 1,
+        "computer": 1
+      }
+    },
+    {
+      "id": 7,
+      "name": "Placid Vidya Vihar (CBSE)",
+      "place": "Kurisummoodu P.O., Changanacherry, Kottayam",
+      "year_established": 1988,
+      "ownership": "CMI",
+      "pin_code": "686104",
+      "contacts": {
+        "phone": ["0481-2721980", "0481-2720314"],
+        "email": "placidvidyavihar@gmail.com"
+      },
+      "roles": {
+        "manager": "0481-2720314",
+        "principal": "8281868484"
+      },
+      "streams": {
+        "biology": 4,
+        "computer": 3,
+        "commerce": 1
+      }
+    },
+    {
+      "id": 8,
+      "name": "Georgian Public School (CBSE)",
+      "place": "Edathua P.O., Alappuzha",
+      "year_established": 1996,
+      "ownership": "Parish",
+      "pin_code": "689573",
+      "contacts": {
+        "phone": ["0477-2215852", "0477-2215853", "0477-2215851"],
+        "email": "gpsedathua@gmail.com"
+      },
+      "roles": {
+        "manager": "0477-2215851",
+        "principal": "9447489738"
+      },
+      "streams": {
+        "bio_maths": 1
+      }
+    },
+    {
+      "id": 9,
+      "name": "Jawahar Public Senior Secondary School (CBSE)",
+      "place": "Edava P.O., Via Varkala, Kollam",
+      "year_established": 1997,
+      "ownership": "CMI",
+      "pin_code": "695315",
+      "contacts": {
+        "phone": ["0470-2660376", "0470-2660715"],
+        "email": "princijpss@gmail.com"
+      },
+      "roles": {
+        "manager": "0470-2660715",
+        "principal": "8078102916"
+      },
+      "streams": {
+        "science": 1
+      }
+    },
+
+    {
+      "id": 10,
+      "name": "Christ Nagar International School (IGCSE)",
+      "place": "Sainik School P.O., Amballoor, Thiruvananthapuram",
+      "year_established": 2004,
+      "ownership": "CMI",
+      "pin_code": "695585",
+      "contacts": {
+        "phone": ["0471-2318482", "0471-2316990"],
+        "email": "cnistvm@gmail.com"
+      },
+      "roles": {
+        "manager": "0471-2316990",
+        "principal": "9496114970"
+      },
+      "streams": {
+        "biology": 1,
+        "information_technology": 1,
+        "maths": 1,
+        "psychology": 1
+      }
+    },
+    {
+    "id": 11,
+    "name": "BK Memorial Sacred Heart Public School (CBSE)",
+    "place": "Thrickodithanam P.O., Changanacherry, Kottayam",
+    "year_established": 1996,
+    "ownership": "AEPA",
+    "pin_code": "686105",
+    "contacts": {
+      "phone": ["0481-2447634", "0481-2446734", "7510447634"],
+      "email": "principal@shps-kili.org"
+    },
+    "roles": {
+      "manager": "9446201820",
+      "principal": "6238273478"
+    },
+    "streams": {
+      "science": 4,
+      "commerce": 1
+    }
+  },
+  {
+    "id": 12,
+    "name": "Christ Nagar English Medium HSS (State)",
+    "place": "Kowdiar P.O., Thiruvananthapuram",
+    "year_established": 1976,
+    "ownership": "CMI",
+    "pin_code": "695003",
+    "contacts": {
+      "phone": ["0471-2318483", "0471-2316990"],
+      "email": "cnehss@gmail.com"
+    },
+    "roles": {
+      "manager": "0471-2316990",
+      "principal": "9447018483"
+    },
+    "streams": {
+      "bio_maths": 1,
+      "computer": 1,
+      "psychology": 1,
+      "commerce": 1
+    }
+  },
+  {
+    "id": 13,
+    "name": "Christ Nagar HSS (ICSE)",
+    "place": "Kowdiar P.O., Thiruvananthapuram",
+    "year_established": 1974,
+    "ownership": "CMI",
+    "pin_code": "695003",
+    "contacts": {
+      "phone": ["0471-2318485", "0471-2316990"],
+      "email": "cnhss@gmail.com"
+    },
+    "roles": {
+      "manager": "0471-2316990",
+      "principal": "9497690700"
+    },
+    "streams": {
+      "bio_maths": 1,
+      "computer": 1
+    }
+  },
+  {
+    "id": 14,
+    "name": "Christ Nagar Central School (CBSE)",
+    "place": "Kowdiar P.O., Thiruvananthapuram",
+    "year_established": 2005,
+    "ownership": "CMI",
+    "pin_code": "695003",
+    "contacts": {
+      "phone": ["0471-2318484", "0471-2316990"],
+      "email": "christnagarschoolk@gmail.com"
+    },
+    "roles": {
+      "manager": "0471-2316990",
+      "principal": "9447809887"
+    },
+    "streams": {
+      "bio_maths": 1
+    }
+  },
+  {
+    "id": 15,
+    "name": "Nirmala Bhavan (Girls - State)",
+    "place": "Kowdiar P.O., Thiruvananthapuram",
+    "year_established": 2002,
+    "ownership": "SABS",
+    "pin_code": "695003",
+    "contacts": {
+      "phone": ["0471-2317772", "9496621482", "0471-2314851"],
+      "email": "nirmalabhavanschool@gmail.com"
+    },
+    "roles": {
+      "manager": "0471-2314851",
+      "principal": "9539881450"
+    },
+    "streams": {
+      "science": 2,
+      "computer": 1
+    }
+  },
+  {
+    "id": 16,
+    "name": "Lourdes Public School & Junior College (CBSE)",
+    "place": "Collectorate P.O., Kottayam",
+    "year_established": 1996,
+    "ownership": "Parish",
+    "pin_code": "686002",
+    "contacts": {
+      "phone": ["0481-2580010", "0481-2564575"],
+      "email": "lourdespublicschool@gmail.com"
+    },
+    "roles": {
+      "manager": "0481-2564575",
+      "principal": "9496493998"
+    },
+    "streams": {
+      "science": 2,
+      "commerce": 1
+    }
+  },
+  {
+    "id": 17,
+    "name": "Christ Nagar Central School (CBSE)",
+    "place": "Amachal P.O., Kattakada, Thiruvananthapuram",
+    "year_established": 2002,
+    "ownership": "CMI",
+    "pin_code": "695572",
+    "contacts": {
+      "phone": ["0471-2257373", "8086490115"],
+      "email": "christnagarschoolk@gmail.com"
+    },
+    "roles": {
+      "manager": "8086490115",
+      "principal": "9446920115"
+    },
+    "streams": {
+      "science": 1
+    }
+  },
+  {
+    "id": 18,
+    "name": "Mary Rani Public School & Junior College (CBSE)",
+    "place": "Perunnai P.O., Changanacherry, Kottayam",
+    "year_established": 1993,
+    "ownership": "SABS",
+    "pin_code": "686102",
+    "contacts": {
+      "phone": ["0481-2400699", "0481-2402199"],
+      "email": "maryranischool@yahoo.co.in"
+    },
+    "roles": {
+      "manager": "0481-2402199",
+      "principal": "9446538699"
+    },
+    "streams": {
+      "science": 6,
+      "commerce": 4
+    }
+  },
+  {
+    "id": 19,
+    "name": "St. George HSS (State)",
+    "place": "Manimala P.O., Kottayam",
+    "year_established": 2002,
+    "ownership": "Parish",
+    "pin_code": "686543",
+    "contacts": {
+      "phone": ["04828-248062", "8590885460"],
+      "email": "stgeorgehssmanimala@gmail.com"
+    },
+    "roles": {
+      "manager": "8590885460",
+      "principal": "9961887244"
+    },
+    "streams": {
+      "science": 1,
+      "commerce": 1
+    }
+  },
+  {
+    "id": 20,
+    "name": "Kuriakose Elias HSS (State - BH)",
+    "place": "Mannanam P.O., Kottayam",
+    "year_established": 1991,
+    "ownership": "CMI",
+    "pin_code": "686561",
+    "contacts": {
+      "phone": ["9526713399", "0481-2597237"],
+      "email": "kehssmannanam@gmail.com"
+    },
+    "roles": {
+      "manager": "0481-2597237",
+      "principal": "8281725386"
+    },
+    "streams": {
+      "science": 3,
+      "computer": 1,
+      "commerce": 1
+    }
+  },
+  {
+    "id": 21,
+    "name": "Kuriakose Elias English Medium School (ICSE - BH)",
+    "place": "Mannanam P.O., Kottayam",
+    "year_established": 2000,
+    "ownership": "CMI",
+    "pin_code": "686561",
+    "contacts": {
+      "phone": ["9526713399", "0481-2597237"],
+      "email": "mannanamkeems@gmail.com"
+    },
+    "roles": {
+      "manager": "0481-2597237",
+      "principal": "8281725386"
+    },
+    "streams": {
+      "science": 3,
+      "computer": 1
+    }
+  },
+  {
+    "id": 22,
+    "name": "AKM Public School & Junior College",
+    "place": "Ruby Nagar P.O., Changanacherry, Kottayam",
+    "year_established": 1976,
+    "ownership": "SABS",
+    "pin_code": "686103",
+    "contacts": {
+      "phone": ["0481-2402161", "8848682677", "7034806874"],
+      "email": "akmschoolchrry@gmail.com"
+    },
+    "roles": {
+      "manager": "7034806874",
+      "principal": "8156890120"
+    },
+    "streams": {
+      "science": 1,
+      "computer": 1,
+      "commerce": 1
+    }
+  },
+  {
+    "id": 23,
+    "name": "Mother Teresa HSS (State)",
+    "place": "Muhamma P.O., Alappuzha",
+    "year_established": 2014,
+    "ownership": "CMI",
+    "pin_code": "688525",
+    "contacts": {
+      "phone": ["0478-2864430", "0478-2868530", "7594054392"],
+      "email": "34046alappuzha@gmail.com"
+    },
+    "roles": {
+      "manager": "0478-2868630",
+      "principal": "8281548126"
+    },
+    "streams": {
+      "science": 1,
+      "commerce": 1
+    }
+  },
+  {
+    "id": 24,
+    "name": "KE Carmel Central School (CBSE)",
+    "place": "Muhamma P.O., Alappuzha",
+    "year_established": 2001,
+    "ownership": "CMI",
+    "pin_code": "688525",
+    "contacts": {
+      "phone": ["0478-2864430", "0478-2868530", "7594054394"],
+      "email": "kemuhamma@gmail.com"
+    },
+    "roles": {
+      "manager": "0478-2868630",
+      "principal": "8281548126"
+    },
+    "streams": {
+      "bio_maths": 1,
+      "bio_malayalam": 1
+    }
+  },
+  {
+    "id": 25,
+    "name": "Christ Central School (CBSE)",
+    "place": "Muthoor P.O., Thiruvalla, Pathanamthitta",
+    "year_established": 1973,
+    "ownership": "CMI",
+    "pin_code": "689107",
+    "contacts": {
+      "phone": ["0469-2741663", "0469-2741666", "8281798066"],
+      "email": "christthiruvalla@gmail.com"
+    },
+    "roles": {
+      "manager": "0469-2604933",
+      "principal": "9447727548"
+    },
+    "streams": {
+      "bio_maths": 3,
+      "computer_science": 1,
+      "commerce": 1
+    }
+  },
+  {
+    "id": 26,
+    "name": "St. John the Baptist's English School (CBSE)",
+    "place": "Nedumkunnam P.O., Kottayam",
+    "year_established": 1993,
+    "ownership": "Parish",
+    "pin_code": "686542",
+    "contacts": {
+      "phone": ["0481-2488022", "0481-2416595"],
+      "email": "stjohnscbse@gmail.com"
+    },
+    "roles": {
+      "manager": "0481-2416595",
+      "principal": "9847697210"
+    },
+    "streams": {
+      "science": 1,
+      "computer": 1
+    }
+  },
+  {
+    "id": 27,
+    "name": "Carmel Convent English Medium School (CBSE)",
+    "place": "Kolabhagam P.O., Thiruvalla, Pathanamthitta",
+    "year_established": 1992,
+    "ownership": "CMC",
+    "pin_code": "689545",
+    "contacts": {
+      "phone": ["0469-2654028", "9544414225"],
+      "email": "carmelcemstdyr@gmail.com"
+    },
+    "roles": {
+      "manager": "9544414225",
+      "principal": "9446755480"
+    },
+    "streams": {
+      "science": 1,
+      "commerce": 1
+    }
+  },
+  {
+    "id": 28,
+    "name": "Christ Nagar Senior Secondary School (CBSE)",
+    "place": "Thiruvallam P.O., Thiruvananthapuram",
+    "year_established": 1994,
+    "ownership": "CMI",
+    "pin_code": "695027",
+    "contacts": {
+      "phone": ["0471-2383770", "0471-2383772", "0471-2383773"],
+      "email": "cnssstvm@hotmail.com"
+    },
+    "roles": {
+      "manager": "9447258005",
+      "principal": "8304006229"
+    },
+    "streams": {
+      "science": 4,
+      "commerce": 1
+    }
+  },
+  {
+    "id": 29,
+    "name": "All Saints Public School (CBSE)",
+    "place": "Chayam, Vithura P.O., Thiruvananthapuram",
+    "year_established": 1985,
+    "ownership": "SABS",
+    "pin_code": "695551",
+    "contacts": {
+      "phone": ["0472-2856311", "9207339283"],
+      "email": "allsaintspublicschool@gmail.com"
+    },
+    "roles": {
+      "manager": "9207339283",
+      "principal": "9344219306"
+    },
+    "streams": {
+      "science": 1,
+      "commerce": 1
+    }
+  },
+  {
+    "id": 30,
+    "name": "St. Francis Sales Senior Secondary School (CBSE)",
+    "place": "Venganoor P.O., Thiruvananthapuram",
+    "year_established": 2001,
+    "ownership": "DSFS",
+    "pin_code": "695523",
+    "contacts": {
+      "phone": ["0471-2484447", "0471-2480447"],
+      "email": "sfsvzm@rediffmail.com"
+    },
+    "roles": {
+      "manager": "0471-2482447",
+      "principal": "7259491715"
+    },
+    "streams": {
+      "science": 1,
+      "commerce": 1
+    }
+  }
+
+],
+
+
+"Corporate_Management_Aided": [
+  {
+    "id": 1,
+    "name": "St. Antony's - Girls (BH)",
+    "place": "Alappuzha",
+    "year_established": 1935,
+    "ownership": "CMC",
+    "pin_code": "688001",
+    "contacts": {
+      "phone": ["0477-2263777", "9497613730"]
+    },
+    "roles": {
+      "manager": "0477-2238746"
+    }
+  },
+  {
+    "id": 2,
+    "name": "St. Thomas",
+    "place": "Amboori",
+    "year_established": 1957,
+    "ownership": "Parish",
+    "pin_code": "695505",
+    "contacts": {
+      "phone": ["0471-2245185", "8943824969"]
+    },
+    "roles": {
+      "manager": "0471-2245240"
+    }
+  },
+  {
+    "id": 3,
+    "name": "St. Philomina’s - Girls",
+    "place": "Arpookara",
+    "year_established": 1949,
+    "ownership": "CMC",
+    "pin_code": "686008",
+    "contacts": {
+      "phone": ["0481-2591154", "9188382956"]
+    },
+    "roles": {
+      "manager": "0481-2597516"
+    }
+  },
+  {
+    "id": 4,
+    "name": "St. Mary’s",
+    "place": "Aryankavu",
+    "year_established": 1983,
+    "ownership": "Parish",
+    "pin_code": "691309",
+    "contacts": {
+      "phone": ["0475-2211450", "9446294647"]
+    },
+    "roles": {
+      "manager": "0475-2211522"
+    }
+  },
+  {
+    "id": 5,
+    "name": "St. Aloysius",
+    "place": "Athirampuzha",
+    "year_established": 1953,
+    "ownership": "Parish",
+    "pin_code": "686562",
+    "contacts": {
+      "phone": ["0481-2730944", "9847109272"]
+    },
+    "roles": {
+      "manager": "0481-2730559"
+    }
+  },
+  {
+    "id": 6,
+    "name": "St. Mary’s - Girls",
+    "place": "Athirampuzha",
+    "year_established": 1921,
+    "ownership": "Parish",
+    "pin_code": "686562",
+    "contacts": {
+      "phone": ["0481-2730253", "9495081202"]
+    },
+    "roles": {
+      "manager": "0481-2730559"
+    }
+  },
+  {
+    "id": 7,
+    "name": "St. Sebastian's",
+    "place": "Ayarkunnam",
+    "year_established": 1960,
+    "ownership": "Parish",
+    "pin_code": "686564",
+    "contacts": {
+      "phone": ["0481-2543256", "9496544527"]
+    },
+    "roles": {
+      "manager": "0481-2542274"
+    }
+  },
+  {
+    "id": 8,
+    "name": "St. Mary's",
+    "place": "Champakulam",
+    "year_established": 1905,
+    "ownership": "Parish",
+    "pin_code": "688505",
+    "contacts": {
+      "phone": ["0477-2736239", "9995548107"]
+    },
+    "roles": {
+      "manager": "0477-2736252"
+    }
+  },
+  {
+    "id": 9,
+    "name": "St. Anne's - Girls",
+    "place": "Changanacherry",
+    "year_established": 1913,
+    "ownership": "FCC",
+    "pin_code": "686101",
+    "contacts": {
+      "phone": ["0481-2954647", "9747842423"]
+    },
+    "roles": {
+      "manager": "0481-2954433"
+    }
+  },
+  {
+    "id": 10,
+    "name": "St. Berchmans - Boys",
+    "place": "Changanacherry",
+    "year_established": 1891,
+    "ownership": "AEPA",
+    "pin_code": "686101",
+    "contacts": {
+      "phone": ["0481-2420269", "9447660544"]
+    },
+    "roles": {
+      "manager": "9446985151"
+    }
+  },
+  {
+    "id": 11,
+    "name": "St. Joseph's - Girls",
+    "place": "Changanacherry",
+    "year_established": 2002,
+    "ownership": "CMC",
+    "pin_code": "686101",
+    "contacts": {
+      "phone": ["0481-2425432", "9446517765"]
+    },
+    "roles": {
+      "manager": "0481-2420458"
+    }
+  },
+  {
+    "id": 12,
+    "name": "Devamatha",
+    "place": "Chennamkary",
+    "year_established": 1966,
+    "ownership": "Parish",
+    "pin_code": "688501",
+    "contacts": {
+      "phone": ["0477-2724260", "9496108170"]
+    },
+    "roles": {
+      "manager": "0477-2724270"
+    }
+  },
+  {
+    "id": 13,
+    "name": "St. Aloysius",
+    "place": "Edathua",
+    "year_established": 1895,
+    "ownership": "Parish",
+    "pin_code": "689573",
+    "contacts": {
+      "phone": ["0477-2212296", "9446123773"]
+    },
+    "roles": {
+      "manager": "0477-2215851"
+    }
+  },
+  {
+    "id": 14,
+    "name": "St. Mary's - Girls",
+    "place": "Edathua",
+    "year_established": 1973,
+    "ownership": "Parish",
+    "pin_code": "689573",
+    "contacts": {
+      "phone": ["0477-2212548", "9495241130"]
+    },
+    "roles": {
+      "manager": "0477-2215851"
+    }
+  },
+  {
+    "id": 15,
+    "name": "AJ John Memorial",
+    "place": "Kainady",
+    "year_established": 1960,
+    "ownership": "Parish",
+    "pin_code": "686534",
+    "contacts": {
+      "phone": ["0477-2710253", "9497586791"]
+    },
+    "roles": {
+      "manager": "0477-2747255"
+    }
+  }, 
+  {
+    "id": 16,
+    "name": "Holy Family HS - Girls",
+    "place": "Kainakary P.O., Alappuzha",
+    "year_established": 1925,
+    "ownership": "CMC",
+    "pin_code": "688501",
+    "contacts": {
+      "phone": ["0477-2724230"],
+      "email": null
+    },
+    "roles": {
+      "manager": "0477-2724223"
+    }
+  },
+  {
+    "id": 17,
+    "name": "St. Mary's HS - Boys",
+    "place": "Kainakary P.O., Alappuzha",
+    "year_established": 1916,
+    "ownership": "Parish",
+    "pin_code": "688501",
+    "contacts": {
+      "phone": ["0477-2724250"],
+      "email": null
+    },
+    "roles": {
+      "manager": "0477-2724233"
+    }
+  },
+  {
+    "id": 18,
+    "name": "Little Flower HS",
+    "place": "Kavalam-Kunnumma East, Alappuzha",
+    "year_established": 1927,
+    "ownership": "Parish",
+    "pin_code": "688506",
+    "contacts": {
+      "phone": ["0477-2747415"],
+      "email": null
+    },
+    "roles": {
+      "manager": "88590-09290"
+    }
+  },
+  {
+    "id": 19,
+    "name": "St. Joseph's HS",
+    "place": "Kulathoor P.O., Alappuzha",
+    "year_established": 1868,
+    "ownership": "Parish",
+    "pin_code": "689588",
+    "contacts": {
+      "phone": ["0469-2697374"],
+      "email": null
+    },
+    "roles": {
+      "manager": "0469-2696221"
+    }
+  },
+  {
+    "id": 20,
+    "name": "St. Peter's HS",
+    "place": "Kurumpanadom P.O., Kottayam",
+    "year_established": 1921,
+    "ownership": "Parish",
+    "pin_code": "686536",
+    "contacts": {
+      "phone": ["0481-2472077"],
+      "email": null
+    },
+    "roles": {
+      "manager": "0481-2472070"
+    }
+  },
+  {
+    "id": 21,
+    "name": "St. Shantal's HS - Girls",
+    "place": "Mammood P.O., Kottayam",
+    "year_established": 1922,
+    "ownership": "SABS",
+    "pin_code": "686536",
+    "contacts": {
+      "phone": ["0481-2472897"],
+      "email": null
+    },
+    "roles": {
+      "manager": "97451-64089"
+    }
+  },
+  {
+    "id": 22,
+    "name": "St. George's HS",
+    "place": "Manimala P.O., Kottayam",
+    "year_established": 1919,
+    "ownership": "Parish",
+    "pin_code": "686543",
+    "contacts": {
+      "phone": ["0482-8247162"],
+      "email": null
+    },
+    "roles": {
+      "manager": "85908-85460"
+    }
+  },
+  {
+    "id": 23,
+    "name": "St. Xavier's HS",
+    "place": "Mithrakary P.O., Alappuzha",
+    "year_established": 1949,
+    "ownership": "Parish",
+    "pin_code": "688595",
+    "contacts": {
+      "phone": ["0477-2703473"],
+      "email": null
+    },
+    "roles": {
+      "manager": "0477-2703661"
+    }
+  },
+  {
+    "id": 24,
+    "name": "St. George's HS",
+    "place": "Muttar Old P.O., Alappuzha",
+    "year_established": 1950,
+    "ownership": "Parish",
+    "pin_code": "689574",
+    "contacts": {
+      "phone": ["0477-2219855"],
+      "email": null
+    },
+    "roles": {
+      "manager": "75101-35713"
+    }
+  },
+  {
+    "id": 25,
+    "name": "St. John the Baptist HS",
+    "place": "Nedumkunnam P.O., Kottayam",
+    "year_established": 1949,
+    "ownership": "Parish",
+    "pin_code": "686542",
+    "contacts": {
+      "phone": ["0481-2488033"],
+      "email": null
+    },
+    "roles": {
+      "manager": "0481-2416595"
+    }
+  },
+  {
+    "id": 26,
+    "name": "St. Teresa's HS - Girls",
+    "place": "Nedumkunnam P.O., Kottayam",
+    "year_established": 1919,
+    "ownership": "CMC",
+    "pin_code": "686542",
+    "contacts": {
+      "phone": ["0481-2415152"],
+      "email": null
+    },
+    "roles": {
+      "manager": "0481-2415979"
+    }
+  },
+  {
+    "id": 27,
+    "name": "Lourdes Matha HS",
+    "place": "Pacha - Chekkidikadu P.O., Alappuzha",
+    "year_established": 1982,
+    "ownership": "Parish",
+    "pin_code": "689573",
+    "contacts": {
+      "phone": ["0477-2211402"],
+      "email": null
+    },
+    "roles": {
+      "manager": "0477-2212302"
+    }
+  },
+  {
+    "id": 28,
+    "name": "St. Joseph's HS - Girls",
+    "place": "Paippadu-Nalukody P.O., Kottayam",
+    "year_established": 1938,
+    "ownership": "CMC",
+    "pin_code": "686548",
+    "contacts": {
+      "phone": ["0481-2446020"],
+      "email": null
+    },
+    "roles": {
+      "manager": "0481-2446390"
+    }
+  },
+  {
+    "id": 29,
+    "name": "Sacred Heart HS - Girls",
+    "place": "Pangada P.O., Kottayam",
+    "year_established": 1976,
+    "ownership": "Parish",
+    "pin_code": "686502",
+    "contacts": {
+      "phone": ["0481-2507922"],
+      "email": null
+    },
+    "roles": {
+      "manager": "94473-19833"
+    }
+  },
+  {
+    "id": 30,
+    "name": "Holy Family HS",
+    "place": "Parampuzha P.O., Kottayam",
+    "year_established": 1911,
+    "ownership": "Parish",
+    "pin_code": "686028",
+    "contacts": {
+      "phone": ["0481-2596967"],
+      "email": null
+    },
+    "roles": {
+      "manager": "0481-2597469"
+    }
+  },
+  {
+    "id": 31,
+    "name": "KJ Chacko Memorial HS",
+    "place": "Pulikallu P.O., Kottayam",
+    "year_established": 1951,
+    "ownership": "Aepa",
+    "pin_code": "686544",
+    "contacts": {
+      "phone": ["94467-58901"],
+      "email": null
+    },
+    "roles": {
+      "manager": "04828-247151"
+    }
+  },
+  {
+    "id": 32,
+    "name": "Little Flower HS - Girls",
+    "place": "Pulincunnoo P.O., Alappuzha",
+    "year_established": 1927,
+    "ownership": "CMC",
+    "pin_code": "688504",
+    "contacts": {
+      "phone": ["0477-2707005"],
+      "email": null
+    },
+    "roles": {
+      "manager": "0477-2702216"
+    }
+  },
+  {
+    "id": 33,
+    "name": "St. Joseph's HS",
+    "place": "Punnathura P.O., Kottayam",
+    "year_established": 1950,
+    "ownership": "Parish",
+    "pin_code": "686583",
+    "contacts": {
+      "phone": ["0481-2545380"],
+      "email": null
+    },
+    "roles": {
+      "manager": "0481-2542378"
+    }
+  },
+  {
+    "id": 34,
+    "name": "St. Michael's HS",
+    "place": "Thathampally P.O., Alappuzha",
+    "year_established": 1856,
+    "ownership": "Parish",
+    "pin_code": "688013",
+    "contacts": {
+      "phone": ["0477-2235709"],
+      "email": null
+    },
+    "roles": {
+      "manager": "0477-2254138"
+    }
+  },
+  {
+    "id": 35,
+    "name": "St. Teresa's HS",
+    "place": "Vazhappally P.O., Kottayam",
+    "year_established": 1917,
+    "ownership": "SABS",
+    "pin_code": "686103",
+    "contacts": {
+      "phone": ["0481-2400360"],
+      "email": null
+    },
+    "roles": {
+      "manager": "0481-2420306"
+    }
+  }
+],
+
+
+"Non_Corporate_Management_Aided":[
+  {
+    "id": 1,
+    "name": "St. Ephrem’s HS (STATE)",
+    "place": "Mannanam P.O., Kottayam",
+    "year_established": 1885,
+    "ownership": "CMI",
+    "pin_code": "686561",
+    "contacts": {
+      "phone": ["0481-2597719"],
+      "email": null
+    },
+    "roles": {
+      "manager": "0481-2597237"
+    }
+  },
+  {
+    "id": 2,
+    "name": "Mother Teresa's HS (STATE)",
+    "place": "Muhamma P.O., Alappuzha",
+    "year_established": 1982,
+    "ownership": "CMI",
+    "pin_code": "688525",
+    "contacts": {
+      "phone": ["0478-2864038"],
+      "email": null
+    },
+    "roles": {
+      "manager": "0478-2868630"
+    }
+  },
+  {
+    "id": 3,
+    "name": "Christ Nagar Public School (CBSE)",
+    "place": "Maranalloor P.O., Thiruvananthapuram",
+    "year_established": 2014,
+    "ownership": "CMI",
+    "pin_code": "695512",
+    "contacts": {
+      "phone": [
+        "0471-2298482",
+        "0471-2298483",
+        "0471-2298484"
+      ],
+      "email": null
+    },
+    "roles": {
+      "manager": "70349-18779"
+    }
+  }
+],
+
+"Non_Corporate_Unaided" : [
+  {
+    "id": 1,
+    "name": "Holy Family School (CBSE)",
+    "place": "Anchal, Kollam",
+    "year_established": 1992,
+    "ownership": "SABS",
+    "pin_code": "691306",
+    "contacts": {
+      "phone": ["0475-2273702"],
+      "email": null
+    },
+    "roles": { "manager": "0475-2270544" }
+  },
+  {
+    "id": 2,
+    "name": "Sahyadri Central School (CBSE)",
+    "place": "Anchal, Kollam",
+    "year_established": 2008,
+    "ownership": "SABS",
+    "pin_code": "691333",
+    "contacts": {
+      "phone": ["94977-68431", "85474-05154"],
+      "email": null
+    },
+    "roles": { "manager": "0475-2270584" }
+  },
+  {
+    "id": 3,
+    "name": "St. Joseph's School (CBSE)",
+    "place": "Arpookara – Villoonni, Kottayam",
+    "year_established": 2003,
+    "ownership": "JS",
+    "pin_code": "686008",
+    "contacts": {
+      "phone": ["0481-2599871", "82816-76713"],
+      "email": null
+    },
+    "roles": { "manager": "80754-71617" }
+  },
+  {
+    "id": 4,
+    "name": "Christ Nagar Public School (CBSE)",
+    "place": "Attingal, Thiruvananthapuram",
+    "year_established": 2016,
+    "ownership": "CMI",
+    "pin_code": "695103",
+    "contacts": {
+      "phone": ["94978-39887"],
+      "email": null
+    },
+    "roles": { "manager": "0470-2638002" }
+  },
+  {
+    "id": 5,
+    "name": "Holy Cross School (CBSE)",
+    "place": "Aymanam, Kottayam",
+    "year_established": 2002,
+    "ownership": "CSC",
+    "pin_code": "686015",
+    "contacts": {
+      "phone": ["0481-2517471"],
+      "email": null
+    },
+    "roles": { "manager": "0481-2516788" }
+  },
+  {
+    "id": 6,
+    "name": "Bishop Kurialacherry Public School (CBSE)",
+    "place": "Champakulam, Alappuzha",
+    "year_established": 1988,
+    "ownership": "SABS",
+    "pin_code": "688505",
+    "contacts": {
+      "phone": ["0477-2736258", "0477-2736212"],
+      "email": null
+    },
+    "roles": {}
+  },
+  {
+    "id": 7,
+    "name": "Sacred Heart School (ICSE)",
+    "place": "Changanacherry, Kottayam",
+    "year_established": 1995,
+    "ownership": "Aepa",
+    "pin_code": "686102",
+    "contacts": {
+      "phone": ["0481-2420534", "0481-2427534"],
+      "email": null
+    },
+    "roles": { "local_manager": "94477-63344" }
+  },
+  {
+    "id": 8,
+    "name": "Cluny School (CBSE)",
+    "place": "Cheppumpara, Kottayam",
+    "year_established": 1994,
+    "ownership": "SJC",
+    "pin_code": "686542",
+    "contacts": {
+      "phone": ["80788-23326"],
+      "email": null
+    },
+    "roles": { "manager": "94969-06119" }
+  },
+  {
+    "id": 9,
+    "name": "Kristu Jyoti Vidya Niketan (ICSE)",
+    "place": "Chethipuzha, Kottayam",
+    "year_established": 2005,
+    "ownership": "CMI",
+    "pin_code": "686104",
+    "contacts": {
+      "phone": ["0481-2721980"],
+      "email": null
+    },
+    "roles": { "manager": "0481-2420314" }
+  },
+  {
+    "id": 10,
+    "name": "Mount Carmel CMI Central School (CBSE)",
+    "place": "Enathu, Pathanamthitta",
+    "year_established": 2012,
+    "ownership": "CMI",
+    "pin_code": "691526",
+    "contacts": {
+      "phone": ["0474-2993444"],
+      "email": null
+    },
+    "roles": { "manager": "85478-23517" }
+  },
+
+  {
+    "id": 11,
+    "name": "KE Carmel Public School (CBSE)",
+    "place": "Kainakary, Alappuzha",
+    "year_established": 2003,
+    "ownership": "CMI",
+    "pin_code": "688501",
+    "contacts": {
+      "phone": ["0477-2725675"],
+      "email": null
+    },
+    "roles": { "manager": "0477-2724240" }
+  },
+  {
+    "id": 12,
+    "name": "Cyriac Chavara Memorial School",
+    "place": "Karikkattoor, Kottayam",
+    "year_established": 1947,
+    "ownership": "CMI",
+    "pin_code": "686544",
+    "contacts": {
+      "phone": ["0482-8248242"],
+      "email": null
+    },
+    "roles": { "manager": "99462-41675" }
+  },
+  {
+    "id": 13,
+    "name": "Mary Mount Public School (CBSE)",
+    "place": "Kattachira, Kottayam",
+    "year_established": 1999,
+    "ownership": "LWSH",
+    "pin_code": "686572",
+    "contacts": {
+      "phone": ["0481-2536233"],
+      "email": null
+    },
+    "roles": { "manager": "94472-30666" }
+  },
+  {
+    "id": 14,
+    "name": "Sacred Heart School (CBSE)",
+    "place": "Kilimala, Kottayam",
+    "year_established": 1996,
+    "ownership": "Aepa",
+    "pin_code": "686104",
+    "contacts": {
+      "phone": ["0481-2446734", "0481-2447634"],
+      "email": null
+    },
+    "roles": { "manager": "94462-01820" }
+  },
+  {
+    "id": 15,
+    "name": "Santa Maria School (CBSE)",
+    "place": "Kooroppada, Kottayam",
+    "year_established": 2002,
+    "ownership": "Parish",
+    "pin_code": "686502",
+    "contacts": {
+      "phone": ["0481-2701863"],
+      "email": null
+    },
+    "roles": { "manager": "0481-2700163" }
+  },
+
+  {
+    "id": 16,
+    "name": "Nirmala Bhavan School (STATE)",
+    "place": "Kowdiar, Thiruvananthapuram",
+    "year_established": 1964,
+    "ownership": "SABS",
+    "pin_code": "695003",
+    "contacts": {
+      "phone": ["0471-2727246"],
+      "email": null
+    },
+    "roles": { "manager": "0471-2314851" }
+  },
+  {
+    "id": 17,
+    "name": "St. Alphonsa Public School & Jr College (CBSE)",
+    "place": "Kudamaloor, Kottayam",
+    "year_established": 2007,
+    "ownership": "Parish",
+    "pin_code": "686017",
+    "contacts": {
+      "phone": ["94962-18437"],
+      "email": null
+    },
+    "roles": { "manager": "94478-48188" }
+  },
+  {
+    "id": 18,
+    "name": "Carmel School (CBSE)",
+    "place": "Madappally, Kottayam",
+    "year_established": 1993,
+    "ownership": "AC",
+    "pin_code": "686546",
+    "contacts": {
+      "phone": ["89215-28230"],
+      "email": null
+    },
+    "roles": { "local_manager": "97442-71430" }
+  },
+  {
+    "id": 19,
+    "name": "St. Shantal’s School (CBSE)",
+    "place": "Malamukal, Thiruvananthapuram",
+    "year_established": 2000,
+    "ownership": "DSFS",
+    "pin_code": "695013",
+    "contacts": {
+      "phone": ["0471-2365351"],
+      "email": null
+    },
+    "roles": { "manager": "0471-2368325" }
+  },
+  {
+    "id": 20,
+    "name": "Kuriakose Elias School (ICSE)",
+    "place": "Mannanam, Kottayam",
+    "year_established": 2000,
+    "ownership": "CMI",
+    "pin_code": "686561",
+    "contacts": {
+      "phone": ["95269-13399"],
+      "email": null
+    },
+    "roles": { "manager": "0481-2597237" }
+  }, {
+    "id": 21,
+    "name": "Lourdes Matha Public School (CBSE)",
+    "place": "Meenkulam",
+    "year_established": 1977,
+    "ownership": "Parish",
+    "pin_code": "691311",
+    "contacts": {
+      "phone": ["0475-2023966", "0475-2304307"],
+      "email": null
+    },
+    "roles": {
+      "manager": "0475-2304307",
+      "principal": "9446182055"
+    }
+  },
+  {
+    "id": 22,
+    "name": "AKM Public School (CBSE)",
+    "place": "Morkulangara, Changanacherry",
+    "year_established": 1969,
+    "ownership": "SABS",
+    "pin_code": "686103",
+    "contacts": {
+      "phone": ["0481-2402161", "8848682667"],
+      "email": null
+    },
+    "roles": {
+      "manager": "7034806874",
+      "principal": "8156890120"
+    }
+  },
+  {
+    "id": 23,
+    "name": "KE Carmel Central School (CBSE)",
+    "place": "Muhamma P.O., Alappuzha",
+    "year_established": 2001,
+    "ownership": "CMI",
+    "pin_code": "688525",
+    "contacts": {
+      "phone": ["0478-2864430", "0478-2868530"],
+      "email": "kemuhamma@gmail.com"
+    },
+    "roles": {
+      "manager": "0478-2868630",
+      "principal": "8281548126"
+    }
+  },
+  {
+    "id": 24,
+    "name": "Little Flower Vidya Nikethan (CBSE)",
+    "place": "Mundathanam",
+    "year_established": 1992,
+    "ownership": "MLF",
+    "pin_code": "686541",
+    "contacts": {
+      "phone": ["0481-2495801", "9497707059"],
+      "email": null
+    },
+    "roles": {
+      "manager": "7902324866",
+      "principal": "9495093985"
+    }
+  },
+  {
+    "id": 25,
+    "name": "KE Carmel School (ICSE)",
+    "place": "Pulincunnoo",
+    "year_established": 1998,
+    "ownership": "CMI",
+    "pin_code": "688504",
+    "contacts": {
+      "phone": ["0477-2704067"],
+      "email": null
+    },
+    "roles": {
+      "manager": "0477-2702375",
+      "principal": "7025066405"
+    }
+  },
+  {
+    "id": 26,
+    "name": "Carmel International School (ICSE)",
+    "place": "Punnapra",
+    "year_established": 2003,
+    "ownership": "CMI",
+    "pin_code": "688004",
+    "contacts": {
+      "phone": ["0477-2288548", "0477-2288646"],
+      "email": null
+    },
+    "roles": {
+      "manager": "0477-2287149",
+      "principal": null
+    }
+  },
+  {
+    "id": 27,
+    "name": "Darsana International School (ICSE)",
+    "place": "Puthuppally",
+    "year_established": 2002,
+    "ownership": "CMI",
+    "pin_code": "686011",
+    "contacts": {
+      "phone": ["0481-2351999", "0481-2352111"],
+      "email": null
+    },
+    "roles": {
+      "manager": "9446529651",
+      "principal": "8547617621"
+    }
+  },
+  {
+    "id": 28,
+    "name": "Christ Central School (CBSE)",
+    "place": "Muthoor",
+    "year_established": 1986,
+    "ownership": "CMI",
+    "pin_code": "689107",
+    "contacts": {
+      "phone": ["0469-2741663", "0469-2741666"],
+      "email": null
+    },
+    "roles": {
+      "manager": "0469-2604933",
+      "principal": "9447727548"
+    }
+  },
+  {
+    "id": 29,
+    "name": "Carmel School (CBSE)",
+    "place": "Thakazhy",
+    "year_established": 1995,
+    "ownership": "CMC",
+    "pin_code": "689862",
+    "contacts": {
+      "phone": ["0477-2274448"],
+      "email": null
+    },
+    "roles": {
+      "manager": "0477-2274898",
+      "principal": "9447572520"
+    }
+  },
+  {
+    "id": 30,
+    "name": "Little Flower School (EM - STATE)",
+    "place": "Vellayani",
+    "year_established": 1994,
+    "ownership": "MLF",
+    "pin_code": "695020",
+    "contacts": {
+      "phone": ["0471-2390646"],
+      "email": null
+    },
+    "roles": {
+      "manager": "0471-2390015",
+      "principal": "9400890646"
+    }
+  },
+  {
+    "id": 31,
+    "name": "Little Flower Vidya Vihar (ICSE)",
+    "place": "Vellayani",
+    "year_established": 2005,
+    "ownership": "MLF",
+    "pin_code": "695020",
+    "contacts": {
+      "phone": ["0471-2393332"],
+      "email": null
+    },
+    "roles": {
+      "manager": "0471-2390015",
+      "principal": "9495773332"
+    }
+  },
+  {
+    "id": 32,
+    "name": "All Saints Public School (CBSE)",
+    "place": "Vithura",
+    "year_established": 1985,
+    "ownership": "SABS",
+    "pin_code": "695551",
+    "contacts": {
+      "phone": ["0472-2858311"],
+      "email": null
+    },
+    "roles": {
+      "manager": "9207309283",
+      "principal": "9344219306"
+    }
+  }
+],
+
+
+"Up_Corporate_Management_Aided": [
+  {
+    "id": 1,
+    "name": "St. Joseph’s",
+    "place": "Champakara",
+    "year_established": 1906,
+    "ownership": "Parish",
+    "pin_code": "686542",
+    "contacts": {
+      "phone": ["0481-2486021"],
+      "email": null
+    },
+    "roles": {
+      "manager": "9446093644"
+    }
+  },
+  {
+    "id": 2,
+    "name": "St. Thomas",
+    "place": "Champakulam",
+    "year_established": 1909,
+    "ownership": "SABS",
+    "pin_code": "688505",
+    "contacts": {
+      "phone": ["0477-2737945"],
+      "email": null
+    },
+    "roles": {
+      "manager": "8547249332"
+    }
+  },
+  {
+    "id": 3,
+    "name": "Sr. Alphonsa’s",
+    "place": "Chennamattam",
+    "year_established": 1948,
+    "ownership": "Parish",
+    "pin_code": "686502",
+    "contacts": {
+      "phone": [],
+      "email": null
+    },
+    "roles": {
+      "manager": "8281324414"
+    }
+  },
+  {
+    "id": 4,
+    "name": "Sacred Heart",
+    "place": "Kannady",
+    "year_established": 1932,
+    "ownership": "FCC",
+    "pin_code": "688504",
+    "contacts": {
+      "phone": ["0477-2704625"],
+      "email": null
+    },
+    "roles": {
+      "manager": "9495358218"
+    }
+  },
+  {
+    "id": 5,
+    "name": "Sacred Heart",
+    "place": "Karimpanakulam",
+    "year_established": 1938,
+    "ownership": "Parish",
+    "pin_code": "686544",
+    "contacts": {
+      "phone": ["04828-240121"],
+      "email": null
+    },
+    "roles": {
+      "manager": "9847838003"
+    }
+  },
+  {
+    "id": 6,
+    "name": "St. Joseph’s",
+    "place": "Kayalpuram",
+    "year_established": 1914,
+    "ownership": "FCC",
+    "pin_code": "688504",
+    "contacts": {
+      "phone": ["0477-2705965"],
+      "email": null
+    },
+    "roles": {
+      "manager": "8547853511"
+    }
+  },
+  {
+    "id": 7,
+    "name": "St. Mary’s",
+    "place": "Koothrappally",
+    "year_established": 1920,
+    "ownership": "Parish",
+    "pin_code": "686540",
+    "contacts": {
+      "phone": ["0481-2486636"],
+      "email": null
+    },
+    "roles": {
+      "manager": "9961128455"
+    }
+  },
+  {
+    "id": 8,
+    "name": "St. Mary’s",
+    "place": "Kudamaloor",
+    "year_established": 1949,
+    "ownership": "Parish",
+    "pin_code": "686017",
+    "contacts": {
+      "phone": ["0481-2393034"],
+      "email": null
+    },
+    "roles": {
+      "manager": "9496262402"
+    }
+  },
+  {
+    "id": 9,
+    "name": "St. John’s",
+    "place": "Kumarakom",
+    "year_established": 1914,
+    "ownership": "Parish",
+    "pin_code": "686563",
+    "contacts": {
+      "phone": [],
+      "email": null
+    },
+    "roles": {
+      "manager": "9495393890"
+    }
+  },
+  {
+    "id": 10,
+    "name": "St. Sebastian’s",
+    "place": "Mammood",
+    "year_established": 1936,
+    "ownership": "Parish",
+    "pin_code": "686536",
+    "contacts": {
+      "phone": ["0481-2475151"],
+      "email": null
+    },
+    "roles": {
+      "manager": "9961110915"
+    }
+  },
+  {
+    "id": 11,
+    "name": "Jayamatha (JM)",
+    "place": "Manoor-Dalumugham",
+    "year_established": 1964,
+    "ownership": "Parish",
+    "pin_code": "695125",
+    "contacts": {
+      "phone": [],
+      "email": null
+    },
+    "roles": {
+      "manager": "9495696818"
+    }
+  },
+  {
+    "id": 12,
+    "name": "St. Mary’s",
+    "place": "Mayam - Marygiri",
+    "year_established": 1951,
+    "ownership": "Parish",
+    "pin_code": "695505",
+    "contacts": {
+      "phone": [],
+      "email": null
+    },
+    "roles": {
+      "manager": "9846593678"
+    }
+  },
+  {
+    "id": 13,
+    "name": "St. George’s",
+    "place": "Muttar Old",
+    "year_established": 1905,
+    "ownership": "Parish",
+    "pin_code": "689574",
+    "contacts": {
+      "phone": ["0477-2219855"],
+      "email": null
+    },
+    "roles": {
+      "manager": "9526491686"
+    }
+  },
+  {
+    "id": 14,
+    "name": "Sr. Alphonsa's",
+    "place": "Nedumanny",
+    "year_established": 1960,
+    "ownership": "Parish",
+    "pin_code": "686542",
+    "contacts": {
+      "phone": [],
+      "email": null
+    },
+    "roles": {
+      "manager": "9446859698"
+    }
+  },
+  {
+    "id": 15,
+    "name": "St. Philomina’s",
+    "place": "Nedungadappally - Mallappally",
+    "year_established": 1912,
+    "ownership": "SABS",
+    "pin_code": "689505",
+    "contacts": {
+      "phone": [],
+      "email": null
+    },
+    "roles": {
+      "manager": "9747486168"
+    }
+  },
+  {
+    "id": 16,
+    "name": "St. Xavier’s",
+    "place": "Pacha - Chekkidikkadu",
+    "year_established": 2018,
+    "ownership": "Parish",
+    "pin_code": "689574",
+    "contacts": {
+      "phone": [],
+      "email": null
+    },
+    "roles": {
+      "manager": "9446762378"
+    }
+  },
+  {
+    "id": 17,
+    "name": "St. Mary’s",
+    "place": "Thuruthy",
+    "year_established": 1916,
+    "ownership": "SABS",
+    "pin_code": "686535",
+    "contacts": {
+      "phone": [],
+      "email": null
+    },
+    "roles": {
+      "manager": "9497325261"
+    }
+  }
+],
+
+
+"Up_Non_Corporate_Aided": [
+  {
+    "id": 1,
+    "name": "St. Mary’s",
+    "place": "Aryankavu",
+    "year_established": 1964,
+    "ownership": "SH",
+    "pin_code": "691316",
+    "contacts": {
+      "phone": ["0475-2964357"],
+      "email": null
+    },
+    "roles": {
+      "manager": "9446462785"
+    }
+  },
+  {
+    "id": 2,
+    "name": "Sacred Heart",
+    "place": "Champakulam",
+    "year_established": 1922,
+    "ownership": "CMI",
+    "pin_code": "688505",
+    "contacts": {
+      "phone": [],
+      "email": null
+    },
+    "roles": {
+      "manager": "9446921060"
+    }
+  },
+  {
+    "id": 3,
+    "name": "St. George’s",
+    "place": "Eravuchira",
+    "year_established": 1938,
+    "ownership": "FCC",
+    "pin_code": "686539",
+    "contacts": {
+      "phone": ["0481-2460680"],
+      "email": null
+    },
+    "roles": {
+      "manager": "8590482629"
+    }
+  },
+  {
+    "id": 4,
+    "name": "St. Joseph’s",
+    "place": "Kunnamkary",
+    "year_established": 1982,
+    "ownership": "SH",
+    "pin_code": "686102",
+    "contacts": {
+      "phone": ["0477-2753466"],
+      "email": null
+    },
+    "roles": {
+      "manager": "9496882797"
+    }
+  },
+  {
+    "id": 5,
+    "name": "St. Joseph's",
+    "place": "Mannanam",
+    "year_established": 1890,
+    "ownership": "CMI",
+    "pin_code": "686561",
+    "contacts": {
+      "phone": [],
+      "email": null
+    },
+    "roles": {
+      "manager": "9497222083"
+    }
+  },
+  {
+    "id": 6,
+    "name": "St. Gregorios",
+    "place": "Mannarkunnu",
+    "year_established": 1966,
+    "ownership": "FCC",
+    "pin_code": "686562",
+    "contacts": {
+      "phone": ["0481-2730318"],
+      "email": null
+    },
+    "roles": {
+      "manager": "9847408492"
+    }
+  }
+],
+
+
+
+"Up_Non_Corporate_Unaided" : [
+
+  {
+    "id": 1,
+    "name": "Little Flower (CBSE)",
+    "place": "Ayoor",
+    "year_established": 2004,
+    "ownership": "CST- Bros.",
+    "pin_code": "691533",
+    "contacts": {
+      "phone": ["9746630553"],
+      "email": "-"
+    },
+    "roles": {
+      "manager": "-"
+    }
+  },
+  {
+    "id": 2,
+    "name": "St. Joseph’s (EM)",
+    "place": "Changanacherry",
+    "year_established": 2003,
+    "ownership": "CMC",
+    "pin_code": "686101",
+    "contacts": {
+      "phone": ["04812420458", "8078254589"],
+      "email": "-"
+    },
+    "roles": {
+      "manager": "-"
+    }
+  },
+  {
+    "id": 3,
+    "name": "Cluny School (CBSE)",
+    "place": "Cheppumpara",
+    "year_established": 1994,
+    "ownership": "SJC",
+    "pin_code": "686502",
+    "contacts": {
+      "phone": ["04812543326"],
+      "email": "-"
+    },
+    "roles": {
+      "manager": "-"
+    }
+  },
+  {
+    "id": 4,
+    "name": "St. Shantal’s (CBSE)",
+    "place": "Kowdiar",
+    "year_established": 1982,
+    "ownership": "DSFS",
+    "pin_code": "695003",
+    "contacts": {
+      "phone": ["04712431170", "7560925933"],
+      "email": "-"
+    },
+    "roles": {
+      "manager": "-"
+    }
+  },
+  {
+    "id": 5,
+    "name": "St. Stephen’s (STATE)",
+    "place": "Manimala",
+    "year_established": 1983,
+    "ownership": "MMM",
+    "pin_code": "686543",
+    "contacts": {
+      "phone": ["04822847147", "9676816381"],
+      "email": "-"
+    },
+    "roles": {
+      "manager": "-"
+    }
+  },
+  {
+    "id": 6,
+    "name": "Christ City (CBSE)",
+    "place": "Muttar",
+    "year_established": 2018,
+    "ownership": "CMI-",
+    "pin_code": "689574",
+    "contacts": {
+      "phone": ["8281813844"],
+      "email": "-"
+    },
+    "roles": {
+      "manager": "-"
+    },
+    "region": "TVM"
+  },
+  {
+    "id": 7,
+    "name": "Bethlehem (EM - STATE)",
+    "place": "Sreekaryam",
+    "year_established": 1987,
+    "ownership": "SABS",
+    "pin_code": "695017",
+    "contacts": {
+      "phone": ["04712598313", "8281808314", "9747136674"],
+      "email": "-"
+    },
+    "roles": {
+      "manager": "-"
+    }
+  },
+  {
+    "id": 8,
+    "name": "St. Luigi (CBSE)",
+    "place": "Thiruvatta",
+    "year_established": 2005,
+    "ownership": "SdP",
+    "pin_code": "686017",
+    "contacts": {
+      "phone": ["04812933695", "9544951702"],
+      "email": "-"
+    },
+    "roles": {
+      "manager": "-"
+    }
+  },
+  {
+    "id": 9,
+    "name": "St. Joseph's (EM - STATE)",
+    "place": "Vavode",
+    "year_established": 1994,
+    "ownership": "FCC",
+    "pin_code": "695125",
+    "contacts": {
+      "phone": ["9446967311"],
+      "email": "-"
+    },
+    "roles": {
+      "manager": "-"
+    }
+  }
+],
+
+
+"Lower_Corporate_Management_Aided" : [
+  {
+    "id": 1,
+    "name": "St. Antony’s",
+    "place": "Alappuzha",
+    "year_established": 1919,
+    "ownership": "Parish",
+    "pin_code": "688501",
+    "contacts": { "phone": ["0477-2238027","9497633185"], "email": null },
+    "roles": { "manager": "-" }
+  },
+  {
+    "id": 2,
+    "name": "St. George’s",
+    "place": "Amboori",
+    "year_established": 1966,
+    "ownership": "Parish",
+    "pin_code": "695505",
+    "contacts": { "phone": ["0471-2245091","9544012292"], "email": null },
+    "roles": { "manager": "-" }
+  },
+  {
+    "id": 3,
+    "name": "St. Philomina’s",
+    "place": "Arpookara",
+    "year_established": 1949,
+    "ownership": "CMC",
+    "pin_code": "686008",
+    "contacts": { "phone": ["0481-2594441","8078854089"], "email": null },
+    "roles": { "manager": "-" }
+  },
+  {
+    "id": 4,
+    "name": "St. Aloysius",
+    "place": "Athirampuzha",
+    "year_established": 1899,
+    "ownership": "Parish",
+    "pin_code": "686562",
+    "contacts": { "phone": ["0481-2730439","9446364073"], "email": null },
+    "roles": { "manager": "-" }
+  },
+  {
+    "id": 5,
+    "name": "St. Mary’s",
+    "place": "Athirampuzha",
+    "year_established": 1905,
+    "ownership": "SABS",
+    "pin_code": "686562",
+    "contacts": { "phone": ["0481-2732320","9495920352"], "email": null },
+    "roles": { "manager": "-" }
+  },
+  {
+    "id": 6,
+    "name": "St. Mary’s",
+    "place": "Champakulam",
+    "year_established": 1905,
+    "ownership": "Parish",
+    "pin_code": "688505",
+    "contacts": { "phone": ["0477-2737974","9946323482"], "email": null },
+    "roles": { "manager": "-" }
+  },
+  {
+    "id": 7,
+    "name": "St. James",
+    "place": "Changanacherry",
+    "year_established": 1936,
+    "ownership": "Parish",
+    "pin_code": "686101",
+    "contacts": { "phone": ["0481-2423326","9446541318"], "email": null },
+    "roles": { "manager": "-" }
+  },
+  {
+    "id": 8,
+    "name": "St. Joseph’s",
+    "place": "Changanacherry",
+    "year_established": 1894,
+    "ownership": "CMC",
+    "pin_code": "686101",
+    "contacts": { "phone": ["0481-2420132","7025463106"], "email": null },
+    "roles": { "manager": "-" }
+  },
+  {
+    "id": 9,
+    "name": "St. Mary's",
+    "place": "Changanacherry",
+    "year_established": 1915,
+    "ownership": "Parish",
+    "pin_code": "686101",
+    "contacts": { "phone": ["9495216251"], "email": null },
+    "roles": { "manager": "-" }
+  },
+  {
+    "id": 10,
+    "name": "St. Sebastian’s",
+    "place": "Chanjody",
+    "year_established": 1984,
+    "ownership": "Parish",
+    "pin_code": "686105",
+    "contacts": { "phone": ["9495447019"], "email": null },
+    "roles": { "manager": "-" }
+  }, 
+  {
+    "id": 11,
+    "name": "St. Antony's",
+    "place": "Chennamkary East",
+    "year_established": 1921,
+    "ownership": "Parish",
+    "pin_code": "688506",
+    "contacts": {
+      "phone": ["0477-2748777","9446603223"],
+      "email": null
+    },
+    "roles": {
+      "manager": "-"
+    }
+  },
+  {
+    "id": 12,
+    "name": "St. Sebastian’s",
+    "place": "Cheruvandoor",
+    "year_established": 1951,
+    "ownership": "Parish",
+    "pin_code": "686631",
+    "contacts": {
+      "phone": ["0481-2530226","9400933798"],
+      "email": null
+    },
+    "roles": {
+      "manager": "-"
+    }
+  },
+  {
+    "id": 13,
+    "name": "St. Aloysius",
+    "place": "Edathua",
+    "year_established": 1910,
+    "ownership": "Parish",
+    "pin_code": "689573",
+    "contacts": {
+      "phone": ["9495440808"],
+      "email": null
+    },
+    "roles": {
+      "manager": "-"
+    }
+  },
+  {
+    "id": 14,
+    "name": "St. Mary’s",
+    "place": "Edathua",
+    "year_established": 1888,
+    "ownership": "Parish",
+    "pin_code": "689573",
+    "contacts": {
+      "phone": ["8281563189"],
+      "email": null
+    },
+    "roles": {
+      "manager": "-"
+    }
+  },
+  {
+    "id": 15,
+    "name": "Sacred Heart",
+    "place": "Kadayanicad",
+    "year_established": 1920,
+    "ownership": "Parish",
+    "pin_code": "686541",
+    "contacts": {
+      "phone": ["9446981804"],
+      "email": null
+    },
+    "roles": {
+      "manager": "-"
+    }
+  },
+  {
+    "id": 16,
+    "name": "AJ John Memorial",
+    "place": "Kainady",
+    "year_established": 1921,
+    "ownership": "Parish",
+    "pin_code": "686534",
+    "contacts": {
+      "phone": ["9496144185"],
+      "email": null
+    },
+    "roles": {
+      "manager": "-"
+    }
+  },
+  {
+    "id": 17,
+    "name": "St. Mary’s",
+    "place": "Kainakary",
+    "year_established": 1914,
+    "ownership": "Parish",
+    "pin_code": "688501",
+    "contacts": {
+      "phone": ["0477-2724037","9497636494"],
+      "email": null
+    },
+    "roles": {
+      "manager":"-" 
+    }
+  },
+  {
+    "id": 18,
+    "name": "Little Flower",
+    "place": "Kainakary",
+    "year_established": 1928,
+    "ownership": "CMC",
+    "pin_code": "688501",
+    "contacts": {
+      "phone": ["0477-2724490","9562923792"],
+      "email": null
+    },
+    "roles": {
+      "manager": "-"
+    }
+  },
+
+  {
+    "id": 19,
+    "name": "St. Thomas",
+    "place": "Karikkattoor",
+    "year_established": 1951,
+    "ownership": "SH",
+    "pin_code": "686554",
+    "contacts": {
+      "phone": ["04828-418110", "9847709071"],
+      "email": null
+    },
+    "roles": {
+      "manager":"-"
+    }
+  },
+  {
+    "id": 20,
+    "name": "St. Nicholas",
+    "place": "Karumady",
+    "year_established": 1966,
+    "ownership": "Parish",
+    "pin_code": "688564",
+    "contacts": {
+      "phone": [ "9497676137"],
+      "email": null
+    },
+    "roles": {
+      "manager":"-"
+    }
+  }, 
+  {
+    "id": 21,
+    "name": "St. Joseph’s",
+    "place": "Karuvatta",
+    "year_established": 1964,
+    "ownership": "Parish",
+    "pin_code": "690554",
+    "contacts": {
+      "phone": ["0479-2490268","9497583910"],
+      "email": "-"
+    },
+    "roles": {
+      "manager": "-"
+    }
+  },
+  {
+    "id": 22,
+    "name": "New St. Teresa's",
+    "place": "Kavalam North",
+    "year_established": 1921,
+    "ownership": "Parish",
+    "pin_code": "688506",
+    "contacts": {
+      "phone": ["9447041070"],
+      "email": "-"
+    },
+    "roles": {
+      "manager": "-"
+    }
+  },
+  {
+    "id": 23,
+    "name": "St. Antony’s",
+    "place": "Koottamackal",
+    "year_established": 1924,
+    "ownership": "Parish",
+    "pin_code": "686503",
+    "contacts": {
+      "phone": ["9446124388"],
+      "email": "-"
+    },
+    "roles": {
+      "manager": "-"
+    }
+  },
+  {
+    "id": 24,
+    "name": "St. Little Theresa’s",
+    "place": "Kottangal",
+    "year_established": 1928,
+    "ownership": "Parish",
+    "pin_code": "686547",
+    "contacts": {
+      "phone": ["9495734335"],
+      "email": "-"
+    },
+    "roles": {
+      "manager": "-"
+    }
+  },
+  {
+    "id": 25,
+    "name": "St. Antony’s",
+    "place": "Kurumpanadom",
+    "year_established": 1916,
+    "ownership": "Parish",
+    "pin_code": "686536",
+    "contacts": {
+      "phone": ["0482-2471460","9605365667"],
+      "email": "-"
+    },
+    "roles": {
+      "manager": "-"
+    }
+  },
+  {
+    "id": 26,
+    "name": "Holy Family",
+    "place": "Kurumpanadom",
+    "year_established": 1930,
+    "ownership": "Parish",
+    "pin_code": "686536",
+    "contacts": {
+      "phone": ["9562568194"],
+      "email": "-"
+    },
+    "roles": {
+      "manager": "-"
+    }
+  },
+  {
+    "id": 27,
+    "name": "St. Joseph’s",
+    "place": "Laikad",
+    "year_established": 1966,
+    "ownership": "Parish",
+    "pin_code": "686102",
+    "contacts": {
+      "phone": ["9495268884"],
+      "email": "-"
+    },
+    "roles": {
+      "manager": "-"
+    }
+  },
+  {
+    "id": 28,
+    "name": "Fr. Philipose Memorial",
+    "place": "Mampuzhakary",
+    "year_established": 1960,
+    "ownership": "Parish",
+    "pin_code": "689590",
+    "contacts": {
+      "phone": ["9446515565"],
+      "email": "-"
+    },
+    "roles": {
+      "manager": "-"
+    }
+  },
+  {
+    "id": 29,
+    "name": "St. Mary’s",
+    "place": "Manalady",
+    "year_established": 1983,
+    "ownership": "Parish",
+    "pin_code": "689595",
+    "contacts": {
+      "phone": ["0477-2707660", "8606655596"],
+      "email": "-"
+    },
+    "roles": {
+      "manager":"-"
+    }
+  },
+  {
+    "id": 30,
+    "name": "Little Flower",
+    "place": "Manimala",
+    "year_established": 1950,
+    "ownership": "Parish",
+    "pin_code": "686543",
+    "contacts": {
+      "phone": ["0482-8249495","9495358899"],
+      "email": "-"
+    },
+    "roles": {
+      "manager": "-"
+    }
+  },  
+  {
+    "id": 31,
+    "name": "St. George’s",
+    "place": "Muttar Old",
+    "year_established": 1905,
+    "ownership": "Parish",
+    "pin_code": "689574",
+    "contacts": {
+      "phone": ["0477-2219738", "9446773951"],
+      "email": "-"
+    },
+    "roles": {
+      "manager": "-"
+    }
+  },
+  {
+    "id": 32,
+    "name": "St. Teresa’s",
+    "place": "Nedumkunnam",
+    "year_established": 1920,
+    "ownership": "CMC",
+    "pin_code": "686542",
+    "contacts": {
+      "phone": ["0481-2415065", "9747981177"],
+      "email": "-"
+    },
+    "roles": {
+      "manager": "-"
+    }
+  },
+  {
+    "id": 33,
+    "name": "SMSS",
+    "place": "Pandankary",
+    "year_established": 1918,
+    "ownership": "Parish",
+    "pin_code": "689573",
+    "contacts": {
+      "phone": ["9605449432"],
+      "email": "-"
+    },
+    "roles": {
+      "manager": "-"
+    }
+  },
+  {
+    "id": 34,
+    "name": "St. Joseph’s",
+    "place": "Parappallikunnu",
+    "year_established": 1924,
+    "ownership": "Parish",
+    "pin_code": "686503",
+    "contacts": {
+      "phone": ["7034739111"],
+      "email": "-"
+    },
+    "roles": {
+      "manager": "-"
+    }
+  },
+  {
+    "id": 35,
+    "name": "Jubilee Memorial (JM)",
+    "place": "Parel",
+    "year_established": 1916,
+    "ownership": "Aepa",
+    "pin_code": "686104",
+    "contacts": {
+      "phone": ["0481-2422769", "9995890050"],
+      "email": "-"
+    },
+    "roles": {
+      "manager": "-"
+    }
+  },
+  {
+    "id": 36,
+    "name": "Amalolbhava",
+    "place": "Pulincunnoo",
+    "year_established": 1927,
+    "ownership": "CMC",
+    "pin_code": "686504",
+    "contacts": {
+      "phone": ["0477-2705963", "9446604216"],
+      "email": "-"
+    },
+    "roles": {
+      "manager": "-"
+    }
+  },
+  {
+    "id": 37,
+    "name": "St. Joseph’s",
+    "place": "Punnathura",
+    "year_established": 1912,
+    "ownership": "Parish",
+    "pin_code": "686583",
+    "contacts": {
+      "phone": ["9745681020"],
+      "email": "-"
+    },
+    "roles": {
+      "manager": "-"
+    }
+  },
+  {
+    "id": 38,
+    "name": "Little Flower",
+    "place": "Purakad",
+    "year_established": 1960,
+    "ownership": "FCC",
+    "pin_code": "690551",
+    "contacts": {
+      "phone": ["0477-2273511", "9188638489"],
+      "email": "-"
+    },
+    "roles": {
+      "manager": "-"
+    }
+  },
+  {
+    "id": 39,
+    "name": "Holy Family",
+    "place": "Thathampally",
+    "year_established": 1964,
+    "ownership": "Parish",
+    "pin_code": "688013",
+    "contacts": {
+      "phone": ["9349258841"],
+      "email": "-"
+    },
+    "roles": {
+      "manager": "-"
+    }
+  },
+  {
+    "id": 40,
+    "name": "St. Antony’s",
+    "place": "Thayamkary",
+    "year_established": 1933,
+    "ownership": "Parish",
+    "pin_code": "689722",
+    "contacts": {
+      "phone": ["9961697167"],
+      "email": "-"
+    },
+    "roles": {
+      "manager": "-"
+    }
+  },
+  {
+    "id": 41,
+    "name": "St. Mary’s",
+    "place": "Thekkupara",
+    "year_established": 1966,
+    "ownership": "Parish",
+    "pin_code": "695505",
+    "contacts": {
+      "phone": ["7907804432"],
+      "email": "-"
+    },
+    "roles": {
+      "manager": "-"
+    }
+  },
+  {
+    "id": 42,
+    "name": "St. Thomas",
+    "place": "Thuruthy",
+    "year_established": 1946,
+    "ownership": "SABS",
+    "pin_code": "686535",
+    "contacts": {
+      "phone": ["9497325261"],
+      "email": "-"
+    },
+    "roles": {
+      "manager": "-"
+    }
+  },
+  {
+    "id": 43,
+    "name": "St. Mary’s",
+    "place": "Vaipur Old",
+    "year_established": 1907,
+    "ownership": "Parish",
+    "pin_code": "689588",
+    "contacts": {
+      "phone": ["9497222995"],
+      "email": "-"
+    },
+    "roles": {
+      "manager": "-"
+    }
+  },
+  {
+    "id": 44,
+    "name": "St. George’s",
+    "place": "Valiad",
+    "year_established": 1916,
+    "ownership": "Parish",
+    "pin_code": "686015",
+    "contacts": {
+      "phone": ["9447659476"],
+      "email": "-"
+    },
+    "roles": {
+      "manager": "-"
+    }
+  },
+  {
+    "id": 45,
+    "name": "St. Teresa’s",
+    "place": "Vazhappally",
+    "year_established": 1916,
+    "ownership": "SABS",
+    "pin_code": "686103",
+    "contacts": {
+      "phone": ["0481-2410792", "9562162132"],
+      "email": "-"
+    },
+    "roles": {
+      "manager": "-"
+    }
+  },
+  {
+    "id": 46,
+    "name": "St. Mary’s",
+    "place": "Veroor",
+    "year_established": 1957,
+    "ownership": "FCC",
+    "pin_code": "686106",
+    "contacts": {
+      "phone": ["0481-2726200", "8289946007"],
+      "email": "-"
+    },
+    "roles": {
+      "manager": "-"
+    }
+  }
+],
+
+"Lower_Non_Corporate_Aided": [
+  {
+    "id": 1,
+    "name": "St. Antony's (EM - English Medium)",
+    "place": "Alappuzha",
+    "year_established": 2003,
+    "ownership": "CMC",
+    "pin_code": "688011",
+    "contacts": {
+      "phone": ["8136997839"],
+      "email": "-"
+    },
+    "roles": {
+      "manager": "-"
+    }
+  },
+  {
+    "id": 2,
+    "name": "BTK",
+    "place": "Fathimapuram",
+    "year_established": 1964,
+    "ownership": "SABS",
+    "pin_code": "686102",
+    "contacts": {
+      "phone": ["0481-2403716", "9605362811"],
+      "email": "-"
+    },
+    "roles": {
+      "manager": "-"
+    }
+  },
+  {
+    "id": 3,
+    "name": "Lisieux",
+    "place": "Ithithanam",
+    "year_established": 1981,
+    "ownership": "CMC",
+    "pin_code": "686531",
+    "contacts": {
+      "phone": ["0481-2726098", "6238371958", "9446769984"],
+      "email": "-"
+    },
+    "roles": {
+      "manager": "-"
+    }
+  },
+  {
+    "id": 4,
+    "name": "St. Mathew's",
+    "place": "Kuchapuram",
+    "year_established": 1982,
+    "ownership": "SH",
+    "pin_code": "695572",
+    "contacts": {
+      "phone": ["0471-2257122", "9497163949"],
+      "email": "-"
+    },
+    "roles": {
+      "manager": "-"
+    }
+  },
+  {
+    "id": 5,
+    "name": "NNCJ Memorial",
+    "place": "Kumarakom",
+    "year_established": 1964,
+    "ownership": "SH",
+    "pin_code": "686563",
+    "contacts": {
+      "phone": ["0481-2523488", "9447681920"],
+      "email": "-"
+    },
+    "roles": {
+      "manager": "-"
+    }
+  },
+  {
+    "id": 6,
+    "name": "Mary Matha",
+    "place": "Punnakkunnathussery",
+    "year_established": 1981,
+    "ownership": "SABS",
+    "pin_code": "688504",
+    "contacts": {
+      "phone": ["0477-2704944", "9495638530"],
+      "email": "-"
+    },
+    "roles": {
+      "manager": "-"
+    }
+  }
+],
+
+"Lower_Non_Corporate_Unaided" :[
+  {
+    "id": 1,
+    "name": "Sahrudaya (CBSE)",
+    "place": "Amboori",
+    "year_established": 1994,
+    "ownership": "SH",
+    "pin_code": "695505",
+    "contacts": {
+      "phone": ["9746842839"],
+      "email": "-"
+    },
+    "roles": {
+      "manager": "-"
+    }
+  },
+  {
+    "id": 2,
+    "name": "Sacred Heart (CBSE)",
+    "place": "Aryankavu",
+    "year_established": 2004,
+    "ownership": "SH",
+    "pin_code": "691309",
+    "contacts": {
+      "phone": ["9605519966"],
+      "email": "-"
+    },
+    "roles": {
+      "manager": "-"
+    }
+  },
+  {
+    "id": 3,
+    "name": "Sacred Heart",
+    "place": "Changanacherry",
+    "year_established": 1964,
+    "ownership": "Aepa",
+    "pin_code": "686102",
+    "contacts": {
+      "phone": ["0481-2420534", "0481-2427534"],
+      "email": "-"
+    },
+    "roles": {
+      "manager": "-"
+    }
+  },
+  {
+    "id": 4,
+    "name": "Lourdes Matha (CBSE)",
+    "place": "Chennamkary",
+    "year_established": 2005,
+    "ownership": "JS",
+    "pin_code": "688501",
+    "contacts": {
+      "phone": ["8281942953"],
+      "email": "-"
+    },
+    "roles": {
+      "manager": "-"
+    }
+  },
+  {
+    "id": 5,
+    "name": "Chavara (CBSE)",
+    "place": "Karikkattoor",
+    "year_established": 2003,
+    "ownership": "CMI",
+    "pin_code": "686544",
+    "contacts": {
+      "phone": ["9747846720"],
+      "email": "-"
+    },
+    "roles": {
+      "manager": "-"
+    }
+  },
+  {
+    "id": 6,
+    "name": "Santa Claus (CBSE)",
+    "place": "Karumady",
+    "year_established": 1997,
+    "ownership": "Parish",
+    "pin_code": "686561",
+    "contacts": {
+      "phone": ["9496247599", "8921488562"],
+      "email": "-"
+    },
+    "roles": {
+      "manager": "-"
+    }
+  },
+  {
+    "id": 7,
+    "name": "Vijayamatha Public (CBSE)",
+    "place": "Koduppunna",
+    "year_established": 2002,
+    "ownership": "LWSH",
+    "pin_code": "689595",
+    "contacts": {
+      "phone": ["0477-2900463", "8281166311"],
+      "email": "-"
+    },
+    "roles": {
+      "manager": "-"
+    }
+  },
+  {
+    "id": 8,
+    "name": "St. Joseph's (CBSE)",
+    "place": "Kurumpanadom",
+    "year_established": 1993,
+    "ownership": "FCC",
+    "pin_code": "686536",
+    "contacts": {
+      "phone": ["9497088411", "9539487825"],
+      "email": "-"
+    },
+    "roles": {
+      "manager": "-"
+    }
+  },
+  {
+    "id": 9,
+    "name": "St. Shantal’s (CBSE)",
+    "place": "Malamukal",
+    "year_established": 2001,
+    "ownership": "DSFS",
+    "pin_code": "695003",
+    "contacts": {
+      "phone": ["0471-2317170"],
+      "email": "-"
+    },
+    "roles": {
+      "manager": "-"
+    }
+  },
+  {
+    "id": 10,
+    "name": "St. George (CBSE)",
+    "place": "Mannarkunnu",
+    "year_established": 1978,
+    "ownership": "FCC",
+    "pin_code": "686562",
+    "contacts": {
+      "phone": ["0481-2731139", "9446927311"],
+      "email": "-"
+    },
+    "roles": {
+      "manager": "-"
+    }
+  },
+  {
+    "id": 11,
+    "name": "Amala (EM - STATE)",
+    "place": "Mithrakary",
+    "year_established": 2005,
+    "ownership": "CMC",
+    "pin_code": "689595",
+    "contacts": {
+      "phone": ["9605218420"],
+      "email": "-"
+    },
+    "roles": {
+      "manager": "-"
+    }
+  },
+  {
+    "id": 12,
+    "name": "Holy Family (CBSE)",
+    "place": "Pachalloor",
+    "year_established": 2003,
+    "ownership": "CHF",
+    "pin_code": "695027",
+    "contacts": {
+      "phone": ["0471-2384932", "0471-2383370"],
+      "email": "-"
+    },
+    "roles": {
+      "manager": "-"
+    }
+  },
+  {
+    "id": 13,
+    "name": "Sacred Heart (EM - STATE)",
+    "place": "Paippad",
+    "year_established": 1990,
+    "ownership": "SH",
+    "pin_code": "686537",
+    "contacts": {
+      "phone": ["0481-2962442", "9605114937"],
+      "email": "-"
+    },
+    "roles": {
+      "manager": "-"
+    }
+  },
+  {
+    "id": 14,
+    "name": "St. Antony’s (CBSE)",
+    "place": "Paral",
+    "year_established": 2005,
+    "ownership": "Parish",
+    "pin_code": "686103",
+    "contacts": {
+      "phone": ["7510505480", "8281669308"],
+      "email": "-"
+    },
+    "roles": {
+      "manager": "-"
+    }
+  },
+  {
+    "id": 15,
+    "name": "St. Mary’s (CBSE)",
+    "place": "Perumkavu",
+    "year_established": 2021,
+    "ownership": "HM",
+    "pin_code": "686543",
+    "contacts": {
+      "phone": ["8111989262"],
+      "email": "-"
+    },
+    "roles": {
+      "manager": "-"
+    }
+  },
+  {
+    "id": 16,
+    "name": "St. Mary’s (EM - STATE)",
+    "place": "Pulickalkavala",
+    "year_established": 1980,
+    "ownership": "SABS",
+    "pin_code": "686515",
+    "contacts": {
+      "phone": ["0481-2457034", "9745754056"],
+      "email": "-"
+    },
+    "roles": {
+      "manager": "-"
+    }
+  },
+  {
+    "id": 17,
+    "name": "Little Flower (CBSE)",
+    "place": "Pulincunnoo",
+    "year_established": 1999,
+    "ownership": "CMC",
+    "pin_code": "688504",
+    "contacts": {
+      "phone": ["0477-2705963", "9495792275"],
+      "email": "-"
+    },
+    "roles": {
+      "manager": "-"
+    }
+  },
+  {
+    "id": 18,
+    "name": "Christ Nagar Junior",
+    "place": "Thiruvallam",
+    "year_established": 2013,
+    "ownership": "CMI",
+    "pin_code": "695027",
+    "contacts": {
+      "phone": ["0471-2383770", "0471-2383771", "0471-2383772", "7902255999"],
+      "email": "-"
+    },
+    "roles": {
+      "manager": "-"
+    }
+  },
+  {
+    "id": 19,
+    "name": "Assisi (CBSE)",
+    "place": "Vaisyambhagom",
+    "year_established": 1998,
+    "ownership": "ASMI",
+    "pin_code": "688505",
+    "contacts": {
+      "phone": ["9544842720"],
+      "email": "-"
+    },
+    "roles": {
+      "manager": "-"
+    }
+  },
+  {
+    "id": 20,
+    "name": "Geo Mount (CBSE)",
+    "place": "Venchempu",
+    "year_established": 2004,
+    "ownership": "Parish",
+    "pin_code": "691333",
+    "contacts": {
+      "phone": ["9946441508"],
+      "email": "-"
+    },
+    "roles": {
+      "manager": "-"
+    }
+  },
+  {
+    "id": 21,
+    "name": "St. Joseph's (CBSE)",
+    "place": "Villoonni",
+    "year_established": 2003,
+    "ownership": "JS",
+    "pin_code": "686008",
+    "contacts": {
+      "phone": ["0481-2599320", "8301836481"],
+      "email": "-"
+    },
+    "roles": {
+      "manager": "-"
+    }
+  },
+  {
+    "id": 22,
+    "name": "St. Francis Sales (CBSE)",
+    "place": "Vizhinjam",
+    "year_established": 1989,
+    "ownership": "DSFS",
+    "pin_code": "695521",
+    "contacts": {
+      "phone": ["0471-2483447", "7025639568"],
+      "email": "-"
+    },
+    "roles": {
+      "manager": "-"
+    }
+  }
+],
+
+"Nursery_Schools": [
+  {
+    "id": 1,
+    "name": "St. George’s Nursery School",
+    "place": "Aikkarachira",
+    "year_established": 1979,
+    "ownership": "CMC",
+    "pin_code": "686015",
+    "contacts": {
+      "phone": ["7510898294"],
+      "email": "-"
+    },
+    "roles": { "manager": "-" }
+  },
+  {
+    "id": 2,
+    "name": "Sishusadan",
+    "place": "Arattuvazhi",
+    "year_established": 1994,
+    "ownership": "Parish",
+    "pin_code": "688007",
+    "contacts": {
+      "phone": ["0477-2244855", "9495543017"],
+      "email": "-"
+    },
+    "roles": { "manager": "-" }
+  },
+  {
+    "id": 3,
+    "name": "Carmel EM Nursery",
+    "place": "Arpookara",
+    "year_established": 2004,
+    "ownership": "CMC",
+    "pin_code": "686008",
+    "contacts": {
+      "phone": ["0481-2594441"],
+      "email": "-"
+    },
+    "roles": { "manager": "-" }
+  },
+  {
+    "id": 4,
+    "name": "St. Thomas English Medium Nursery School",
+    "place": "Ayarkunnam",
+    "year_established": 1973,
+    "ownership": "SABS",
+    "pin_code": "686564",
+    "contacts": {
+      "phone": ["0481-2544858"],
+      "email": "-"
+    },
+    "roles": { "manager": "-" }
+  },
+  {
+    "id": 5,
+    "name": "Bishop Kurialacherry Nursery School",
+    "place": "Champakulam",
+    "year_established": 1983,
+    "ownership": "SABS",
+    "pin_code": "688505",
+    "contacts": {
+      "phone": ["9447855210"],
+      "email": "-"
+    },
+    "roles": { "manager": "-" }
+  },
+  {
+    "id": 6,
+    "name": "St. Thomas Nursery School",
+    "place": "Champakulam",
+    "year_established": 2013,
+    "ownership": "SABS",
+    "pin_code": "688505",
+    "contacts": {
+      "phone": ["8547249332"],
+      "email": "-"
+    },
+    "roles": { "manager": "-" }
+  },
+  {
+    "id": 7,
+    "name": "St. Anne’s Nursery School",
+    "place": "Changanacherry",
+    "year_established": 1961,
+    "ownership": "FCC",
+    "pin_code": "686101",
+    "contacts": {
+      "phone": ["8281722476"],
+      "email": "-"
+    },
+    "roles": { "manager": "-" }
+  },
+  {
+    "id": 8,
+    "name": "St. Joseph’s Nursery School",
+    "place": "Changanacherry",
+    "year_established": 1968,
+    "ownership": "CMC",
+    "pin_code": "686101",
+    "contacts": {
+      "phone": ["0481-2412458"],
+      "email": "-"
+    },
+    "roles": { "manager": "-" }
+  },
+  {
+    "id": 9,
+    "name": "St. Mary Mazzerallo Nursery School",
+    "place": "Charamangalam",
+    "year_established": 1993,
+    "ownership": "FDSHJ",
+    "pin_code": "688539",
+    "contacts": {
+      "phone": ["7594072397"],
+      "email": "-"
+    },
+    "roles": { "manager": "-" }
+  },
+  {
+    "id": 10,
+    "name": "Matha Nursery School",
+    "place": "Cheruvandoor",
+    "year_established": 1979,
+    "ownership": "FCC",
+    "pin_code": "686631",
+    "contacts": {
+      "phone": ["0481-2539418", "8547416328"],
+      "email": "-"
+    },
+    "roles": { "manager": "-" }
+  },
+
+  {
+    "id": 11,
+    "name": "Carmel Nursery School",
+    "place": "Chethipuzha",
+    "year_established": 1998,
+    "ownership": "CMC",
+    "pin_code": "686104",
+    "contacts": {
+      "phone": ["0481-2729973", "8281570482"],
+      "email": "-"
+    },
+    "roles": { "manager": "-" }
+  },
+  {
+    "id": 12,
+    "name": "St. George Nursery School",
+    "place": "Edathua",
+    "year_established": 1946,
+    "ownership": "SABS",
+    "pin_code": "689573",
+    "contacts": {
+      "phone": ["0477-2961125"],
+      "email": "-"
+    },
+    "roles": { "manager": "-" }
+  },
+  {
+    "id": 13,
+    "name": "St. Francis Nursery School",
+    "place": "Eravuchira",
+    "year_established": 1977,
+    "ownership": "FCC",
+    "pin_code": "686539",
+    "contacts": {
+      "phone": ["0481-2462066", "8281915447"],
+      "email": "-"
+    },
+    "roles": { "manager": "-" }
+  },
+  {
+    "id": 14,
+    "name": "Zion Nursery",
+    "place": "Ettumanoor",
+    "year_established": 1982,
+    "ownership": "SABS",
+    "pin_code": "686631",
+    "contacts": {
+      "phone": ["0481-2538482"],
+      "email": "-"
+    },
+    "roles": { "manager": "-" }
+  },
+  {
+    "id": 15,
+    "name": "BTK Nursery School",
+    "place": "Fathimapuram",
+    "year_established": 1966,
+    "ownership": "SABS",
+    "pin_code": "686102",
+    "contacts": {
+      "phone": ["8281750113"],
+      "email": "-"
+    },
+    "roles": { "manager": "-" }
+  },
+
+  {
+    "id": 16,
+    "name": "Lisieux English Medium Nursery School",
+    "place": "Ithithanam",
+    "year_established": 1981,
+    "ownership": "CMC",
+    "pin_code": "686535",
+    "contacts": {
+      "phone": ["8111861336", "8590388763"],
+      "email": "-"
+    },
+    "roles": { "manager": "-" }
+  },
+
+  {
+    "id": 17,
+    "name": "St. Mary’s Nursery School",
+    "place": "Kainady",
+    "year_established": 1946,
+    "ownership": "SABS",
+    "pin_code": "686534",
+    "contacts": {
+      "phone": ["0477-2710409"],
+      "email": "-"
+    },
+    "roles": { "manager": "-" }
+  },
+
+  {
+    "id": 18,
+    "name": "St. Joseph’s Nursery School",
+    "place": "Kandankary",
+    "year_established": 1991,
+    "ownership": "FDSHJ",
+    "pin_code": "689573",
+    "contacts": {
+      "phone": ["8156949641"],
+      "email": "-"
+    },
+    "roles": { "manager": "-" }
+  },
+
+  {
+    "id": 19,
+    "name": "Sacred Heart Nursery School",
+    "place": "Kannady",
+    "year_established": 1975,
+    "ownership": "FCC",
+    "pin_code": "688507",
+    "contacts": {
+      "phone": ["0477-2704625"],
+      "email": "-"
+    },
+    "roles": { "manager": "-" }
+  },
+
+  {
+    "id": 20,
+    "name": "St. Antony’s Nursery School",
+    "place": "Kannady",
+    "year_established": 1944,
+    "ownership": "FCC",
+    "pin_code": "688504",
+    "contacts": {
+      "phone": ["0477-2702056", "8304802056"],
+      "email": "-"
+    },
+    "roles": { "manager": "-" }
+  },
+  {
+    "id": 21,
+    "name": "Sacred Heart Nursery School",
+    "place": "Karimpanakulam",
+    "year_established": 1976,
+    "ownership": "SABS",
+    "pin_code": "686544",
+    "contacts": {
+      "phone": ["83018-76784"],
+      "email": "-"
+    },
+    "roles": {
+      "manager": "-"
+    }
+  },
+  {
+    "id": 22,
+    "name": "St. Joseph’s Nursery School",
+    "place": "Karuvatta",
+    "year_established": 1973,
+    "ownership": "FCC",
+    "pin_code": "690517",
+    "contacts": {
+      "phone": ["0479-2492502"],
+      "email": "-"
+    },
+    "roles": {
+      "manager": "-"
+    }
+  },
+  {
+    "id": 23,
+    "name": "St. Joseph’s Nursery School",
+    "place": "Kayalpuram",
+    "year_established": 1976,
+    "ownership": "FCC",
+    "pin_code": "688504",
+    "contacts": {
+      "phone": ["85904-82236"],
+      "email": "-"
+    },
+    "roles": {
+      "manager": "-"
+    }
+  },
+  {
+    "id": 24,
+    "name": "Vimala Nursery School",
+    "place": "Koothrappally",
+    "year_established": 1978,
+    "ownership": "SABS",
+    "pin_code": "686540",
+    "contacts": {
+      "phone": ["82818-59383"],
+      "email": "-"
+    },
+    "roles": {
+      "manager": "-"
+    }
+  },
+  {
+    "id": 25,
+    "name": "Infant Jesus Nursery School",
+    "place": "Kottangal",
+    "year_established": 2000,
+    "ownership": "SD",
+    "pin_code": "686547",
+    "contacts": {
+      "phone": ["0469-2696789"],
+      "email": "-"
+    },
+    "roles": {
+      "manager": "-"
+    }
+  },
+  {
+    "id": 26,
+    "name": "Nirmala Bhavan Nursery School",
+    "place": "Kowdiar",
+    "year_established": 1959,
+    "ownership": "SABS",
+    "pin_code": "695003",
+    "contacts": {
+      "phone": ["0471-2316388"],
+      "email": "-"
+    },
+    "roles": {
+      "manager": "-"
+    }
+  },
+  {
+    "id": 27,
+    "name": "SH Nursery School",
+    "place": "Kuchapuram",
+    "year_established": 1976,
+    "ownership": "SH",
+    "pin_code": "695572",
+    "contacts": {
+      "phone": ["0471-2255357"],
+      "email": "-"
+    },
+    "roles": {
+      "manager": "-"
+    }
+  },
+  {
+    "id": 28,
+    "name": "Little Flower Nursery School",
+    "place": "Kulathoor",
+    "year_established": 1980,
+    "ownership": "SABS",
+    "pin_code": "689588",
+    "contacts": {
+      "phone": ["0469-2696649"],
+      "email": "-"
+    },
+    "roles": {
+      "manager": "-"
+    }
+  },
+  {
+    "id": 29,
+    "name": "SH Nursery School",
+    "place": "Kumarakom",
+    "year_established": 1964,
+    "ownership": "SH",
+    "pin_code": "686563",
+    "contacts": {
+      "phone": ["74066-07348"],
+      "email": "-"
+    },
+    "roles": {
+      "manager": "-"
+    }
+  },
+  {
+    "id": 30,
+    "name": "St. John Nepumseanos Nursery School",
+    "place": "Kumarakom",
+    "year_established": 1992,
+    "ownership": "FDSHJ",
+    "pin_code": "686563",
+    "contacts": {
+      "phone": ["97467-12871"],
+      "email": "-"
+    },
+    "roles": {
+      "manager": "-"
+    }
+  },
+  {
+    "id": 31,
+    "name": "St. Mary’s Nursery School",
+    "place": "Kumaramkary",
+    "year_established": 2006,
+    "ownership": "FDSHJ",
+    "pin_code": "686103",
+    "contacts": {
+      "phone": ["85479-15560"],
+      "email": "-"
+    },
+    "roles": {
+      "manager": "-"
+    }
+  },
+  {
+    "id": 32,
+    "name": "St. Joseph’s Nursery School",
+    "place": "Kumarapuram",
+    "year_established": 1969,
+    "ownership": "SD",
+    "pin_code": "695011",
+    "contacts": {
+      "phone": ["0471-2442734", "94474-44929"],
+      "email": "-"
+    },
+    "roles": {
+      "manager": "-"
+    }
+  },
+  {
+    "id": 33,
+    "name": "St. Shantal’s English Medium Nursery School",
+    "place": "Mammood",
+    "year_established": 1977,
+    "ownership": "SABS",
+    "pin_code": "686536",
+    "contacts": {
+      "phone": ["94971-64089"],
+      "email": "-"
+    },
+    "roles": {
+      "manager": "-"
+    }
+  },
+  {
+    "id": 34,
+    "name": "St. Joseph Nursery School",
+    "place": "Manackachira",
+    "year_established": 1993,
+    "ownership": "FDSHJ",
+    "pin_code": "686102",
+    "contacts": {
+      "phone": ["0481-2421542", "80865-39770"],
+      "email": "-"
+    },
+    "roles": {
+      "manager": "-"
+    }
+  },
+  {
+    "id": 35,
+    "name": "Holy Magi Nursery School",
+    "place": "Manimala",
+    "year_established": 1967,
+    "ownership": "CMC",
+    "pin_code": "686543",
+    "contacts": {
+      "phone": ["0482-8247476"],
+      "email": "-"
+    },
+    "roles": {
+      "manager": "-"
+    }
+  },
+  {
+    "id": 36,
+    "name": "St. Mary’s Nursery School",
+    "place": "Mannancherry",
+    "year_established": 1998,
+    "ownership": "Parish",
+    "pin_code": "688538",
+    "contacts": {
+      "phone": ["88918-20072"],
+      "email": "-"
+    },
+    "roles": {
+      "manager": "-"
+    }
+  },
+  {
+    "id": 37,
+    "name": "Pious X Nursery School",
+    "place": "Moncompu",
+    "year_established": 1983,
+    "ownership": "FCC",
+    "pin_code": "688502",
+    "contacts": {
+      "phone": ["0477-2707531", "94951-07531"],
+      "email": "-"
+    },
+    "roles": {
+      "manager": "-"
+    }
+  },
+  {
+    "id": 38,
+    "name": "Stella Maris Nursery School",
+    "place": "Mundupalam",
+    "year_established": 2006,
+    "ownership": "DM",
+    "pin_code": "686546",
+    "contacts": {
+      "phone": ["0481-2475390", "94974-75335"],
+      "email": "-"
+    },
+    "roles": {
+      "manager": "-"
+    }
+  },
+  {
+    "id": 39,
+    "name": "Carmel English Medium Nursery School",
+    "place": "Nalukody",
+    "year_established": 1978,
+    "ownership": "CMC",
+    "pin_code": "686548",
+    "contacts": {
+      "phone": ["86063-19903"],
+      "email": "-"
+    },
+    "roles": {
+      "manager": "-"
+    }
+  },
+  {
+    "id": 40,
+    "name": "SH Nursery School",
+    "place": "Nedumanny",
+    "year_established": 1991,
+    "ownership": "SH",
+    "pin_code": "686542",
+    "contacts": {
+      "phone": ["0481-2417601"],
+      "email": "-"
+    },
+    "roles": {
+      "manager": "-"
+    }
+},
+{
+  "id": 41,
+    "name": "Infant Jesus Nursery",
+    "place": "Nedumkunnam",
+    "year_established": 1921,
+    "ownership": "CMC",
+    "pin_code": "686542",
+    "contacts": {
+      "phone": ["0481-2415025"],
+      "email": "-"
+    },
+    "roles": {
+      "manager": "-"
+    }
+  },
+  {
+    "id": 42,
+    "name": "St. Philomina’s Nursery School",
+    "place": "Nedungadappally",
+    "year_established": 1970,
+    "ownership": "SABS",
+    "pin_code": "689585",
+    "contacts": {
+      "phone": ["95625-42360"],
+      "email": "-"
+    },
+    "roles": {
+      "manager": "-"
+    }
+  },
+  {
+    "id": 43,
+    "name": "Vimala Nursery School",
+    "place": "Pacha",
+    "year_established": 1973,
+    "ownership": "SABS",
+    "pin_code": "689573",
+    "contacts": {
+      "phone": ["96561-88809"],
+      "email": "-"
+    },
+    "roles": {
+      "manager": "-"
+    }
+  },
+  {
+    "id": 44,
+    "name": "St. Joseph Nursery",
+    "place": "Padaharam",
+    "year_established": 2011,
+    "ownership": "SDS",
+    "pin_code": "688562",
+    "contacts": {
+      "phone": ["85940-13360"],
+      "email": "-"
+    },
+    "roles": {
+      "manager": "-"
+    }
+  },
+  {
+    "id": 45,
+    "name": "St. Thomas Nursery",
+    "place": "Pallathuruthy",
+    "year_established": 1976,
+    "ownership": "LSC",
+    "pin_code": "688501",
+    "contacts": {
+      "phone": ["85475-62168"],
+      "email": "-"
+    },
+    "roles": {
+      "manager": "-"
+    }
+  },
+  {
+    "id": 46,
+    "name": "SH Nursery School",
+    "place": "Parampuzha",
+    "year_established": 1968,
+    "ownership": "SH",
+    "pin_code": "686028",
+    "contacts": {
+      "phone": ["95625-31585"],
+      "email": "-"
+    },
+    "roles": {
+      "manager": "-"
+    }
+  },
+  {
+    "id": 47,
+    "name": "Amala Nursery School",
+    "place": "Ponga",
+    "year_established": 2003,
+    "ownership": "ASMI-",
+    "pin_code": "688503",
+    "contacts": {
+      "phone": ["85473-63232"],
+      "email": "-"
+    },
+    "roles": {
+      "manager": "-"
+    }
+  },
+  {
+    "id": 48,
+    "name": "Deepa Nursery School",
+    "place": "Pulickalkavala",
+    "year_established": 1974,
+    "ownership": "SABS",
+    "pin_code": "686515",
+    "contacts": {
+      "phone": ["0481-2456034"],
+      "email": "-"
+    },
+    "roles": {
+      "manager": "-"
+    }
+  },
+  {
+    "id": 49,
+    "name": "Holy Family Nursery",
+    "place": "Pullangady",
+    "year_established": 1992,
+    "ownership": "FDSHJ",
+    "pin_code": "688505",
+    "contacts": {
+      "phone": ["82811-21820"],
+      "email": "-"
+    },
+    "roles": {
+      "manager": "-"
+    }
+  },
+  {
+    "id": 50,
+    "name": "Mary Matha Nursery School",
+    "place": "Punnakkunnathussery",
+    "year_established": 1977,
+    "ownership": "SABS",
+    "pin_code": "688504",
+    "contacts": {
+      "phone": ["0477-2704944", "94956-38530"],
+      "email": "-"
+    },
+    "roles": {
+      "manager": "-"
+    }
+  },
+  {
+    "id": 51,
+    "name": "Nirmala Nursery School",
+    "place": "Punnamada",
+    "year_established": 1999,
+    "ownership": "FDSHJ",
+    "pin_code": "688006",
+    "contacts": {
+      "phone": ["96567-99401"],
+      "email": "-"
+    },
+    "roles": {
+      "manager": "-"
+    }
+  },
+  {
+    "id": 52,
+    "name": "Bethlehem Nursery School",
+    "place": "Sreekaryam",
+    "year_established": 1985,
+    "ownership": "SABS",
+    "pin_code": "695017",
+    "contacts": {
+      "phone": ["0471-2998314"],
+      "email": "-"
+    },
+    "roles": {
+      "manager": "-"
+    }
+  },
+  {
+    "id": 53,
+    "name": "St. Michael’s Nursery",
+    "place": "Thathampally",
+    "year_established": 1960,
+    "ownership": "SABS",
+    "pin_code": "688013",
+    "contacts": {
+      "phone": ["0477-2261350"],
+      "email": "-"
+    },
+    "roles": {
+      "manager": "-"
+    }
+  },
+  {
+    "id": 54,
+    "name": "Lourdes Central Parish Nursery",
+    "place": "Thiruvananthapuram",
+    "year_established": "-",
+    "ownership": "Parish",
+    "pin_code": "695004",
+    "contacts": {
+      "phone": ["0471-2390646", "0471-2302778", "94001-37645"],
+      "email": "-"
+    },
+    "roles": {
+      "manager": "-"
+    }
+  },
+  {
+    "id": 55,
+    "name": "St. Thomas Nursery",
+    "place": "Thottackad",
+    "year_established": 1997,
+    "ownership": "CMC",
+    "pin_code": "686539",
+    "contacts": {
+      "phone": ["0481-2468777"],
+      "email": "-"
+    },
+    "roles": {
+      "manager": "-"
+    }
+  },
+  {
+    "id": 56,
+    "name": "St. Little Flower Nursery",
+    "place": "Thrickodithanam",
+    "year_established": 1989,
+    "ownership": "CMC",
+    "pin_code": "686105",
+    "contacts": {
+      "phone": ["0481-2441317"],
+      "email": "-"
+    },
+    "roles": {
+      "manager": "-"
+    }
+  },
+  {
+    "id": 57,
+    "name": "St. Mary’s Nursery School",
+    "place": "Thuruthy",
+    "year_established": 1966,
+    "ownership": "SABS",
+    "pin_code": "686535",
+    "contacts": {
+      "phone": ["95268-77337"],
+      "email": "-"
+    },
+    "roles": {
+      "manager": "-"
+    }
+  },
+  {
+    "id": 58,
+    "name": "Infant Jesus Nursery",
+    "place": "Vadakkekkara",
+    "year_established": 1995,
+    "ownership": "SH",
+    "pin_code": "686104",
+    "contacts": {
+      "phone": ["85476-31136"],
+      "email": "-"
+    },
+    "roles": {
+      "manager": "-"
+    }
+  },
+  {
+    "id": 59,
+    "name": "Angels Garden Nursery School",
+    "place": "Vaipur",
+    "year_established": 2019,
+    "ownership": "SH",
+    "pin_code": "686541",
+    "contacts": {
+      "phone": ["96334-82808"],
+      "email": "-"
+    },
+    "roles": {
+      "manager": "-"
+    }
+  },
+  {
+    "id": 60,
+    "name": "St. Teresa’s Nursery School",
+    "place": "Vazhappally",
+    "year_established": 1958,
+    "ownership": "SABS",
+    "pin_code": "686103",
+    "contacts": {
+      "phone": ["0481-2423620"],
+      "email": "-"
+    },
+    "roles": {
+      "manager": "-"
+    }
+  },
+  {
+    "id": 61,
+    "name": "St. Ignatius Nursery School",
+    "place": "Veliyanadu",
+    "year_established": 1994,
+    "ownership": "FDSHJ",
+    "pin_code": "689590",
+    "contacts": {
+      "phone": ["62822-53147"],
+      "email": "-"
+    },
+    "roles": {
+      "manager": "-"
+    }
+  },
+  {
+    "id": 62,
+    "name": "St. Antony’s Nursery School",
+    "place": "Veroor",
+    "year_established": 1978,
+    "ownership": "FCC",
+    "pin_code": "686106",
+    "contacts": {
+      "phone": ["0481-2722415"],
+      "email": "-"
+    },
+    "roles": {
+      "manager": "-"
+    }
+  }
+
+
+],
+
+"Kinder_Gardens":[
+  {
+    "id": 1,
+    "name": "Bonaventura Kinder Garten",
+    "place": "Champakulam",
+    "year_established": 1993,
+    "ownership": "CMI-",
+    "pin_code": "688505",
+    "contacts": {
+      "phone": ["0477-2737276"],
+      "email": "-"
+    },
+    "roles": {
+      "manager": "-"
+    }
+  },
+  {
+    "id": 2,
+    "name": "St. Alphonsa Kinder Garten",
+    "place": "Chathanad",
+    "year_established": 2014,
+    "ownership": "Parish",
+    "pin_code": "688006",
+    "contacts": {
+      "phone": ["0477-2232212", "97470-65031"],
+      "email": "-"
+    },
+    "roles": {
+      "manager": "-"
+    }
+  },
+  {
+    "id": 3,
+    "name": "Kristu Jyoti Kinder Garten & Play School",
+    "place": "Chethipuzha",
+    "year_established": 1986,
+    "ownership": "CMI-",
+    "pin_code": "686104",
+    "contacts": {
+      "phone": ["0481-2721980"],
+      "email": "-"
+    },
+    "roles": {
+      "manager": "-"
+    }
+  },
+  {
+    "id": 4,
+    "name": "Little Flower Kinder Garten (English Medium)",
+    "place": "Kainakary",
+    "year_established": 1967,
+    "ownership": "CMC",
+    "pin_code": "688501",
+    "contacts": {
+      "phone": ["94468-14197"],
+      "email": "-"
+    },
+    "roles": {
+      "manager": "-"
+    }
+  },
+  {
+    "id": 5,
+    "name": "Christ Kinder Garten",
+    "place": "Kanjiramkulam",
+    "year_established": 2015,
+    "ownership": "CMC",
+    "pin_code": "695133",
+    "contacts": {
+      "phone": ["75580-93193", "88480-83049"],
+      "email": "-"
+    },
+    "roles": {
+      "manager": "-"
+    }
+  },
+  {
+    "id": 6,
+    "name": "St. Nicholas Kinder Garten",
+    "place": "Karumady",
+    "year_established": 2011,
+    "ownership": "Parish",
+    "pin_code": "686561",
+    "contacts": {
+      "phone": ["94976-76137"],
+      "email": "-"
+    },
+    "roles": {
+      "manager": "-"
+    }
+  },
+  {
+    "id": 7,
+    "name": "Play School",
+    "place": "Kilimala",
+    "year_established": 2001,
+    "ownership": "SMMI",
+    "pin_code": "686105",
+    "contacts": {
+      "phone": ["0481-2446591"],
+      "email": "-"
+    },
+    "roles": {
+      "manager": "-"
+    }
+  },
+  {
+    "id": 8,
+    "name": "Christ Nagar Kinder Garten",
+    "place": "Kowdiar",
+    "year_established": 2015,
+    "ownership": "CMI-",
+    "pin_code": "695027",
+    "contacts": {
+      "phone": ["94478-09887"],
+      "email": "-"
+    },
+    "roles": {
+      "manager": "-"
+    }
+  },
+  {
+    "id": 9,
+    "name": "Kuriakose Elias Day Care & Play School",
+    "place": "Mannanam",
+    "year_established": 2003,
+    "ownership": "CMI-",
+    "pin_code": "686561",
+    "contacts": {
+      "phone": ["0481-2598190"],
+      "email": "-"
+    },
+    "roles": {
+      "manager": "-"
+    }
+  },
+  {
+    "id": 10,
+    "name": "Kuriakose Elias Kinder Garten",
+    "place": "Mannanam",
+    "year_established": 1995,
+    "ownership": "CMI-",
+    "pin_code": "686561",
+    "contacts": {
+      "phone": ["0481-2598190"],
+      "email": "-"
+    },
+    "roles": {
+      "manager": "-"
+    }
+  },
+  {
+    "id": 11,
+    "name": "CMI KE Carmel Kinder Garten",
+    "place": "Muhamma",
+    "year_established": 2011,
+    "ownership": "CMI-",
+    "pin_code": "688525",
+    "contacts": {
+      "phone": ["75940-54395"],
+      "email": "-"
+    },
+    "roles": {
+      "manager": "-"
+    }
+  },
+  {
+    "id": 12,
+    "name": "Amala Kids Zone",
+    "place": "Punnapra",
+    "year_established": 1974,
+    "ownership": "Aepa",
+    "pin_code": "688004",
+    "contacts": {
+      "phone": ["82812-84844"],
+      "email": "-"
+    },
+    "roles": {
+      "manager": "-"
+    }
+  },
+  {
+    "id": 13,
+    "name": "Christ Nagar Kinder Garten",
+    "place": "Thiruvallam",
+    "year_established": 1994,
+    "ownership": "CMI-",
+    "pin_code": "695027",
+    "contacts": {
+      "phone": ["0471-2318485"],
+      "email": "-"
+    },
+    "roles": {
+      "manager": "-"
+    }
+  }
+],
+
+"Mentally_Challenged_Schools":[
+  {
+    "id": 1,
+    "name": "Nava Jyothy Special School",
+    "place": "Amboori",
+    "year_established": 1996,
+    "ownership": "ASMI-",
+    "pin_code": "695505",
+    "contacts": {
+      "phone": ["70341-47720"],
+      "email": "navajyothiamboori@gmail.com"
+    },
+    "roles": { "manager": "-" }
+  },
+  {
+    "id": 2,
+    "name": "St. John of God Special School",
+    "place": "Annadivayal",
+    "year_established": 1998,
+    "ownership": "OH",
+    "pin_code": "686501",
+    "contacts": {
+      "phone": ["0481-2373236", "94462-67875", "81299-06050"],
+      "email": "seldjohnofgodschool@yahoo.com"
+    },
+    "roles": { "manager": "-" }
+  },
+  {
+    "id": 3,
+    "name": "Agriculture Horticulture Rehabilitation Training Centre",
+    "place": "Aryanad",
+    "year_established": 1996,
+    "ownership": "Fr. Felix / CMI",
+    "pin_code": "695542",
+    "contacts": {
+      "phone": ["0471-2445796"],
+      "email": "cimrdirector@gmail.com"
+    },
+    "roles": { "manager": "-" }
+  },
+  {
+    "id": 4,
+    "name": "Assisi Centre (School for Mentally Challenged)",
+    "place": "Chunkappara",
+    "year_established": 2001,
+    "ownership": "FCC",
+    "pin_code": "686547",
+    "contacts": {
+      "phone": ["0469-2696799", "94009-96799"],
+      "email": "assisicentre2013@gmail.com"
+    },
+    "roles": { "manager": "-" }
+  },
+  {
+    "id": 5,
+    "name": "Snehalayam Shushrusha Charitable Trust",
+    "place": "Eravuchira",
+    "year_established": 1997,
+    "ownership": "Society",
+    "pin_code": "686539",
+    "contacts": {
+      "phone": ["94957-51101"],
+      "email": "snehalayam@gmail.com"
+    },
+    "roles": { "manager": "-" }
+  },
+  {
+    "id": 6,
+    "name": "Anugraha Special School",
+    "place": "Kottackupuram",
+    "year_established": 1991,
+    "ownership": "CMC",
+    "pin_code": "686562",
+    "contacts": {
+      "phone": ["0481-2533510"],
+      "email": "anugrahaspecialschool@gmail.com"
+    },
+    "roles": { "manager": "-" }
+  },
+  {
+    "id": 7,
+    "name": "Jeevodaya Centre",
+    "place": "Kurumpanadom",
+    "year_established": 1988,
+    "ownership": "FCC",
+    "pin_code": "686536",
+    "contacts": {
+      "phone": ["0481-2472313", "95622-60382"],
+      "email": "jeevodayacentre@gmail.com"
+    },
+    "roles": { "manager": "-" }
+  },
+  {
+    "id": 8,
+    "name": "Deepthi Special School",
+    "place": "Muhamma",
+    "year_established": 1992,
+    "ownership": "CMC",
+    "pin_code": "688625",
+    "contacts": {
+      "phone": ["98460-51427", "98464-59884"],
+      "email": "deepthyconventmuhamma@gmail.com"
+    },
+    "roles": { "manager": "-" }
+  },
+  {
+    "id": 9,
+    "name": "Vikas Vidyalaya Special School",
+    "place": "Mullamkuzhy",
+    "year_established": 1985,
+    "ownership": "CMI-",
+    "pin_code": "686002",
+    "contacts": {
+      "phone": ["0481-2575744", "94952-34075"],
+      "email": "vikasktm@gmail.com"
+    },
+    "roles": { "manager": "-" }
+  },
+  {
+    "id": 10,
+    "name": "Developmental Centre for the Mentally Retarded (DCMR)",
+    "place": "Murinjapalam",
+    "year_established": 1983,
+    "ownership": "Fr. Felix / CMI",
+    "pin_code": "695011",
+    "contacts": {
+      "phone": ["0471-2445796", "85479-86245"],
+      "email": "dcmrschool1984@gmail.com"
+    },
+    "roles": { "manager": "-" }
+  },
+  {
+    "id": 11,
+    "name": "Sanjoe Special School",
+    "place": "Nedumparambu",
+    "year_established": 2014,
+    "ownership": "MSJ",
+    "pin_code": "689695",
+    "contacts": {
+      "phone": ["86101-15142", "97657-02226"],
+      "email": "sanjoessptpm@gmail.com"
+    },
+    "roles": { "manager": "-" }
+  },
+  {
+    "id": 12,
+    "name": "Njanodaya Special School",
+    "place": "Niranam",
+    "year_established": 2004,
+    "ownership": "CMC",
+    "pin_code": "689621",
+    "contacts": {
+      "phone": ["0469-2747405"],
+      "email": "njanodayaspl@gmail.com"
+    },
+    "roles": { "manager": "-" }
+  },
+  {
+    "id": 13,
+    "name": "Thiruhrudaya Nivas (School for Mentally Challenged)",
+    "place": "Parel",
+    "year_established": 1990,
+    "ownership": "SH",
+    "pin_code": "686104",
+    "contacts": {
+      "phone": ["0481-2400268", "94002-31060"],
+      "email": "-"
+    },
+    "roles": { "manager": "-" }
+  },
+  {
+    "id": 14,
+    "name": "Assissi Vidyalayam",
+    "place": "Poonthope",
+    "year_established": 1996,
+    "ownership": "CHASS- / CMC",
+    "pin_code": "688006",
+    "contacts": {
+      "phone": ["0477-2233829", "89431-15319"],
+      "email": "assisipoonthope@gmail.com"
+    },
+    "roles": { "manager": "-" }
+  },
+  {
+    "id": 15,
+    "name": "Sevanikethan Madonna Jyothis School",
+    "place": "Puthuppally",
+    "year_established": 1981,
+    "ownership": "SH",
+    "pin_code": "686009",
+    "contacts": {
+      "phone": ["82816-73468"],
+      "email": "-"
+    },
+    "roles": { "manager": "-" }
+  },
+  {
+    "id": 16,
+    "name": "Sahrudaya Special School",
+    "place": "Ramankary",
+    "year_established": 2001,
+    "ownership": "SABS",
+    "pin_code": "689595",
+    "contacts": {
+      "phone": ["0477-2705957", "83010-26551"],
+      "email": "sahrudayass@gmail.com"
+    },
+    "roles": { "manager": "-" }
+  },
+  {
+    "id": 17,
+    "name": "TIMUC – Training Institute for Mentally Under Developed Children",
+    "place": "Thathampally",
+    "year_established": 1983,
+    "ownership": "Aepa",
+    "pin_code": "688013",
+    "contacts": {
+      "phone": ["75111-42430"],
+      "email": "timucspecialschool@gmail.com"
+    },
+    "roles": { "manager": "-" }
+  },
+  {
+    "id": 18,
+    "name": "Chavara Sadan Special School",
+    "place": "Thazhathuvadakara",
+    "year_established": 2015,
+    "ownership": "CMC",
+    "pin_code": "686541",
+    "contacts": {
+      "phone": ["0481-2498854", "73068-66205"],
+      "email": "chavarasadanspl@gmail.com"
+    },
+    "roles": { "manager": "-" }
+  },
+  {
+    "id": 19,
+    "name": "Sevagram – School for Mentally Retarded",
+    "place": "Vettimukal",
+    "year_established": 1991,
+    "ownership": "CMI-",
+    "pin_code": "686631",
+    "contacts": {
+      "phone": ["0481-2537930"],
+      "email": "sevagramvettimukal@yahoo.co.in"
+    },
+    "roles": { "manager": "-" }
+  },
+  {
+    "id": 20,
+    "name": "Sathirthya School for Mentally Challenged",
+    "place": "Villoonni",
+    "year_established": 1994,
+    "ownership": "SDS",
+    "pin_code": "686008",
+    "contacts": {
+      "phone": ["0481-2594439", "94967-22025"],
+      "email": "sathirthya@gmail.com"
+    },
+    "roles": { "manager": "-" }
+  }
+],
+
+"Physically_Challenged_Schools":[
+  {
+    "id": 1,
+    "name": "SH Njanodaya School for Deaf",
+    "place": "Arpookara",
+    "year_established": 1997,
+    "ownership": "SH",
+    "pin_code": "686008",
+    "contacts": {
+      "phone": [
+        "0481-2599490"
+      ],
+      "email": "-"
+    },
+    "address": "Villoonni P.O., Kottayam"
+  },
+  {
+    "id": 2,
+    "name": "Navadhvani (Holy Cross Deaf Ministry)",
+    "place": "Aymanam",
+    "year_established": 2017,
+    "ownership": "CSC",
+    "pin_code": "686015",
+    "contacts": {
+      "phone": [
+        "94957-01856"
+      ],
+      "email": "navadhvaniholycross@gmail.com"
+    },
+    "address": "Aymanam P.O., Kottayam"
+  },
+  {
+    "id": 3,
+    "name": "Santhi Bhavan School for Deaf and Dumb",
+    "place": "Enathu",
+    "year_established": 1990,
+    "ownership": "CMI",
+    "pin_code": "691526",
+    "contacts": {
+      "phone": [
+        "94464-21173"
+      ],
+      "email": "-"
+    },
+    "address": "Via Adoor, Enathu P.O., Kollam"
+  }
+],
+
+"For_the_Autistic":[
+  {
+    "id": 1,
+    "name": "SH Njanodaya School for Deaf",
+    "place": "Arpookara",
+    "year_established": 1997,
+    "ownership": "SH",
+    "pin_code": "686008",
+    "contacts": {
+      "phone": [
+        "0481-2599490"
+      ],
+      "email": "-"
+    },
+    "address": "Villoonni P.O., Kottayam"
+  },
+  {
+    "id": 2,
+    "name": "Navadhvani (Holy Cross Deaf Ministry)",
+    "place": "Aymanam",
+    "year_established": 2017,
+    "ownership": "CSC",
+    "pin_code": "686015",
+    "contacts": {
+      "phone": [
+        "94957-01856"
+      ],
+      "email": "navadhvaniholycross@gmail.com"
+    },
+    "address": "Aymanam P.O., Kottayam"
+  },
+  {
+    "id": 3,
+    "name": "Santhi Bhavan School for Deaf and Dumb",
+    "place": "Enathu",
+    "year_established": 1990,
+    "ownership": "CMI",
+    "pin_code": "691526",
+    "contacts": {
+      "phone": [
+        "94464-21173"
+      ],
+      "email": "-"
+    },
+    "address": "Via Adoor, Enathu P.O., Kollam"
+  }
+],
+
+"Hostels":[
+  {
+    "id": 1,
+    "name": "Mercy Home",
+    "place": "Amalagiri",
+    "year_established": 1965,
+    "ownership": "SABS",
+    "pin_code": "686036",
+    "contacts": {
+      "phone": ["90489-63598"],
+      "email": "mercyhomebk@gmail.com"
+    },
+    "address": "Amalagiri P.O., Kottayam"
+  },
+  {
+    "id": 2,
+    "name": "Navajyothi Working Women Hostel",
+    "place": "Amalagiri",
+    "year_established": 1989,
+    "ownership": "SABS",
+    "pin_code": "686036",
+    "contacts": {
+      "phone": ["0481-2596445", "95620-24823"],
+      "email": "-"
+    },
+    "address": "Amalagiri P.O., Kottayam"
+  },
+  {
+    "id": 3,
+    "name": "Sanjoe Bhavan",
+    "place": "Amalagiri",
+    "year_established": 1985,
+    "ownership": "SABS",
+    "pin_code": "686036",
+    "contacts": {
+      "phone": ["0481-2597147", "94950-53015"],
+      "email": "-"
+    },
+    "address": "Amalagiri P.O., Kottayam"
+  },
+  {
+    "id": 4,
+    "name": "Jyothis Bhavan Tribal Hostel",
+    "place": "Amboori",
+    "year_established": 1995,
+    "ownership": "SH",
+    "pin_code": "695505",
+    "contacts": {
+      "phone": ["73069-31896"],
+      "email": "-"
+    },
+    "address": "Via Vellarada, Amboori P.O., Thiruvananthapuram"
+  },
+  {
+    "id": 5,
+    "name": "Vijaya Bhavan",
+    "place": "Changanacherry",
+    "year_established": 1965,
+    "ownership": "Aepa",
+    "pin_code": "686101",
+    "contacts": {
+      "phone": ["0481-2121", "94964-23438"],
+      "email": "-"
+    },
+    "address": "Changanacherry P.O., Kottayam"
+  },
+  {
+    "id": 6,
+    "name": "Amala Bhavan",
+    "place": "Changanacherry",
+    "year_established": 1961,
+    "ownership": "SABS",
+    "pin_code": "686101",
+    "contacts": {
+      "phone": ["0481-2402352", "99610-14411"],
+      "email": "-"
+    },
+    "address": "Changanacherry P.O., Kottayam"
+  },
+  {
+    "id": 7,
+    "name": "Assumption Hostel",
+    "place": "Changanacherry",
+    "year_established": 1952,
+    "ownership": "Aepa",
+    "pin_code": "686101",
+    "contacts": {
+      "phone": ["0481-2402351", "95446-22695"],
+      "email": "-"
+    },
+    "address": "Changanacherry P.O., Kottayam"
+  },
+  {
+    "id": 8,
+    "name": "Jyothi Bhavan",
+    "place": "Changanacherry",
+    "year_established": 1969,
+    "ownership": "Aepa",
+    "pin_code": "686101",
+    "contacts": {
+      "phone": ["0481-2401810", "70250-31953"],
+      "email": "jyotibhavan@gmail.com"
+    },
+    "address": "Changanacherry P.O., Kottayam"
+  },
+  {
+    "id": 9,
+    "name": "Nirmala Sadan",
+    "place": "Changanacherry",
+    "year_established": 1962,
+    "ownership": "SOIL",
+    "pin_code": "686103",
+    "contacts": {
+      "phone": ["90743-97140"],
+      "email": "-"
+    },
+    "address": "Ruby Nagar P.O., Kottayam"
+  },
+  {
+    "id": 10,
+    "name": "Pius X Hostel",
+    "place": "Changanacherry",
+    "year_established": 1962,
+    "ownership": "CMC",
+    "pin_code": "686101",
+    "contacts": {
+      "phone": [
+        "0481-2402318",
+        "85906-15314",
+        "96053-75874",
+        "82816-10458"
+      ],
+      "email": "hos90006@gmail.com"
+    },
+    "address": "Changanacherry P.O., Kottayam"
+  },
+  {
+    "id": 11,
+    "name": "SH Study House",
+    "place": "Changanacherry",
+    "year_established": 1976,
+    "ownership": "SH",
+    "pin_code": "686101",
+    "contacts": {
+      "phone": ["0481-2402412", "94001-95899"],
+      "email": "shstudyhouse1978@gmail.com"
+    },
+    "address": "Changanacherry P.O., Kottayam"
+  },
+  {
+    "id": 12,
+    "name": "St. Mary’s Hostel",
+    "place": "Changanacherry",
+    "year_established": 2013,
+    "ownership": "Aepa",
+    "pin_code": "686101",
+    "contacts": {
+      "phone": ["99610-76868"],
+      "email": "-"
+    },
+    "address": "Changanacherry P.O., Kottayam"
+  },
+  {
+    "id": 13,
+    "name": "Vimala Hostel",
+    "place": "Changanacherry",
+    "year_established": 1961,
+    "ownership": "Aepa",
+    "pin_code": "686101",
+    "contacts": {
+      "phone": ["0481-2402461", "89435-91401"],
+      "email": "vimalahostel51@gmail.com"
+    },
+    "address": "Changanacherry P.O., Kottayam"
+  },
+  {
+    "id": 14,
+    "name": "St. Alphonsa Hostel",
+    "place": "Chethipuzha",
+    "year_established": 1995,
+    "ownership": "Aepa",
+    "pin_code": "686104",
+    "contacts": {
+      "phone": ["80867-60675"],
+      "email": "-"
+    },
+    "address": "St. Thomas College of Nursing, Kurisummoodu P.O., Kottayam"
+  },
+  {
+    "id": 15,
+    "name": "Nirmala Hostel",
+    "place": "Edathua",
+    "year_established": 1922,
+    "ownership": "SABS",
+    "pin_code": "689573",
+    "contacts": {
+      "phone": ["0477-2961125"],
+      "email": "acedathua@gmail.com"
+    },
+    "address": "Edathua P.O., Alappuzha"
+  },
+  {
+    "id": 16,
+    "name": "Zion Hostel",
+    "place": "Ettumanoor",
+    "year_established": 1982,
+    "ownership": "SABS",
+    "pin_code": "686631",
+    "contacts": {
+      "phone": ["0481-2538482"],
+      "email": "-"
+    },
+    "address": "Ettumanoor P.O., Kottayam"
+  },
+  {
+    "id": 17,
+    "name": "Lisieux Bhavan",
+    "place": "Karikode",
+    "year_established": 2001,
+    "ownership": "MLF",
+    "pin_code": "691005",
+    "contacts": {
+      "phone": ["0474-2716262", "94963-62629"],
+      "email": "-"
+    },
+    "address": "TKM College P.O., Kollam"
+  },
+  {
+    "id": 18,
+    "name": "Girls Hostel",
+    "place": "Kilimala",
+    "year_established": 2002,
+    "ownership": "SMMI",
+    "pin_code": "686105",
+    "contacts": {
+      "phone": ["0481-2446591"],
+      "email": "-"
+    },
+    "address": "Thrickodithanam P.O., Changanacherry, Kottayam"
+  },
+  {
+    "id": 19,
+    "name": "SH Hostel",
+    "place": "Kilimala",
+    "year_established": 2019,
+    "ownership": "Aepa",
+    "pin_code": "686105",
+    "contacts": {
+      "phone": ["94970-47634"],
+      "email": "shhostel@gmail.com"
+    },
+    "address": "Thrickodithanam P.O., Changanacherry, Kottayam"
+  },
+  {
+    "id": 20,
+    "name": "Thiruhrudaya College of Nursing Hostel",
+    "place": "Kottayam",
+    "year_established": 2019,
+    "ownership": "SH",
+    "pin_code": "686001",
+    "contacts": {
+      "phone": ["0481-2569840", "94462-86599"],
+      "email": "-"
+    },
+    "address": "Nagampadom P.O., Kottayam"
+  },
+  {
+    "id": 21,
+    "name": "Sevanikethan",
+    "place": "Kowdiar",
+    "year_established": 1983,
+    "ownership": "SH",
+    "pin_code": "695003",
+    "contacts": {
+      "phone": ["0471-2313876"],
+      "email": "-"
+    },
+    "address": "Kowdiar P.O., Thiruvananthapuram"
+  },
+  {
+    "id": 22,
+    "name": "St. Thomas Hostel",
+    "place": "Kurisummoodu",
+    "year_established": 2009,
+    "ownership": "Media",
+    "pin_code": "686104",
+    "contacts": {
+      "phone": ["0481-2722225"],
+      "email": "-"
+    },
+    "address": "Media Village, Kurisummoodu P.O., Changanacherry, Kottayam"
+  },
+  {
+    "id": 23,
+    "name": "Assisi Hostel (Lourdes Matha Engineering College)",
+    "place": "Kuttichal",
+    "year_established": 2002,
+    "ownership": "Aepa / FCC",
+    "pin_code": "695574",
+    "contacts": {
+      "phone": ["0472-2853922", "79941-20803", "85479-89940"],
+      "email": "-"
+    },
+    "address": "Kuttichal P.O., Thiruvananthapuram"
+  },
+  {
+    "id": 24,
+    "name": "Little Flower Home",
+    "place": "Manackachira",
+    "year_established": 2017,
+    "ownership": "FDSHJ",
+    "pin_code": "686102",
+    "contacts": {
+      "phone": ["0481-2421542", "80865-39770"],
+      "email": "-"
+    },
+    "address": "Panachikavu P.O., Perunna West, Kottayam"
+  },
+  {
+    "id": 25,
+    "name": "Holy Family Hostel",
+    "place": "Mannanam",
+    "year_established": 1975,
+    "ownership": "CMC",
+    "pin_code": "686561",
+    "contacts": {
+      "phone": ["0481-2597510", "82819-05934"],
+      "email": "-"
+    },
+    "address": "Mannanam P.O., Kottayam"
+  },
+  {
+    "id": 26,
+    "name": "Suvidhya Bhavan",
+    "place": "Mannanam",
+    "year_established": 2002,
+    "ownership": "SDS",
+    "pin_code": "686561",
+    "contacts": {
+      "phone": ["95443-56830", "82814-02438"],
+      "email": "suvidhyabhavan19@gmail.com"
+    },
+    "address": "Mannanam P.O., Kottayam"
+  },
+  {
+    "id": 27,
+    "name": "Santhi Bhavan",
+    "place": "Mudiyoorkara",
+    "year_established": 1976,
+    "ownership": "FCC",
+    "pin_code": "686008",
+    "contacts": {
+      "phone": ["0481-2597418"],
+      "email": "santhibhavanfcc@gmail.com"
+    },
+    "address": "Gandhinagar P.O., Kottayam"
+  },
+  {
+    "id": 28,
+    "name": "Santhi Nikethan",
+    "place": "Mudiyoorkara",
+    "year_established": 1985,
+    "ownership": "CMC",
+    "pin_code": "686008",
+    "contacts": {
+      "phone": ["91885-97220"],
+      "email": "santhinikethan2016@gmail.com"
+    },
+    "address": "Gandhi Nagar P.O., Kottayam"
+  },
+  {
+    "id": 29,
+    "name": "St. Aloysius Hostel",
+    "place": "Nedumkunnam",
+    "year_established": 1921,
+    "ownership": "CMC",
+    "pin_code": "686542",
+    "contacts": {
+      "phone": ["0481-2415652"],
+      "email": "-"
+    },
+    "address": "Nedumkunnam P.O., Kottayam"
+  },
+  {
+    "id": 30,
+    "name": "St. Rose Hostel",
+    "place": "Pazhavangadi",
+    "year_established": 1919,
+    "ownership": "CMC",
+    "pin_code": "688001",
+    "contacts": {
+      "phone": ["0477-2260971"],
+      "email": "-"
+    },
+    "address": "Iron Bridge P.O., Alappuzha"
+  },
+  {
+    "id": 31,
+    "name": "Alphonsa Bhavan",
+    "place": "Pulincunnoo",
+    "year_established": 2002,
+    "ownership": "FCC",
+    "pin_code": "688504",
+    "contacts": {
+      "phone": ["0477-2703230", "99463-32043"],
+      "email": "-"
+    },
+    "address": "Pulincunnoo P.O., Alappuzha"
+  },
+  {
+    "id": 32,
+    "name": "St. Joseph’s Hostel",
+    "place": "Punnapra",
+    "year_established": 1983,
+    "ownership": "Aepa",
+    "pin_code": "688004",
+    "contacts": {
+      "phone": ["96057-09761"],
+      "email": "-"
+    },
+    "address": "Punnapra P.O., Alappuzha"
+  },
+  {
+    "id": 33,
+    "name": "Sanjoe Bhavan",
+    "place": "Sreekaryam",
+    "year_established": 1991,
+    "ownership": "FCC",
+    "pin_code": "695016",
+    "contacts": {
+      "phone": ["0471-2598286", "75920-98286"],
+      "email": "sanjoebhavan3@gmail.com"
+    },
+    "address": "Engineering College P.O., Thiruvananthapuram"
+  },
+  {
+    "id": 34,
+    "name": "Kunnath Snehalayam",
+    "place": "Thellakom",
+    "year_established": 2003,
+    "ownership": "SK Trust",
+    "pin_code": "686630",
+    "contacts": {
+      "phone": ["0481-2792250", "82814-64250"],
+      "email": "-"
+    },
+    "address": "Caritas P.O., Kottayam"
+  },
+  {
+    "id": 35,
+    "name": "SH Hostel (Amala Province – Tezpur, Assam)",
+    "place": "Thellakom",
+    "year_established": 2017,
+    "ownership": "SH",
+    "pin_code": "686630",
+    "contacts": {
+      "phone": ["94965-02491"],
+      "email": "-"
+    },
+    "address": "Thellakom P.O., Kottayam"
+  },
+  {
+    "id": 36,
+    "name": "Girls & Working Women Hostel",
+    "place": "Thirumala",
+    "year_established": 2017,
+    "ownership": "CHF",
+    "pin_code": "695006",
+    "contacts": {
+      "phone": ["94975-70085"],
+      "email": "-"
+    },
+    "address": "Near Rajan Textiles, Thirumala P.O., Thiruvananthapuram"
+  },
+  {
+    "id": 37,
+    "name": "Avila Bhavan",
+    "place": "Vazhuthacaud",
+    "year_established": 1987,
+    "ownership": "CMC",
+    "pin_code": "695014",
+    "contacts": {
+      "phone": ["0471-2329005"],
+      "email": "avilabhavan649@gmail.com"
+    },
+    "address": "Cotton Hill, Thycaudu P.O., Thiruvananthapuram"
+  }
+],
+
+"Boarding_Houses":[
+  {
+    "id": 1,
+    "name": "St. Benedict’s Boarding House",
+    "place": "Athirampuzha",
+    "year_established": 1919,
+    "ownership": "SABS",
+    "pin_code": "686562",
+    "contacts": {
+      "phone": ["0481-2732111", "96569-62033"],
+      "email": "-"
+    },
+    "address": "Athirampuzha P.O., Kottayam"
+  },
+  {
+    "id": 2,
+    "name": "St. Anne’s Boarding House",
+    "place": "Changanacherry",
+    "year_established": 1950,
+    "ownership": "FCC",
+    "pin_code": "686101",
+    "contacts": {
+      "phone": ["77366-22433"],
+      "email": "-"
+    },
+    "address": "Changanacherry P.O., Kottayam"
+  },
+  {
+    "id": 3,
+    "name": "St. Berchmans Boarding House",
+    "place": "Changanacherry",
+    "year_established": 1890,
+    "ownership": "Aepa",
+    "pin_code": "686101",
+    "contacts": {
+      "phone": [
+        "94469-85151",
+        "92493-02491",
+        "94469-31987",
+        "70344-08284"
+      ],
+      "email": "-"
+    },
+    "address": "Changanacherry P.O., Kottayam"
+  },
+  {
+    "id": 4,
+    "name": "St. Theresa’s Boarding House",
+    "place": "Changanacherry",
+    "year_established": 1897,
+    "ownership": "CMC",
+    "pin_code": "686101",
+    "contacts": {
+      "phone": ["0481-2412458", "83018-22431"],
+      "email": "-"
+    },
+    "address": "Changanacherry P.O., Kottayam"
+  },
+  {
+    "id": 5,
+    "name": "Nirmala Bhavan",
+    "place": "Kowdiar",
+    "year_established": 1964,
+    "ownership": "SABS",
+    "pin_code": "695003",
+    "contacts": {
+      "phone": ["0471-2314851", "77588-38012"],
+      "email": "-"
+    },
+    "address": "Kowdiar P.O., Thiruvananthapuram"
+  },
+  {
+    "id": 6,
+    "name": "Mary Rany Public School Boarding House (For Girls)",
+    "place": "Laikad",
+    "year_established": 2001,
+    "ownership": "SABS",
+    "pin_code": "686102",
+    "contacts": {
+      "phone": ["0481-2402199"],
+      "email": "-"
+    },
+    "address": "Perunna P.O., Changanacherry, Kottayam"
+  },
+  {
+    "id": 7,
+    "name": "St. Mariagoreti Boarding House",
+    "place": "Morkulangara",
+    "year_established": 2017,
+    "ownership": "SABS",
+    "pin_code": "686103",
+    "contacts": {
+      "phone": ["0481-2402161"],
+      "email": "-"
+    },
+    "address": "Ruby Nagar P.O., Changanacherry, Kottayam"
+  },
+  {
+    "id": 8,
+    "name": "Carmelaram Boarding House",
+    "place": "Muthoor",
+    "year_established": 1992,
+    "ownership": "CMC",
+    "pin_code": "689107",
+    "contacts": {
+      "phone": ["0469-2603299", "94476-41453"],
+      "email": "-"
+    },
+    "address": "Muthoor P.O., Via Thiruvalla, Pathanamthitta"
+  },
+  {
+    "id": 9,
+    "name": "St. Aloysius Boarding House",
+    "place": "Vazhappally",
+    "year_established": 1919,
+    "ownership": "SABS",
+    "pin_code": "686103",
+    "contacts": {
+      "phone": ["0481-2421538"],
+      "email": "-"
+    },
+    "address": "Vazhappally P.O., Changanacherry, Kottayam"
+  }
+],
+
+"Boarding_Houses_Free":[
+  {
+    "id": 1,
+    "name": "St. Germane Balika Bhavan",
+    "place": "Changanacherry",
+    "year_established": 1888,
+    "ownership": "FCC",
+    "pin_code": "686101",
+    "contacts": {
+      "phone": ["0481-2424732"],
+      "email": "stgermanesbalikabhavan@gmail.com"
+    },
+    "address": "Changanacherry P.O., Kottayam"
+  },
+  {
+    "id": 2,
+    "name": "Alphonsa Balika Bhavan",
+    "place": "Changanacherry",
+    "year_established": 2009,
+    "ownership": "SMS",
+    "pin_code": "686103",
+    "contacts": {
+      "phone": ["0481-2080020", "96052-95713"],
+      "email": "alphonsabalikabhavanchry@gmail.com"
+    },
+    "address": "Ruby Nagar P.O., Kottayam"
+  },
+  {
+    "id": 3,
+    "name": "Alphonsa Sneha Nivas",
+    "place": "Fathimapuram",
+    "year_established": 1995,
+    "ownership": "Aepa",
+    "pin_code": "686102",
+    "contacts": {
+      "phone": ["94967-63811", "94966-74296"],
+      "email": "snehanivask@gmail.com"
+    },
+    "address": "Fathimapuram P.O., Changanacherry, Kottayam"
+  },
+  {
+    "id": 4,
+    "name": "St. Joseph’s Boys Home",
+    "place": "Kallooppara",
+    "year_established": 1926,
+    "ownership": "Aepa",
+    "pin_code": "689602",
+    "contacts": {
+      "phone": ["85474-82313", "99619-96226"],
+      "email": "sjo4boys@gmail.com"
+    },
+    "address": "Puthussery P.O., Mallappally, Pathanamthitta"
+  },
+  {
+    "id": 5,
+    "name": "Sacred Heart Home (For Girls)",
+    "place": "Karikkattoor Centre",
+    "year_established": 1972,
+    "ownership": "SH",
+    "pin_code": "686544",
+    "contacts": {
+      "phone": ["94956-79370", "96564-50635"],
+      "email": "shhomegktr@gmail.com"
+    },
+    "address": "Karikkattoor Centre P.O., Via Manimala, Kottayam"
+  },
+  {
+    "id": 6,
+    "name": "Mercy Home (Prathyasa Bhavan – For Girls)",
+    "place": "Kodinattumkunnu",
+    "year_established": 2017,
+    "ownership": "SD",
+    "pin_code": "686105",
+    "contacts": {
+      "phone": ["0481-2441641", "75590-44640"],
+      "email": "mercyhomek@gmail.com"
+    },
+    "address": "Thrickodithanam P.O., Kottayam"
+  },
+  {
+    "id": 7,
+    "name": "Don Bosco Home (For Girls)",
+    "place": "Nalukody",
+    "year_established": 1953,
+    "ownership": "CMC",
+    "pin_code": "686548",
+    "contacts": {
+      "phone": ["0481-2446554"],
+      "email": "donboscohome001@gmail.com"
+    },
+    "address": "Nalukody P.O., Kottayam"
+  },
+  {
+    "id": 8,
+    "name": "St. Philomina’s Home",
+    "place": "Nedungadappally",
+    "year_established": 1914,
+    "ownership": "SABS",
+    "pin_code": "689585",
+    "contacts": {
+      "phone": ["85476-40446"],
+      "email": "-"
+    },
+    "address": "Mallappally West P.O., Pathanamthitta"
+  },
+  {
+    "id": 9,
+    "name": "St. James Home",
+    "place": "Pazhavangadi",
+    "year_established": 1946,
+    "ownership": "CMC",
+    "pin_code": "688001",
+    "contacts": {
+      "phone": ["0477-2262971"],
+      "email": "stjames@gmail.com"
+    },
+    "address": "Iron Bridge P.O., Alappuzha"
+  },
+  {
+    "id": 10,
+    "name": "St. Joseph’s Balabhavan & After Care Home",
+    "place": "Pulincunnoo",
+    "year_established": 1973,
+    "ownership": "CMC",
+    "pin_code": "688504",
+    "contacts": {
+      "phone": ["0477-2703992"],
+      "email": "-"
+    },
+    "address": "Pulincunnoo P.O., Alappuzha"
+  },
+  {
+    "id": 11,
+    "name": "St. Joseph’s Balika Bhavan",
+    "place": "Punnathura East",
+    "year_established": 1926,
+    "ownership": "SH",
+    "pin_code": "686583",
+    "contacts": {
+      "phone": ["75106-43953"],
+      "email": "anittac565@gmail.com"
+    },
+    "address": "Punnathura East P.O., Kottayam"
+  },
+  {
+    "id": 12,
+    "name": "Savina Sneha Bhavan",
+    "place": "Puthuppally",
+    "year_established": 1998,
+    "ownership": "SdP",
+    "pin_code": "686009",
+    "contacts": {
+      "phone": ["94463-42224", "94977-53081"],
+      "email": "savinasnehabhavan@gmail.com"
+    },
+    "address": "Rubber Board P.O., Kottayam"
+  },
+  {
+    "id": 13,
+    "name": "Abp. Kavukattu Bala Vihar",
+    "place": "Thathampally",
+    "year_established": 1969,
+    "ownership": "SABS",
+    "pin_code": "688013",
+    "contacts": {
+      "phone": ["82811-75306"],
+      "email": "amkboarding@gmail.com"
+    },
+    "address": "Thathampally P.O., Alappuzha"
+  },
+  {
+    "id": 14,
+    "name": "Ammaveedu",
+    "place": "Thellakom",
+    "year_established": 2006,
+    "ownership": "Trust",
+    "pin_code": "686630",
+    "contacts": {
+      "phone": ["94972-91395", "94466-81395"],
+      "email": "theresiantrust@yahoo.co.in"
+    },
+    "address": "Thellakom P.O., Kottayam"
+  }
+],
+"Boarding_Houses_Tribal_Girls": [
+  {
+    "id": 1,
+    "name": "SH Jyothis Bhavan Tribal Students Hostel",
+    "place": "Amboori",
+    "year_established": 1995,
+    "ownership": "SH",
+    "pin_code": "695505",
+    "address": "Via Vellarada, Amboori P.O., Thiruvananthapuram",
+    "contacts": {
+      "phone": [
+        "73069-31896"
+      ],
+      "email": "-"
+    },
+    "roles": {
+      "manager": "-"
+    }
+  }
+],
+"Catholic_Council_For_Children_Homes_India":[
+  {
+    "id": 1,
+    "name": "Catholic Council For Children's Homes India (CCCHI)",
+    "place": "Neendakara",
+    "year_established": "-",
+    "ownership": "CCCHI",
+    "pin_code": "691582",
+    "address": "San Jose, Neendakara, Kollam",
+    "contacts": {
+      "phone": [
+        "0476-2680332",
+        "94952-63332"
+      ],
+      "email": "-"
+    },
+    "roles": {
+      "manager": "-"
+    }
+  }
+],
+"Special_Adoption_Agency": [
+  {
+    "id": 1,
+    "name": "Infant Jesus Sisu Bhavan (IJSB - Specialized Adoption Agency - SAA)",
+    "place": "Rajamattom",
+    "year_established": 1997,
+    "ownership": "DSJ",
+    "pin_code": "686539",
+    "address": "Umbidi P.O., Thottackad, Kottayam",
+    "contacts": {
+      "phone": [
+        "0481-2468212",
+        "95260-38961"
+      ],
+      "email": "infantjesussisubhavan@ymail.com"
+    },
+    "roles": {
+      "manager": "-"
+    }
+  }
+],
+"Health_Care_Institutions":[
+  {
+    "id": 1,
+    "name": "St. Thomas Hospital",
+    "place": "Chethipuzha",
+    "year_established": 1953,
+    "ownership": "Aepa",
+    "pin_code": "686104",
+    "address": "Kurisummoodu P.O., Changanacherry, Kottayam",
+    "contacts": {
+      "phone": [
+        "0481-2722100",
+        "0481-2729000",
+        "0481-2723953",
+        "92078-46999",
+        "86069-10660"
+      ],
+      "email": "info@st-thomashospital.com",
+      "website": "www.st-thomashospital.com"
+    },
+    "roles": {
+      "proprietor": "Archeparchy of Changanacherry"
+    }
+  },
+  {
+    "id": 2,
+    "name": "Maha Jubilee Memorial Hospital",
+    "place": "Edathua",
+    "year_established": 2001,
+    "ownership": "SABS",
+    "pin_code": "689573",
+    "address": "Edathua P.O., Alappuzha",
+    "contacts": {
+      "phone": ["0477-2214151", "99613-58249"],
+      "email": "jubilyhos@gmail.com"
+    },
+    "roles": {}
+  },
+  {
+    "id": 3,
+    "name": "Bishop Kurialacherry Nature Cure & Yoga Centre",
+    "place": "Edayirickapuzha",
+    "year_established": 1980,
+    "ownership": "SABS",
+    "pin_code": "686541",
+    "address": "Edayirickapuzha P.O., Kangazha, Kottayam",
+    "contacts": {
+      "phone": ["0481-2494348", "99618-87461"],
+      "email": "srjyothisabs@gmail.com"
+    },
+    "roles": {}
+  },
+  {
+    "id": 4,
+    "name": "Ayushya (Holistic Health Clinic)",
+    "place": "Ithithanam",
+    "year_established": 1961,
+    "ownership": "MMS",
+    "pin_code": "686104",
+    "address": "Veroor P.O., Changanacherry, Kottayam",
+    "contacts": {
+      "phone": ["0481-2720544", "99464-05102"],
+      "email": "ayushyamms@gmail.com"
+    },
+    "roles": {}
+  },
+  {
+    "id": 5,
+    "name": "St. Antony’s Hospital",
+    "place": "Kainakary",
+    "year_established": 1998,
+    "ownership": "CMC",
+    "pin_code": "688501",
+    "address": "Kainakary P.O., Alappuzha",
+    "contacts": {
+      "phone": ["0477-2724242", "82812-28751"],
+      "email": "stantonyschycmc@gmail.com"
+    },
+    "roles": {}
+  },
+  {
+    "id": 6,
+    "name": "Shantalgiri Ayurvedic Hospital",
+    "place": "Mammood",
+    "year_established": 2019,
+    "ownership": "SABS",
+    "pin_code": "686536",
+    "address": "Mammood P.O., Kottayam",
+    "contacts": {
+      "phone": ["75590-16648"],
+      "email": "dr.bindhujose@gmail.com"
+    },
+    "roles": {}
+  },
+  {
+    "id": 7,
+    "name": "Speech Therapy Centre",
+    "place": "Manalady",
+    "year_established": 2019,
+    "ownership": "SD",
+    "pin_code": "688595",
+    "address": "Ramankary P.O., Alappuzha",
+    "contacts": {
+      "phone": ["0477-2707651"],
+      "email": "sdmanalady@gmail.com"
+    },
+    "roles": {}
+  },
+  {
+    "id": 8,
+    "name": "St. Thomas Health Centre (STH, Chethipuzha)",
+    "place": "Manimala",
+    "year_established": 2021,
+    "ownership": "Aepa",
+    "pin_code": "686543",
+    "address": "Manimala P.O., Kottayam",
+    "contacts": {
+      "phone": ["04828-299194", "86069-10659", "89433-53603"],
+      "email": "sthcmanimala@gmail.com"
+    },
+    "roles": {}
+  },
+  {
+    "id": 9,
+    "name": "SH Lab & X-ray",
+    "place": "Mudiyoorkara",
+    "year_established": 1978,
+    "ownership": "SH",
+    "pin_code": "686008",
+    "address": "Gandhinagar P.O., Kottayam",
+    "contacts": {
+      "phone": ["0481-2597416", "85473-97416"],
+      "email": "shlabkottayam@gmail.com"
+    },
+    "roles": {}
+  },
+  {
+    "id": 10,
+    "name": "Jeevan Prakash Child Centre (Centre for early Diagnosis & early Intervention)",
+    "place": "Murinjapalam",
+    "year_established": 1991,
+    "ownership": "Fr. Felix CMI",
+    "pin_code": "695011",
+    "address": "Medical College P.O., Thiruvananthapuram",
+    "contacts": {
+      "phone": ["0471-2445796", "94460-63140"],
+      "email": "cimrdirector@gmail.com"
+    },
+    "roles": {}
+  },
+  {
+    "id": 11,
+    "name": "St. Joseph’s Mission Hospital",
+    "place": "Muttar",
+    "year_established": 1967,
+    "ownership": "SH",
+    "pin_code": "689574",
+    "address": "Muttar P.O., Via Neerattupuram, Alappuzha",
+    "contacts": {
+      "phone": ["0477-2219208", "90482-74051"],
+      "email": "muttarshconvent@gmail.com"
+    },
+    "roles": {}
+  },
+  {
+    "id": 12,
+    "name": "Medical Centre Hospital",
+    "place": "Nagampadom",
+    "year_established": 1969,
+    "ownership": "SH",
+    "pin_code": "686001",
+    "address": "Nagampadom P.O., Kottayam",
+    "contacts": {
+      "phone": ["0481-2560941", "0481-2562239", "0481-2562240"],
+      "email": "info@shmedicalcentrektm.com"
+    },
+    "roles": {}
+  },
+  {
+    "id": 13,
+    "name": "St. Joseph Hospital",
+    "place": "Nedumparambu",
+    "year_established": 1995,
+    "ownership": "MSJ",
+    "pin_code": "689695",
+    "address": "Pathanapuram P.O., Kollam",
+    "contacts": {
+      "phone": ["0475-2351958", "94976-99053"],
+      "email": "stjosephshospitalptpm@gmail.com"
+    },
+    "roles": {}
+  },
+  {
+    "id": 14,
+    "name": "St. Rita’s Hospital",
+    "place": "Nalukody",
+    "year_established": 1971,
+    "ownership": "CMI-",
+    "pin_code": "686548",
+    "address": "Nalukody P.O., Changanacherry, Kottayam",
+    "contacts": {
+      "phone": ["0481-2446790", "0481-2446010"],
+      "email": "st.ritashospital12@gmail.com"
+    },
+    "roles": {}
+  },
+  {
+    "id": 15,
+    "name": "KCM Hospital, Leprosy Sanitorium",
+    "place": "Nooranad",
+    "year_established": 1972,
+    "ownership": "CMC",
+    "pin_code": "690571",
+    "address": "P.O., Alappuzha",
+    "contacts": {
+      "phone": ["0479-2382348", "0479-2382848", "91882-40434"],
+      "email": "kcmhnooranad@yahoo.co.in"
+    },
+    "roles": {}
+  },
+  {
+    "id": 16,
+    "name": "Lourdes Matha Hospital",
+    "place": "Pacha",
+    "year_established": 1986,
+    "ownership": "SABS",
+    "pin_code": "689573",
+    "address": "Chekkidikad P.O., Alappuzha",
+    "contacts": {
+      "phone": ["0477-2212305", "0477-2213305"],
+      "email": "lourdesmathahospitalpacha@gmail.com"
+    },
+    "roles": {}
+  },
+  {
+    "id": 17,
+    "name": "St. Antony’s Ayurveda Hospital & Visha Chikilsalayam",
+    "place": "Poomattom",
+    "year_established": 1963,
+    "ownership": "CMI-",
+    "pin_code": "686011",
+    "address": "Puthuppally P.O., Kottayam",
+    "contacts": {
+      "phone": ["0481-2352387", "94961-61851"]
+    },
+    "roles": {}
+  },
+  {
+    "id": 18,
+    "name": "Nirmala Medical Centre",
+    "place": "Punnapra",
+    "year_established": 1976,
+    "ownership": "Aepa",
+    "pin_code": "688004",
+    "address": "Punnapra P.O., Alappuzha",
+    "contacts": {
+      "phone": ["82812-51700"]
+    },
+    "roles": {}
+  },
+  {
+    "id": 19,
+    "name": "Marian Homoeo Clinic & Fitness Centre",
+    "place": "Thathampally",
+    "year_established": 2005,
+    "ownership": "SABS",
+    "pin_code": "688013",
+    "address": "Thathampally P.O., Alappuzha",
+    "contacts": {
+      "phone": ["99472-95890"],
+      "email": "tessinsabs@gmail.com"
+    },
+    "roles": {}
+  },
+  {
+    "id": 20,
+    "name": "Sahrudaya Hospital",
+    "place": "Thathampally",
+    "year_established": 1967,
+    "ownership": "Aepa",
+    "pin_code": "688013",
+    "address": "Thathampally P.O., Alappuzha",
+    "contacts": {
+      "phone": ["0477-2247000", "94009-97772", "83010-28229"],
+      "website": "www.sahrudayahospital.com",
+      "email": "sahrudayahospital@gmail.com"
+    },
+    "roles": {}
+  },
+  {
+    "id": 21,
+    "name": "St. Antony’s Hospital",
+    "place": "Thayamkary",
+    "year_established": 1973,
+    "ownership": "SABS",
+    "pin_code": "689722",
+    "address": "Thayamkary P.O., Alappuzha",
+    "contacts": {
+      "phone": ["81118-32498"]
+    },
+    "roles": {}
+  },
+  {
+    "id": 22,
+    "name": "St. Jude’s Mission Hospital",
+    "place": "Yudapuram",
+    "year_established": 2008,
+    "ownership": "ASMI-",
+    "pin_code": "686535",
+    "address": "Thuruthy P.O., Changanacherry, Kottayam, Green Gardens",
+    "contacts": {
+      "phone": ["0481-2320063", "90745-69053"],
+      "email": "stjudemissionhospital@gmail.com"
+    },
+    "roles": {}
+  }
+],
+
+"Care_Homes":[
+  {
+    "id": 1,
+    "name": "Tharavad (Longterm Residential Care)",
+    "place": "Annadivayal",
+    "year_established": 2014,
+    "ownership": "OH",
+    "pin_code": "686501",
+    "address": "Velloor P.O., Via Pampady, Kottayam",
+    "contacts": {
+      "phone": ["0481-2371006", "81299-06050"]
+    },
+    "roles": {}
+  }
+],
+"Old_Age_Homes":[
+  {
+    "id": 1,
+    "name": "Santhi Bhavan",
+    "place": "Arpookara",
+    "year_established": 1989,
+    "ownership": "JS",
+    "pin_code": "686008",
+    "address": "Villoonni P.O., Kottayam",
+    "contacts": {
+      "phone": ["92078-36623"]
+    },
+    "roles": {}
+  },
+  {
+    "id": 2,
+    "name": "Karunya Home",
+    "place": "Athirampuzha",
+    "year_established": 1989,
+    "ownership": "SH",
+    "pin_code": "686562",
+    "address": "Sreekandamangalam P.O., Kottayam",
+    "contacts": {
+      "phone": ["0481-2730210"]
+    },
+    "roles": {}
+  },
+  {
+    "id": 3,
+    "name": "Abro Bhavan (for Women)",
+    "place": "Athirampuzha",
+    "year_established": 2008,
+    "ownership": "SMS",
+    "pin_code": "686562",
+    "address": "Primary Health Centre, Athirampuzha P.O., Kottayam",
+    "contacts": {
+      "phone": ["0481-2732982", "82815-29495"],
+      "email": "bhavanabro@gmail.com"
+    },
+    "roles": {}
+  },
+  {
+    "id": 4,
+    "name": "St. Vincent Poor Home",
+    "place": "Changanacherry",
+    "year_established": 1941,
+    "ownership": "FCC",
+    "pin_code": "686101",
+    "address": "Changanacherry P.O., Kottayam",
+    "contacts": {
+      "phone": ["0481-2423543"],
+      "email": "chypoorhome@gmail.com"
+    },
+    "roles": {}
+  },
+  {
+    "id": 5,
+    "name": "Vimala Poor Home",
+    "place": "Kadayanickad",
+    "year_established": 1979,
+    "ownership": "SABS",
+    "pin_code": "686550",
+    "address": "Kadayanickad P.O., Kottayam",
+    "contacts": {
+      "phone": ["96056-41956", "96565-63794"]
+    },
+    "roles": {}
+  },
+  {
+    "id": 6,
+    "name": "Assisi Home (for Women)",
+    "place": "Kaduvakulam",
+    "year_established": 1974,
+    "ownership": "FCC",
+    "pin_code": "686029",
+    "address": "Kollad P.O., Kottayam",
+    "contacts": {
+      "phone": ["0481-2342782", "85473-93782"],
+      "email": "assisioldagehome@gmail.com"
+    },
+    "roles": {}
+  },
+  {
+    "id": 7,
+    "name": "Upavishala",
+    "place": "Kainakary",
+    "year_established": 1869,
+    "ownership": "CMC",
+    "pin_code": "688501",
+    "address": "Kainakary PO., Alappuzha",
+    "contacts": {
+      "phone": ["0477-2724223", "94475-53241"]
+    },
+    "roles": {}
+  },
+  {
+    "id": 8,
+    "name": "Nazareth Shushroosha Bhavan (House of Destitute)",
+    "place": "Kaithavana",
+    "year_established": 2004,
+    "ownership": "LSC",
+    "pin_code": "688003",
+    "address": "Sanathanapuram P.O., Alappuzha",
+    "contacts": {
+      "phone": ["0477-2268127", "94967-93127"]
+    },
+    "roles": {}
+  },
+  {
+    "id": 9,
+    "name": "Bro. Fortunas",
+    "place": "Karuvatta",
+    "year_established": 2008,
+    "ownership": "SCJG",
+    "pin_code": "693523",
+    "address": "Adoor P.O., Pathanamthitta",
+    "contacts": {
+      "phone": ["04734-225141"],
+      "email": "fortunasadoor@gmail.com"
+    },
+    "roles": {}
+  },
+  {
+    "id": 10,
+    "name": "Nazareth Sneha Bhavan",
+    "place": "Kottackupuram",
+    "year_established": 1990,
+    "ownership": "MSMHC",
+    "pin_code": "686632",
+    "address": "Kanakkary P.O., Kottayam",
+    "contacts": {
+      "phone": ["94969-44260", "83040-64250"],
+      "email": "snehabhavankotta@gmail.com"
+    },
+    "roles": {}
+  }, 
+  {
+    "id": 11,
+    "name": "Great Jubilee St. Alphonsa Centre (Abhaya Bhavan)",
+    "place": "Kudamaloor",
+    "year_established": 2001,
+    "ownership": "Aepa-SMMI",
+    "pin_code": "686008",
+    "address": "Arpookara East P.O., Kottayam",
+    "contacts": {
+      "phone": ["94958-89898"],
+      "email": "rosechirackal@gmail.com"
+    },
+    "roles": {}
+  },
+  {
+    "id": 12,
+    "name": "Bethany Snehatheeram (Old Age Home for Men)",
+    "place": "Koothrappally",
+    "year_established": 2019,
+    "ownership": "OIC",
+    "pin_code": "686540",
+    "address": "Koothrappally P.O., Karukachal, Kottayam",
+    "contacts": {
+      "phone": ["81297-00819", "86061-42146"],
+      "email": "snehatheerambethany@gmail.com"
+    },
+    "roles": {}
+  },
+  {
+    "id": 13,
+    "name": "Santhi Bhavan",
+    "place": "Mannanthala",
+    "year_established": 1992,
+    "ownership": "RFTS",
+    "pin_code": "695015",
+    "address": "Kairali Nagar (KN) 26, Mannanthala P.O., Thiruvananthapuram",
+    "contacts": {
+      "phone": ["0471-2530095", "99477-66412", "99476-72083"],
+      "email": "santhibhavanmannanthala@gmail.com"
+    },
+    "roles": {}
+  },
+  {
+    "id": 14,
+    "name": "Japamala Bhavan",
+    "place": "Mundakapadom",
+    "year_established": 2008,
+    "ownership": "FMSC",
+    "pin_code": "686630",
+    "address": "Thellakom P.O., Kottayam",
+    "contacts": {
+      "phone": ["0481-2970481", "82811-31951"],
+      "email": "japamalabhavanfmsc@gmail.com"
+    },
+    "roles": {}
+  },
+  {
+    "id": 15,
+    "name": "Kripa Theeram - Agathimandiram - Mariam Thresia Home",
+    "place": "Muttacaud",
+    "year_established": 2012,
+    "ownership": "CHF",
+    "pin_code": "695023",
+    "address": "Muttacaud P.O., Venganoor, Thiruvananthapuram",
+    "contacts": {
+      "phone": ["0471-2488099", "98473-70948"],
+      "email": "kripatheeram@gmail.com"
+    },
+    "roles": {}
+  },
+  {
+    "id": 16,
+    "name": "Mother Theresa Home",
+    "place": "Nedumangad",
+    "year_established": 2019,
+    "ownership": "Aepa-ASMI",
+    "pin_code": "695561",
+    "address": "Pazhakutty P.O., Kollamkavu, Thiruvananthapuram",
+    "contacts": {
+      "phone": ["0472-2804111", "94962-59589", "75105-04640"],
+      "email": "mothertheresaoldagehome1@gmail.com"
+    },
+    "roles": {}
+  },
+  {
+    "id": 17,
+    "name": "Ammaveedu",
+    "place": "Nedumkunnam",
+    "year_established": 2015,
+    "ownership": "Aepa",
+    "pin_code": "686542",
+    "address": "Nedumkunnam P.O., Kottayam",
+    "contacts": {
+      "phone": ["97474-84161"]
+    },
+    "roles": {}
+  },
+  {
+    "id": 18,
+    "name": "St. Augustine Aramam",
+    "place": "Paippad",
+    "year_established": 2013,
+    "ownership": "OSA",
+    "pin_code": "686537",
+    "address": "Pallickachira P.O., Adavichira Colony, Kottayam",
+    "contacts": {
+      "phone": ["0481-2440511", "0481-2440811", "80860-05254"],
+      "email": "aramamosa@gmail.com"
+    },
+    "roles": {}
+  },
+  {
+    "id": 19,
+    "name": "St. Joseph",
+    "place": "Punnapra",
+    "year_established": 1936,
+    "ownership": "Aepa-SABS",
+    "pin_code": "688004",
+    "address": "Punnapra P.O., Alappuzha",
+    "contacts": {
+      "phone": ["95260-38070"],
+      "email": "stjosephpoorhome@gmail.com"
+    },
+    "roles": {}
+  },
+  {
+    "id": 20,
+    "name": "Jesus Home",
+    "place": "Punnaveli",
+    "year_established": 2005,
+    "ownership": "FDSHJ",
+    "pin_code": "689589",
+    "address": "Punnaveli P.O., Pathanamthitta",
+    "contacts": {
+      "phone": ["0469-2685203", "94471-65890"],
+      "email": "fdshjpunnaveli@gmail.com"
+    },
+    "roles": {}
+  },
+  {
+    "id": 21,
+    "name": "Camil Sadhan (for Women)",
+    "place": "Puthuppally",
+    "year_established": 1977,
+    "ownership": "DSC",
+    "pin_code": "686009",
+    "address": "Rubber Board P.O., Kottayam",
+    "contacts": {
+      "phone": ["0481-2351992", "94970-89828"]
+    },
+    "roles": {}
+  },
+  {
+    "id": 22,
+    "name": "Vannini Retirement Home",
+    "place": "Puthuppally",
+    "year_established": 2021,
+    "ownership": "DSC",
+    "pin_code": "686009",
+    "address": "Rubber Board P.O., Kottayam",
+    "contacts": {
+      "phone": ["0481-2351992", "94970-89828", "62351-47509"]
+    },
+    "roles": {}
+  },
+  {
+    "id": 23,
+    "name": "Assissi Nilayam",
+    "place": "Thathampally",
+    "year_established": 1993,
+    "ownership": "FHGS",
+    "pin_code": "688013",
+    "address": "Thathampally P.O., Alappuzha",
+    "contacts": {
+      "phone": ["0477-2962810", "98371-65847"]
+    },
+    "roles": {}
+  },
+  {
+    "id": 24,
+    "name": "Assisi Karunyabhavan (for Disabled Men & Women)",
+    "place": "Varimuttom",
+    "year_established": 2020,
+    "ownership": "FSD",
+    "pin_code": "686008",
+    "address": "Arpookara East P.O., Kottayam",
+    "contacts": {
+      "phone": ["96456-09259"]
+    },
+    "roles": {}
+  },
+  {
+    "id": 25,
+    "name": "Santhi Sadan",
+    "place": "Veroochira",
+    "year_established": 1975,
+    "ownership": "FCC",
+    "pin_code": "686104",
+    "address": "Kurisummoodu P.O., Kottayam",
+    "contacts": {
+      "phone": ["0481-2720751", "96568-97457"],
+      "email": "santhisadanveroochira@gmail.com"
+    },
+    "roles": {}
+  },
+  {
+    "id": 26,
+    "name": "AMMA (for Women)",
+    "place": "Vettikavala",
+    "year_established": 2001,
+    "ownership": "HSS",
+    "pin_code": "691538",
+    "address": "Kokkadu P.O., Via Kottarakara, Kollam",
+    "contacts": {
+      "phone": ["0474-2409813", "99470-68150"],
+      "email": "ammaagathibhavanam@gmail.com"
+    },
+    "roles": {}
+  }
+],
+"Homes_for_terminally_ill":[
+  {
+    "id": 1,
+    "name": "Raksha Bhavan",
+    "place": "Attuvakary",
+    "year_established": 1994,
+    "ownership": "Society",
+    "pin_code": "686104",
+    "address": "Via Chethipuzha, Veroor P.O., Changanacherry, Kottayam",
+    "contacts": {
+      "phone": ["0481-2729240"]
+    },
+    "roles": {}
+  },
+  {
+    "id": 2,
+    "name": "Mother Chantal’s Terminally ill Care Centre (Seva Nivas)",
+    "place": "Pacha",
+    "year_established": 1996,
+    "ownership": "SABS",
+    "pin_code": "689573",
+    "address": "Chekkidikad P.O., Alappuzha",
+    "contacts": {
+      "phone": ["80785-38437"]
+    },
+    "roles": {}
+  },
+  {
+    "id": 3,
+    "name": "Karunalaya Hospice",
+    "place": "Puthenangady",
+    "year_established": 2001,
+    "ownership": "SD",
+    "pin_code": "688001",
+    "address": "Puthenangady, St. George Street, Vazhicherry P.O., Alappuzha",
+    "contacts": {
+      "phone": ["0477-2243658", "94956-87917"],
+      "email": "karunalayasd@gmail.com"
+    },
+    "roles": {}
+  }
+],
+"Centers_for_mental_health":[
+  {
+    "id": 1,
+    "name": "Snehabhavan Charitable Society",
+    "place": "Anaprambal",
+    "year_established": 2003,
+    "ownership": "Society",
+    "pin_code": "689572",
+    "address": "Thalavady P.O., Edathua, Alappuzha",
+    "contacts": {
+      "phone": ["94469-19933"],
+      "email": "snehabhavan03@gmail.com"
+    }
+  },
+  {
+    "id": 2,
+    "name": "Home for Differently Abled",
+    "place": "Annadivayal",
+    "year_established": 1998,
+    "ownership": "OH",
+    "pin_code": "686501",
+    "address": "Velloor P.O., Via Pampady, Kottayam",
+    "contacts": {
+      "phone": ["0481-2371006", "81299-06050"]
+    }
+  },
+  {
+    "id": 3,
+    "name": "Navajeevan (PU Thomas)",
+    "place": "Arpookara",
+    "year_established": 1988,
+    "ownership": "Trust",
+    "pin_code": "686008",
+    "address": "Villoonni P.O., Kottayam",
+    "contacts": {
+      "phone": ["0481-2596300", "0481-2590300", "94473-66701"],
+      "email": "mail@navajeevantrustktm.org"
+    }
+  },
+  {
+    "id": 4,
+    "name": "Angel Home (Rehab. for Mentally Challenged Women)",
+    "place": "Aruvikuzhy",
+    "year_established": 2012,
+    "ownership": "CMC",
+    "pin_code": "686503",
+    "address": "Aruvikuzhy P.O., Via Vazhoor, Kottayam",
+    "contacts": {
+      "phone": ["81130-44053"]
+    }
+  },
+  {
+    "id": 5,
+    "name": "Lourdes Bhavan Trust (Home for the Homeless and Mentally Challenged)",
+    "place": "Aruvikuzhy",
+    "year_established": 1999,
+    "ownership": "Trust",
+    "pin_code": "686503",
+    "address": "Aruvikuzhy P.O., Pallickathodu, Kottayam",
+    "contacts": {
+      "phone": ["0481-2552014", "94462-02793"],
+      "email": "lourdebhavantrust@gmail.com"
+    }
+  },
+  {
+    "id": 6,
+    "name": "Bishop Charles Lavinge Psychological Rehabilitation Centre",
+    "place": "Ayarkunnam",
+    "year_established": 2016,
+    "ownership": "FCC",
+    "pin_code": "686564",
+    "address": "Arumanoor P.O., Kottayam",
+    "contacts": {
+      "phone": ["0481-2542323", "73064-86252"]
+    }
+  },
+  {
+    "id": 7,
+    "name": "Jimmy Padanilam Centre (JPC) for Special Needs (Asha Bhavan)",
+    "place": "Cheeranchira",
+    "year_established": 2015,
+    "ownership": "CWT",
+    "pin_code": "686106",
+    "address": "Cheeranchira P.O., Kottayam",
+    "contacts": {
+      "phone": ["0481-2727225", "94955-87400"],
+      "email": "charityworldtrust@gmail.com"
+    }
+  },
+  {
+    "id": 8,
+    "name": "Rehabilitation Aid Society (RAS)",
+    "place": "Edapazhanji",
+    "year_established": 1969,
+    "ownership": "OCD",
+    "pin_code": "695010",
+    "address": "CSM Nagar, Edapazhanji P.O., Thiruvananthapuram",
+    "contacts": {
+      "phone": ["94466-85609"],
+      "email": "jochakkala@gmail.com"
+    }
+  },
+  {
+    "id": 9,
+    "name": "Asha Bhavan",
+    "place": "Ithithanam",
+    "year_established": 1973,
+    "ownership": "Aepa-CMC",
+    "pin_code": "686104",
+    "address": "Veroor P.O., Changanacherry, Kottayam",
+    "contacts": {
+      "phone": ["0481-2721196", "94962-61196"],
+      "email": "ashabhavan1973@gmail.com"
+    }
+  },
+  {
+    "id": 10,
+    "name": "Snehatheeram (Pope John XXIII Rehabilitation Centre for Old & Mentally Challenged Women)",
+    "place": "Kidangara",
+    "year_established": 2012,
+    "ownership": "SCB",
+    "pin_code": "686102",
+    "address": "Kidangara P.O., Alappuzha",
+    "contacts": {
+      "phone": ["75111-33810"],
+      "email": "popejohnreh.centre@gmail.com"
+    }
+  },
+  {
+    "id": 11,
+    "name": "Samraksha MR Home",
+    "place": "Kumarakom",
+    "year_established": 2017,
+    "ownership": "FDSHJ",
+    "pin_code": "686563",
+    "address": "Kumarakom South P.O., Kottayam",
+    "contacts": {
+      "phone": ["82815-84164", "94471-49127"]
+    }
+  },
+  {
+    "id": 12,
+    "name": "Sampreethy (Home for Mentally Challenged Children)",
+    "place": "Kumaranalloor",
+    "year_established": 2010,
+    "ownership": "MCBS",
+    "pin_code": "686016",
+    "address": "Kumaranalloor P.O., Kottayam",
+    "contacts": {
+      "phone": ["90481-29289"]
+    }
+  },
+  {
+    "id": 13,
+    "name": "Jeevan Jyothi Ashram (Psycho-Social Rehabilitation Centre for Women)",
+    "place": "Kurichy",
+    "year_established": 1999,
+    "ownership": "SABS",
+    "pin_code": "686535",
+    "address": "Malakunnam P.O., Kottayam",
+    "contacts": {
+      "phone": ["86067-71291"]
+    }
+  },
+  {
+    "id": 14,
+    "name": "Puthujeevan Trust",
+    "place": "Nalukody",
+    "year_established": 1996,
+    "ownership": "Aepa",
+    "pin_code": "686548",
+    "address": "Nalukody P.O., Kottayam",
+    "contacts": {
+      "phone": ["80899-93423", "94964-63423"],
+      "email": "puthujeevantrust@gmail.com; saanthwanamcare@gmail.com"
+    }
+  },
+  {
+    "id": 15,
+    "name": "Sanjivani Rehabilitation Centre",
+    "place": "Nedumkunnam",
+    "year_established": 2008,
+    "ownership": "Aepa-FDSHJ",
+    "pin_code": "686540",
+    "address": "Chelacombu P.O., Kottayam",
+    "contacts": {
+      "phone": ["81139-15327", "94952-17387"]
+    }
+  },
+  {
+    "id": 16,
+    "name": "Mother Theresa Home",
+    "place": "Nedumkunnam",
+    "year_established": 2000,
+    "ownership": "Aepa",
+    "pin_code": "686542",
+    "address": "Nedumkunnam P.O., Kottayam",
+    "contacts": {
+      "phone": ["97474-84161"]
+    }
+  },
+  {
+    "id": 17,
+    "name": "SH Charity Home (Psycho Social Rehabilitation Centre for Mentally ill Women)",
+    "place": "Parel",
+    "year_established": 2021,
+    "ownership": "SH",
+    "pin_code": "686104",
+    "address": "Kurisummoodu P.O., Changanacherry, Kottayam",
+    "contacts": {
+      "phone": ["0481-2939555", "62352-20003"]
+    }
+  },
+  {
+    "id": 18,
+    "name": "St. Joseph Rehabilitation Centre",
+    "place": "Puthenangady",
+    "year_established": 2018,
+    "ownership": "SD",
+    "pin_code": "688001",
+    "address": "Exchange Road, Near Head Post Office, Alappuzha",
+    "contacts": {
+      "phone": ["0477-2999017", "94966-83717"],
+      "email": "sjrehabalappuzha@gmail.com"
+    }
+  },
+  {
+    "id": 19,
+    "name": "Snehatheeram (Psycho-Social Rehabilitation Centre)",
+    "place": "Uthirakuzhi",
+    "year_established": 2016,
+    "ownership": "SM",
+    "pin_code": "695610",
+    "address": "Sisters of Mercy, Mithirmala P.O., Thiruvanathapuram",
+    "contacts": {
+      "phone": ["0472-2820062", "94958-01515"],
+      "email": "snehatheeramcst@gmail.com"
+    }
+  },
+  {
+    "id": 20,
+    "name": "AMMA (Psycho Social Rehabilitation Centre)",
+    "place": "Vettikavala",
+    "year_established": 2019,
+    "ownership": "HSS",
+    "pin_code": "691538",
+    "address": "Kokkadu P.O., Via Kottarakara, Kollam",
+    "contacts": {
+      "phone": ["0474-2409813", "99470-68150"],
+      "email": "ammaagathibhavanam@gmail.com"
+    }
+  },
+  {
+    "id": 21,
+    "name": "Snehatheeram (Psycho-Social Rehabilitation Centre)",
+    "place": "Vilakudy",
+    "year_established": 2002,
+    "ownership": "SM",
+    "pin_code": "691508",
+    "address": "Kollam",
+    "contacts": {
+      "phone": ["0475-2325376", "94968-51515"],
+      "email": "snehatheeramcs@gmail.com"
+    }
+  }
+],
+
+"Paliative_Care_Centres":[
+  {
+    "id": 1,
+    "name": "St. Alphonsa Palliative Care Centre",
+    "place": "Changanacherry",
+    "year_established": 2011,
+    "ownership": "FCC",
+    "pin_code": "686101",
+    "address": "Changanacherry P.O., Kottayam",
+    "contacts": {
+      "phone": ["0481-2423543"]
+    }
+  },
+  {
+    "id": 2,
+    "name": "Pallimed Palliative Care Centre",
+    "place": "Koovapoika",
+    "year_established": 2017,
+    "ownership": "CST",
+    "pin_code": "686503",
+    "address": "Aruvikuzhy P.O., Kottayam",
+    "contacts": {
+      "phone": ["82813-49986"]
+    }
+  },
+  {
+    "id": 3,
+    "name": "St. Martin’s Palliative Care Centre",
+    "place": "Vaipur",
+    "year_established": 2011,
+    "ownership": "SH",
+    "pin_code": "686541",
+    "address": "Kulathoor Prayar P.O., Pathanamthitta",
+    "contacts": {
+      "phone": ["96334-82808"]
+    }
+  }
+],
+"De_addiction_Centers":[
+  {
+    "id": 1,
+    "name": "ACCEPT - IRCA (Integrated Rehabilitation Center for Addicts - Adults)",
+    "place": "Kattanam",
+    "year_established": 2001,
+    "ownership": "CHASS",
+    "pin_code": "690503",
+    "address": "St. Thomas Mission Hospital Compound, Vetticodu P.O., Pallickal, Kayamkulam, Alappuzha",
+    "contacts": {
+      "phone": ["0479-2332878", "83108-41273"],
+      "email": "acceptircakttanam@gmail.com"
+    }
+  },
+  {
+    "id": 2,
+    "name": "Samrudha (Care Centre for Children)",
+    "place": "Kurumpanadom",
+    "year_established": 2021,
+    "ownership": "CHASS",
+    "pin_code": "686538",
+    "address": "Pongamthanam P.O., Vakathanam, Kottayam",
+    "contacts": {
+      "phone": ["0481-2080444"],
+      "email": "samrudhacarecentre@gmail.com"
+    }
+  },
+  {
+    "id": 3,
+    "name": "Bishop Kurialacherry Counselling & De addiction Centre",
+    "place": "Pacha",
+    "year_established": 1987,
+    "ownership": "SABS",
+    "pin_code": "689573",
+    "address": "Pacha-Chekkidikkad P.O., Alappuzha",
+    "contacts": {
+      "phone": ["82810-71387"]
+    }
+  },
+  {
+    "id": 4,
+    "name": "ACCEPT - IRCA (Integrated Rehabilitation Center for Addicts - Adults)",
+    "place": "Punnapra",
+    "year_established": 1997,
+    "ownership": "CHASS",
+    "pin_code": "688003",
+    "address": "VS Lodge, Sindhura Jn., Vandanam - Punnapra Rd, Punnapra P.O., Alappuzha",
+    "contacts": {
+      "phone": ["0477-2287242"],
+      "email": "acceptircapunnapra@gmail.com"
+    }
+  }
+],
+"Homes_for_physically_challenged":[
+  {
+    "id": 1,
+    "name": "Providence Home",
+    "place": "Aruvikkuzhy",
+    "year_established": 1995,
+    "ownership": "LSDP",
+    "pin_code": "686503",
+    "address": "Aruvikkuzhy P.O., Kadalimattom, Kottayam",
+    "contacts": {
+      "phone": ["0481-2552494", "86063-11499"],
+      "email": "aruvikuzhyph95@gmail.com"
+    }
+  },
+  {
+    "id": 2,
+    "name": "Providence Home",
+    "place": "Ayroor",
+    "year_established": 2011,
+    "ownership": "LSDP",
+    "pin_code": "689612",
+    "address": "Ayroor North P.O., Pathanamthitta",
+    "contacts": {
+      "phone": ["04735-230058", "82812-46480", "85898-94146"],
+      "email": "providencehomeayroor@gmail.com"
+    }
+  },
+  {
+    "id": 3,
+    "name": "Mercy Home (for Girls)",
+    "place": "Chethipuzha",
+    "year_established": 1974,
+    "ownership": "SD",
+    "pin_code": "686104",
+    "address": "Kurisummoodu P.O., Kottayam",
+    "contacts": {
+      "phone": ["0481-2720980", "85902-06078", "83308-81923"],
+      "email": "chrymercyhome@gmail.com"
+    }
+  },
+  {
+    "id": 4,
+    "name": "Providence Home",
+    "place": "Gandhinagar",
+    "year_established": 2001,
+    "ownership": "LSDP",
+    "pin_code": "686008",
+    "address": "Gandhinagar P.O., Kottayam",
+    "contacts": {
+      "phone": ["0481-2594883", "94972-22993"],
+      "email": "providencehomegandhinagar@gmail.com"
+    }
+  },
+  {
+    "id": 5,
+    "name": "Providence Home",
+    "place": "Keezhvaipur",
+    "year_established": 1995,
+    "ownership": "LSDP",
+    "pin_code": "689587",
+    "address": "Keezhvaipur P.O., Via Mallappally, Pathanamthitta",
+    "contacts": {
+      "phone": ["0469-2683254", "83010-40765"],
+      "email": "providencehomekeezhvaipur@gmail.com"
+    }
+  },
+  {
+    "id": 6,
+    "name": "Providence Home",
+    "place": "Killy",
+    "year_established": 1995,
+    "ownership": "LSDP",
+    "pin_code": "695571",
+    "address": "Kollodu P.O., Kattakada, Kunthani, Thiruvananthapuram",
+    "contacts": {
+      "phone": ["0471-2291335", "85890-89038", "62355-29077", "85470-89078"],
+      "email": "lsdpkilly@gmail.com"
+    }
+  },
+  {
+    "id": 7,
+    "name": "House of Providence",
+    "place": "Kunnamthanam",
+    "year_established": 1978,
+    "ownership": "LSDP",
+    "pin_code": "689581",
+    "address": "Kunnamthanam P.O., Pathanamthitta",
+    "contacts": {
+      "phone": ["0469-2690414", "80783-41968"]
+    }
+  },
+  {
+    "id": 8,
+    "name": "Providence Home",
+    "place": "Kuttikkonam",
+    "year_established": 1998,
+    "ownership": "LSDP",
+    "pin_code": "691508",
+    "address": "Kunnikodu P.O., Kollam",
+    "contacts": {
+      "phone": ["0475-2323338", "94950-14330", "95672-1707"],
+      "email": "providencehomekuttkonam@gmail.com"
+    }
+  }
+],
+"Homes_for_Cancer_and_terminal_diesease_patients":[
+  {
+    "id": 1,
+    "name": "Benziger Home",
+    "place": "Edapazhanji",
+    "year_established": 2019,
+    "ownership": "OCD",
+    "pin_code": "695010",
+    "address": "CSM Nagar, Edapazhanji P.O., Thiruvananthapuram",
+    "contacts": {
+      "phone": ["90740-40310", "94466-85609"],
+      "email": ["benzigerhome@gmail.com", "benzigerhomeocd@gmail.com"]
+    }
+  },
+  {
+    "id": 2,
+    "name": "Cancer & AIDS Shelter Society (CASS-Snehatheeram)",
+    "place": "Kumaranalloor",
+    "year_established": 1999,
+    "ownership": "CASS",
+    "pin_code": "686016",
+    "address": "Kumaranalloor P.O., Kottayam",
+    "contacts": {
+      "phone": ["0481-2933475", "95394-85719", "85939-19707"]
+    }
+  },
+  {
+    "id": 3,
+    "name": "De Paul Care Centre",
+    "place": "Kumarapuram",
+    "year_established": 1993,
+    "ownership": "VC",
+    "pin_code": "695011",
+    "address": "Medical College P.O., Thiruvananthapuram",
+    "contacts": {
+      "phone": ["0471-2552172", "94951-48484"],
+      "email": "depaulcares@gmail.com"
+    }
+  },
+  {
+    "id": 4,
+    "name": "Santhwana",
+    "place": "Kumarapuram",
+    "year_established": 1999,
+    "ownership": "SD",
+    "pin_code": "695011",
+    "address": "Medical College P.O., Thiruvananthapuram",
+    "contacts": {
+      "phone": ["0471-2442734"]
+    }
+  },
+  {
+    "id": 5,
+    "name": "Karunalayam",
+    "place": "Mudiyoorkara",
+    "year_established": 2013,
+    "ownership": "Aepa",
+    "pin_code": "686008",
+    "address": "Gandhinagar P.O., Kottayam",
+    "contacts": {
+      "phone": ["0481-2597519", "94460-14750", "94461-19647"],
+      "email": "karunalayam.13@gmail.com"
+    }
+  },
+  {
+    "id": 6,
+    "name": "Lourdes Matha Cancer Care",
+    "place": "Pongummoodu",
+    "year_established": null,
+    "ownership": "Aepa-ASMI",
+    "pin_code": "695011",
+    "address": "P.T. Chacko Nagar, Ulloor Road, Medical College P.O., Thiruvananthapuram (Green Gardens)",
+    "contacts": {
+      "phone": ["94475-35410"],
+      "email": "lourdesmathacancercare@gmail.com"
+    }
+  },
+  {
+    "id": 7,
+    "name": "Mother Teresa Care Home",
+    "place": "Vandanam",
+    "year_established": 2022,
+    "ownership": "Aepa",
+    "pin_code": "688005",
+    "address": "Vandanam P.O., Alappuzha",
+    "contacts": {
+      "phone": ["97474-84161"]
+    }
+  }
+],
+
+"Family_counselling_Centers":[
+  {
+    "id": 1,
+    "name": "Santhi Family Counselling Centre",
+    "place": "Kumaranalloor",
+    "year_established": 2018,
+    "ownership": "SJ",
+    "pin_code": "686016",
+    "address": "Kumaranalloor P.O., Kottayam",
+    "contacts": {
+      "phone": ["94473-75312"],
+      "email": "santhifcpdc@gmail.com"
+    }
+  },
+  {
+    "id": 2,
+    "name": "St. Kuriakose Elias Spirituality & Family Apostolic Centre",
+    "place": "Pallathuruthy",
+    "year_established": 2015,
+    "ownership": "CMC",
+    "pin_code": "688501",
+    "address": "Thottuvathala P.O., Kainakary, Alappuzha",
+    "contacts": {
+      "phone": ["99474-72431"]
+    }
+  },
+  {
+    "id": 3,
+    "name": "Asha Kendra Counselling Centre",
+    "place": "Pulinchuvadu",
+    "year_established": 2009,
+    "ownership": "SD",
+    "pin_code": "686017",
+    "address": "Kudamaloor P.O., Kottayam",
+    "contacts": {
+      "phone": ["94970-99240", "97449-95541"],
+      "email": "akcckudamaloor@gmail.com"
+    }
+  },
+  {
+    "id": 4,
+    "name": "CANA - Pontifical John Paul II",
+    "place": "Thuruthy",
+    "year_established": 1981,
+    "ownership": "Aepa",
+    "pin_code": "686535",
+    "address": "Thuruthy P.O., Changanacherry, Kottayam",
+    "contacts": {
+      "phone": ["0481-2321144", "82898-33641", "94476-62034", "94477-51276"],
+      "email": "johnpaulismf1998@gmail.com",
+      "website": "stjohnpaul2institute.org"
+    }
+  }
+],
+"Museums":[
+  {
+    "id": 1,
+    "name": "Kurialacherry Sadan",
+    "place": "Champakulam",
+    "year_established": 2008,
+    "ownership": "SABS",
+    "pin_code": "688505",
+    "address": "Champakulam P.O., Alappuzha",
+    "contacts": {
+      "phone": ["0477-2736409"],
+      "email": "sadanchampakulam@gmail.com"
+    }
+  },
+  {
+    "id": 2,
+    "name": "Mar Thomas Kurialacherry Vikas",
+    "place": "Changanacherry",
+    "year_established": 1988,
+    "ownership": "SABS",
+    "pin_code": "686101",
+    "address": "Changanacherry P.O., Kottayam",
+    "contacts": {
+      "phone": ["0481-2424145"],
+      "email": "vikasmuseum@yahoo.com"
+    }
+  },
+  {
+    "id": 3,
+    "name": "Mar Mathew Kavukatt Museum",
+    "place": "Changanacherry",
+    "year_established": 2022,
+    "ownership": "Aepa",
+    "pin_code": "686101",
+    "address": "Changanacherry P.O., Kottayam",
+    "contacts": {
+      "phone": ["79944-44974", "80782-94974"],
+      "email": "markavukattmuseum@gmail.com"
+    }
+  },
+  {
+    "id": 4,
+    "name": "Chavara Bhavan (Birth Home of St. Chavara)",
+    "place": "Kainakary",
+    "year_established": 1980,
+    "ownership": "CMI",
+    "pin_code": "688501",
+    "address": "Kuttamangalam, Kainakary P.O., Alappuzha",
+    "contacts": {
+      "phone": ["0477-2724755", "0477-2724293", "97476-46418"],
+      "email": "chavarakainakary@gmail.com",
+      "website": "www.chavarabhavankainakary.org"
+    }
+  },
+  {
+    "id": 5,
+    "name": "Alphonsa Bhavan (Birth Home of St. Alphonsa FCC)",
+    "place": "Kudamaloor",
+    "year_established": 1975,
+    "ownership": "FCC",
+    "pin_code": "686008",
+    "address": "Villoonni P.O., Arpookara, Kottayam",
+    "contacts": {
+      "phone": ["0481-2967786", "77365-63493", "82814-60491"],
+      "email": "alphonsabhavankudamaloor@gmail.com"
+    }
+  },
+  {
+    "id": 6,
+    "name": "Msgr Nidhirickal Museum",
+    "place": "Parel",
+    "year_established": 2005,
+    "ownership": "Aepa",
+    "pin_code": "686104",
+    "address": "Kurisummoodu P.O., Kottayam",
+    "contacts": {
+      "phone": ["97447-99717"]
+    }
+  }
+],
+"Retreat_Centres":[
+  {
+    "id": 1,
+    "name": "Parithrana",
+    "place": "Adichira",
+    "year_established": 1992,
+    "ownership": "VC",
+    "pin_code": "686016",
+    "address": "Perumbaikad P.O., Kottayam",
+    "contacts": {
+      "phone": ["0481-2791635"],
+      "email": "retreatparithrana@gmail.com"
+    }
+  },
+  {
+    "id": 2,
+    "name": "Charis Bhavan (Diocese of Vijayapuram)",
+    "place": "Athirampuzha",
+    "year_established": 1989,
+    "ownership": "MSFS",
+    "pin_code": "686562",
+    "address": "Ettumanoor-Neendoor Rd., Athirampuzha P.O., Kottayam",
+    "contacts": {
+      "phone": ["0481-2731911", "90482-50775"],
+      "email": "info@charisbhavan.com"
+    }
+  },
+  {
+    "id": 3,
+    "name": "Carmel Mount",
+    "place": "Chethipuzha",
+    "year_established": 2007,
+    "ownership": "CMC",
+    "pin_code": "686104",
+    "address": "Kurisummoodu P.O., Changanacherry, Kottayam",
+    "contacts": {
+      "phone": ["0481-2728326", "96056-03795"],
+      "email": "carmelmountchry@gmail.com"
+    }
+  },
+  {
+    "id": 4,
+    "name": "Zion (ZRC)",
+    "place": "Kunnamthanam",
+    "year_established": 1999,
+    "ownership": "Aepa",
+    "pin_code": "689581",
+    "address": "Kunnamthanam P.O., Pathanamthitta",
+    "contacts": {
+      "phone": ["0469-2692469", "80863-99023", "94473-43828"],
+      "email": "cyriackottayil7@gmail.com"
+    }
+  },
+  {
+    "id": 5,
+    "name": "Emmaus (Divyakarunya Maria Bhavan)",
+    "place": "Mallappally",
+    "year_established": 2005,
+    "ownership": "MCBS-KTM",
+    "pin_code": "689585",
+    "address": "Mallappally West P.O., Pathanamthitta",
+    "contacts": {
+      "phone": ["70250-95413", "94967-10479"],
+      "email": "emmausrc@gmail.com"
+    }
+  }
+],
+"Social_Work_and_Welfare_Centres":[
+  {
+    "id": 1,
+    "name": "Samagravikas Bhavan",
+    "place": "Alappuzha",
+    "year_established": 1979,
+    "ownership": "CMI-TVM",
+    "pin_code": "688012",
+    "address": "",
+    "contacts": {
+      "phone": ["0477-2246045", "0477-2617667"],
+      "email": "vikasalapuzha@gmail.com"
+    }
+  },
+  {
+    "id": 2,
+    "name": "TAASC, Good Samaritan",
+    "place": "Amboori",
+    "year_established": 2020,
+    "ownership": "Aepa",
+    "pin_code": "695505",
+    "address": "Hospital Campus, Amboori P.O., Thiruvananthapuram",
+    "contacts": {
+      "phone": ["82816-99013"],
+      "email": "taasc.office@gmail.com"
+    }
+  },
+  {
+    "id": 3,
+    "name": "Adorers (for Women)",
+    "place": "Changanacherry",
+    "year_established": 2006,
+    "ownership": "AASC",
+    "pin_code": "686101",
+    "address": "Aramana Road, Changanacherry P.O., Kottayam",
+    "contacts": {
+      "phone": ["0481-2429100"],
+      "email": "adochanganacherry@gmail.com"
+    }
+  },
+  {
+    "id": 4,
+    "name": "CHASS",
+    "place": "Changanacherry",
+    "year_established": 1966,
+    "ownership": "Aepa",
+    "pin_code": "686101",
+    "address": "Changanacherry P.O., Kottayam",
+    "contacts": {
+      "phone": ["0481-2402345", "0481-2411817", "0481-2423735"],
+      "email": "chass1966@gmail.com",
+      "website": "www.chasschry.org"
+    }
+  },
+  {
+    "id": 5,
+    "name": "Archana (for Women)",
+    "place": "Ettumanoor",
+    "year_established": 2009,
+    "ownership": "OMMI",
+    "pin_code": "686631",
+    "address": "Ettumanoor P.O., Kottayam",
+    "contacts": {
+      "phone": ["0481-2533694"],
+      "email": "archanajjpt@gmail.com",
+      "website": "www.archanawomencentre.org"
+    }
+  },
+  {
+    "id": 6,
+    "name": "Sanketham Social Work Centre",
+    "place": "Koonanthanam",
+    "year_established": 1988,
+    "ownership": "CMC",
+    "pin_code": "686106",
+    "address": "Cheeramchira P.O., Changanacherry, Kottayam",
+    "contacts": {
+      "phone": ["0481-2726628", "94461-95381"],
+      "email": "naveenasanketham@gmail.com"
+    }
+  },
+  {
+    "id": 7,
+    "name": "Pratheeksha",
+    "place": "Koothrappally",
+    "year_established": 1998,
+    "ownership": "SABS",
+    "pin_code": "686540",
+    "address": "Koothrappally P.O., Karukachal, Kottayam",
+    "contacts": {
+      "phone": ["0481-2480064"],
+      "email": ""
+    }
+  },
+  {
+    "id": 8,
+    "name": "Arpana Service Society",
+    "place": "Kottayam",
+    "year_established": 1978,
+    "ownership": "CMI-KTM",
+    "pin_code": "686001",
+    "address": "Sastri Road, Kottayam",
+    "contacts": {
+      "phone": ["0481-2564547"],
+      "email": ""
+    }
+  },
+  {
+    "id": 9,
+    "name": "Samagravikas",
+    "place": "Mannanam",
+    "year_established": 2017,
+    "ownership": "CMI-TVM",
+    "pin_code": "686561",
+    "address": "Mannanam P.O., Kottayam",
+    "contacts": {
+      "phone": ["0481-2595416"],
+      "email": ""
+    }
+  },
+  {
+    "id": 10,
+    "name": "Chavara Welfare Centre",
+    "place": "Mannanam",
+    "year_established": 2017,
+    "ownership": "CMI-TVM",
+    "pin_code": "686561",
+    "address": "Mannanam P.O., Kottayam",
+    "contacts": {
+      "phone": ["0481-2398648"],
+      "email": ""
+    }
+  },
+  {
+    "id": 11,
+    "name": "Shanthigiri Social Service Centre",
+    "place": "Perumkavu",
+    "year_established": 1979,
+    "ownership": "HM",
+    "pin_code": "686543",
+    "address": "Erathuvadakara P.O., Kottayam",
+    "contacts": {
+      "phone": ["90729-49980"],
+      "email": ""
+    }
+  },
+  {
+    "id": 12,
+    "name": "Kripamatha Social Centre",
+    "place": "Poonkulam",
+    "year_established": 2017,
+    "ownership": "CHF",
+    "pin_code": "695522",
+    "address": "Vellayani P.O., Thiruvananthapuram",
+    "contacts": {
+      "phone": ["97448-07930"],
+      "email": ""
+    }
+  },
+  {
+    "id": 13,
+    "name": "Archana Women Centre",
+    "place": "Thellakom",
+    "year_established": 2004,
+    "ownership": "OMMI",
+    "pin_code": "686630",
+    "address": "Thellakom P.O., Kottayam",
+    "contacts": {
+      "phone": ["97471-22959"],
+      "email": ""
+    }
+  }
+],
+"Liturgical_Art_Centres":[
+  {
+    "id": 1,
+    "name": "Raza Artspace",
+    "place": "Adichira",
+    "year_established": 2020,
+    "ownership": "CMI-KTM",
+    "pin_code": "686016",
+    "address": "Thellakom P.O., Kottayam",
+    "contacts": {
+      "phone": ["94950-05452"],
+      "email": "razaartspace@gmail.com"
+    }
+  },
+  {
+    "id": 2,
+    "name": "Centre for Church Art & Architecture - Marios Institute of Iconography",
+    "place": "Changanacherry",
+    "year_established": 2016,
+    "ownership": "Aepa",
+    "pin_code": "686104",
+    "address": "Kurisummoodu P.O., Changanacherry, Kottayam",
+    "contacts": {
+      "phone": ["94973-31228"],
+      "email": "jacobkooroth@gmail.com"
+    }
+  }
+],
+"Printing_Presses":[
+  {
+    "id": 1,
+    "name": "St. Joseph Orphanage Press (Offset & Digital)",
+    "place": "Changanacherry",
+    "year_established": 1924,
+    "ownership": "Aepa",
+    "pin_code": "686101",
+    "address": "Changanacherry P.O., Kottayam",
+    "contacts": {
+      "phone": ["0481-2410101", "85477-85270"],
+      "email": "sjopresschry@gmail.com"
+    }
+  },
+  {
+    "id": 2,
+    "name": "Wi-Gi Printers (Offset)",
+    "place": "Manganam",
+    "year_established": 1995,
+    "ownership": "AO",
+    "pin_code": "686018",
+    "address": "Manganam P.O., Kottayam",
+    "contacts": {
+      "phone": ["94474-20082"],
+      "email": "wigipress@gmail.com"
+    }
+  },
+  {
+    "id": 3,
+    "name": "St. Joseph’s Press",
+    "place": "Mannanam",
+    "year_established": 1846,
+    "ownership": "CMI-KTM",
+    "pin_code": "686561",
+    "address": "Mannanam P.O., Kottayam",
+    "contacts": {
+      "phone": ["0481-2597296"],
+      "email": "stjosephspress1846@gmail.com"
+    }
+  },
+  {
+    "id": 4,
+    "name": "SH Offset Press",
+    "place": "Vettimukal",
+    "year_established": 1985,
+    "ownership": "SH",
+    "pin_code": "686631",
+    "address": "Vettimukal P.O., Via Ettumanoor, Kottayam",
+    "contacts": {
+      "phone": ["97781-83160"],
+      "email": "shoffsetvettimukal@gmail.com"
+    }
+  }
+],
+"Book_Stalls":[
+  {
+    "id": 1,
+    "name": "St. Joseph Book Stall",
+    "place": "Changanacherry",
+    "year_established": 1967,
+    "ownership": "Aepa",
+    "pin_code": "686101",
+    "address": "Changanacherry P.O., Kottayam",
+    "contacts": {
+      "phone": ["0481-2410101", "86060-10191"],
+      "email": "stjosephbookstall@gmail.com"
+    }
+  },
+  {
+    "id": 2,
+    "name": "Deepika Book House",
+    "place": "Kottayam",
+    "year_established": 1977,
+    "ownership": "CMI-KTM",
+    "pin_code": "686001",
+    "address": "Sastri Road, Kottayam",
+    "contacts": {
+      "phone": ["0481-2564547", "96397-33902"],
+      "email": "deepikabookhouse@gmail.com"
+    }
+  },
+  {
+    "id": 3,
+    "name": "San Jose Book Stall",
+    "place": "Mannanam",
+    "year_established": 1976,
+    "ownership": "CMI-KTM",
+    "pin_code": "686561",
+    "address": "Mannanam P.O., Kottayam",
+    "contacts": {
+      "phone": ["0481-2597050"],
+      "email": null
+    }
+  },
+  {
+    "id": 4,
+    "name": "St. Joseph Book Stall",
+    "place": "Muthoor",
+    "year_established": 2022,
+    "ownership": "Aepa",
+    "pin_code": "689107",
+    "address": "Muthoor P.O., Via Thiruvalla, Pathanamthitta, Kottayam",
+    "contacts": {
+      "phone": ["0481-2410101", "86060-10191"],
+      "email": "stjosephbookstall@gmail.com"
+    }
+  },
+  {
+    "id": 5,
+    "name": "Carmel Book Stall",
+    "place": "Thiruvananthapuram",
+    "year_established": 1947,
+    "ownership": "OCD",
+    "pin_code": "695014",
+    "address": "Cotton Hill P.O., Thiruvananthapuram",
+    "contacts": {
+      "phone": ["0471-2329772", "95391-09090"],
+      "email": "kunjagasthy@gmail.com"
+    }
+  },
+  {
+    "id": 6,
+    "name": "Book Stall",
+    "place": "Vadavathoor",
+    "year_established": 1962,
+    "ownership": "Seminary",
+    "pin_code": "686010",
+    "address": "Vadavathoor P.O., Kottayam",
+    "contacts": {
+      "phone": ["85473-49200"],
+      "email": null
+    }
+  }
+],
+"Publishing_Houses":[
+  {
+    "id": 1,
+    "name": "HIRS Publications",
+    "place": "Changanacherry",
+    "year_established": 1996,
+    "ownership": "Aepa",
+    "pin_code": "686101",
+    "address": "Marthoma Vidhyanikethan, PB No. 20, Changanacherry P.O., Kottayam",
+    "contacts": {
+      "phone": ["0481-2421891"],
+      "email": null
+    }
+  },
+  {
+    "id": 2,
+    "name": "Madhyastan Books",
+    "place": "Changanacherry",
+    "year_established": 2011,
+    "ownership": "Aepa",
+    "pin_code": "686101",
+    "address": "Changanacherry P.O., Kottayam",
+    "contacts": {
+      "phone": ["0481-2410101", "85477-85278"],
+      "email": "sjopresschry@gmail.com"
+    }
+  },
+  {
+    "id": 3,
+    "name": "Media Village Publications",
+    "place": "Kurisummoodu",
+    "year_established": 2009,
+    "ownership": "Aepa",
+    "pin_code": "686104",
+    "address": "Kurisummoodu P.O., Changanacherry",
+    "contacts": {
+      "phone": ["0481-2721085"],
+      "email": "mail@mediavillage.in"
+    }
+  },
+  {
+    "id": 4,
+    "name": "Denha Services",
+    "place": "Manganam",
+    "year_established": 1984,
+    "ownership": "MTS-Bet-Toma Dayara",
+    "pin_code": "686018",
+    "address": "Vidyanagar, Manganam P.O., Kottayam",
+    "contacts": {
+      "phone": ["94953-24726", "75106-18451"],
+      "email": "denehaservices@gmail.com"
+    }
+  },
+  {
+    "id": 5,
+    "name": "Carmel International Publishing House",
+    "place": "Thiruvananthapuram",
+    "year_established": 1981,
+    "ownership": "OCD",
+    "pin_code": "695014",
+    "address": "Cotton Hill P.O., Thiruvananthapuram",
+    "contacts": {
+      "phone": ["0471-2327253", "94460-37253"],
+      "email": "ciphindia@gmail.com"
+    }
+  },
+  {
+    "id": 6,
+    "name": "OIRSI Publications",
+    "place": "Vadavathoor",
+    "year_established": 1962,
+    "ownership": "Seminary",
+    "pin_code": "686010",
+    "address": "Vadavathoor P.O., Kottayam",
+    "contacts": {
+      "phone": ["0481-2574596", "91885-43331"],
+      "email": null
+    }
+  }
+],
+"Malpanate":[
+  {
+    "id": 1,
+    "name": "Mar Sleeva Malpanate",
+    "place": "Manganam",
+    "year_established": 2018,
+    "ownership": "Aepa",
+    "pin_code": "686018",
+    "address": "Manganam P.O., Kottayam",
+    "contacts": {
+      "phone": ["0481-2578192", "98478-24702", "83019-87029"],
+      "email": "vellanickalmathew@gmail.com"
+    }
+  }
+],
+"Seminaries":[
+  {
+    "id": 1,
+    "name": "Lisieux Minor Seminary",
+    "place": "Athirampuzha",
+    "year_established": 1936,
+    "ownership": "MCBS-KTM",
+    "pin_code": "686562",
+    "address": "Sreekandamangalam P.O., Kottayam",
+    "contacts": {
+      "phone": ["0481-2597298", "81578-52304"],
+      "email": "lisieuxminorseminary@gmail.com"
+    }
+  },
+  {
+    "id": 2,
+    "name": "Sacred Heart Minor Seminary",
+    "place": "Chethipuzha",
+    "year_established": 1979,
+    "ownership": "CMI-TV M",
+    "pin_code": "686104",
+    "address": "Kurisummoodu P.O., Changanacherry, Kottayam",
+    "contacts": {
+      "phone": ["0481-2721307", "72933-79542"],
+      "email": "jpkcmi@gmail.com"
+    }
+  },
+  {
+    "id": 3,
+    "name": "St. Thomas Minor Seminary",
+    "place": "Kurichy",
+    "year_established": 1894,
+    "ownership": "Aepa",
+    "pin_code": "686535",
+    "address": "PB No.1, Thuruthy P.O., Kottayam",
+    "contacts": {
+      "phone": ["0481-2321892", "1973", "94469-21118"],
+      "email": "kurichyseminary@gmail.com"
+    }
+  },
+  {
+    "id": 4,
+    "name": "Mary Immaculate Minor Seminary",
+    "place": "Mannanam",
+    "year_established": 1933,
+    "ownership": "CMI-TVM",
+    "pin_code": "686561",
+    "address": "Mannanam P.O., Kottayam",
+    "contacts": {
+      "phone": ["86062-16058", "94964-64134"],
+      "email": "mimseminarycmi@gmail.com"
+    }
+  },
+  {
+    "id": 5,
+    "name": "Vincentian Minor Seminary",
+    "place": "Myladi",
+    "year_established": 1976,
+    "ownership": "VC",
+    "pin_code": "686542",
+    "address": "Nedumkunnam P.O., Kottayam",
+    "contacts": {
+      "phone": ["0481-2416336", "96455-44501"],
+      "email": "frtonyvc@gmail.com"
+    }
+  },
+  {
+    "id": 6,
+    "name": "St. John’s Mission Seminary",
+    "place": "Parel",
+    "year_established": 1961,
+    "ownership": "SVD",
+    "pin_code": "686104",
+    "address": "Opposite St. Mary’s Church, Kurisummoodu P.O., Changanacherry, Kottayam",
+    "contacts": {
+      "phone": ["0481-2421751", "82813-48580"],
+      "email": "svdstjohns@gmail.com"
+    }
+  },
+  {
+    "id": 7,
+    "name": "Capuchin Vidyabhavan (Theologate)",
+    "place": "Thellakom",
+    "year_established": 1986,
+    "ownership": "OFM Cap.",
+    "pin_code": "686630",
+    "address": "Thellakom P.O., Kottayam",
+    "contacts": {
+      "phone": ["82819-48524", "94402-17952"],
+      "email": "capuchinvidyabhavan@gmail.com"
+    }
+  },
+  {
+    "id": 8,
+    "name": "Cherupushpa Ashram",
+    "place": "Thellakom",
+    "year_established": 1962,
+    "ownership": "OCD",
+    "pin_code": "686630",
+    "address": "Thellakom P.O., 101 Kavala, Kottayam",
+    "contacts": {
+      "phone": ["0481-2790592", "94950-87670", "94467-86591"],
+      "email": "cherupushpashramocd@gmail.com"
+    }
+  },
+  {
+    "id": 9,
+    "name": "Carmel Hill Monastery (Philosophy College)",
+    "place": "Thiruvananthapuram",
+    "year_established": 1902,
+    "ownership": "OCD",
+    "pin_code": "695014",
+    "address": "Cotton Hill P.O., Thiruvananthapuram",
+    "contacts": {
+      "phone": ["0471-2324404", "80752-46127"],
+      "email": "ocd-pchakiath@gmail.com"
+    }
+  }
+],
+"Matrimonial_Website":[
+  {
+    "id": 1,
+    "name": "Madhyastan Matrimony.com",
+    "place": "Changanacherry",
+    "year_established": 2011,
+    "ownership": "Aepa",
+    "pin_code": "686101",
+    "address": "Changanacherry P.O., Kottayam",
+    "contacts": {
+      "phone": ["0481-2410101", "85477-85285"],
+      "email": "madhyastanmatrimony@gmail.com"
+    }
+  }
+]
+
+
+
+
+
+
+
+
+
+
+
+}
