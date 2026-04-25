@@ -1,0 +1,1695 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Missions — Admin Panel</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" />
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    :root {
+      --brand: #921a02;
+      --brand-dark: #6e1301;
+      --brand-gold: #c9a84c;
+      --brand-border: rgba(217,35,45,0.18);
+    }
+
+    /* ── Stat Cards ── */
+    .mis-stat-card { background:#fff; border:1px solid #e2e8f0; border-radius:14px; padding:18px 20px; display:flex; align-items:center; gap:14px; box-shadow:0 2px 8px rgba(0,0,0,.05); }
+    .mis-stat-icon { width:42px; height:42px; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:1.1rem; flex-shrink:0; }
+    .mis-stat-icon.red { background:#fff1f0; color:#921a02; }
+    .mis-stat-icon.blue { background:#eff6ff; color:#2563eb; }
+    .mis-stat-icon.green { background:#f0fdf4; color:#16a34a; }
+    .mis-stat-icon.gold { background:#fffbeb; color:#d97706; }
+    .mis-stat-value { font-size:1.4rem; font-weight:800; color:#1e293b; line-height:1; }
+    .mis-stat-label { font-size:.7rem; color:#64748b; margin-top:2px; }
+
+    /* ── Layout ── */
+    .mis-admin-layout { display:flex; gap:20px; align-items:flex-start; }
+    .mis-admin-sidebar { width:220px; flex-shrink:0; position:sticky; top:80px; }
+    .mis-admin-content { flex:1; min-width:0; }
+
+    /* ── Sidebar Nav ── */
+    .mis-nav-card { border-radius:12px; overflow:hidden; box-shadow:0 4px 20px rgba(217,35,45,0.10); border:1px solid var(--brand-border); }
+    .nav-section-label { font-size:.65rem; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:var(--brand); padding:10px 16px 8px; background:#fff; border-bottom:1px solid var(--brand-border); }
+    .mis-nav { list-style:none; padding:0; margin:0; }
+    .mis-nav .nav-item { border-bottom:1px solid rgba(217,35,45,0.07); }
+    .mis-nav .nav-item:last-child { border-bottom:none; }
+    .mis-nav .nav-link { display:flex; align-items:center; gap:8px; padding:11px 14px; color:#555; font-size:.82rem; font-weight:600; text-decoration:none; background:#fff; border-left:4px solid transparent; cursor:pointer; transition:all .22s; user-select:none; }
+    .mis-nav .nav-link:hover { color:var(--brand); border-left-color:rgba(217,35,45,0.35); background:rgba(217,35,45,0.04); }
+    .mis-nav .nav-link.active { color:var(--brand); font-weight:700; border-left-color:var(--brand); background:linear-gradient(90deg,rgba(217,35,45,0.09),rgba(217,35,45,0.02)); }
+    .mis-nav .nav-link .nav-badge { margin-left:auto; background:var(--brand); color:#fff; font-size:.6rem; font-weight:700; padding:1px 6px; border-radius:20px; }
+
+    /* ── Tab Panes ── */
+    .tab-pane-mis { animation:tabSlideIn .28s cubic-bezier(0.4,0,0.2,1) both; }
+    @keyframes tabSlideIn { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+    .section-header { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px; margin-bottom:16px; padding-bottom:12px; border-bottom:2px solid var(--brand-border); }
+    .section-header h3 { font-size:1rem; font-weight:700; color:#1e293b; margin:0; }
+
+    /* ── Buttons ── */
+    .btn-add { background:var(--brand); color:#fff; border:none; border-radius:8px; padding:7px 16px; font-size:.76rem; font-weight:700; cursor:pointer; transition:background .15s; }
+    .btn-add:hover { background:var(--brand-dark); }
+    .btn-edit { background:#4f46e5; color:#fff; border:none; border-radius:6px; padding:4px 10px; font-size:.7rem; cursor:pointer; transition:background .15s; }
+    .btn-edit:hover { background:#4338ca; }
+    .btn-del { background:#ef4444; color:#fff; border:none; border-radius:6px; padding:4px 10px; font-size:.7rem; cursor:pointer; margin-left:4px; }
+    .btn-del:hover { background:#dc2626; }
+
+    /* ── Admin Table ── */
+    .mis-admin-table { width:100%; border-collapse:collapse; font-size:.78rem; margin-bottom:8px; }
+    .mis-admin-table thead th { background:var(--brand); color:#fff; padding:9px 12px; font-weight:600; font-size:.72rem; text-align:left; white-space:nowrap; }
+    .mis-admin-table tbody tr { border-bottom:1px solid #f1f5f9; transition:background .15s; }
+    .mis-admin-table tbody tr:hover { background:#fafafa; }
+    .mis-admin-table tbody td { padding:9px 12px; vertical-align:top; color:#374151; }
+    .tbl-name { font-weight:600; color:#1e293b; font-size:.8rem; }
+    .tbl-sub { font-size:.72rem; color:#64748b; margin-top:2px; }
+    .tbl-empty { text-align:center; padding:32px; color:#94a3b8; font-size:.82rem; }
+
+    /* ── Subsection Header ── */
+    .subsection-header { display:flex; align-items:center; justify-content:space-between; gap:8px; margin:20px 0 10px; padding:8px 12px; background:rgba(146,26,2,0.04); border-radius:8px; border:1px solid var(--brand-border); }
+    .subsection-header h4 { font-size:.85rem; font-weight:700; color:var(--brand); margin:0; }
+    .btn-add-sub { background:transparent; color:var(--brand); border:1.5px solid var(--brand-border); border-radius:7px; padding:4px 12px; font-size:.72rem; font-weight:700; cursor:pointer; transition:all .15s; white-space:nowrap; }
+    .btn-add-sub:hover { background:var(--brand); color:#fff; border-color:var(--brand); }
+
+    /* ── Toast ── */
+    #mis-toast { position:fixed; bottom:24px; right:24px; z-index:99999; background:#1e293b; color:#fff; padding:12px 20px; border-radius:10px; font-size:.82rem; font-weight:600; box-shadow:0 8px 24px rgba(0,0,0,.25); opacity:0; transform:translateY(10px); transition:opacity .25s,transform .25s; pointer-events:none; max-width:320px; }
+    #mis-toast.show { opacity:1; transform:translateY(0); }
+    #mis-toast.success { background:#16a34a; }
+    #mis-toast.error { background:#dc2626; }
+
+    /* ── Modal Backdrop ── */
+    .hm-backdrop { display:none; position:fixed; inset:0; z-index:9998; background:rgba(0,0,0,.55); backdrop-filter:blur(3px); align-items:center; justify-content:center; }
+    .hm-backdrop.show { display:flex; animation:hmFadeIn .2s ease; }
+    @keyframes hmFadeIn { from{opacity:0} to{opacity:1} }
+    .hm-box { background:#fff; border-radius:16px; padding:24px; width:100%; max-width:580px; max-height:92vh; overflow-y:auto; box-shadow:0 20px 60px rgba(0,0,0,.25); position:relative; animation:hmUp .25s ease; }
+    @keyframes hmUp { from{transform:translateY(20px);opacity:0} to{transform:translateY(0);opacity:1} }
+    .hm-box h5 { font-size:1rem; font-weight:700; margin:0 0 16px; }
+    .hm-close { position:absolute; top:14px; right:16px; background:none; border:none; font-size:1.2rem; cursor:pointer; color:#6b7280; }
+    .hm-close:hover { color:#1e293b; }
+    .hm-group { margin-bottom:11px; }
+    .hm-group label { display:block; font-size:.7rem; font-weight:700; text-transform:uppercase; letter-spacing:.05em; color:#64748b; margin-bottom:4px; }
+    .hm-group input, .hm-group textarea, .hm-group select { width:100%; border:1px solid #e2e8f0; border-radius:8px; padding:8px 11px; font-size:.83rem; outline:none; transition:border-color .2s; font-family:inherit; }
+    .hm-group input:focus, .hm-group select:focus, .hm-group textarea:focus { border-color:var(--brand); }
+    .hm-group textarea { resize:vertical; min-height:64px; }
+    .hm-row { display:grid; grid-template-columns:1fr 1fr; gap:11px; }
+    .hm-save { flex:1; padding:9px; border-radius:8px; border:none; background:var(--brand); color:#fff; font-weight:600; font-size:.84rem; cursor:pointer; transition:background .15s; display:flex; align-items:center; justify-content:center; gap:6px; }
+    .hm-save:hover:not(:disabled) { background:var(--brand-dark); }
+    .hm-save:disabled { opacity:.6; cursor:not-allowed; }
+    .hm-cancel { padding:9px 16px; border-radius:8px; border:1px solid #e2e8f0; background:#f8fafc; font-size:.84rem; cursor:pointer; }
+    .hm-cancel:hover { background:#f1f5f9; }
+    .hm-del-btn { padding:9px 14px; border-radius:8px; border:none; background:#ef4444; color:#fff; font-size:.82rem; cursor:pointer; }
+    .hm-del-btn:hover { background:#dc2626; }
+    .hm-status { font-size:.76rem; text-align:center; margin-top:8px; min-height:16px; }
+    .spin { width:13px; height:13px; border:2px solid rgba(255,255,255,.4); border-top-color:#fff; border-radius:50%; animation:spinAnim .6s linear infinite; display:inline-block; }
+    @keyframes spinAnim { to{transform:rotate(360deg)} }
+
+    /* ── Skeleton ── */
+    .skel { background:linear-gradient(90deg,#f1f5f9 25%,#e2e8f0 50%,#f1f5f9 75%); background-size:200% 100%; animation:skelShimmer 1.4s infinite; border-radius:8px; }
+    @keyframes skelShimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
+
+    /* ── Import Banner ── */
+    .import-banner { background:linear-gradient(135deg,#fff7ed,#fef3c7); border:1px solid #fcd34d; border-radius:12px; padding:16px 20px; margin-bottom:16px; display:flex; align-items:center; gap:14px; flex-wrap:wrap; }
+    .import-banner p { font-size:.84rem; font-weight:700; color:#92400e; margin:0 0 2px; }
+    .import-banner small { font-size:.74rem; color:#b45309; }
+    .btn-import { background:#d97706; color:#fff; border:none; border-radius:8px; padding:8px 16px; font-size:.78rem; font-weight:700; cursor:pointer; white-space:nowrap; transition:background .15s; }
+    .btn-import:hover:not(:disabled) { background:#b45309; }
+    .btn-import:disabled { opacity:.6; cursor:not-allowed; }
+
+    /* ── Field group for dynamic fields ── */
+    .dynamic-field-group { border:1px solid #e2e8f0; border-radius:10px; padding:12px; margin-bottom:8px; position:relative; background:#fafafa; }
+    .dynamic-field-group .remove-field { position:absolute; top:8px; right:8px; background:#ef4444; color:#fff; border:none; border-radius:5px; padding:2px 8px; font-size:.7rem; cursor:pointer; }
+    .btn-add-field { background:transparent; color:var(--brand); border:1.5px dashed var(--brand-border); border-radius:8px; padding:6px 14px; font-size:.74rem; font-weight:600; cursor:pointer; width:100%; margin-top:6px; transition:all .15s; }
+    .btn-add-field:hover { background:rgba(217,35,45,0.05); border-color:var(--brand); }
+
+    /* ── Textarea for paragraphs ── */
+    .para-group { border:1px solid #e2e8f0; border-radius:10px; padding:12px; margin-bottom:8px; position:relative; background:#fafafa; }
+    .para-group .remove-para { position:absolute; top:8px; right:8px; background:#ef4444; color:#fff; border:none; border-radius:5px; padding:2px 8px; font-size:.7rem; cursor:pointer; }
+    .para-group textarea { border:none; background:transparent; padding:0; resize:vertical; min-height:80px; font-size:.82rem; width:100%; outline:none; }
+
+    /* ── Pie chart district field ── */
+    .district-row { display:grid; grid-template-columns:2fr 1fr 1fr 1fr auto; gap:8px; align-items:center; margin-bottom:6px; }
+    .district-row input { border:1px solid #e2e8f0; border-radius:6px; padding:6px 8px; font-size:.78rem; outline:none; }
+    .district-row input:focus { border-color:var(--brand); }
+
+    @media(max-width:991px) {
+      .mis-admin-layout { flex-direction:column; }
+      .mis-admin-sidebar { width:100%; position:relative; top:0; }
+      .mis-nav { display:flex; overflow-x:auto; scrollbar-width:none; }
+      .mis-nav::-webkit-scrollbar { display:none; }
+      .mis-nav .nav-item { border-bottom:none; border-right:1px solid rgba(217,35,45,0.2); flex-shrink:0; }
+      .mis-nav .nav-link { flex-direction:column; gap:2px; padding:8px 10px; border-left:none; border-bottom:3px solid transparent; font-size:.68rem; white-space:nowrap; text-align:center; }
+      .mis-nav .nav-link.active { border-left-color:transparent; border-bottom-color:var(--brand); }
+      .hm-row { grid-template-columns:1fr; }
+      .district-row { grid-template-columns:1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div id="mis-toast"></div>
+  <div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+  <div class="dash-layout">
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-brand">
+        <div class="sidebar-logo">AF</div>
+        <div>
+          <div class="sidebar-brand-text">AdminForge</div>
+          <div class="sidebar-brand-sub">Management System</div>
+        </div>
+      </div>
+      <div class="sidebar-menu">
+        <p class="sidebar-section">Main</p>
+        <a href="dashboard.html" class="sidebar-item"><span class="si-icon">⬡</span> Home</a>
+        <a href="about.html" class="sidebar-item"><span class="si-icon">ℹ</span> About Us</a>
+        <a href="administration.html" class="sidebar-item"><span class="si-icon">⛪</span> Administration</a>
+        <a href="parishes.html" class="sidebar-item"><span class="si-icon">⛪</span> Parishes</a>
+        <a href="priests.html" class="sidebar-item"><span class="si-icon">✝</span> Priests</a>
+        <a href="seminarians.html" class="sidebar-item"><span class="si-icon">🎓</span> Seminarians</a>
+        <a href="department.html" class="sidebar-item"><span class="si-icon">🏢</span> Departments</a>
+        <a href="missions-admin.html" class="sidebar-item active"><span class="si-icon">🌍</span> Missions <span class="si-badge" id="sidebar-mis-count">0</span></a>
+        <p class="sidebar-section" style="margin-top:14px;">Account</p>
+        <div class="sidebar-item" onclick="misToast('Settings — coming soon!')"><span class="si-icon">⚙</span> Settings</div>
+        <div class="sidebar-item" onclick="misToast('Profile editor — coming soon!')"><span class="si-icon">◉</span> My Profile</div>
+      </div>
+      <div class="sidebar-footer">
+        <div class="user-row">
+          <div class="user-row-avatar" id="sidebar-avatar">?</div>
+          <div>
+            <div class="user-row-name" id="sidebar-username">Loading…</div>
+            <div class="user-row-role" id="sidebar-role">—</div>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <nav class="topbar">
+      <div class="topbar-left">
+        <button class="sidebar-toggle" id="sidebar-toggle">☰</button>
+        <div class="topbar-rule d-none d-lg-block"></div>
+        <div>
+          <div class="topbar-title">Missions</div>
+          <div class="topbar-sub">Manage Mission Stations & Data</div>
+        </div>
+      </div>
+      <div class="topbar-right">
+        <span id="role-badge" class="badge bg-secondary me-2" style="font-size:.8rem;padding:6px 12px;"></span>
+        <button class="btn btn-logout btn-sm" id="btn-logout">⏻ Logout</button>
+      </div>
+    </nav>
+
+    <main class="dash-main">
+      <!-- Stats -->
+      <div class="row g-3 mb-4">
+        <div class="col-6 col-xl-3">
+          <div class="mis-stat-card">
+            <div class="mis-stat-icon red"><i class="bi bi-globe-asia-australia"></i></div>
+            <div><div class="mis-stat-value" id="st-etawah">—</div><div class="mis-stat-label">Etawah Stations</div></div>
+          </div>
+        </div>
+        <div class="col-6 col-xl-3">
+          <div class="mis-stat-card">
+            <div class="mis-stat-icon blue"><i class="bi bi-geo-alt-fill"></i></div>
+            <div><div class="mis-stat-value" id="st-jaipur">—</div><div class="mis-stat-label">Jaipur Districts</div></div>
+          </div>
+        </div>
+        <div class="col-6 col-xl-3">
+          <div class="mis-stat-card">
+            <div class="mis-stat-icon green"><i class="bi bi-building-check"></i></div>
+            <div><div class="mis-stat-value" id="st-foreign">—</div><div class="mis-stat-label">Foreign Countries</div></div>
+          </div>
+        </div>
+        <div class="col-6 col-xl-3">
+          <div class="mis-stat-card">
+            <div class="mis-stat-icon gold"><i class="bi bi-heart-fill"></i></div>
+            <div><div class="mis-stat-value" id="st-adopted">—</div><div class="mis-stat-label">Adopted Diocese</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Import Banner -->
+      <div class="import-banner" id="banner-import">
+        <i class="bi bi-database-fill-up" style="font-size:1.5rem;color:#d97706;flex-shrink:0;"></i>
+        <div style="flex:1;">
+          <p>Import default Missions data to Firebase</p>
+          <small>Etawah, Jaipur districts, Virudhunagar, Foreign Countries & Adopted — one-time import. Won't overwrite existing.</small>
+        </div>
+        <button id="btn-import-default" class="btn-import" onclick="importDefaultData()">⬆ Import Default Data</button>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <div class="card-header-title">
+            <div class="card-header-pill">🌍</div><span>Mission Sections</span>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="mis-admin-layout">
+            <!-- Sidebar Nav -->
+            <div class="mis-admin-sidebar">
+              <div class="mis-nav-card">
+                <div class="nav-section-label">Sections</div>
+                <ul class="mis-nav" id="misNav">
+                  <li class="nav-item"><a class="nav-link active" data-tab="tab-etawah" href="#"><i class="bi bi-geo-alt"></i><span>Etawah</span><span class="nav-badge" id="nb-etawah">0</span></a></li>
+                  <li class="nav-item"><a class="nav-link" data-tab="tab-jaipur" href="#"><i class="bi bi-pin-map"></i><span>Jaipur</span><span class="nav-badge" id="nb-jaipur">0</span></a></li>
+                  <li class="nav-item"><a class="nav-link" data-tab="tab-virudhunagar" href="#"><i class="bi bi-building"></i><span>Virudhunagar</span><span class="nav-badge" id="nb-virudhunagar">0</span></a></li>
+                  <li class="nav-item"><a class="nav-link" data-tab="tab-foreign" href="#"><i class="bi bi-globe2"></i><span>Foreign</span><span class="nav-badge" id="nb-foreign">0</span></a></li>
+                  <li class="nav-item"><a class="nav-link" data-tab="tab-adopted" href="#"><i class="bi bi-heart"></i><span>Adopted</span><span class="nav-badge" id="nb-adopted">0</span></a></li>
+                </ul>
+              </div>
+            </div>
+
+            <!-- Content -->
+            <div class="mis-admin-content" id="misContent">
+              <div id="mis-skeleton">
+                <div class="skel" style="height:40px;margin-bottom:14px;"></div>
+                <div class="skel" style="height:200px;margin-bottom:12px;opacity:.7;"></div>
+              </div>
+
+              <!-- ═══ ETAWAH TAB ═══ -->
+              <div id="tab-etawah" class="tab-pane-mis" style="display:none;">
+                <div class="section-header">
+                  <h3>🌿 Etawah Mission (1975)</h3>
+                  <div style="display:flex;gap:8px;flex-wrap:wrap;">
+                    <button class="btn-add admin-only" onclick="openInfoModal('etawah')" style="display:none;background:#4f46e5;">✏️ Edit Info</button>
+                    <button class="btn-add admin-only" onclick="openParaModal('etawah')" style="display:none;background:#0891b2;">📝 Edit Paragraphs</button>
+                    <button class="btn-add admin-only" onclick="openStationModal('etawah')" style="display:none;">+ Add Station</button>
+                    <button class="btn-add admin-only" onclick="openCongregationModal('etawah')" style="display:none;background:#059669;">+ Add Congregation</button>
+                  </div>
+                </div>
+                <div id="etawah-info-preview" style="margin-bottom:16px;"></div>
+                <div id="etawah-stations-list"></div>
+                <div id="etawah-congregations-list"></div>
+              </div>
+
+              <!-- ═══ JAIPUR TAB ═══ -->
+              <div id="tab-jaipur" class="tab-pane-mis" style="display:none;">
+                <div class="section-header">
+                  <h3>🏜️ Jaipur Mission (2015)</h3>
+                  <div style="display:flex;gap:8px;flex-wrap:wrap;">
+                    <button class="btn-add admin-only" onclick="openInfoModal('jaipur')" style="display:none;background:#4f46e5;">✏️ Edit Info</button>
+                    <button class="btn-add admin-only" onclick="openParaModal('jaipur')" style="display:none;background:#0891b2;">📝 Edit Paragraphs</button>
+                    <button class="btn-add admin-only" onclick="openDistrictModal()" style="display:none;background:#0369a1;">🗺️ Manage Districts</button>
+                    <button class="btn-add admin-only" onclick="openStationModal('jaipur')" style="display:none;">+ Add Station</button>
+                  </div>
+                </div>
+                <div id="jaipur-info-preview" style="margin-bottom:16px;"></div>
+                <div id="jaipur-districts-list"></div>
+                <div id="jaipur-stations-list"></div>
+              </div>
+
+              <!-- ═══ VIRUDHUNAGAR TAB ═══ -->
+              <div id="tab-virudhunagar" class="tab-pane-mis" style="display:none;">
+                <div class="section-header">
+                  <h3>⛪ Virudhunagar Mission (2019)</h3>
+                  <div style="display:flex;gap:8px;flex-wrap:wrap;">
+                    <button class="btn-add admin-only" onclick="openParaModal('virudhunagar')" style="display:none;background:#0891b2;">📝 Edit Paragraphs</button>
+                    <button class="btn-add admin-only" onclick="openStationModal('virudhunagar')" style="display:none;">+ Add Station</button>
+                  </div>
+                </div>
+                <div id="virudhunagar-stations-list"></div>
+              </div>
+
+              <!-- ═══ FOREIGN TAB ═══ -->
+              <div id="tab-foreign" class="tab-pane-mis" style="display:none;">
+                <div class="section-header">
+                  <h3>✈️ Foreign Countries</h3>
+                  <button class="btn-add admin-only" onclick="openForeignModal()" style="display:none;">+ Add Country</button>
+                </div>
+                <div id="foreign-list"></div>
+              </div>
+
+              <!-- ═══ ADOPTED TAB ═══ -->
+              <div id="tab-adopted" class="tab-pane-mis" style="display:none;">
+                <div class="section-header">
+                  <h3>💛 Adopted Diocese</h3>
+                  <button class="btn-add admin-only" onclick="openAdoptedModal()" style="display:none;">✏️ Edit Details</button>
+                </div>
+                <div id="adopted-details"></div>
+              </div>
+
+            </div><!-- end misContent -->
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- ═══════════ MODALS ═══════════ -->
+
+  <!-- Info Modal (Etawah / Jaipur summary table) -->
+  <div id="m-info" class="hm-backdrop">
+    <div class="hm-box">
+      <button class="hm-close" onclick="closeModal('m-info')">✕</button>
+      <h5 id="info-title">Edit Mission Info</h5>
+      <p style="font-size:.78rem;color:#64748b;margin-bottom:12px;">Each row = one table row. Key (left column) and Value (right column).</p>
+      <div id="info-fields-wrap"></div>
+      <button class="btn-add-field" onclick="addInfoField()">+ Add Row</button>
+      <div style="display:flex;gap:10px;margin-top:16px;flex-wrap:wrap;">
+        <button class="hm-cancel" onclick="closeModal('m-info')">Cancel</button>
+        <button class="hm-save" id="btn-info-save" onclick="saveInfo()">💾 Save</button>
+      </div>
+      <div class="hm-status" id="info-status"></div>
+    </div>
+  </div>
+
+  <!-- Paragraphs Modal -->
+  <div id="m-para" class="hm-backdrop">
+    <div class="hm-box">
+      <button class="hm-close" onclick="closeModal('m-para')">✕</button>
+      <h5 id="para-title">Edit Paragraphs</h5>
+      <p style="font-size:.78rem;color:#64748b;margin-bottom:12px;">Each block = one paragraph displayed on the church website.</p>
+      <div id="para-fields-wrap"></div>
+      <button class="btn-add-field" onclick="addParaField()">+ Add Paragraph</button>
+      <div style="display:flex;gap:10px;margin-top:16px;flex-wrap:wrap;">
+        <button class="hm-cancel" onclick="closeModal('m-para')">Cancel</button>
+        <button class="hm-save" id="btn-para-save" onclick="saveParagraphs()">💾 Save</button>
+      </div>
+      <div class="hm-status" id="para-status"></div>
+    </div>
+  </div>
+
+  <!-- Station Modal (Etawah / Jaipur / Virudhunagar) -->
+  <div id="m-station" class="hm-backdrop">
+    <div class="hm-box">
+      <button class="hm-close" onclick="closeModal('m-station')">✕</button>
+      <h5 id="station-title">Add Mission Station</h5>
+      <div class="hm-group"><label>Mission Name *</label><input type="text" id="st-name" placeholder="e.g. Etawah Central Mission" /></div>
+      <div class="hm-row">
+        <div class="hm-group"><label>Address</label><input type="text" id="st-address" placeholder="Address" /></div>
+        <div class="hm-group"><label>State</label><input type="text" id="st-state" placeholder="e.g. Uttar Pradesh" /></div>
+      </div>
+      <div class="hm-row">
+        <div class="hm-group"><label>Pin Code</label><input type="text" id="st-pin" placeholder="e.g. 206001" /></div>
+        <div class="hm-group"><label>Year Established</label><input type="text" id="st-year" placeholder="e.g. 1975" /></div>
+      </div>
+      <div class="hm-group"><label>Phone (comma separated)</label><input type="text" id="st-phone" placeholder="e.g. 94118 65219, 93687 08519" /></div>
+      <div style="margin-top:10px;"><label style="font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#64748b;display:block;margin-bottom:6px;">Personnel</label>
+        <div id="st-personnel-wrap"></div>
+        <button class="btn-add-field" onclick="addPersonnelField('st-personnel-wrap')">+ Add Person</button>
+      </div>
+      <div style="margin-top:10px;"><label style="font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#64748b;display:block;margin-bottom:6px;">Institutions</label>
+        <div id="st-inst-wrap"></div>
+        <button class="btn-add-field" onclick="addInstField('st-inst-wrap')">+ Add Institution</button>
+      </div>
+      <div style="display:flex;gap:10px;margin-top:16px;flex-wrap:wrap;">
+        <button class="hm-cancel" onclick="closeModal('m-station')">Cancel</button>
+        <button class="hm-save" id="btn-st-save" onclick="saveStation()">💾 Save</button>
+        <button class="hm-del-btn" id="btn-st-del" onclick="askDelete(editStId,'stations',editMisSection)" style="display:none;">🗑 Delete</button>
+      </div>
+      <div class="hm-status" id="station-status"></div>
+    </div>
+  </div>
+
+  <!-- Congregation Modal -->
+  <div id="m-congregation" class="hm-backdrop">
+    <div class="hm-box">
+      <button class="hm-close" onclick="closeModal('m-congregation')">✕</button>
+      <h5 id="cong-title">Add Congregation</h5>
+      <div class="hm-group"><label>Congregation Name *</label><input type="text" id="cong-name" placeholder="e.g. Sisters of Charity" /></div>
+      <div class="hm-group"><label>Province</label><input type="text" id="cong-province" placeholder="e.g. Kerala Province" /></div>
+      <div style="margin-top:10px;"><label style="font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#64748b;display:block;margin-bottom:6px;">Institutions</label>
+        <div id="cong-inst-wrap"></div>
+        <button class="btn-add-field" onclick="addInstField('cong-inst-wrap')">+ Add Institution</button>
+      </div>
+      <div style="display:flex;gap:10px;margin-top:16px;flex-wrap:wrap;">
+        <button class="hm-cancel" onclick="closeModal('m-congregation')">Cancel</button>
+        <button class="hm-save" id="btn-cong-save" onclick="saveCongregation()">💾 Save</button>
+        <button class="hm-del-btn" id="btn-cong-del" onclick="askDelete(editCongId,'congregations','etawah')" style="display:none;">🗑 Delete</button>
+      </div>
+      <div class="hm-status" id="cong-status"></div>
+    </div>
+  </div>
+
+  <!-- Districts Modal (Jaipur pie chart data) -->
+  <div id="m-districts" class="hm-backdrop">
+    <div class="hm-box" style="max-width:700px;">
+      <button class="hm-close" onclick="closeModal('m-districts')">✕</button>
+      <h5>🗺️ Manage Jaipur Districts (Pie Chart Data)</h5>
+      <p style="font-size:.78rem;color:#64748b;margin-bottom:10px;">Name | Area (sq km) | Population | Christian % (e.g. 0.19 = 19%)</p>
+      <div style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr auto;gap:6px;margin-bottom:6px;padding:0 4px;">
+        <span style="font-size:.68rem;font-weight:700;color:#94a3b8;text-transform:uppercase;">District Name</span>
+        <span style="font-size:.68rem;font-weight:700;color:#94a3b8;text-transform:uppercase;">Area km²</span>
+        <span style="font-size:.68rem;font-weight:700;color:#94a3b8;text-transform:uppercase;">Population</span>
+        <span style="font-size:.68rem;font-weight:700;color:#94a3b8;text-transform:uppercase;">Christian%</span>
+        <span></span>
+      </div>
+      <div id="district-rows-wrap"></div>
+      <button class="btn-add-field" onclick="addDistrictRow()">+ Add District</button>
+      <div style="display:flex;gap:10px;margin-top:16px;flex-wrap:wrap;">
+        <button class="hm-cancel" onclick="closeModal('m-districts')">Cancel</button>
+        <button class="hm-save" id="btn-dist-save" onclick="saveDistricts()">💾 Save Districts</button>
+      </div>
+      <div class="hm-status" id="dist-status"></div>
+    </div>
+  </div>
+
+  <!-- Foreign Country Modal -->
+  <div id="m-foreign" class="hm-backdrop">
+    <div class="hm-box" style="max-width:400px;">
+      <button class="hm-close" onclick="closeModal('m-foreign')">✕</button>
+      <h5 id="foreign-modal-title">Add Country</h5>
+      <div class="hm-group"><label>Country Name *</label><input type="text" id="f-country" placeholder="e.g. Germany" /></div>
+      <div class="hm-group"><label>No. of Priests *</label><input type="number" id="f-priests" placeholder="e.g. 20" min="0" /></div>
+      <div style="display:flex;gap:10px;margin-top:16px;flex-wrap:wrap;">
+        <button class="hm-cancel" onclick="closeModal('m-foreign')">Cancel</button>
+        <button class="hm-save" id="btn-f-save" onclick="saveForeign()">💾 Save</button>
+        <button class="hm-del-btn" id="btn-f-del" onclick="askDelete(editForeignId,'foreign',null)" style="display:none;">🗑 Delete</button>
+      </div>
+      <div class="hm-status" id="foreign-status"></div>
+    </div>
+  </div>
+
+  <!-- Adopted Modal -->
+  <div id="m-adopted" class="hm-backdrop">
+    <div class="hm-box" style="max-width:440px;">
+      <button class="hm-close" onclick="closeModal('m-adopted')">✕</button>
+      <h5>Edit Adopted Diocese Details</h5>
+      <div id="adopted-fields-wrap"></div>
+      <button class="btn-add-field" onclick="addInfoField('adopted-fields-wrap','adopted-data')">+ Add Row</button>
+      <div style="display:flex;gap:10px;margin-top:16px;flex-wrap:wrap;">
+        <button class="hm-cancel" onclick="closeModal('m-adopted')">Cancel</button>
+        <button class="hm-save" id="btn-adopted-save" onclick="saveAdopted()">💾 Save</button>
+      </div>
+      <div class="hm-status" id="adopted-status"></div>
+    </div>
+  </div>
+
+  <!-- Delete Confirm -->
+  <div id="m-del-confirm" class="hm-backdrop">
+    <div class="hm-box" style="max-width:380px;">
+      <h5>⚠️ Confirm Delete</h5>
+      <p style="font-size:.84rem;color:#374151;" id="del-confirm-text">Are you sure?</p>
+      <div style="display:flex;gap:10px;margin-top:16px;">
+        <button class="hm-cancel" onclick="closeModal('m-del-confirm')">Cancel</button>
+        <button id="btn-del-confirm" style="flex:1;padding:9px;border-radius:8px;border:none;background:#ef4444;color:#fff;font-weight:600;font-size:.84rem;cursor:pointer;" onclick="confirmDelete()">Yes, Delete</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+    import {
+      getFirestore, doc, getDoc, setDoc, collection,
+      addDoc, getDocs, updateDoc, deleteDoc,
+      serverTimestamp, query, orderBy
+    } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+    const FC = {
+      apiKey: "AIzaSyArM8sv7J1RUj4XvAJhJd40tzA7Yc8BGXY",
+      authDomain: "admin-dashboard-ed62c.firebaseapp.com",
+      projectId: "admin-dashboard-ed62c",
+      storageBucket: "admin-dashboard-ed62c.firebasestorage.app",
+      messagingSenderId: "560027475135",
+      appId: "1:560027475135:web:3fae0cb0268729ae79fa0a"
+    };
+    const ADMIN_EMAIL = "issacnewton1503@gmail.com";
+    const app = initializeApp(FC);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    // ═══ PATH HELPERS ═══
+    // missions/{section}/info          → single doc "main"
+    // missions/{section}/paragraphs    → single doc "main" with array
+    // missions/{section}/stations      → subcollection
+    // missions/{section}/congregations → subcollection (etawah)
+    // missions/jaipur/districts        → single doc "main"
+    // missions/foreign/countries       → subcollection
+    // missions/adopted/info            → single doc "main"
+
+    const misDoc = (section, sub) => doc(db, 'missions', section, sub, 'main');
+    const misCol = (section, sub) => collection(db, 'missions', section, sub);
+    const misEntry = (section, sub, id) => doc(db, 'missions', section, sub, id);
+
+    let userRole = null;
+    let allData = {};
+    let currentTab = 'tab-etawah';
+    let editStId = null, editMisSection = null;
+    let editCongId = null;
+    let editForeignId = null;
+    let pendingDelId = null, pendingDelType = null, pendingDelSection = null;
+    let currentInfoSection = null, currentParaSection = null;
+
+    // expose to window for onclick handlers
+    window.editStId = null; window.editMisSection = null; window.editCongId = null; window.editForeignId = null;
+
+    const esc = s => String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+
+    // ── Toast ──
+    window.misToast = function(msg, type='', dur=3000) {
+      const t = document.getElementById('mis-toast');
+      t.textContent = msg; t.className = 'show' + (type ? ' '+type : '');
+      clearTimeout(t._t); t._t = setTimeout(() => t.className = '', dur);
+    };
+    function busyBtn(id, on, label='Save') {
+      const b = document.getElementById(id); if(!b) return;
+      if(on) { b._lbl=b.innerHTML; b.disabled=true; b.innerHTML=`<span class="spin"></span> Saving…`; }
+      else { b.disabled=false; b.innerHTML = b._lbl || label; }
+    }
+
+    // ── Auth ──
+    document.body.style.display = 'none';
+    onAuthStateChanged(auth, async user => {
+      if(!user) { window.location.href='index.html'; return; }
+      const snap = await getDoc(doc(db,'users',user.uid));
+      if(!snap.exists()) { await signOut(auth); window.location.href='index.html'; return; }
+      const prof = snap.data();
+      userRole = user.email === ADMIN_EMAIL ? 'Admin' : 'User';
+      const uname = prof.username || user.displayName || user.email;
+      document.getElementById('sidebar-username').textContent = uname;
+      document.getElementById('sidebar-role').textContent = userRole;
+      document.getElementById('sidebar-avatar').textContent = uname[0].toUpperCase();
+      const badge = document.getElementById('role-badge');
+      badge.textContent = userRole;
+      badge.className = userRole==='Admin' ? 'badge bg-warning text-dark me-2' : 'badge bg-primary me-2';
+      if(userRole==='Admin') document.querySelectorAll('.admin-only').forEach(el => el.style.display='');
+      document.body.style.display = '';
+      await loadAllData();
+    });
+    document.getElementById('btn-logout').addEventListener('click', async () => { await signOut(auth); window.location.href='index.html'; });
+    document.getElementById('sidebar-toggle').addEventListener('click', () => { document.getElementById('sidebar').classList.toggle('open'); document.getElementById('sidebar-overlay').classList.toggle('show'); });
+    document.getElementById('sidebar-overlay').addEventListener('click', () => { document.getElementById('sidebar').classList.remove('open'); document.getElementById('sidebar-overlay').classList.remove('show'); });
+
+    // ── Load All ──
+    async function loadAllData() {
+      document.getElementById('mis-skeleton').style.display = '';
+      try {
+        // Ensure parent docs
+        for(const sec of ['etawah','jaipur','virudhunagar','foreign','adopted']) {
+          const pd = doc(db,'missions',sec);
+          const ps = await getDoc(pd);
+          if(!ps.exists()) await setDoc(pd,{section:sec,createdAt:serverTimestamp()});
+        }
+
+        // Load info docs
+        for(const sec of ['etawah','jaipur','adopted']) {
+          try { const s = await getDoc(misDoc(sec,'info')); allData[sec+'_info'] = s.exists() ? s.data() : {}; } catch(e){ allData[sec+'_info']={}; }
+        }
+
+        // Load paragraphs
+        for(const sec of ['etawah','jaipur','virudhunagar']) {
+          try { const s = await getDoc(misDoc(sec,'paragraphs')); allData[sec+'_paras'] = s.exists() ? (s.data().items||[]) : []; } catch(e){ allData[sec+'_paras']=[]; }
+        }
+
+        // Load stations
+        for(const sec of ['etawah','jaipur','virudhunagar']) {
+          try {
+            const sn = await getDocs(query(misCol(sec,'stations'), orderBy('order','asc')));
+            allData[sec+'_stations'] = sn.docs.map(d=>({id:d.id,...d.data()}));
+          } catch(e) {
+            const sn = await getDocs(misCol(sec,'stations'));
+            allData[sec+'_stations'] = sn.docs.map(d=>({id:d.id,...d.data()}));
+          }
+        }
+
+        // Load etawah congregations
+        try {
+          const sn = await getDocs(query(misCol('etawah','congregations'), orderBy('order','asc')));
+          allData['etawah_congregations'] = sn.docs.map(d=>({id:d.id,...d.data()}));
+        } catch(e) {
+          const sn = await getDocs(misCol('etawah','congregations'));
+          allData['etawah_congregations'] = sn.docs.map(d=>({id:d.id,...d.data()}));
+        }
+
+        // Load jaipur districts
+        try { const s = await getDoc(misDoc('jaipur','districts')); allData['jaipur_districts'] = s.exists() ? (s.data().items||[]) : []; } catch(e){ allData['jaipur_districts']=[]; }
+
+        // Load foreign countries
+        try {
+          const sn = await getDocs(query(misCol('foreign','countries'), orderBy('order','asc')));
+          allData['foreign_countries'] = sn.docs.map(d=>({id:d.id,...d.data()}));
+        } catch(e) {
+          const sn = await getDocs(misCol('foreign','countries'));
+          allData['foreign_countries'] = sn.docs.map(d=>({id:d.id,...d.data()}));
+        }
+
+        updateStats();
+        renderCurrentTab();
+      } catch(err) {
+        misToast('❌ Load failed: '+err.message,'error');
+      } finally {
+        document.getElementById('mis-skeleton').style.display='none';
+        document.getElementById(currentTab).style.display='';
+      }
+    }
+
+    function updateStats() {
+      document.getElementById('st-etawah').textContent = (allData['etawah_stations']||[]).length;
+      document.getElementById('st-jaipur').textContent = (allData['jaipur_districts']||[]).length;
+      document.getElementById('st-foreign').textContent = (allData['foreign_countries']||[]).length;
+      document.getElementById('st-adopted').textContent = Object.keys(allData['adopted_info']||{}).filter(k=>!['createdAt','updatedAt'].includes(k)).length;
+      document.getElementById('nb-etawah').textContent = (allData['etawah_stations']||[]).length;
+      document.getElementById('nb-jaipur').textContent = (allData['jaipur_districts']||[]).length;
+      document.getElementById('nb-virudhunagar').textContent = (allData['virudhunagar_stations']||[]).length;
+      document.getElementById('nb-foreign').textContent = (allData['foreign_countries']||[]).length;
+      document.getElementById('nb-adopted').textContent = 1;
+      document.getElementById('sidebar-mis-count').textContent =
+        (allData['etawah_stations']||[]).length + (allData['jaipur_districts']||[]).length +
+        (allData['foreign_countries']||[]).length + (allData['virudhunagar_stations']||[]).length;
+    }
+
+    // ── Tab Navigation ──
+    window.activateMisTab = function(tabId) {
+      document.querySelectorAll('.tab-pane-mis').forEach(p => p.style.display='none');
+      const t = document.getElementById(tabId);
+      if(t) { t.style.display=''; t.style.animation='none'; void t.offsetWidth; t.style.animation=''; }
+      currentTab = tabId;
+      document.querySelectorAll('#misNav .nav-link').forEach(l => l.classList.toggle('active', l.dataset.tab===tabId));
+      renderCurrentTab();
+    };
+    document.querySelectorAll('#misNav .nav-link').forEach(link => {
+      link.addEventListener('click', function(e) { e.preventDefault(); activateMisTab(this.dataset.tab); });
+    });
+
+    // ── Render ──
+    function renderCurrentTab() {
+      if(currentTab==='tab-etawah') renderEtawah();
+      else if(currentTab==='tab-jaipur') renderJaipur();
+      else if(currentTab==='tab-virudhunagar') renderVirudhunagar();
+      else if(currentTab==='tab-foreign') renderForeign();
+      else if(currentTab==='tab-adopted') renderAdopted();
+    }
+
+    function renderInfoTable(data, excludeKeys=[]) {
+      const rows = Object.entries(data).filter(([k])=>!['createdAt','updatedAt',...excludeKeys].includes(k));
+      if(!rows.length) return '<p style="color:#94a3b8;font-size:.82rem;">No info yet. Click "Edit Info" to add.</p>';
+      return `<div class="table-responsive"><table class="mis-admin-table">
+        <thead><tr><th>Key</th><th>Value</th></tr></thead>
+        <tbody>${rows.map(([k,v])=>`<tr><td>${esc(k)}</td><td>${esc(v)}</td></tr>`).join('')}</tbody>
+      </table></div>`;
+    }
+
+    function renderStationsTable(stations, section) {
+      if(!stations.length) return '<p style="color:#94a3b8;font-size:.82rem;">No stations yet.</p>';
+      return `<div class="table-responsive"><table class="mis-admin-table">
+        <thead><tr><th>#</th><th>Mission</th><th>Personnel</th><th>Institutions</th>${userRole==='Admin'?'<th>Actions</th>':''}</tr></thead>
+        <tbody>${stations.map((st,i)=>{
+          const personnel = (st.personnel||[]).map(p=>`<div><strong>${esc(p.name)}</strong>${p.phone?` <span style="color:#64748b;">${esc(p.phone)}</span>`:''}</div>`).join('');
+          const insts = (st.institutions||[]).map(inst=>`<div>${esc(inst.name)}${inst.phone?`<br><span style="color:#64748b;font-size:.7rem;">${esc(inst.phone)}</span>`:''}</div>`).join('');
+          return `<tr>
+            <td style="color:#94a3b8;">${i+1}</td>
+            <td><div class="tbl-name">${esc(st.name||'—')}</div>
+              <div class="tbl-sub">${[st.address,st.state,st.pin?'Pin:'+st.pin:''].filter(Boolean).join(', ')}</div>
+              ${st.year?`<div class="tbl-sub">Est: ${esc(st.year)}</div>`:''}
+              ${st.phone?`<div class="tbl-sub">📞 ${esc(st.phone)}</div>`:''}
+            </td>
+            <td>${personnel||'—'}</td>
+            <td>${insts||'—'}</td>
+            ${userRole==='Admin'?`<td><button class="btn-edit" onclick="openEditStation('${st.id}','${section}')">✏️</button><button class="btn-del" onclick="askDelete('${st.id}','stations','${section}')">🗑</button></td>`:''}
+          </tr>`;
+        }).join('')}</tbody>
+      </table></div>`;
+    }
+
+    function renderEtawah() {
+      document.getElementById('etawah-info-preview').innerHTML =
+        `<div class="subsection-header"><h4>Mission Info Table</h4></div>` +
+        renderInfoTable(allData['etawah_info']||{});
+      document.getElementById('etawah-stations-list').innerHTML =
+        `<div class="subsection-header"><h4>Mission Stations (Etawah)</h4>${userRole==='Admin'?'<button class="btn-add-sub admin-only" onclick="openStationModal(\'etawah\')">+ Station</button>':''}</div>` +
+        renderStationsTable(allData['etawah_stations']||[], 'etawah');
+      const congs = allData['etawah_congregations']||[];
+      document.getElementById('etawah-congregations-list').innerHTML =
+        `<div class="subsection-header"><h4>Religious Congregations</h4>${userRole==='Admin'?'<button class="btn-add-sub admin-only" onclick="openCongregationModal(\'etawah\')">+ Congregation</button>':''}</div>` +
+        (congs.length ? `<div class="table-responsive"><table class="mis-admin-table">
+          <thead><tr><th>#</th><th>Congregation</th><th>Institutions</th>${userRole==='Admin'?'<th>Actions</th>':''}</tr></thead>
+          <tbody>${congs.map((c,i)=>`<tr>
+            <td style="color:#94a3b8;">${i+1}</td>
+            <td><div class="tbl-name">${esc(c.name)}</div><div class="tbl-sub">${esc(c.province||'')}</div></td>
+            <td>${(c.institutions||[]).map(inst=>`<div>${esc(inst.name)}</div>`).join('')||'—'}</td>
+            ${userRole==='Admin'?`<td><button class="btn-edit" onclick="openEditCongregation('${c.id}')">✏️</button><button class="btn-del" onclick="askDelete('${c.id}','congregations','etawah')">🗑</button></td>`:''}
+          </tr>`).join('')}</tbody>
+        </table></div>` : '<p style="color:#94a3b8;font-size:.82rem;">No congregations yet.</p>');
+    }
+
+    function renderJaipur() {
+      document.getElementById('jaipur-info-preview').innerHTML =
+        `<div class="subsection-header"><h4>Mission Info Table</h4></div>` +
+        renderInfoTable(allData['jaipur_info']||{});
+      const districts = allData['jaipur_districts']||[];
+      document.getElementById('jaipur-districts-list').innerHTML =
+        `<div class="subsection-header"><h4>Districts (Pie Chart Data)</h4>${userRole==='Admin'?'<button class="btn-add-sub admin-only" onclick="openDistrictModal()">🗺️ Manage</button>':''}</div>` +
+        (districts.length ? `<div class="table-responsive"><table class="mis-admin-table">
+          <thead><tr><th>#</th><th>District</th><th>Area (km²)</th><th>Population</th><th>Christian %</th></tr></thead>
+          <tbody>${districts.map((d,i)=>`<tr>
+            <td style="color:#94a3b8;">${i+1}</td>
+            <td class="tbl-name">${esc(d.name)}</td>
+            <td>${(d.area||0).toLocaleString()}</td>
+            <td>${(d.population||0).toLocaleString()}</td>
+            <td>${((d.christian||0)*100).toFixed(2)}%</td>
+          </tr>`).join('')}</tbody>
+        </table></div>` : '<p style="color:#94a3b8;font-size:.82rem;">No districts yet. Click "Manage Districts".</p>');
+      document.getElementById('jaipur-stations-list').innerHTML =
+        `<div class="subsection-header"><h4>Mission Stations</h4>${userRole==='Admin'?'<button class="btn-add-sub admin-only" onclick="openStationModal(\'jaipur\')">+ Station</button>':''}</div>` +
+        renderStationsTable(allData['jaipur_stations']||[], 'jaipur');
+    }
+
+    function renderVirudhunagar() {
+      document.getElementById('virudhunagar-stations-list').innerHTML =
+        `<div class="subsection-header"><h4>Mission Stations</h4>${userRole==='Admin'?'<button class="btn-add-sub admin-only" onclick="openStationModal(\'virudhunagar\')">+ Station</button>':''}</div>` +
+        renderStationsTable(allData['virudhunagar_stations']||[], 'virudhunagar');
+    }
+
+    function renderForeign() {
+      const countries = allData['foreign_countries']||[];
+      document.getElementById('foreign-list').innerHTML = countries.length
+        ? `<div class="table-responsive"><table class="mis-admin-table">
+            <thead><tr><th>#</th><th>Country</th><th>No. of Priests</th>${userRole==='Admin'?'<th>Actions</th>':''}</tr></thead>
+            <tbody>${countries.map((c,i)=>`<tr>
+              <td style="color:#94a3b8;">${i+1}</td>
+              <td class="tbl-name">${esc(c.country)}</td>
+              <td>${esc(String(c.priests||0).padStart(2,'0'))}</td>
+              ${userRole==='Admin'?`<td><button class="btn-edit" onclick="openEditForeign('${c.id}')">✏️</button><button class="btn-del" onclick="askDelete('${c.id}','foreign',null)">🗑</button></td>`:''}
+            </tr>`).join('')}</tbody>
+          </table></div>`
+        : '<p style="color:#94a3b8;font-size:.82rem;">No countries yet.</p>';
+    }
+
+    function renderAdopted() {
+      const info = allData['adopted_info']||{};
+      document.getElementById('adopted-details').innerHTML =
+        `${userRole==='Admin'?'<div class="subsection-header"><h4>Diocese Details</h4><button class="btn-add-sub admin-only" onclick="openAdoptedModal()">✏️ Edit</button></div>':''}` +
+        renderInfoTable(info);
+    }
+
+    // ── Modal Helpers ──
+    window.closeModal = function(id) { document.getElementById(id).classList.remove('show'); };
+    document.querySelectorAll('.hm-backdrop').forEach(bd => bd.addEventListener('click', e => { if(e.target===e.currentTarget) e.currentTarget.classList.remove('show'); }));
+
+    // ── Info Modal ──
+    window.openInfoModal = function(section) {
+      currentInfoSection = section;
+      document.getElementById('info-title').textContent = 'Edit ' + section.charAt(0).toUpperCase()+section.slice(1) + ' Mission Info';
+      const data = allData[section+'_info']||{};
+      const wrap = document.getElementById('info-fields-wrap');
+      wrap.innerHTML = '';
+      const filtered = Object.entries(data).filter(([k])=>!['createdAt','updatedAt'].includes(k));
+      filtered.forEach(([k,v]) => addInfoField('info-fields-wrap','info-data',k,v));
+      if(!filtered.length) addInfoField('info-fields-wrap','info-data');
+      document.getElementById('info-status').textContent = '';
+      busyBtn('btn-info-save',false);
+      document.getElementById('m-info').classList.add('show');
+    };
+    window.addInfoField = function(wrapId='info-fields-wrap', dataId='info-data', key='', value='') {
+      const wrap = document.getElementById(wrapId);
+      const div = document.createElement('div');
+      div.className = 'dynamic-field-group';
+      div.innerHTML = `<div class="hm-row">
+        <div class="hm-group"><label>Key</label><input data-field="key" type="text" value="${esc(key)}" placeholder="e.g. Priests" /></div>
+        <div class="hm-group"><label>Value</label><input data-field="val" type="text" value="${esc(value)}" placeholder="e.g. 21" /></div>
+      </div><button class="remove-field" onclick="this.parentElement.remove()">✕</button>`;
+      wrap.appendChild(div);
+    };
+    window.saveInfo = async function() {
+      busyBtn('btn-info-save',true);
+      const st = document.getElementById('info-status');
+      const wrap = document.getElementById('info-fields-wrap');
+      const payload = { updatedAt: serverTimestamp() };
+      wrap.querySelectorAll('.dynamic-field-group').forEach(div => {
+        const k = div.querySelector('[data-field="key"]').value.trim();
+        const v = div.querySelector('[data-field="val"]').value.trim();
+        if(k) payload[k] = v;
+      });
+      try {
+        await setDoc(misDoc(currentInfoSection,'info'), payload, {merge:true});
+        allData[currentInfoSection+'_info'] = payload;
+        misToast('✅ Info saved!','success');
+        closeModal('m-info');
+        renderCurrentTab();
+      } catch(err) { st.textContent='❌ '+err.message; st.style.color='#ef4444'; }
+      finally { busyBtn('btn-info-save',false); }
+    };
+
+    // ── Paragraphs Modal ──
+    window.openParaModal = function(section) {
+      currentParaSection = section;
+      document.getElementById('para-title').textContent = 'Edit ' + section.charAt(0).toUpperCase()+section.slice(1) + ' Paragraphs';
+      const paras = allData[section+'_paras']||[];
+      const wrap = document.getElementById('para-fields-wrap');
+      wrap.innerHTML = '';
+      paras.forEach(p => addParaField(p));
+      if(!paras.length) addParaField();
+      document.getElementById('para-status').textContent = '';
+      busyBtn('btn-para-save',false);
+      document.getElementById('m-para').classList.add('show');
+    };
+    window.addParaField = function(text='') {
+      const wrap = document.getElementById('para-fields-wrap');
+      const div = document.createElement('div');
+      div.className = 'para-group';
+      div.innerHTML = `<textarea placeholder="Type paragraph here…">${esc(text)}</textarea><button class="remove-para" onclick="this.parentElement.remove()">✕</button>`;
+      wrap.appendChild(div);
+    };
+    window.saveParagraphs = async function() {
+      busyBtn('btn-para-save',true);
+      const st = document.getElementById('para-status');
+      const items = Array.from(document.querySelectorAll('#para-fields-wrap .para-group textarea'))
+        .map(ta => ta.value.trim()).filter(Boolean);
+      try {
+        await setDoc(misDoc(currentParaSection,'paragraphs'), { items, updatedAt: serverTimestamp() });
+        allData[currentParaSection+'_paras'] = items;
+        misToast('✅ Paragraphs saved!','success');
+        closeModal('m-para');
+      } catch(err) { st.textContent='❌ '+err.message; st.style.color='#ef4444'; }
+      finally { busyBtn('btn-para-save',false); }
+    };
+
+    // ── Station Modal ──
+    window.openStationModal = function(section) {
+      editStId = null; editMisSection = section;
+      window.editStId = null; window.editMisSection = section;
+      document.getElementById('station-title').textContent = 'Add Mission Station';
+      ['st-name','st-address','st-state','st-pin','st-year','st-phone'].forEach(id => document.getElementById(id).value='');
+      document.getElementById('st-personnel-wrap').innerHTML = '';
+      document.getElementById('st-inst-wrap').innerHTML = '';
+      addPersonnelField('st-personnel-wrap');
+      document.getElementById('btn-st-del').style.display='none';
+      document.getElementById('station-status').textContent='';
+      busyBtn('btn-st-save',false);
+      document.getElementById('m-station').classList.add('show');
+    };
+    window.openEditStation = function(id, section) {
+      const st = (allData[section+'_stations']||[]).find(x=>x.id===id); if(!st) return;
+      editStId = id; editMisSection = section;
+      window.editStId = id; window.editMisSection = section;
+      document.getElementById('station-title').textContent = 'Edit Mission Station';
+      document.getElementById('st-name').value = st.name||'';
+      document.getElementById('st-address').value = st.address||'';
+      document.getElementById('st-state').value = st.state||'';
+      document.getElementById('st-pin').value = st.pin||'';
+      document.getElementById('st-year').value = st.year||'';
+      document.getElementById('st-phone').value = st.phone||'';
+      const pw = document.getElementById('st-personnel-wrap'); pw.innerHTML='';
+      (st.personnel||[]).forEach(p => addPersonnelField('st-personnel-wrap',p));
+      if(!st.personnel?.length) addPersonnelField('st-personnel-wrap');
+      const iw = document.getElementById('st-inst-wrap'); iw.innerHTML='';
+      (st.institutions||[]).forEach(inst => addInstField('st-inst-wrap',inst));
+      document.getElementById('btn-st-del').style.display='';
+      document.getElementById('station-status').textContent='';
+      busyBtn('btn-st-save',false);
+      document.getElementById('m-station').classList.add('show');
+    };
+    window.addPersonnelField = function(wrapId='st-personnel-wrap', data={}) {
+      const wrap = document.getElementById(wrapId);
+      const div = document.createElement('div');
+      div.className = 'dynamic-field-group';
+      div.innerHTML = `<div class="hm-row">
+        <div class="hm-group"><label>Name</label><input data-field="p-name" type="text" value="${esc(data.name||'')}" placeholder="Rev. Fr. Thomas Ezhikad" /></div>
+        <div class="hm-group"><label>Phone</label><input data-field="p-phone" type="text" value="${esc(data.phone||'')}" placeholder="94118 65219" /></div>
+      </div><button class="remove-field" onclick="this.parentElement.remove()">✕</button>`;
+      wrap.appendChild(div);
+    };
+    window.addInstField = function(wrapId='st-inst-wrap', data={}) {
+      const wrap = document.getElementById(wrapId);
+      const div = document.createElement('div');
+      div.className = 'dynamic-field-group';
+      div.innerHTML = `<div class="hm-row">
+        <div class="hm-group"><label>Institution Name</label><input data-field="i-name" type="text" value="${esc(data.name||'')}" placeholder="e.g. St. Thomas School" /></div>
+        <div class="hm-group"><label>Phone</label><input data-field="i-phone" type="text" value="${esc(data.phone||'')}" placeholder="0512 2345678" /></div>
+      </div>
+      <div class="hm-row">
+        <div class="hm-group"><label>Email</label><input data-field="i-email" type="text" value="${esc(data.email||'')}" placeholder="info@example.org" /></div>
+        <div class="hm-group"><label>Website</label><input data-field="i-website" type="text" value="${esc(data.website||'')}" placeholder="www.example.org" /></div>
+      </div>
+      <button class="remove-field" onclick="this.parentElement.remove()">✕</button>`;
+      wrap.appendChild(div);
+    };
+    window.saveStation = async function() {
+      const name = document.getElementById('st-name').value.trim();
+      const st = document.getElementById('station-status');
+      if(!name) { st.textContent='⚠ Mission name required.'; st.style.color='#ef4444'; return; }
+      busyBtn('btn-st-save',true); st.textContent='';
+      const personnel = Array.from(document.querySelectorAll('#st-personnel-wrap .dynamic-field-group')).map(div=>({
+        name: div.querySelector('[data-field="p-name"]').value.trim(),
+        phone: div.querySelector('[data-field="p-phone"]').value.trim()
+      })).filter(p=>p.name);
+      const institutions = Array.from(document.querySelectorAll('#st-inst-wrap .dynamic-field-group')).map(div=>({
+        name: div.querySelector('[data-field="i-name"]').value.trim(),
+        phone: div.querySelector('[data-field="i-phone"]').value.trim(),
+        email: div.querySelector('[data-field="i-email"]').value.trim(),
+        website: div.querySelector('[data-field="i-website"]').value.trim()
+      })).filter(i=>i.name);
+      const payload = {
+        name, address:document.getElementById('st-address').value.trim(),
+        state:document.getElementById('st-state').value.trim(),
+        pin:document.getElementById('st-pin').value.trim(),
+        year:document.getElementById('st-year').value.trim(),
+        phone:document.getElementById('st-phone').value.trim(),
+        personnel, institutions, updatedAt:serverTimestamp()
+      };
+      try {
+        if(editStId) await updateDoc(misEntry(editMisSection,'stations',editStId), payload);
+        else { payload.order=(allData[editMisSection+'_stations']||[]).length; payload.createdAt=serverTimestamp(); await addDoc(misCol(editMisSection,'stations'),payload); }
+        misToast('✅ Station saved!','success');
+        closeModal('m-station');
+        await refreshStations(editMisSection);
+        renderCurrentTab();
+      } catch(err) { st.textContent='❌ '+err.message; st.style.color='#ef4444'; busyBtn('btn-st-save',false); }
+    };
+
+    // ── Congregation Modal ──
+    window.openCongregationModal = function() {
+      editCongId = null; window.editCongId = null;
+      document.getElementById('cong-title').textContent = 'Add Congregation';
+      document.getElementById('cong-name').value=''; document.getElementById('cong-province').value='';
+      document.getElementById('cong-inst-wrap').innerHTML='';
+      addInstField('cong-inst-wrap');
+      document.getElementById('btn-cong-del').style.display='none';
+      document.getElementById('cong-status').textContent='';
+      busyBtn('btn-cong-save',false);
+      document.getElementById('m-congregation').classList.add('show');
+    };
+    window.openEditCongregation = function(id) {
+      const c = (allData['etawah_congregations']||[]).find(x=>x.id===id); if(!c) return;
+      editCongId = id; window.editCongId = id;
+      document.getElementById('cong-title').textContent = 'Edit Congregation';
+      document.getElementById('cong-name').value = c.name||'';
+      document.getElementById('cong-province').value = c.province||'';
+      const iw = document.getElementById('cong-inst-wrap'); iw.innerHTML='';
+      (c.institutions||[]).forEach(inst => addInstField('cong-inst-wrap',inst));
+      if(!c.institutions?.length) addInstField('cong-inst-wrap');
+      document.getElementById('btn-cong-del').style.display='';
+      document.getElementById('cong-status').textContent='';
+      busyBtn('btn-cong-save',false);
+      document.getElementById('m-congregation').classList.add('show');
+    };
+    window.saveCongregation = async function() {
+      const name = document.getElementById('cong-name').value.trim();
+      const st = document.getElementById('cong-status');
+      if(!name) { st.textContent='⚠ Name required.'; st.style.color='#ef4444'; return; }
+      busyBtn('btn-cong-save',true); st.textContent='';
+      const institutions = Array.from(document.querySelectorAll('#cong-inst-wrap .dynamic-field-group')).map(div=>({
+        name: div.querySelector('[data-field="i-name"]').value.trim(),
+        phone: div.querySelector('[data-field="i-phone"]').value.trim(),
+        email: div.querySelector('[data-field="i-email"]').value.trim(),
+        website: div.querySelector('[data-field="i-website"]').value.trim()
+      })).filter(i=>i.name);
+      const payload = { name, province:document.getElementById('cong-province').value.trim(), institutions, updatedAt:serverTimestamp() };
+      try {
+        if(editCongId) await updateDoc(misEntry('etawah','congregations',editCongId), payload);
+        else { payload.order=(allData['etawah_congregations']||[]).length; payload.createdAt=serverTimestamp(); await addDoc(misCol('etawah','congregations'),payload); }
+        misToast('✅ Congregation saved!','success');
+        closeModal('m-congregation');
+        await refreshSection('etawah_congregations','etawah','congregations');
+        renderCurrentTab();
+      } catch(err) { st.textContent='❌ '+err.message; st.style.color='#ef4444'; busyBtn('btn-cong-save',false); }
+    };
+
+    // ── Districts Modal ──
+    window.openDistrictModal = function() {
+      const districts = allData['jaipur_districts']||[];
+      const wrap = document.getElementById('district-rows-wrap');
+      wrap.innerHTML = '';
+      districts.forEach(d => addDistrictRow(d));
+      if(!districts.length) addDistrictRow();
+      document.getElementById('dist-status').textContent='';
+      busyBtn('btn-dist-save',false);
+      document.getElementById('m-districts').classList.add('show');
+    };
+    window.addDistrictRow = function(d={}) {
+      const wrap = document.getElementById('district-rows-wrap');
+      const div = document.createElement('div');
+      div.className = 'district-row';
+      div.innerHTML = `
+        <input data-field="d-name" type="text" value="${esc(d.name||'')}" placeholder="District name" />
+        <input data-field="d-area" type="number" value="${d.area||''}" placeholder="8380" />
+        <input data-field="d-pop" type="number" value="${d.population||''}" placeholder="3671999" />
+        <input data-field="d-chr" type="number" step="0.0001" value="${d.christian||''}" placeholder="0.07" />
+        <button onclick="this.parentElement.remove()" style="background:#ef4444;color:#fff;border:none;border-radius:5px;padding:4px 8px;cursor:pointer;font-size:.7rem;">✕</button>`;
+      wrap.appendChild(div);
+    };
+    window.saveDistricts = async function() {
+      busyBtn('btn-dist-save',true);
+      const st = document.getElementById('dist-status');
+      const items = Array.from(document.querySelectorAll('#district-rows-wrap .district-row')).map(row=>({
+        name: row.querySelector('[data-field="d-name"]').value.trim(),
+        area: parseFloat(row.querySelector('[data-field="d-area"]').value)||0,
+        population: parseInt(row.querySelector('[data-field="d-pop"]').value)||0,
+        christian: parseFloat(row.querySelector('[data-field="d-chr"]').value)||0
+      })).filter(d=>d.name);
+      try {
+        await setDoc(misDoc('jaipur','districts'), { items, updatedAt:serverTimestamp() });
+        allData['jaipur_districts'] = items;
+        misToast('✅ Districts saved!','success');
+        closeModal('m-districts');
+        updateStats();
+        renderCurrentTab();
+      } catch(err) { st.textContent='❌ '+err.message; st.style.color='#ef4444'; }
+      finally { busyBtn('btn-dist-save',false); }
+    };
+
+    // ── Foreign Modal ──
+    window.openForeignModal = function() {
+      editForeignId = null; window.editForeignId = null;
+      document.getElementById('foreign-modal-title').textContent = 'Add Country';
+      document.getElementById('f-country').value=''; document.getElementById('f-priests').value='';
+      document.getElementById('btn-f-del').style.display='none';
+      document.getElementById('foreign-status').textContent='';
+      busyBtn('btn-f-save',false);
+      document.getElementById('m-foreign').classList.add('show');
+    };
+    window.openEditForeign = function(id) {
+      const c = (allData['foreign_countries']||[]).find(x=>x.id===id); if(!c) return;
+      editForeignId = id; window.editForeignId = id;
+      document.getElementById('foreign-modal-title').textContent = 'Edit Country';
+      document.getElementById('f-country').value = c.country||'';
+      document.getElementById('f-priests').value = c.priests||'';
+      document.getElementById('btn-f-del').style.display='';
+      document.getElementById('foreign-status').textContent='';
+      busyBtn('btn-f-save',false);
+      document.getElementById('m-foreign').classList.add('show');
+    };
+    window.saveForeign = async function() {
+      const country = document.getElementById('f-country').value.trim();
+      const priests = parseInt(document.getElementById('f-priests').value)||0;
+      const st = document.getElementById('foreign-status');
+      if(!country) { st.textContent='⚠ Country required.'; st.style.color='#ef4444'; return; }
+      busyBtn('btn-f-save',true); st.textContent='';
+      const payload = { country, priests, updatedAt:serverTimestamp() };
+      try {
+        if(editForeignId) await updateDoc(misEntry('foreign','countries',editForeignId), payload);
+        else { payload.order=(allData['foreign_countries']||[]).length; payload.createdAt=serverTimestamp(); await addDoc(misCol('foreign','countries'),payload); }
+        misToast('✅ Saved!','success');
+        closeModal('m-foreign');
+        await refreshSection('foreign_countries','foreign','countries');
+        renderCurrentTab();
+      } catch(err) { st.textContent='❌ '+err.message; st.style.color='#ef4444'; busyBtn('btn-f-save',false); }
+    };
+
+    // ── Adopted Modal ──
+    window.openAdoptedModal = function() {
+      const data = allData['adopted_info']||{};
+      const wrap = document.getElementById('adopted-fields-wrap');
+      wrap.innerHTML = '';
+      const filtered = Object.entries(data).filter(([k])=>!['createdAt','updatedAt'].includes(k));
+      filtered.forEach(([k,v]) => addAdoptedField(k,v));
+      if(!filtered.length) addAdoptedField();
+      document.getElementById('adopted-status').textContent='';
+      busyBtn('btn-adopted-save',false);
+      document.getElementById('m-adopted').classList.add('show');
+    };
+    function addAdoptedField(key='', value='') {
+      const wrap = document.getElementById('adopted-fields-wrap');
+      const div = document.createElement('div');
+      div.className = 'dynamic-field-group';
+      div.innerHTML = `<div class="hm-row">
+        <div class="hm-group"><label>Key</label><input data-field="key" type="text" value="${esc(key)}" placeholder="e.g. Diocese of Jagdalpur" /></div>
+        <div class="hm-group"><label>Value</label><input data-field="val" type="text" value="${esc(value)}" placeholder="07782 228293" /></div>
+      </div><button class="remove-field" onclick="this.parentElement.remove()">✕</button>`;
+      wrap.appendChild(div);
+    }
+    window.saveAdopted = async function() {
+      busyBtn('btn-adopted-save',true);
+      const st = document.getElementById('adopted-status');
+      const wrap = document.getElementById('adopted-fields-wrap');
+      const payload = { updatedAt:serverTimestamp() };
+      wrap.querySelectorAll('.dynamic-field-group').forEach(div=>{
+        const k=div.querySelector('[data-field="key"]').value.trim();
+        const v=div.querySelector('[data-field="val"]').value.trim();
+        if(k) payload[k]=v;
+      });
+      try {
+        await setDoc(misDoc('adopted','info'), payload, {merge:true});
+        allData['adopted_info'] = payload;
+        misToast('✅ Adopted info saved!','success');
+        closeModal('m-adopted');
+        renderCurrentTab();
+      } catch(err) { st.textContent='❌ '+err.message; st.style.color='#ef4444'; }
+      finally { busyBtn('btn-adopted-save',false); }
+    };
+
+    // ── Delete ──
+    window.askDelete = function(id, type, section) {
+      pendingDelId=id; pendingDelType=type; pendingDelSection=section;
+      document.getElementById('del-confirm-text').textContent = `Delete this ${type} entry? This cannot be undone.`;
+      document.getElementById('m-del-confirm').classList.add('show');
+    };
+    window.confirmDelete = async function() {
+      if(!pendingDelId) return;
+      const btn = document.getElementById('btn-del-confirm');
+      btn.disabled=true; btn.textContent='Deleting…';
+      try {
+        let ref;
+        if(pendingDelType==='stations') ref = misEntry(pendingDelSection,'stations',pendingDelId);
+        else if(pendingDelType==='congregations') ref = misEntry('etawah','congregations',pendingDelId);
+        else if(pendingDelType==='foreign') ref = misEntry('foreign','countries',pendingDelId);
+        await deleteDoc(ref);
+        closeModal('m-del-confirm');
+        closeModal('m-station'); closeModal('m-congregation'); closeModal('m-foreign');
+        misToast('Deleted.','success');
+        if(pendingDelType==='stations') await refreshStations(pendingDelSection);
+        else if(pendingDelType==='congregations') await refreshSection('etawah_congregations','etawah','congregations');
+        else if(pendingDelType==='foreign') await refreshSection('foreign_countries','foreign','countries');
+        updateStats(); renderCurrentTab();
+      } catch(err) { misToast('❌ Delete failed: '+err.message,'error'); }
+      finally { btn.disabled=false; btn.textContent='Yes, Delete'; pendingDelId=null; }
+    };
+
+    // ── Refresh Helpers ──
+    async function refreshStations(section) {
+      try {
+        const sn = await getDocs(query(misCol(section,'stations'), orderBy('order','asc')));
+        allData[section+'_stations'] = sn.docs.map(d=>({id:d.id,...d.data()}));
+      } catch(e) {
+        const sn = await getDocs(misCol(section,'stations'));
+        allData[section+'_stations'] = sn.docs.map(d=>({id:d.id,...d.data()}));
+      }
+      updateStats();
+    }
+    async function refreshSection(key, section, sub) {
+      try {
+        const sn = await getDocs(query(misCol(section,sub), orderBy('order','asc')));
+        allData[key] = sn.docs.map(d=>({id:d.id,...d.data()}));
+      } catch(e) {
+        const sn = await getDocs(misCol(section,sub));
+        allData[key] = sn.docs.map(d=>({id:d.id,...d.data()}));
+      }
+      updateStats();
+    }
+
+    // ═══════════════════════════════════════════════════════════════════
+// PASTE THIS ENTIRE BLOCK to REPLACE window.importDefaultData in
+// your missions-admin.html  (inside the <script type="module"> tag)
+// ═══════════════════════════════════════════════════════════════════
+
+window.importDefaultData = async function() {
+  if(userRole!=='Admin') { misToast('⛔ Admin only'); return; }
+  if(!confirm('Import default missions data? Will not overwrite existing records.')) return;
+  const btn = document.getElementById('btn-import-default');
+  btn.disabled=true; btn.textContent='⏳ Importing…';
+  let total=0;
+
+  try {
+
+    // ────────────────────────────────────────────────────────────────
+    // ETAWAH INFO
+    // ────────────────────────────────────────────────────────────────
+    const ei = await getDoc(misDoc('etawah','info'));
+    if(!ei.exists()) {
+      await setDoc(misDoc('etawah','info'), {
+        Website:'www.etawahmission.org', Email:'etawahmission1975@gmail.com',
+        'Heavenly Patron':'St. Thomas', Established:'1975 May 1',
+        Priests:'21', Seminarians:'16', Area:'11360 sq.km', Sisters:'38',
+        'Total Population':'58.82 Lakh', Convents:'14',
+        'Catholic Population':'1000', 'Minor Seminary':'1',
+        'Churches & Chapels':'15', 'Senior Secondary Schools':'9', 'Other Schools':'3',
+        updatedAt:serverTimestamp()
+      }); total++;
+    }
+
+    // ────────────────────────────────────────────────────────────────
+    // ETAWAH PARAGRAPHS
+    // ────────────────────────────────────────────────────────────────
+    const ep = await getDoc(misDoc('etawah','paragraphs'));
+    if(!ep.exists()) {
+      await setDoc(misDoc('etawah','paragraphs'), { items:[
+        'Etawah Mission, formerly known as the Agra Mission, is the north Indian missionary outreach of the Archeparchy of Changanacherry. Founded in 1975 Etawah Mission was a response to a long cherished desire of the Catholic Church in India expressed in the CBCI meeting of Kolkata that dioceses and religious congregations from South which are rich in vocations may be requested to take up mission territories in North where the missions were facing a shortage of personnel.',
+        'As an answer to these twin desires that Most Rev. Dr. Dominic Athaide, then Archbishop of Agra offered the Archeparchy of Changanacherry, territories for mission work. Mar Antony Padiyara, then Archbishop of Changanacherry himself a missionary gladly accepted the invitation and sent his priests and religious to the area entrusted to the Archeparchy.',
+        'The areas entrusted to our care were very backward and criminal in nature. The pioneer missionaries felt that education will be a very effective means of evangelization. Consequently the educational apostolate of the mission was developed in the districts of Etawah, Mainpuri, Farrukhabad, Kannauj, Auraiya and Firozabad.',
+        'On 9 Oct 2017 Holy Father Pope Francis through "The Letter to the Bishops of India" accorded all India Jurisdiction for the Syro Malabar Church. Consequently the Syro Malabar faithful of Etawah mission became part of the newly formed eparchy of Shamsabad. A contract was solemnly signed on 24 February 2018 at Changanacherry and Very Rev. Dr. James Palackal was appointed Vicar General of Etawah Mission for Shamsabad eparchy.'
+      ], updatedAt:serverTimestamp() }); total++;
+    }
+
+    // ────────────────────────────────────────────────────────────────
+    // ETAWAH STATIONS — ALL 17 MISSIONS
+    // ────────────────────────────────────────────────────────────────
+    const existEt = await getDocs(misCol('etawah','stations'));
+    if(existEt.empty) {
+      const etawahStations = [
+        {
+          name:'Etawah, Church of Portiuncula',
+          address:'Christ Niwas, Civil Lines, Etawah', state:'Uttar Pradesh', pin:'206001',
+          year:'1975', phone:'05688-254002',
+          personnel:[
+            {name:'Rev. Fr. Thomas Ezhikad',    phone:'9411865219, 9368708519'},
+            {name:'Rev. Fr. Luke Thalayinakuzhy', phone:'9457620360'},
+            {name:'Rev. Fr. Scaria Nambiamadom',  phone:'9412068383'}
+          ],
+          institutions:[
+            {name:'St. Thomas Education and Medical Society', phone:'05688-254626', email:'', website:''},
+            {name:'St. Mary\'s Inter College',               phone:'05688-254626', email:'stmarysetw@gmail.com', website:''},
+            {name:'Marian Kinder Garten',                    phone:'', email:'', website:''},
+            {name:'CMC Convent',                             phone:'9411241655',   email:'cmcetawah@gmail.com', website:''}
+          ]
+        },
+        {
+          name:'Alampur Hauz, Asha Niketan School for MR',
+          address:'Alampur Hauz, Sarangpur P.O., Etawah', state:'Uttar Pradesh', pin:'206002',
+          year:'2001', phone:'',
+          personnel:[{name:'Rev. Fr. Joseph Ovelil', phone:'7376602365, 8848986260'}],
+          institutions:[
+            {name:'Asha Niketan School for Intellectually Disabled', phone:'6397291898',   email:'ashaniketanetawah@gmail.com', website:''},
+            {name:'Etawah Samaj Kalyan Samiti',                     phone:'9368708538',   email:'', website:''},
+            {name:'Asha Socio Community Development Centre',         phone:'',             email:'esksetawah@gmail.com', website:'https://www.esksetawah.org'},
+            {name:'Holy Family Convent (CHF)',                       phone:'9412183367',   email:'hfcetawah@gmail.com', website:''}
+          ]
+        },
+        {
+          name:'Auraiya, St. Francis Mission',
+          address:'Anepur, Karka P.O., Auraiya', state:'Uttar Pradesh', pin:'206122',
+          year:'2006', phone:'',
+          personnel:[
+            {name:'Rev. Fr. Francis Maniparampil', phone:'8006960078'},
+            {name:'Rev. Fr. Jimmy Paimpally',      phone:'9415493637, 7317644444'}
+          ],
+          institutions:[
+            {name:'St. Francis Academy', phone:'8899447307', email:'auraiyastfrancis@gmail.com', website:''},
+            {name:'SH Convent',          phone:'9927059593', email:'shcauraiya2020@yahoo.com',   website:''}
+          ]
+        },
+        {
+          name:'Jaswant Nagar, St. Peter\'s Mission',
+          address:'Kesth P.O., Jaswant Nagar, Etawah', state:'Uttar Pradesh', pin:'206245',
+          year:'1990', phone:'',
+          personnel:[{name:'Rev. Fr. Antony Kuttichira', phone:'9411020942'}],
+          institutions:[
+            {name:'St. Peter\'s School', phone:'9412323841', email:'stpetersjaswantnagar@gmail.com', website:''},
+            {name:'Nazareth Sisters (NS)', phone:'9045500747', email:'', website:''}
+          ]
+        },
+        {
+          name:'Mainpuri, St. Thomas Mission',
+          address:'St. Thomas Senior Secondary School, Mainpuri', state:'Uttar Pradesh', pin:'205001',
+          year:'1976', phone:'',
+          personnel:[
+            {name:'Rev. Fr. Emmanuel Ponnattil', phone:'9415563586'},
+            {name:'Rev. Fr. Joseph Thuruthel',   phone:'7907396643'}
+          ],
+          institutions:[
+            {name:'Christu Raj Education Society',  phone:'', email:'', website:''},
+            {name:'St. Thomas Secondary School',    phone:'9557352271', email:'stthomassrschool@gmail.com', website:''},
+            {name:'St. Thomas Kinder Garten',       phone:'', email:'stthomassrschool@gmail.com', website:''},
+            {name:'SABS Convent',                   phone:'8755476812', email:'stthomasconventmpi@gmail.com', website:''}
+          ]
+        },
+        {
+          name:'Chibramau, St. Paul\'s Mission',
+          address:'Lalakpur, Hariharpur P.O., Chibramau, Kannauj', state:'Uttar Pradesh', pin:'272164',
+          year:'1983', phone:'',
+          personnel:[
+            {name:'Rev. Fr. Celestine Karottuvempenickal', phone:'9410268779, 9918238036'},
+            {name:'Rev. Fr. Francis Meenatheril',          phone:'9746207817, 7012649045'}
+          ],
+          institutions:[
+            {name:'Sevasram School (Hindi Medium), Primary School', phone:'9264999531', email:'sacredheartschool2020@gmail.com', website:''},
+            {name:'St. Paul\'s Dispensary',                         phone:'', email:'', website:''},
+            {name:'St. Paul\'s Senior Secondary School',            phone:'7007054332', email:'stpaulchb@gmail.com', website:''},
+            {name:'SH Convent',                                     phone:'9984528640', email:'shchibramau@gmail.com', website:''}
+          ]
+        },
+        {
+          name:'Fatehgarh, St. Anthony\'s Mission',
+          address:'Fatehgarh Cantt., Farrukhabad', state:'Uttar Pradesh', pin:'209601',
+          year:'1977', phone:'',
+          personnel:[
+            {name:'Rev. Fr. Sebastian Kuttikkattil', phone:'9456696873'},
+            {name:'Rev. Fr. Thomas Thuruthumalil',   phone:'9037275724'}
+          ],
+          institutions:[
+            {name:'St. Antony\'s Senior Secondary School',    phone:'8887422348, 8887422338', email:'stanthonyschoolfatehgarh@gmail.com', website:''},
+            {name:'St. Anthony\'s Junior School, Nekhpur Kalan', phone:'', email:'stanthonyschoolfatehgarh@gmail.com', website:''},
+            {name:'St. John\'s Mission, Kaimganj (Mass Station)', phone:'', email:'', website:''},
+            {name:'MLF Convent',                              phone:'6306230498, 9452607716', email:'anthonycon2018@gmail.com', website:''}
+          ]
+        },
+        {
+          name:'Dibiyapur, St. Joseph\'s Mission',
+          address:'C/o St. Joseph\'s Senior Secondary School, NTPC, Dibiyapur, Auraiya', state:'Uttar Pradesh', pin:'206244',
+          year:'1989', phone:'',
+          personnel:[{name:'Very Rev. Dr. James Palackal', phone:'8606598565'}],
+          institutions:[
+            {name:'St. Joseph\'s Senior Secondary School', phone:'9756202057', email:'stjosephdibiyapur@gmail.com', website:''},
+            {name:'CMC Convent',                           phone:'9456002398', email:'stjosephdbr@gmail.com',      website:''}
+          ]
+        },
+        {
+          name:'Dibiyapur, Sanjos Mission',
+          address:'NTPC – GAIL, Canal Road, Dibiyapur, Auraiya', state:'Uttar Pradesh', pin:'206244',
+          year:'1993', phone:'',
+          personnel:[{name:'Rev. Fr. Francis Koippally', phone:'9412284115'}],
+          institutions:[
+            {name:'Sanjos Academy',  phone:'9458577161', email:'sanjoseacademydibi@gmail.com', website:''},
+            {name:'SABS Convent',    phone:'9458577161', email:'sanjosconvent2011@gmail.com',  website:''}
+          ]
+        },
+        {
+          name:'Shikohabad, St. Dominic\'s Mission',
+          address:'Booda, Agra Road, NH 2, Shikohabad, Firozabad', state:'Uttar Pradesh', pin:'283135',
+          year:'1990', phone:'',
+          personnel:[{name:'Rev. Fr. George Chekkathadathil', phone:'9997137900, 9412373431'}],
+          institutions:[
+            {name:'St. Dominic\'s Academy', phone:'7055521666', email:'st.dominicsacademy@gmail.com', website:''},
+            {name:'SABS Convent',           phone:'8859380147', email:'sdconvent123@gmail.com',       website:''}
+          ]
+        },
+        {
+          name:'Nagla Gadaria, Jeevan Jyothi Bhawan Minor Seminary',
+          address:'Nagla Gadaria, Vichpuri Kheda, Mainpuri Road, Etawah', state:'Uttar Pradesh', pin:'206001',
+          year:'1992', phone:'',
+          personnel:[
+            {name:'Rev. Fr. Martin Ninaparampil', phone:'9400201998'},
+            {name:'Rev. Fr. Thomas Vellanickal',  phone:'7559090292'}
+          ],
+          institutions:[
+            {name:'Jeevan Jyothi Bhawan Minor Seminary', phone:'', email:'rectorjeevanjyothi@gmail.com', website:''}
+          ]
+        },
+        {
+          name:'Kannauj, St. Mathew\'s Mission',
+          address:'Sarai Shah Mohammad, Jalalpur Panwara P.O., Kannauj', state:'Uttar Pradesh', pin:'209801',
+          year:'2006', phone:'',
+          personnel:[{name:'Rev. Fr. Vincent Padanilathu', phone:'9454918416'}],
+          institutions:[
+            {name:'Christu Jyothi Academy', phone:'8887444220', email:'cjakannauj@gmail.com',          website:''},
+            {name:'MLF Convent',            phone:'9794947118', email:'stmathewsconvent18@gmail.com',  website:''}
+          ]
+        },
+        {
+          name:'Saifai, St. Alphonsa\'s Mission',
+          address:'C/o Jeevan Jyothi Bhawan, Christ Niwas, Etawah', state:'Uttar Pradesh', pin:'206001',
+          year:'', phone:'',
+          personnel:[{name:'Rev. Fr. Martin Ninaparampil', phone:'9400201998'}],
+          institutions:[]
+        },
+        {
+          name:'Chakarnagar, St. Xavier\'s Mission',
+          address:'Ganiawar, Chakarnagar, Etawah', state:'Uttar Pradesh', pin:'206125',
+          year:'2018', phone:'',
+          personnel:[{name:'Rev. Fr. Antony Parackal', phone:'9450025531'}],
+          institutions:[
+            {name:'St. Xavier\'s School', phone:'7534051759', email:'stxaviorschakarnagar@gmail.com',  website:''},
+            {name:'SJSM Convent',         phone:'8193967523', email:'sanjosadhanchakarnagar@gmail.com', website:''}
+          ]
+        },
+        {
+          name:'Nagla Gadaria, Devmatha Vidya Mandir',
+          address:'Nagla Gadaria', state:'Uttar Pradesh', pin:'',
+          year:'2020', phone:'',
+          personnel:[],
+          institutions:[
+            {name:'Nazareth Convent (NS)', phone:'9027250207', email:'srarchanascaria@gmail.com', website:''}
+          ]
+        },
+        {
+          name:'Bidhuna, St. Mother Teresa\'s Mission',
+          address:'Sarai Pradham, Achalda Road, Bidhuna', state:'Uttar Pradesh', pin:'206243',
+          year:'2020', phone:'',
+          personnel:[{name:'Rev. Fr. Varghese Pallikizhakkethil', phone:'9497110487'}],
+          institutions:[]
+        },
+        {
+          name:'Kanpur, Mass Station',
+          address:'Kanpur', state:'Uttar Pradesh', pin:'',
+          year:'', phone:'',
+          personnel:[{name:'Very Rev. Dr. James Palackal', phone:'8606598565'}],
+          institutions:[]
+        }
+      ];
+
+      for(let i=0; i<etawahStations.length; i++) {
+        await addDoc(misCol('etawah','stations'), {
+          ...etawahStations[i], order:i,
+          createdAt:serverTimestamp(), updatedAt:serverTimestamp()
+        });
+        total++;
+      }
+    }
+
+    // ────────────────────────────────────────────────────────────────
+    // ETAWAH CONGREGATIONS — ALL 7
+    // ────────────────────────────────────────────────────────────────
+    const existCong = await getDocs(misCol('etawah','congregations'));
+    if(existCong.empty) {
+      const congregations = [
+        {
+          name:'Congregation of the Mother of Carmel (CMC)',
+          province:'Mount Carmel Province - Bhopal',
+          institutions:[
+            {name:'St. Mary\'s Convent',   phone:'9411241655', email:'cmcetawah@gmail.com',   website:''},
+            {name:'St. Joseph\'s Convent', phone:'9456002398', email:'stjosephdbr@gmail.com', website:''}
+          ]
+        },
+        {
+          name:'Sisters of Adoration of the Blessed Sacrament (SABS)',
+          province:'Pavitrathma Province - Jagdalpur',
+          institutions:[
+            {name:'St. Thomas Convent',   phone:'8755476812', email:'stthomasconventmpi@gmail.com', website:''},
+            {name:'Sanjos Convent',       phone:'9458577161', email:'sanjosconvent2011@gmail.com',  website:''},
+            {name:'St. Dominic\'s Convent', phone:'8859380147, 9410280403', email:'sdconvent123@gmail.com', website:''}
+          ]
+        },
+        {
+          name:'Sacred Heart Congregation (SH)',
+          province:'St. Matthew\'s Province - Changanacherry',
+          institutions:[
+            {name:'SH Sevashram Convent', phone:'9984528640', email:'shchibramau@gmail.com',       website:''},
+            {name:'St. Francis Convent',  phone:'9927059593', email:'shcauraiya2020@yahoo.com',    website:''}
+          ]
+        },
+        {
+          name:'Congregation of the Holy Family (CHF)',
+          province:'Mary Matha Province - Jalgaon, Maharashtra',
+          institutions:[
+            {name:'Asha Niketan Convent', phone:'9412183367', email:'hfcetawah@gmail.com', website:''}
+          ]
+        },
+        {
+          name:'Missionaries of Little Flower (MLF)',
+          province:'Little Flower Generalate - Changanacherry',
+          institutions:[
+            {name:'St. Anthony\'s Convent', phone:'7705801702', email:'anthonycon2018@gmail.com',      website:''},
+            {name:'St. Mathew\'s Convent',  phone:'9794947118', email:'stmathewsconvent18@gmail.com',  website:''}
+          ]
+        },
+        {
+          name:'Nazareth Sisters (NS)',
+          province:'Generalate, Kiliyanthara P.O., Kunnoth, Thalassery, Kannur',
+          institutions:[
+            {name:'St. Peter\'s Convent', phone:'9045500747', email:'nsjaswantnagar@gmail.com',  website:''},
+            {name:'Nazareth Convent',     phone:'9027250207', email:'srarchanascaria@gmail.com', website:''}
+          ]
+        },
+        {
+          name:'St. Joseph of St. Marc (SJSM)',
+          province:'Sanjo Province - Angamaly',
+          institutions:[
+            {name:'SJSM Convent',     phone:'8193967523', email:'sanjosadhanchakarnagar@gmail.com', website:''},
+            {name:'Bidhuna Convent',  phone:'7667588710', email:'', website:''}
+          ]
+        }
+      ];
+
+      for(let i=0; i<congregations.length; i++) {
+        await addDoc(misCol('etawah','congregations'), {
+          ...congregations[i], order:i,
+          createdAt:serverTimestamp(), updatedAt:serverTimestamp()
+        });
+        total++;
+      }
+    }
+
+    // ────────────────────────────────────────────────────────────────
+    // JAIPUR INFO
+    // ────────────────────────────────────────────────────────────────
+    const ji = await getDoc(misDoc('jaipur','info'));
+    if(!ji.exists()) {
+      await setDoc(misDoc('jaipur','info'), {
+        Gmail:'smectrajasthan@gmail.com', 'Heavenly Patron':'St. Mary',
+        Established:'2015 June 2', Priests:'06',
+        Area:'12 Districts of Rajasthan', Sisters:'04', Convents:'01',
+        'Churches and Mission Centres':'06', 'Prayer House':'01',
+        'Vicar General & Mission Superior':'Very Rev. Dr. James Palackal',
+        Contact:'86065 98565', updatedAt:serverTimestamp()
+      }); total++;
+    }
+
+    // ────────────────────────────────────────────────────────────────
+    // JAIPUR PARAGRAPHS
+    // ────────────────────────────────────────────────────────────────
+    const jp = await getDoc(misDoc('jaipur','paragraphs'));
+    if(!jp.exists()) {
+      await setDoc(misDoc('jaipur','paragraphs'), { items:[
+        'The Archeparchy of Changanacherry has been very faithful to the divine missionary call and the most recent chapter in her missionary journey is the opening of the St. Mary\'s Syro Malabar Mission in the state of Rajasthan. St. Mary\'s Syro Malabar Mission in Rajasthan is the result of the missionary and pastoral collaboration between the newly erected eparchy of Shamshabad and the archeparchy of Changanacherry, comprising the 12 civil districts of Rajasthan – Jaipur, Alwar, Bharatpur, Dausa, Dhaulpur, Karuli, Tonk, Sawai Madhopur, Bundi, Kota, Baran and Jhalawar.',
+        'The official signing of the contract between the archeparchy of Changanacherry and the eparchy of Shamshabad took place on April 24, 2019 at Mount St. Thomas, Kakkanadu. Very Rev. Dr. James Palackal was appointed Vicar General of the Etawah and Jaipur missions and Mission Superior of Jaipur mission.',
+        'Rev. Fr. Sebastian Souriamakil came to Jaipur on June 2, 2015 and was able to form a Syro Malabar community in the city of Jaipur. On 20 February 2022 Holy Family Syro Malabar Church was consecrated.'
+      ], updatedAt:serverTimestamp() }); total++;
+    }
+
+    // ────────────────────────────────────────────────────────────────
+    // JAIPUR DISTRICTS (pie chart data)
+    // ────────────────────────────────────────────────────────────────
+    const jd = await getDoc(misDoc('jaipur','districts'));
+    if(!jd.exists()) {
+      await setDoc(misDoc('jaipur','districts'), { items:[
+        {name:'Alwar',           area:8380,  population:3671999, christian:0.07},
+        {name:'Baran',           area:6955,  population:1223921, christian:0.12},
+        {name:'Bharatpur',       area:5066,  population:2549121, christian:0.06},
+        {name:'Bundi',           area:5550,  population:1113725, christian:0.06},
+        {name:'Dausa',           area:3432,  population:1637226, christian:0.03},
+        {name:'Dholpur',         area:3033,  population:1207293, christian:0.06},
+        {name:'Jaipur',          area:14068, population:6663971, christian:0.19},
+        {name:'Jhalawar',        area:6219,  population:1411327, christian:0.06},
+        {name:'Karauli',         area:5530,  population:1458459, christian:0.04},
+        {name:'Kota',            area:5446,  population:1950491, christian:0.42},
+        {name:'Sawai Madhopur',  area:10527, population:1338114, christian:0.07},
+        {name:'Tonk',            area:7194,  population:1421711, christian:0.05}
+      ], updatedAt:serverTimestamp() }); total++;
+    }
+
+    // ────────────────────────────────────────────────────────────────
+    // JAIPUR STATIONS — ALL 7 MISSION CHURCHES
+    // ────────────────────────────────────────────────────────────────
+    const existJp = await getDocs(misCol('jaipur','stations'));
+    if(existJp.empty) {
+      const jaipurStations = [
+        {
+          name:'Bhiwadi, St. Joseph\'s Syro Malabar Church',
+          address:'11/145, Aravalli Vihar Housing Board Colony, Near KEI Industries, Bhiwadi',
+          state:'Rajasthan', pin:'301019', year:'', phone:'',
+          personnel:[{name:'Rev. Fr. Philip Moozhikunnel', phone:'94467 94482'}],
+          institutions:[{name:'St. Joseph\'s Syro Malabar Church', phone:'9446794482', email:'', website:''}]
+        },
+        {
+          name:'Bundi, Deva Matha Ashram',
+          address:'House No. 237, Rajat Grah Colony, Bundi',
+          state:'Rajasthan', pin:'323001', year:'', phone:'',
+          personnel:[{name:'Rev. Fr. George Mannumadom', phone:'94475 93700'}],
+          institutions:[{name:'Deva Matha Ashram', phone:'9447593700', email:'devamathaashrambundi@gmail.com', website:''}]
+        },
+        {
+          name:'Bundi, St Jude Church / St. Thomas Secondary School',
+          address:'Indira Colony, Bundi',
+          state:'Rajasthan', pin:'323001', year:'', phone:'',
+          personnel:[{name:'Rev. Fr. Joseph Pulickaparampil', phone:'96020 80736'}],
+          institutions:[{name:'St Jude Church / St. Thomas Secondary School', phone:'9602080736', email:'pulickaparampiljoseph@gmail.com', website:''}]
+        },
+        {
+          name:'Jaipur, Holy Family City Parish (Zonal Parish)',
+          address:'Plot No. 4 & 5, Rameswer Dham, Mansarovar Extension, Jaipur',
+          state:'Rajasthan', pin:'302020', year:'', phone:'',
+          personnel:[{name:'Rev. Fr. Paul Peediyekkal', phone:'92497 79693'}],
+          institutions:[{name:'Holy Family City Parish', phone:'9249779693, 8690715705', email:'holyfamilysmcjaipur@gmail.com', website:''}]
+        },
+        {
+          name:'Jhotwara, St. Thomas Syro Malabar Church',
+          address:'Plot No. 17, Udyog Nagar, Jhotwara, Jaipur',
+          state:'Rajasthan', pin:'302012', year:'', phone:'',
+          personnel:[{name:'Rev. Fr. Varghese Punnakalayil', phone:'94961 84231'}],
+          institutions:[{name:'St. Thomas Syro Malabar Church', phone:'9496184231', email:'wilsonpunnakala@gmail.com', website:''}]
+        },
+        {
+          name:'Kota, Mar Sleeva Church',
+          address:'Plot No. 117, Maharana Pratap Residency, Near Chandresal Road, Kota',
+          state:'Rajasthan', pin:'324002', year:'', phone:'',
+          personnel:[{name:'Rev. Fr. Joseph Pulickaparampi', phone:'96020 80736'}],
+          institutions:[{name:'Mar Sleeva Church', phone:'9602080736', email:'marsleevachurchkota@gmail.com', website:''}]
+        },
+        {
+          name:'Alwar, St. John Paul II Syro Malabar Mission',
+          address:'Divine Mercy Home, Mega Highway, Surer, Rajgarh, Alwar',
+          state:'Rajasthan', pin:'301408', year:'', phone:'',
+          personnel:[{name:'Rev. Fr. Philip Moozhikunnel', phone:'94467 94482'}],
+          institutions:[{name:'St. John Paul II Syro Malabar Mission', phone:'9446794482', email:'philipon36@gmail.com', website:''}]
+        }
+      ];
+
+      for(let i=0; i<jaipurStations.length; i++) {
+        await addDoc(misCol('jaipur','stations'), {
+          ...jaipurStations[i], order:i,
+          createdAt:serverTimestamp(), updatedAt:serverTimestamp()
+        });
+        total++;
+      }
+    }
+
+    // ────────────────────────────────────────────────────────────────
+    // VIRUDHUNAGAR PARAGRAPHS
+    // ────────────────────────────────────────────────────────────────
+    const vp = await getDoc(misDoc('virudhunagar','paragraphs'));
+    if(!vp.exists()) {
+      await setDoc(misDoc('virudhunagar','paragraphs'), { items:[
+        'The territorial jurisdiction of the eparchy of Changanacherry got extended from the Pampa River in the State of Kerala to the South upto Kanyakumari in the State of Tamil Nadu on April 29, 1955 by Pope Pius XII. With this extension from 1960 onwards many young priests, religious and laity of the Archeparchy volunteered to devote themselves in the evangelization works in Kanyakumari Mission.',
+        'As a result, on November 11, 1996 Archeparchy of Changanacherry was bifurcated establishing Eparchy of Thuckalay. Again, on October 10, 2017 Pope Francis extended the territory of the Eparchy of Thuckalay comprising 9 civil districts. As per invitation from the Bishop of Thuckalay, the Archeparchy of Changanacherry decided to undertake Virudhunagar Mission and sent Rev. Fr. Peter Kizhakkeyil. This new mission was inaugurated on May 30, 2019, on the Feast of the Ascension of Jesus Christ.',
+        'Rev. Fr. Joseph Keeranchira was appointed in 2022. On 03 April 2022 St. Joseph Syro Malabar Catholic Church was consecrated.'
+      ], updatedAt:serverTimestamp() }); total++;
+    }
+
+    // ────────────────────────────────────────────────────────────────
+    // VIRUDHUNAGAR STATIONS
+    // ────────────────────────────────────────────────────────────────
+    const existVd = await getDocs(misCol('virudhunagar','stations'));
+    if(existVd.empty) {
+      await addDoc(misCol('virudhunagar','stations'), {
+        name:'Kovilpatti — St. Joseph\'s Mission', address:'Melachinnayapuram',
+        state:'Tamil Nadu', pin:'', year:'2019', phone:'',
+        personnel:[], institutions:[], order:0,
+        createdAt:serverTimestamp(), updatedAt:serverTimestamp()
+      }); total++;
+      await addDoc(misCol('virudhunagar','stations'), {
+        name:'Inam Rettiapatti Mission', address:'',
+        state:'Tamil Nadu', pin:'', year:'2019', phone:'',
+        personnel:[], institutions:[], order:1,
+        createdAt:serverTimestamp(), updatedAt:serverTimestamp()
+      }); total++;
+    }
+
+    // ────────────────────────────────────────────────────────────────
+    // FOREIGN COUNTRIES
+    // ────────────────────────────────────────────────────────────────
+    const existFc = await getDocs(misCol('foreign','countries'));
+    if(existFc.empty) {
+      const countries = [
+        {country:'Australia',    priests:1},
+        {country:'Austria',      priests:1},
+        {country:'Canada',       priests:1},
+        {country:'Germany',      priests:20},
+        {country:'Italy',        priests:17},
+        {country:'Malta',        priests:1},
+        {country:'Ireland',      priests:2},
+        {country:'Romania',      priests:1},
+        {country:'South Africa', priests:1},
+        {country:'Spain',        priests:1},
+        {country:'Switzerland',  priests:1},
+        {country:'UK',           priests:5},
+        {country:'USA',          priests:1}
+      ];
+      for(let i=0; i<countries.length; i++) {
+        await addDoc(misCol('foreign','countries'), {
+          ...countries[i], order:i,
+          createdAt:serverTimestamp(), updatedAt:serverTimestamp()
+        });
+      } total += countries.length;
+    }
+
+    // ────────────────────────────────────────────────────────────────
+    // ADOPTED DIOCESE INFO
+    // ────────────────────────────────────────────────────────────────
+    const ai = await getDoc(misDoc('adopted','info'));
+    if(!ai.exists()) {
+      await setDoc(misDoc('adopted','info'), {
+        'Diocese of Jagdalpur':'07782 228293',
+        'Lal - Bagh, Jagdalpur P.O.':'(P) 07782 228307',
+        'Bastar Dist., Chhattisgarh 494 001':'(Secretary) 78799 52543',
+        updatedAt:serverTimestamp()
+      }); total++;
+    }
+  
+    misToast(`✅ Imported ${total} records successfully!`,'success',5000);
+    await loadAllData();
+    document.getElementById('banner-import').style.display='none';
+
+  } catch(err) {
+    misToast('❌ Import error: '+err.message,'error');
+    console.error(err);
+  } finally {
+    btn.disabled=false;
+    btn.textContent='⬆ Import Default Data';
+  }
+};
+    // Init
+    activateMisTab('tab-etawah');
+  </script>
+</body>
+</html>
