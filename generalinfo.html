@@ -1,0 +1,1308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>General Information — Admin Panel</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"/>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"/>
+<link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;600;700;800;900&family=Lato:wght@300;400;700&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --brand:#921a02;--brand-dark:#6e1301;--brand-gold:#c9a84c;
+  --brand-border:rgba(146,26,2,.18);--brand-dim:rgba(146,26,2,.08);
+  --sidebar-w:260px;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Lato',sans-serif;background:#f1f5f9;color:#1e293b;min-height:100vh;}
+
+/* ── Layout ── */
+.dash-layout{display:grid;grid-template-columns:var(--sidebar-w) 1fr;min-height:100vh;}
+.dash-main{grid-column:2;display:flex;flex-direction:column;}
+
+/* ── Sidebar ── */
+.sidebar{background:#fff;border-right:1px solid #e2e8f0;display:flex;flex-direction:column;position:sticky;top:0;height:100vh;overflow-y:auto;transition:transform .3s;}
+.sidebar-brand{background:var(--brand);color:#fff;padding:16px 18px;display:flex;align-items:center;gap:10px;}
+.sidebar-logo{width:36px;height:36px;border-radius:8px;background:rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:.85rem;font-family:'Raleway',sans-serif;}
+.sidebar-brand-text{font-family:'Raleway',sans-serif;font-weight:800;font-size:.95rem;}
+.sidebar-brand-sub{font-size:.68rem;opacity:.75;}
+.sidebar-section{font-size:.65rem;font-weight:800;text-transform:uppercase;letter-spacing:.1em;color:#94a3b8;padding:14px 18px 4px;}
+.sidebar-item{display:flex;align-items:center;gap:10px;padding:10px 18px;font-size:.82rem;font-weight:600;color:#475569;cursor:pointer;border-left:3px solid transparent;transition:all .2s;text-decoration:none;}
+.sidebar-item:hover{background:var(--brand-dim);color:var(--brand);}
+.sidebar-item.active{background:var(--brand-dim);color:var(--brand);border-left-color:var(--brand);}
+.sidebar-item .si-icon{font-size:.9rem;width:20px;text-align:center;flex-shrink:0;}
+.si-badge{margin-left:auto;background:var(--brand);color:#fff;font-size:.62rem;padding:2px 6px;border-radius:10px;min-width:20px;text-align:center;}
+.sidebar-footer{margin-top:auto;padding:12px 18px;border-top:1px solid #e2e8f0;}
+.user-row{display:flex;align-items:center;gap:10px;}
+.user-row-avatar{width:34px;height:34px;border-radius:50%;background:var(--brand);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.8rem;flex-shrink:0;}
+.user-row-name{font-size:.82rem;font-weight:700;color:#1e293b;}
+.user-row-role{font-size:.7rem;color:#94a3b8;}
+
+/* ── Topbar ── */
+.topbar{background:#fff;border-bottom:1px solid #e2e8f0;padding:12px 24px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;box-shadow:0 1px 4px rgba(0,0,0,.05);}
+.topbar-left{display:flex;align-items:center;gap:14px;}
+.topbar-title{font-family:'Raleway',sans-serif;font-weight:800;font-size:.95rem;color:#1e293b;}
+.topbar-sub{font-size:.72rem;color:#94a3b8;}
+.topbar-right{display:flex;align-items:center;gap:10px;}
+.sidebar-toggle{background:none;border:none;font-size:1.2rem;cursor:pointer;color:#475569;padding:4px 8px;border-radius:6px;transition:background .15s;}
+.sidebar-toggle:hover{background:#f1f5f9;}
+.btn-logout{background:#fef2f2;color:#dc2626;border:none;border-radius:8px;padding:7px 14px;font-size:.78rem;font-weight:700;cursor:pointer;transition:background .15s;}
+.btn-logout:hover{background:#fee2e2;}
+.sidebar-overlay{display:none;position:fixed;inset:0;z-index:150;background:rgba(0,0,0,.4);}
+
+/* ── Content area ── */
+.gi-content-area{padding:22px;flex:1;overflow-x:hidden;}
+
+/* ── Page header ── */
+.gi-page-header{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:20px;}
+.gi-page-title{font-family:'Raleway',sans-serif;font-size:1.15rem;font-weight:800;color:#1e293b;display:flex;align-items:center;gap:8px;}
+.gi-page-title span{color:var(--brand);}
+.gi-header-actions{display:flex;gap:8px;flex-wrap:wrap;}
+
+/* ── Seed banner ── */
+.seed-banner{background:#fff3cd;border:1px solid #ffc107;border-radius:8px;padding:10px 16px;font-size:.82rem;color:#856404;margin-bottom:16px;display:none;align-items:center;gap:8px;}
+.seed-banner.show{display:flex;}
+
+/* ── Buttons ── */
+.btn-primary-brand{display:inline-flex;align-items:center;gap:6px;padding:9px 18px;background:var(--brand);color:#fff;border:none;border-radius:8px;font-size:.82rem;font-weight:700;cursor:pointer;transition:background .2s;font-family:'Raleway',sans-serif;}
+.btn-primary-brand:hover{background:var(--brand-dark);}
+.btn-primary-brand:disabled{opacity:.6;cursor:not-allowed;}
+.btn-seed{display:inline-flex;align-items:center;gap:6px;padding:9px 18px;background:#1e293b;color:#fff;border:none;border-radius:8px;font-size:.82rem;font-weight:700;cursor:pointer;transition:background .2s;font-family:'Raleway',sans-serif;}
+.btn-seed:hover{background:#0f172a;}
+.btn-seed:disabled{opacity:.6;cursor:not-allowed;}
+.btn-outline-brand{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;background:#fff;color:var(--brand);border:1.5px solid var(--brand);border-radius:8px;font-size:.82rem;font-weight:700;cursor:pointer;transition:all .2s;}
+.btn-outline-brand:hover{background:var(--brand-dim);}
+
+/* ── Card ── */
+.gi-card{background:#fff;border-radius:14px;border:1px solid #e2e8f0;box-shadow:0 2px 12px rgba(0,0,0,.05);overflow:hidden;}
+.gi-card-header{background:#f8fafc;border-bottom:1px solid #e2e8f0;padding:13px 18px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;}
+.gi-card-title{font-family:'Raleway',sans-serif;font-size:.9rem;font-weight:800;color:#1e293b;display:flex;align-items:center;gap:8px;}
+.gi-pill{width:30px;height:30px;border-radius:8px;background:var(--brand);color:#fff;display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:800;}
+.gi-count{background:var(--brand-dim);color:var(--brand);font-size:.7rem;font-weight:700;padding:2px 9px;border-radius:20px;}
+.gi-search{border:1px solid #e2e8f0;border-radius:8px;padding:7px 12px 7px 32px;font-size:.82rem;outline:none;background:#f8fafc url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' fill='%2394a3b8' viewBox='0 0 16 16'%3E%3Cpath d='M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398l3.85 3.85a1 1 0 0 0 1.415-1.415l-3.868-3.833zm-5.242 1.156a5.5 5.5 0 1 1 0-11 5.5 5.5 0 0 1 0 11z'/%3E%3C/svg%3E") no-repeat 10px center;transition:border-color .2s;min-width:180px;}
+.gi-search:focus{border-color:var(--brand);background-color:#fff;}
+.gi-card-body{padding:20px;}
+
+/* ── Sub-section header ── */
+.gi-subsec{font-size:.78rem;font-weight:800;text-transform:uppercase;letter-spacing:.07em;color:var(--brand);padding:8px 12px;background:var(--brand-dim);border-left:3px solid var(--brand);border-radius:0 6px 6px 0;margin:16px 0 8px;display:flex;align-items:center;justify-content:space-between;}
+.gi-subsec:first-child{margin-top:0;}
+.gi-subsec-actions{display:flex;gap:6px;}
+
+/* ── Table ── */
+.gi-table-wrap{overflow-x:auto;border-radius:8px;border:1px solid #f1f5f9;}
+.gi-table{width:100%;border-collapse:collapse;font-size:.82rem;}
+.gi-table thead tr{background:var(--brand);color:#fff;}
+.gi-table thead th{padding:10px 14px;font-weight:700;white-space:nowrap;text-align:left;}
+.gi-table tbody tr{border-bottom:1px solid #f1f5f9;transition:background .15s;}
+.gi-table tbody tr:hover{background:#fef9f8;}
+.gi-table td{padding:10px 14px;color:#374151;vertical-align:middle;}
+.gi-table td:first-child{color:#94a3b8;font-size:.75rem;}
+.row-actions{display:flex;gap:6px;}
+.btn-sm-edit{padding:4px 10px;border-radius:6px;border:none;font-size:.72rem;font-weight:600;cursor:pointer;background:#eff6ff;color:#2563eb;transition:all .15s;}
+.btn-sm-edit:hover{background:#dbeafe;}
+.btn-sm-del{padding:4px 10px;border-radius:6px;border:none;font-size:.72rem;font-weight:600;cursor:pointer;background:#fef2f2;color:#dc2626;transition:all .15s;}
+.btn-sm-del:hover{background:#fee2e2;}
+
+/* ── Spinner ── */
+.gi-spinner{width:34px;height:34px;border:3px solid rgba(146,26,2,.2);border-top-color:var(--brand);border-radius:50%;animation:spin .7s linear infinite;margin:30px auto;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.spin-sm{width:13px;height:13px;border:2px solid rgba(255,255,255,.4);border-top-color:#fff;border-radius:50%;animation:spin .6s linear infinite;display:inline-block;}
+
+/* ── Nav tabs (gi sidebar) ── */
+.gi-nav-list{list-style:none;padding:8px 0;flex:1;}
+.gi-nav-list li{border-bottom:1px solid rgba(146,26,2,.06);}
+.gi-nav-btn{width:100%;text-align:left;background:none;border:none;padding:10px 18px;font-size:.81rem;font-weight:600;color:#475569;cursor:pointer;display:flex;align-items:center;gap:10px;border-left:3px solid transparent;transition:all .2s;font-family:'Lato',sans-serif;}
+.gi-nav-btn:hover{background:var(--brand-dim);color:var(--brand);}
+.gi-nav-btn.active{background:var(--brand-dim);color:var(--brand);border-left-color:var(--brand);}
+.gi-nav-btn .tab-badge{margin-left:auto;background:var(--brand);color:#fff;font-size:.62rem;padding:2px 7px;border-radius:20px;min-width:20px;text-align:center;}
+
+/* ── Modal ── */
+.modal-bd{display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.55);backdrop-filter:blur(4px);align-items:center;justify-content:center;}
+.modal-bd.show{display:flex;animation:mfade .2s ease;}
+@keyframes mfade{from{opacity:0}to{opacity:1}}
+.modal-box{background:#fff;border-radius:16px;padding:26px;width:100%;max-width:580px;max-height:92vh;overflow-y:auto;box-shadow:0 24px 60px rgba(0,0,0,.25);position:relative;animation:mup .25s ease;}
+@keyframes mup{from{transform:translateY(20px);opacity:0}to{transform:translateY(0);opacity:1}}
+.modal-box h5{font-family:'Raleway',sans-serif;font-size:1rem;font-weight:800;margin:0 0 18px;color:#1e293b;}
+.modal-close{position:absolute;top:14px;right:16px;background:none;border:none;font-size:1.2rem;cursor:pointer;color:#6b7280;}
+.modal-close:hover{color:#1e293b;}
+.mgroup{margin-bottom:13px;}
+.mgroup label{display:block;font-size:.71rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#64748b;margin-bottom:5px;}
+.mgroup input,.mgroup select,.mgroup textarea{width:100%;border:1px solid #e2e8f0;border-radius:8px;padding:8px 12px;font-size:.84rem;outline:none;transition:border-color .2s;font-family:'Lato',sans-serif;resize:vertical;}
+.mgroup input:focus,.mgroup select:focus,.mgroup textarea:focus{border-color:var(--brand);}
+.mactions{display:flex;gap:10px;margin-top:18px;flex-wrap:wrap;}
+.msave{flex:1;padding:10px;border-radius:8px;border:none;background:var(--brand);color:#fff;font-weight:700;font-size:.85rem;cursor:pointer;transition:background .15s;display:flex;align-items:center;justify-content:center;gap:6px;min-height:40px;font-family:'Raleway',sans-serif;}
+.msave:hover:not(:disabled){background:var(--brand-dark);}
+.msave:disabled{opacity:.6;cursor:not-allowed;}
+.mcancel{padding:10px 18px;border-radius:8px;border:1px solid #e2e8f0;background:#f8fafc;font-size:.85rem;cursor:pointer;}
+.mcancel:hover{background:#f1f5f9;}
+.mdel{padding:10px 14px;border-radius:8px;border:none;background:#fef2f2;color:#dc2626;font-size:.82rem;cursor:pointer;font-weight:700;}
+.mdel:hover{background:#fee2e2;}
+.mstatus{font-size:.78rem;text-align:center;margin-top:8px;min-height:18px;}
+
+/* ── Toast ── */
+#gi-toast{position:fixed;bottom:24px;right:24px;z-index:99999;background:#1e293b;color:#fff;padding:12px 20px;border-radius:10px;font-size:.82rem;font-weight:600;box-shadow:0 8px 24px rgba(0,0,0,.25);opacity:0;transform:translateY(10px);transition:opacity .25s,transform .25s;pointer-events:none;max-width:320px;}
+#gi-toast.show{opacity:1;transform:translateY(0);}
+#gi-toast.success{background:#16a34a;}
+#gi-toast.error{background:#dc2626;}
+#gi-toast.warn{background:#d97706;}
+
+/* ── Seed progress modal ── */
+.seed-progress-item{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid #f1f5f9;font-size:.82rem;}
+.seed-progress-item:last-child{border-bottom:none;}
+.seed-dot{width:10px;height:10px;border-radius:50%;background:#e2e8f0;flex-shrink:0;transition:background .3s;}
+.seed-dot.done{background:#16a34a;}
+.seed-dot.active{background:var(--brand);animation:pulse .8s infinite;}
+.seed-dot.error{background:#dc2626;}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:.4;}}
+
+/* ── Responsive ── */
+@media(max-width:900px){
+  .dash-layout{grid-template-columns:1fr;}
+  .dash-main{grid-column:1;}
+  .sidebar{position:fixed;left:-280px;top:0;z-index:200;height:100vh;transition:left .3s;width:var(--sidebar-w);}
+  .sidebar.open{left:0;}
+  .sidebar-overlay.show{display:block;}
+  .gi-content-area{padding:14px;}
+}
+.mob-toggle{display:none!important;}
+@media(max-width:900px){.mob-toggle{display:inline-flex!important;}}
+
+/* ── Stat row ── */
+.gi-stat-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:12px;margin-bottom:20px;}
+.gi-stat-card{background:#fff;border-radius:12px;border:1px solid #e2e8f0;padding:14px 16px;display:flex;align-items:center;gap:12px;box-shadow:0 1px 6px rgba(0,0,0,.04);}
+.gi-stat-icon{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0;}
+.gi-stat-val{font-family:'Raleway',sans-serif;font-size:1.3rem;font-weight:800;color:#1e293b;line-height:1;}
+.gi-stat-lbl{font-size:.7rem;color:#94a3b8;margin-top:2px;}
+
+/* Section visibility */
+.gi-section{display:none;}
+.gi-section.active{display:block;}
+/* ── Permanent Synod & Curia Custom Styles ── */
+.synod-member-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.synod-member-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  border-bottom: 1px solid #f1f5f9;
+  transition: background 0.2s;
+}
+.synod-member-item:hover {
+  background: var(--brand-dim);
+}
+.synod-member-name {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #334155;
+}
+.synod-member-actions {
+  display: flex;
+  gap: 5px;
+}
+.btn-add-sm {
+  padding: 4px 10px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  border-radius: 6px;
+  background: var(--brand);
+  color: #fff;
+  border: none;
+}
+.btn-add-sm-outline {
+  padding: 4px 10px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--brand);
+  border: 1.5px solid var(--brand);
+}
+</style>
+</head>
+<body>
+
+<div id="gi-toast"></div>
+<div class="sidebar-overlay" id="sidebar-overlay" onclick="closeSidebar()"></div>
+
+<div class="dash-layout">
+
+  <!-- ══ SIDEBAR ══ -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-brand">
+      <div class="sidebar-logo">⛪</div>
+      <div>
+        <div class="sidebar-brand-text">AdminForge</div>
+        <div class="sidebar-brand-sub">General Information</div>
+      </div>
+    </div>
+
+    <p class="sidebar-section">Main</p>
+    <a href="dashboard.html" class="sidebar-item"><span class="si-icon">🏠</span> Dashboard</a>
+    <a href="administration.html" class="sidebar-item"><span class="si-icon">⚙</span> Administration</a>
+    <a href="priests.html" class="sidebar-item"><span class="si-icon">✝</span> Priests</a>
+    <a href="parishes.html" class="sidebar-item"><span class="si-icon">⬡</span> Parishes</a>
+
+    <p class="sidebar-section">General Info Sections</p>
+    <ul class="gi-nav-list" id="giNavList">
+      <li><button class="gi-nav-btn active" data-tab="catholicChurches" onclick="switchTab('catholicChurches',this)"><i class="bi bi-globe2"></i> Catholic Churches <span class="tab-badge" id="badge-catholicChurches">—</span></button></li>
+      <li><button class="gi-nav-btn" data-tab="romanPontiff" onclick="switchTab('romanPontiff',this)"><i class="bi bi-person-circle"></i> Roman Pontiff <span class="tab-badge" id="badge-romanPontiff">—</span></button></li>
+      <li><button class="gi-nav-btn" data-tab="romanCuria" onclick="switchTab('romanCuria',this)"><i class="bi bi-building"></i> Roman Curia <span class="tab-badge" id="badge-romanCuria">—</span></button></li>
+      <li><button class="gi-nav-btn" data-tab="orientalChurches" onclick="switchTab('orientalChurches',this)"><i class="bi bi-church"></i> Oriental Churches <span class="tab-badge" id="badge-orientalChurches">—</span></button></li>
+      <li><button class="gi-nav-btn" data-tab="fabcAsia" onclick="switchTab('fabcAsia',this)"><i class="bi bi-geo-alt"></i> FABC (Asia) <span class="tab-badge" id="badge-fabcAsia">—</span></button></li>
+      <li><button class="gi-nav-btn" data-tab="churchInIndia" onclick="switchTab('churchInIndia',this)"><i class="bi bi-flag"></i> Church in India <span class="tab-badge" id="badge-churchInIndia">—</span></button></li>
+      <li><button class="gi-nav-btn" data-tab="cbci" onclick="switchTab('cbci',this)"><i class="bi bi-people"></i> CBCI <span class="tab-badge" id="badge-cbci">—</span></button></li>
+      <li><button class="gi-nav-btn" data-tab="kcbc" onclick="switchTab('kcbc',this)"><i class="bi bi-people-fill"></i> KCBC <span class="tab-badge" id="badge-kcbc">—</span></button></li>
+      <li><button class="gi-nav-btn" data-tab="syroMalabarHierarchy" onclick="switchTab('syroMalabarHierarchy',this)"><i class="bi bi-diagram-3"></i> Syro Malabar Hierarchy <span class="tab-badge" id="badge-syroMalabarHierarchy">—</span></button></li>
+      <li><button class="gi-nav-btn" data-tab="bishopsEmeriti" onclick="switchTab('bishopsEmeriti',this)"><i class="bi bi-person-badge"></i> Bishops Emeriti <span class="tab-badge" id="badge-bishopsEmeriti">—</span></button></li>
+    </ul>
+
+    <div class="sidebar-footer">
+      <div class="user-row">
+        <div class="user-row-avatar">A</div>
+        <div>
+          <div class="user-row-name">Admin</div>
+          <div class="user-row-role">General Info Module</div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ══ MAIN ══ -->
+  <div class="dash-main">
+    <!-- Topbar -->
+    <nav class="topbar">
+      <div class="topbar-left">
+        <button class="sidebar-toggle mob-toggle" onclick="openSidebar()">☰</button>
+        <div>
+          <div class="topbar-title" id="topbar-title">General Information</div>
+          <div class="topbar-sub" id="topbar-sub">Catholic Churches</div>
+        </div>
+      </div>
+      <div class="topbar-right">
+        <button class="btn-seed" id="btn-open-seed" onclick="openSeedModal()">☁ Seed to Firebase</button>
+        <button class="btn-logout" onclick="window.location.href='index.html'">← Back</button>
+      </div>
+    </nav>
+
+    <!-- Content -->
+    <div class="gi-content-area">
+
+      <!-- Seed banner -->
+      <div class="seed-banner" id="seed-banner">
+        <i class="bi bi-cloud-upload-fill"></i>
+        <span id="seed-msg">Loading data…</span>
+      </div>
+
+      <!-- Stats row -->
+      <div class="gi-stat-row" id="gi-stat-row"></div>
+
+      <!-- Page header -->
+      <div class="gi-page-header">
+        <div class="gi-page-title">
+          <span>⛪</span> General Information — <span id="current-tab-label">Catholic Churches</span>
+        </div>
+        <div class="gi-header-actions">
+          <input type="text" class="gi-search" id="gi-search" placeholder="Search entries…" oninput="renderCurrentTab()"/>
+          <button class="btn-primary-brand" id="btn-add-main" onclick="openAdd()">＋ Add Entry</button>
+        </div>
+      </div>
+
+      <!-- Main card -->
+      <div class="gi-card">
+        <div class="gi-card-header">
+          <div class="gi-card-title">
+            <div class="gi-pill" id="card-pill">1</div>
+            <span id="card-title">Catholic Churches</span>
+            <span class="gi-count" id="card-count">0</span>
+          </div>
+        </div>
+        <div class="gi-card-body" id="gi-content">
+          <div class="gi-spinner"></div>
+        </div>
+      </div>
+
+    </div><!-- /gi-content-area -->
+  </div><!-- /dash-main -->
+</div><!-- /dash-layout -->
+
+<!-- ══ UNIVERSAL MODAL ══ -->
+<div class="modal-bd" id="m-main">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <h5 id="modal-title">Add Entry</h5>
+    <div id="modal-fields"></div>
+    <div class="mactions">
+      <button class="mcancel" onclick="closeModal()">Cancel</button>
+      <button class="msave" id="btn-modal-save" onclick="saveEntry()">💾 Save</button>
+      <button class="mdel" id="btn-modal-del" onclick="delEntry()" style="display:none;">🗑 Delete</button>
+    </div>
+    <div class="mstatus" id="modal-status"></div>
+  </div>
+</div>
+
+<!-- ══ SEED MODAL ══ -->
+<div class="modal-bd" id="m-seed">
+  <div class="modal-box" style="max-width:520px;">
+    <button class="modal-close" onclick="closeModal('m-seed')">✕</button>
+    <h5>☁ Seed General Information to Firebase</h5>
+    <p style="font-size:.82rem;color:#64748b;margin-bottom:16px;">This will write all default data into the <strong>generalInformation</strong> Firestore collection. Each section becomes a separate document. Existing data will be overwritten.</p>
+    <div id="seed-progress-list"></div>
+    <div class="mactions" style="margin-top:16px;">
+      <button class="mcancel" onclick="closeModal('m-seed')" id="btn-seed-cancel">Cancel</button>
+      <button class="msave" id="btn-seed-start" onclick="runSeed()" style="background:#1e293b;">☁ Start Seeding</button>
+    </div>
+    <div class="mstatus" id="seed-modal-status"></div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- ══ EMBEDDED JSON DATA ══ -->
+<script>
+// ════════════════════════════════════════════════════════════
+//  GENERAL INFORMATION — COMPLETE DEFAULT DATA (JSON)
+//  Collection: "generalInformation"
+//  Documents:  catholicChurches | romanPontiff | romanCuria |
+//              orientalChurches | fabcAsia | churchInIndia |
+//              cbci | kcbc | syroMalabarHierarchy | bishopsEmeriti
+// ════════════════════════════════════════════════════════════
+const GI_DATA = {
+
+  // ── Document: catholicChurches ──
+  catholicChurches: {
+    meta: { title: "Catholic Churches", type: "churches" },
+    items: [
+      { tradition: "Roman or Latin", church: "Roman Church", head: "Pope Francis" },
+      { tradition: "Alexandrian", church: "Coptic Church", head: "Ibrahim Isaac Sedrak" },
+      { tradition: "Alexandrian", church: "Eritrean Church", head: "Menghesteab Tesfamariam" },
+      { tradition: "Alexandrian", church: "Ethiopian Church", head: "Berhaneyesus Demerew Souraphiel" },
+      { tradition: "Antiochian", church: "Maronite Church", head: "Bechara Pierre Rai" },
+      { tradition: "Antiochian", church: "Syro Malankara Church", head: "Baselios Mar Cleemis" },
+      { tradition: "Antiochian", church: "West Syrian Church", head: "Ignace Youssif III Younan" },
+      { tradition: "Armenian", church: "Armenian Church", head: "Raphael Bedros XXI Minassian" },
+      { tradition: "Chaldean or East Syriac", church: "Chaldean Church", head: "Louis Raphael I Sako" },
+      { tradition: "Chaldean or East Syriac", church: "Syro Malabar Church", head: "George Cardinal Alencherry" },
+      { tradition: "Constantinopolitan or Byzantine", church: "Albanian Church", head: "Hil Kabashi" },
+      { tradition: "Constantinopolitan or Byzantine", church: "Byzantine Church of the Krizevci Eparchy", head: "Nikola Kekic" },
+      { tradition: "Constantinopolitan or Byzantine", church: "Belarussian Church", head: "Alexander Nadson" },
+      { tradition: "Constantinopolitan or Byzantine", church: "Bulgarian Church", head: "Christo Proykov" },
+      { tradition: "Constantinopolitan or Byzantine", church: "Greek Church", head: "Nin Manuel" },
+      { tradition: "Constantinopolitan or Byzantine", church: "Greek Melkite Church", head: "Youssef Absi Gallaro" },
+      { tradition: "Constantinopolitan or Byzantine", church: "Hungarian Church", head: "Peter Fulop Kocsis" },
+      { tradition: "Constantinopolitan or Byzantine", church: "Italo Albanian Church", head: "Giorgio Demetrio" },
+      { tradition: "Constantinopolitan or Byzantine", church: "Macedonian Church", head: "Kiro Stojanov" },
+      { tradition: "Constantinopolitan or Byzantine", church: "Romanian Church", head: "Lucian Muresan" },
+      { tradition: "Constantinopolitan or Byzantine", church: "Russian Church", head: "Kirill of Moscow" },
+      { tradition: "Constantinopolitan or Byzantine", church: "Ruthenian Church", head: "William C Skurla" },
+      { tradition: "Constantinopolitan or Byzantine", church: "Slovak Church", head: "Jan Babjak" },
+      { tradition: "Constantinopolitan or Byzantine", church: "Ukrainian Church", head: "Sviatoslav Shevchuk" }
+    ]
+  },
+
+  // ── Document: romanPontiff ──
+  romanPontiff: {
+    meta: { title: "The Roman Pontiff", type: "pontiff" },
+    items: [
+      {
+        name: "HIS HOLINESS POPE FRANCIS (Jorge Mario Bergoglio)",
+        dob: "December 17, 1936", pob: "Buenos Aires, Argentina",
+        ordained: "December 13, 1969", episcopal: "June 27, 1992",
+        cardinal: "February 21, 2001", elected: "March 13, 2013",
+        began: "March 19, 2013", status: "Pope"
+      },
+      {
+        name: "HIS HOLINESS POPE EMERITUS BENEDICT XVI (Joseph Ratzinger)",
+        dob: "April 16, 1927", pob: "Marktl am Inn, Germany",
+        ordained: "June 29, 1951", episcopal: "May 28, 1977",
+        cardinal: "June 27, 1977", elected: "April 19, 2005",
+        began: "February 28, 2013", status: "Pope Emeritus"
+      }
+    ]
+  },
+
+  // ── Document: romanCuria ──
+  romanCuria: {
+    meta: { title: "The Roman Curia", type: "curia" },
+    items: [
+      { no: "1", dicastery: "Secretariat of State", prefect: "His Eminence Cardinal Pietro Parolin", address: "Palazzo Apostolico Vaticano, 00120 Vatican City" },
+      { no: "2", dicastery: "Congregation for the Doctrine of the Faith", prefect: "His Eminence Cardinal Luis Francisco Ladaria Ferrer", address: "Piazza del S. Ufficio, 11, 00193 Roma, Italia" },
+      { no: "3", dicastery: "Congregation for the Oriental Churches", prefect: "His Eminence Cardinal Leonardo Sandri", address: "Palazzo del Bramante, Via della Conciliazione, 34, 00193 Roma" },
+      { no: "4", dicastery: "Congregation for Divine Worship and Discipline of Sacraments", prefect: "His Grace Archbishop Arthur Roche", address: "Piazza Pio XII, 10, 00193 Roma, Italia" },
+      { no: "5", dicastery: "Congregation for the Causes of Saints", prefect: "His Eminence Cardinal Marcello Semeraro", address: "Piazza Pio XII, 10, 00193 Roma, Italia" },
+      { no: "6", dicastery: "Congregation for the Bishops", prefect: "His Eminence Cardinal Marc Ouellet", address: "Piazza Pio XII, 10, 00193 Roma, Italia" },
+      { no: "7", dicastery: "Congregation for the Evangelization of Peoples", prefect: "His Eminence Cardinal Luis Antonio Gokim Tagle", address: "Piazza di Spagna, 48, 00187 Roma, Italia" },
+      { no: "8", dicastery: "Congregation for the Clergy", prefect: "His Grace Archbishop Lazzaro You Heung-sik", address: "Piazza Pio XII, 3, 00193 Roma, Italia" },
+      { no: "9", dicastery: "Congregation for the Apostolic Life", prefect: "His Eminence Cardinal João Braz de Aviz", address: "Piazza Pio XII, 3, 00193 Roma, Italia" },
+      { no: "10", dicastery: "Congregation for Catholic Education", prefect: "His Eminence Cardinal Giuseppe Versaldi", address: "Piazza Pio XII, 3, 00193 Roma, Italia" }
+    ]
+  },
+
+  // ── Document: orientalChurches ──
+  orientalChurches: {
+    meta: { title: "Oriental Churches", type: "kv" },
+    items: [
+      { field: "Name", value: "Congregation for the Oriental Churches" },
+      { field: "Prefect", value: "His Eminence Cardinal Leonardo Sandri" },
+      { field: "Secretary", value: "Archbishop Giorgio Gallaro" },
+      { field: "Address", value: "Palazzo del Bramante, Via della Conciliazione, 34, 00193 Roma, Italia" },
+      { field: "Telephone", value: "+39 06 6988 4282" }
+    ]
+  },
+
+  // ── Document: fabcAsia ──
+  fabcAsia: {
+    meta: { title: "FABC (Asia)", type: "kv" },
+    items: [
+      { field: "Name", value: "THE FEDERATION OF ASIAN BISHOPS' CONFERENCES (FABC)" },
+      { field: "President", value: "His Eminence Charles Maung Cardinal Bo, SDB" },
+      { field: "Vice-President", value: "His Eminence Malcolm Cardinal Ranjith" },
+      { field: "Secretary General", value: "Most Rev. Tarcisio Isao Kikuchi, SVD" },
+      { field: "Address", value: "4/F, Holy Cross Centre, 72 Yiu Hing Road, Sai Wan Ho, Hong Kong SAR" },
+      { field: "Telephone", value: "+852 3904 1121" },
+      { field: "Website", value: "www.fabc.org" },
+      { field: "Email", value: "fabccentral@yahoo.com / fabcgs@gmail.com" }
+    ]
+  },
+
+  // ── Document: churchInIndia ──
+  churchInIndia: {
+    meta: { title: "Church in India — Apostolic Nunciature", type: "kv" },
+    items: [
+      { field: "Name", value: "APOSTOLIC NUNCIATURE" },
+      { field: "Apostolic Nuncio", value: "Most Reverend Leopoldo Girelli" },
+      { field: "Address", value: "50-C Niti Marg, Chanakyapuri, New Delhi – 110 021" },
+      { field: "Telephone", value: "011 4249 2300 / 011 2688 9184 / 011 2410 3148" },
+      { field: "Email", value: "na.india@diplomat.va" },
+      { field: "Website", value: "www.apostolicnunciatureindia.com" }
+    ]
+  },
+
+  // ── Document: cbci ──
+  cbci: {
+    meta: {
+      title: "CBCI",
+      type: "cbci",
+      president: "His Eminence Oswald Cardinal Gracias",
+      vp1: "Joshua Mar Ignathios",
+      vp2: "Mar George Njaralakatt",
+      secretary: "Most Rev. Felix Anthony Machado",
+      address: "CBCI Centre, 1, Ashok Place, Near Gol Dak Khana, New Delhi – 110 001",
+      telephone: "011 2334 4470 / +91 98711 47838",
+      email: "secretarygeneral@cbci.in",
+      website: "www.cbci.in"
+    },
+    commissions: [
+      { committee: "Doctrine", chairman: "Thomas Mar Koorilos", members: "Mar Joseph Pamplany, Most Rev. Albert D'souza", secretary: "Rev. Fr. Thomas Vadakkel" },
+      { committee: "Clergy and Religious", chairman: "Most Rev. Anil Joseph Thomas Couto", members: "Most Rev. Francis Serrao SJ, Mar Sebastian Adayanthrath", secretary: "Rev. Fr. Gratian Carlo SJ" },
+      { committee: "Dialogue and Desk Ecumenism", chairman: "Mar Joseph Perumthottam", members: "Most Rev. Raphy Manjaly, Most Rev. Thomas Dabre", secretary: "Rev. Fr. Cherian Karukaparambil" },
+      { committee: "Education and Culture", chairman: "Most Rev. Thomas D'souza", members: "Mar Andrews Thazhath, Most Rev. John Moolachira", secretary: "Rev. Fr. Maria Charles Antonysamy SDB" },
+      { committee: "Health Care", chairman: "Most Rev. Prakash Mallavarapu", members: "Most Rev. Felix Toppo SJ, Most Rev. Jacob Manathodath", secretary: "Rev. Fr. Julius Arakkal CMI" },
+      { committee: "Justice, Peace and Development (JPD)", chairman: "Most Rev. Gerald Almeida", members: "Most Rev. Allwyn D'silva, Most Rev. Gerald Isaac Lobo", secretary: "Rev. Fr. Stephen Fernandes" },
+      { committee: "Labour", chairman: "Most Rev. Alex Vadakumthala", members: "Mar Jose Chittooparambil CMI, Most Rev. Nazarene Soosai", secretary: "Msgr Eugene Hilary Pereira" },
+      { committee: "Tribal Affairs", chairman: "Most Rev. Vincent Barwa", members: "Most Rev. Michael Akasius Toppo, Most Rev. Paul Toppo", secretary: "Rev. Fr. Nicholas Barla SVD" },
+      { committee: "Scheduled Castes / Backward Classes", chairman: "Most Rev. Sarat Chandra Nayak", members: "Most Rev. Moses D. Prakasam", secretary: "Rev. Fr. Vijay Kumar Nayak CM" },
+      { committee: "Social Communications", chairman: "Most Rev. Salvadore Lobo", members: "Most Rev. Sebastian Kallupura, Most Rev. Anthony Poola", secretary: "Rev. Fr. Varaprasad Marneni" },
+      { committee: "Laity", chairman: "Mar Mathew Arackal", members: "Joshua Mar Ignathios, Most Rev. Gerald John Mathias", secretary: "Chevalier Adv. VC Sebastian Valliamthadathil" },
+      { committee: "Women", chairman: "", members: "Mar Mathew Arackal, Most Rev. Francis Kalist", secretary: "Rev. Sr. Navya FCC" },
+      { committee: "Youth", chairman: "Most Rev. Nazarene Soosai", members: "Vincent Mar Paulos, Mar Joseph Pandarasseril", secretary: "Rev. Fr. Chetan Machado" }
+    ]
+  },
+
+  // ── Document: kcbc ──
+  kcbc: {
+    meta: {
+      title: "KCBC",
+      type: "kcbc",
+      president: "His Beatitude Cardinal Mar George Alencherry",
+      vp: "His Excellency Rt. Rev. Dr. Varghese Chakkalakal",
+      secretary: "His Excellency Dr. Joseph Mar Thomas",
+      deputy: "Rev. Fr. Jacob G. Palackappilly",
+      address: "Secretariat, POC, PB No. 2251, Palarivattom, Kochi – 682 025, Kerala",
+      telephone: "0484 280 5722 / 0484 280 5815",
+      email: "deputysecretarykcbc@gmail.com",
+      website: "www.kcbc.co.in"
+    },
+    commissions: [
+      { commission: "POC Commission", chairman: "His Beatitude Cardinal Mar George Alencherry", vice: "His Excellency Rt. Rev. Dr. Varghese Chakkalakal, His Excellency Dr. Joseph Mar Thomas", secretary: "Rev. Fr. Jacob G Palackappilly" },
+      { commission: "Commission for Religious", chairman: "Most Rev. Dr. Varghese Chakkalackal", vice: "Mar Mathew Moolakkatt, Mar Antony Kariyil", secretary: "Rev. Fr. Sebastian Jecobi OSJ" },
+      { commission: "Bible Commission", chairman: "Most Rev. Dr. James Anaparambil", vice: "Mar Jacob Manathodath, Thomas Mar Eusebius", secretary: "Rev. Fr. Johnson Puthussery CST" },
+      { commission: "Doctrinal Commission", chairman: "Mar Tony Neelankavil", vice: "Most Rev. Dr. James Anaparambil, Mar George Madathikandathil", secretary: "Rev. Fr. Stanley Mathirappilly" },
+      { commission: "Media Commission", chairman: "Mar Joseph Pamplany", vice: "Mar Pauly Kannookadan, Thomas Mar Eusebius", secretary: "Rev. Dr. Cibu Irimbinikal" },
+      { commission: "Family Commission", chairman: "Most Rev. Paul Antony Mullassery", vice: "Joshua Mar Ignathios, Mar Sebastian Vaniyapurackal", secretary: "Rev. Fr. Paulson Simethy" },
+      { commission: "Laity Commission", chairman: "Mar George Madathikandathil", vice: "Most Rev. Joseph Karikkassery, Most Rev. Paul Antony Mullassery", secretary: "Mr. PK Joseph" },
+      { commission: "Women's Commission", chairman: "Most Rev. Dr. Joseph Karikkassery", vice: "Most Rev. Dr. Vincent Samuel, Mar Thomas Tharayil", secretary: "Ms. Jane Ancil Francis" },
+      { commission: "Education Commission", chairman: "Joshua Mar Ignathios", vice: "Mar Antony Kariyil, Most Rev. Dr. Paul Antony Mullassery", secretary: "Rev. Fr. Charles Leon" },
+      { commission: "Social Harmony & Vigilance Commission", chairman: "Most Rev. Dr. Joseph Kariyil", vice: "Mar Andrews Thazhath, Mar Pauly Kannookadan", secretary: "Rev. Fr. Michel Pulickal" },
+      { commission: "Commission for Youth", chairman: "Most Rev. Dr. Christudas R", vice: "Yoohanon Mar Theodocious, Mar John Nellikunnel", secretary: "Rev. Fr. Stephen Thomas Chalakara" },
+      { commission: "Commission for Labour & Migrants (KLM)", chairman: "Most Rev. Dr. Alex Vadakkumthala", vice: "Mar Joseph Porunnedom, Thomas Mar Eusebius", secretary: "Rev. Fr. Prasad Kandathiparambil" },
+      { commission: "Justice Peace & Development Commission", chairman: "Mar Jose Pulickal", vice: "Most Rev. Dr. Joseph Kalathiparambil, Thomas Mar Eusebius", secretary: "Rev. Fr. Jacob Mavunkal" },
+      { commission: "SC/ST/BC Commission", chairman: "Mar Jacob Muricken", vice: "Most Rev. Dr. Selvister Ponnumuthan, Yoohanon Mar Theodocious", secretary: "Fr. Jose Vadakkekuttu" },
+      { commission: "Temperance Commission", chairman: "Yoohanon Mar Theodocious", vice: "Most Rev. Sebastian Thekkethecheril, Most Rev. Dr. Christudas R", secretary: "Rev. Fr. John Areekal" },
+      { commission: "Health Commission", chairman: "Mar George Njaralakkatt", vice: "Most Rev. Dr. Alex Vadakkumthala, Mar Tony Neelankavil", secretary: "Rev. Fr. Simon Pallupetta" },
+      { commission: "Vocation Commission", chairman: "Thomas Mar Koorilos", vice: "Mar Joseph Perumthottom, Most Rev. Dr. James Anaparambil", secretary: "Rev. Fr. Bijoy Augustine Marottickal" },
+      { commission: "Charismatic Commission", chairman: "Most Rev. Dr. Samuel Mar Irenios", vice: "Most Rev. Dr. Alex Vadakkumthala, Mar Jose Pulickal", secretary: "Rev. Fr. Joseph Thamaraveli" },
+      { commission: "Commission for Ecumenism & Dialogue", chairman: "Most Rev. Dr. Selvister Ponnumuthan", vice: "Thomas Mar Koorilos, Mar Joseph Kallarangatt", secretary: "Rev. Dr. Prasad Theruvath" }
+    ]
+  },
+
+  // ── Document: syroMalabarHierarchy ──
+  syroMalabarHierarchy: {
+    meta: { title: "Syro Malabar Hierarchy", type: "hierarchy" },
+    majorArchbishop: {
+      name: "Cardinal Mar George Alencherry",
+      dob: "April 19, 1945 — Thuruthy, Kottayam, Kerala",
+      ordained: "December 18, 1972",
+      episcopal: "February 02, 1997",
+      elected: "May 24, 2011",
+      cardinal: "January 06, 2012",
+      address: "Mount St. Thomas, PB No. 3110, Kakkanad P.O., Kochi – 682 030, Kerala",
+      telephone: "0484 242 4768 / 0484 242 4780",
+      website: "www.syromalabarchurch.in"
+    },
+    permanentSynod: {
+      members: ["Mar George Cardinal Alencherry","Mar Mathew Moolakkatt OSB","Mar Andrews Thazhath","Mar George Njaralakkatt","Mar Jacob Manathodath"],
+      substitutes: ["Mar Joseph Kallarangatt","Mar George Madathikandathil","Mar Joseph Perumthottam","Mar Paul Alappatt"]
+    },
+    curia: {
+      bishop: "Mar Sebastian Vaniyapurackal",
+      chancellor: "Rev. Fr. Vincent Cheruvathoor",
+      viceChancellor: "Rev. Fr. Abraham Kavilpurayidathil",
+      finance: "Rev. Fr. Joseph Tholanickal"
+    },
+    commissions: [
+      { name: "Commission for Clergy", chairman: "Mar George Madathikandathil", episcopal: "Mar Thomas Tharayil, Mar Sebastian Pozholiparambil", secretary: "Rev. Fr. Joji Kallingal", email: "clergy2010@gmail.com", mobile: "94479 92216" },
+      { name: "Commission for Doctrine", chairman: "Mar Tony Neelankavil", episcopal: "Mar Joseph Pamplany, Mar Jose Pulickal", secretary: "Rev. Fr. Sebastian Chalackal", email: "smdodrinalcommission@gmail.com", mobile: "94466 19266" },
+      { name: "Commission for Ecumenism", chairman: "Mar Joseph Perumthottam", episcopal: "Mar Joseph Kodakallil, Mar Thomas Thuruthimattam CST", secretary: "Rev. Fr. Cherian Karukaparampil", email: "", mobile: "97454 21326" },
+      { name: "Commission for Evangelization and Pastoral Care of Migrants", chairman: "Mar Raphael Thattil", episcopal: "Mar Sebastian Vadakel MST, Mar Joseph Pandarasseril", secretary: "Fr. Sebastian Muttamthottil MCBS", email: "sec2cepcm@gmail.com", mobile: "94957 72184" },
+      { name: "Commission for Family, Laity & Life", chairman: "Mar Joseph Kallarangatt", episcopal: "Mar Remigiose Inchananiyil, Mar Jose Pulickal", secretary: "Fr. Joby Moolayil", email: "smfllcommission@gmail.com", mobile: "94973 91968" }
+    ],
+    provinces: [
+      { province: "Province of Changanacherry", diocese: "Changanacherry", established: "20 May 1887", archbishop: "Mar Joseph Perumthottam", auxiliary: "Mar Thomas Tharayil", address: "Archbishop House, PB No. 20, Changanacherry, Kottayam 686 101", tel: "0481 2420040", email: "chancellorchry@gmail.com", website: "www.archdiocesechanganacherry.org" },
+      { province: "Province of Changanacherry", diocese: "Palai", established: "25 July 1950", archbishop: "Mar Joseph Kallarangatt", auxiliary: "Mar Jacob Muricken", address: "Bishop's House, PB No. 18, Pala P.O., Kottayam 686 575", tel: "0482 2202000", email: "aramanapala@gmail.com", website: "www.palaidiocese.com" },
+      { province: "Province of Changanacherry", diocese: "Kanjirapally", established: "26 February 1977", archbishop: "Mar Jose Pulickal", auxiliary: "", address: "Bishop's House, PB No. 22, Kanjirapally, Kottayam 686 507", tel: "04828 202665", email: "kplyeparchy@gmail.com", website: "www.kanjirapallydiocese.com" },
+      { province: "Province of Changanacherry", diocese: "Thuckalay", established: "11 November 1996", archbishop: "Mar George Rajendran SDB", auxiliary: "", address: "Bishop's House, PB No. 12, Thuckalay P.O., Kanyakumari 629 175", tel: "04651 250633", email: "thuckalaydiocese@yahoo.com", website: "www.thuckalaydiocese.org" },
+      { province: "Province of Trichur", diocese: "Trichur", established: "20 May 1887", archbishop: "Mar Andrews Thazhath", auxiliary: "Mar Tony Neelankavil", address: "Catholic Archbishop's House, PB No. 706, Trichur 680 005", tel: "0487 2333325", email: "curiatcr@yahoo.com", website: "www.trichurarchdiocese.org" },
+      { province: "Province of Trichur", diocese: "Palghat", established: "27 June 1974", archbishop: "Mar Jacob Manathodath", auxiliary: "Mar Peter Kochupurackal", address: "Bishop's Office, PB No. 4, Noorani P.O., Palakkad 678 004", tel: "0491 2515277", email: "diopgt@gmail.com", website: "www.palghatdiocese.org" },
+      { province: "Province of Trichur", diocese: "Irinjalakuda", established: "22 June 1978", archbishop: "Mar Pauly Kannookadan", auxiliary: "", address: "Catholic Bishop's House, PB No. 59, Irinjalakuda P.O., Thrissur 680 121", tel: "0480 2826830", email: "ijkbph@gmail.com", website: "www.irinjalakudadiocese.com" },
+      { province: "Province of Trichur", diocese: "Ramanathapuram", established: "18 January 2010", archbishop: "Mar Paul Alappatt", auxiliary: "", address: "Catholic Bishop's House, Trichy Road, Ramanathapuram, Coimbatore 641 045", tel: "0422 4221795", email: "dioceseoframanathapuram@gmail.com", website: "www.ramanathapuramdiocese.com" },
+      { province: "Province of Ernakulam-Angamaly", diocese: "Ernakulam-Angamaly", established: "28 July 1896", archbishop: "Cardinal Mar George Alencherry", auxiliary: "Mar Antony Kariyil CMI", address: "Major Archbishop's House, PB No. 2580, Ernakulam, Kochi 682 031", tel: "0484 2352629", email: "curia@ernakulamarchdiocese.org", website: "www.ernakulamarchdiocese.org" },
+      { province: "Province of Ernakulam-Angamaly", diocese: "Kothamangalam", established: "29 July 1956", archbishop: "Mar George Madathikandathil", auxiliary: "", address: "Bishop's House, PB No. 6, Kothamangalam 686 691", tel: "0485 2862236", email: "bishophouseklm@gmail.com", website: "www.kothamangalamdiocese.org" },
+      { province: "Province of Ernakulam-Angamaly", diocese: "Idukki", established: "15 January 2003", archbishop: "Mar John Nellikunnel", auxiliary: "", address: "Bishop's Office, Karimpan, Manippara P.O., Idukki 685 602", tel: "04862 230204", email: "curiaidukkidiocese@gmail.com", website: "www.idukkidiocese.org" },
+      { province: "Province of Tellicherry", diocese: "Tellicherry", established: "31 December 1953", archbishop: "Mar George Njaralakatt", auxiliary: "Mar Joseph Pamplany", address: "Archbishop's House, PB No. 70, Thalassery P.O., Kannur 670 101", tel: "0490 2341058", email: "diocese@archdioceseoftellicherry.org", website: "www.archdioceseoftellicherry.org" },
+      { province: "Province of Tellicherry", diocese: "Mananthavady", established: "01 March 1973", archbishop: "Mar Jose Porunnedom", auxiliary: "", address: "Bishop's House, PB No. 1, Mananthavady 670 645", tel: "04935 240735", email: "bphmtdy@gmail.com", website: "www.diocesemdy.org" },
+      { province: "Province of Tellicherry", diocese: "Thamarassery", established: "28 April 1986", archbishop: "Mar Remigiose Inchananiyil", auxiliary: "", address: "Bishop's House, PB No. 1, Thamarassery P.O., Kozhikode 673 573", tel: "0495 2223376", email: "diocesetmy09@gmail.com", website: "www.dioceseofthamarassery.org" },
+      { province: "Province of Tellicherry", diocese: "Belthangady", established: "24 April 1999", archbishop: "Mar Lawrence Mukkuzhy", auxiliary: "", address: "Bishop's House, Udayanagar, PB No. 13, Belthangady, D.K. 574 214", tel: "08256 232439", email: "chancerybgy@gmail.com", website: "www.belthangadydiocese.com" },
+      { province: "Province of Tellicherry", diocese: "Bhadravathi", established: "29 August 2007", archbishop: "Mar Joseph Arumachadath MCBS", auxiliary: "", address: "Bishop's House, St. Joseph's Church, Sagar Road, Shimoga 577 204", tel: "", email: "bhadravathidiocese@rediffmail.com", website: "www.bhadravathidiocese.org" },
+      { province: "Province of Tellicherry", diocese: "Mandya", established: "18 January 2010", archbishop: "Mar Sebastian Adayanthrath", auxiliary: "", address: "Bishop's House, Kalenahalli Post, Mandya 571 402", tel: "08232 291050", email: "dioceseofmandya@gmail.com", website: "www.mandyadiocese.org" },
+      { province: "Eparchies Outside Metropolitan Provinces", diocese: "Adilabad", established: "23 June 1999", archbishop: "Mar Prince Antony Panengadan", auxiliary: "", address: "Bishop's House, 12-601/1, Mancherial P.O., Adilabad 504 208", tel: "87362 58262", email: "bishopadilabaddiocesein@gmail.com", website: "www.adilabaddiocese.com" },
+      { province: "Eparchies Outside Metropolitan Provinces", diocese: "Bijnor", established: "23 March 1972", archbishop: "Mar Vincent Nellaiparambil", auxiliary: "", address: "Bishop's House, PB No. 1, Kotdwar, Pauri-Garhwal, Uttarakhand 246 149", tel: "01382 222231", email: "bijnordiocese@gmail.com", website: "www.bijnordiocese.in" },
+      { province: "Eparchies Outside Metropolitan Provinces", diocese: "Chanda", established: "29 July 1968", archbishop: "Mar Ephrem Nariculam", auxiliary: "", address: "Bishop's Home, Ballapur P.O., Chandrapur, Maharashtra 442 701", tel: "07172 240537", email: "bishopchanda@gmail.com", website: "www.dioceseofchanda.org" },
+      { province: "Eparchies Outside Metropolitan Provinces", diocese: "Faridabad", established: "6 March 2012", archbishop: "Mar Kuriakose Bharanikulangara", auxiliary: "Mar Jose Puthenveettil", address: "Archbishop's House, IB/32 N.E.A., Old Rajender Nagar, New Delhi 110 060", tel: "011 25759160", email: "faridabaddiocese@gmail.com", website: "www.faridabaddiocese.in" },
+      { province: "Eparchies Outside Metropolitan Provinces", diocese: "Gorakhpur", established: "19 June 1984", archbishop: "Mar Thomas Thuruthimattam CST", auxiliary: "", address: "Bishop's House, Civil Lines, University P.O., Gorakhpur, UP 273 009", tel: "0551 2332723", email: "dioceseofgorakhpur@gmail.com", website: "www.dioceseofgorakhpur.org" },
+      { province: "Eparchies Outside Metropolitan Provinces", diocese: "Hosur", established: "09 October 2017", archbishop: "Mar Sebastian Pozholiparambil", auxiliary: "", address: "Bishop's Office, St. Thomas Pastoral Centre, 16 Ayanavaram Road, Chennai 600 023", tel: "0442 6444183", email: "hosurdiocese@gmail.com", website: "www.hosurdiocese.in" },
+      { province: "Eparchies Outside Metropolitan Provinces", diocese: "Jagdalpur", established: "23 March 1972", archbishop: "Mar Joseph Kollamparampil CMI", auxiliary: "", address: "Bishop's House, Lal-Bagh, Jagdalpur P.O., Bastar, Chhattisgarh 494 001", tel: "07782 228293", email: "jagdalpurbishop@gmail.com", website: "" },
+      { province: "Eparchies Outside Metropolitan Provinces", diocese: "Kalyan", established: "30 April 1988", archbishop: "Mar Thomas Elavanal MCBS", auxiliary: "", address: "Bishop's House, B/38, Powai, IIT P.O., Mumbai 400 076", tel: "022 25785515", email: "eparchyofkalyan@gmail.com", website: "www.kalyandiocese.com" },
+      { province: "Eparchies Outside Metropolitan Provinces", diocese: "Rajkot", established: "26 February 1977", archbishop: "Mar Jose Chittooparambil CMI", auxiliary: "", address: "Bishop's House, PB No. 1501, Kalawad Road, Rajkot, Gujarat 360 005", tel: "0281 2563891", email: "rajkotbishop@gmail.com", website: "www.rajkotdiocese.org" },
+      { province: "Eparchies Outside Metropolitan Provinces", diocese: "Sagar", established: "29 July 1968", archbishop: "Mar James Athikalam MST", auxiliary: "", address: "Bishop's House, PB No. 32, Sagar Cantt., Madhya Pradesh 470 001", tel: "07582 222633", email: "sagardiocese@yahoo.com", website: "www.sagardiocese.com" },
+      { province: "Eparchies Outside Metropolitan Provinces", diocese: "Satna", established: "29 July 1968", archbishop: "Mar Joseph Kodakallil", auxiliary: "", address: "Bishop's House, PB No. 22, Rewa Road, Satna, Madhya Pradesh 485 001", tel: "07672 224167", email: "satnadiocese@gmail.com", website: "www.satnadiocese.org" },
+      { province: "Eparchies Outside Metropolitan Provinces", diocese: "Shamshabad", established: "10 October 2017", archbishop: "Mar Raphael Thattil", auxiliary: "", address: "Eparchial Curia, St. Mary's Syro Malabar Church, Keshogiri P.O., Ranga Reddy 500 005", tel: "86396 21346", email: "shamshabadeparchy@gmail.com", website: "www.shamshabaddiocese.org" },
+      { province: "Eparchies Outside Metropolitan Provinces", diocese: "Ujjain", established: "29 July 1968", archbishop: "Mar Sebastian Vadakel MST", auxiliary: "", address: "Bishop's House, PB No. 234, Ujjain 456 010", tel: "0734 2515970", email: "dioceseofujjain@gmail.com", website: "www.ujjaindiocese.org" },
+      { province: "Eparchies Outside India", diocese: "Chicago", established: "13 March 2001", archbishop: "Mar Jacob Angadiath", auxiliary: "Mar Joy Alappat", address: "372 S. Prairie Ave, Elmhurst, Illinois 60126-4020, USA", tel: "+16302791383", email: "curia@syromail.com", website: "www.stthomasdiocese.org" },
+      { province: "Eparchies Outside India", diocese: "Great Britain", established: "28 July 2016", archbishop: "Mar Joseph Srampickal", auxiliary: "", address: "Bishop's Office, St. Alphonsa's Cathedral, St. Ignatius Square, Preston, Lancashire PR1 1TT, UK", tel: "+441772396065", email: "smcuriagb@gmail.com", website: "www.eparchyofgreatbritain.org" },
+      { province: "Eparchies Outside India", diocese: "Melbourne", established: "23 December 2013", archbishop: "Mar Bosco Puthur", auxiliary: "", address: "6 Greenock Court, Greenvale, VIC 3059, Australia", tel: "+61394805379", email: "office@syromalabar.com.au", website: "www.syromalabar.org.au" },
+      { province: "Eparchies Outside India", diocese: "Mississauga", established: "06 August 2015", archbishop: "Mar Jose Kalluvelil", auxiliary: "", address: "6630 Turner Valley Rd., Mississauga, Ontario L5N 2P1, Canada", tel: "+19058588200", email: "bishop@syromalabarcanada.org", website: "www.syromalabarcanada.org" },
+      { province: "Syro Malankara Hierarchy", diocese: "Trivandrum", established: "", archbishop: "His Beatitude Moran Mor Baselios Cleemis Catholicos", auxiliary: "", address: "Major Archbishop's House, Thirusannidhi, Pattam, Thiruvananthapuram 695004", tel: "04712541642", email: "archbp03@md3.vsnl.net.in", website: "www.malankaracatholicchurch.net" },
+      { province: "Syro Malankara Hierarchy", diocese: "Marthandom", established: "", archbishop: "Vincent Mar Paulose", auxiliary: "", address: "Catholic Bishop's House, Vettuvenni Junction, Marthandom 629165", tel: "04651270180", email: "bpdiomarmardio@gmail.com", website: "www.marthandomdiocese.org" },
+      { province: "Syro Malankara Hierarchy", diocese: "Mavelikara", established: "", archbishop: "Joshuva Mar Ignathios", auxiliary: "", address: "Amalagiri Catholic Bishop's House, Punnamoodu, Mavelikara 690101", tel: "04792344081", email: "marignathios@yahoo.co.in", website: "www.mavelikaradiocese.org" },
+      { province: "Syro Malankara Hierarchy", diocese: "Pathanamthitta", established: "", archbishop: "Samuel Mar Irenios", auxiliary: "", address: "Santhome Catholic Bishop's House, Pathanamthitta 689645", tel: "04682223100", email: "bpdiopta@gmail.com", website: "www.pathanamthittadiocese.com" },
+      { province: "Syro Malankara Hierarchy", diocese: "Parassala", established: "", archbishop: "Thomas Mar Eusebius", auxiliary: "", address: "Catholic Bishop's House, Kadayal, Ayira P.O., Parassala 695502", tel: "04712205834", email: "diocese.parassala@gmail.com", website: "" },
+      { province: "Latin Hierarchy - Province of Verapoly", diocese: "Verapoly", established: "", archbishop: "Most Rev. Dr. Joseph Kalathiparambil", auxiliary: "", address: "Latin Archbishop's House, PB No. 2581, Kochi 682031", tel: "04842372892", email: "mail@verapoly.in", website: "www.verapolyarchdiocese.org" },
+      { province: "Latin Hierarchy - Province of Verapoly", diocese: "Cochin", established: "", archbishop: "Rt. Rev. Joseph Kariyil", auxiliary: "", address: "Bishop's House, Fort Cochin, Cochin 682001", tel: "04842215400", email: "josephkariyil@sancharnet.in", website: "www.dioceseofcochin.org" },
+      { province: "Latin Hierarchy - Province of Verapoly", diocese: "Kozhikode", established: "", archbishop: "Rt. Rev. Varghese Chackalackal", auxiliary: "", address: "Bishop's House, Malaparamba, Kozhikode 673009", tel: "04952370313", email: "calicut_diocese@yahoo.com", website: "www.calicutdiocese.org" },
+      { province: "Latin Hierarchy - Province of Verapoly", diocese: "Alappuzha", established: "", archbishop: "Rt. Rev. James Raphael Anaparambil", auxiliary: "", address: "Bishop's House, PB No. 4804, Alappuzha 688012", tel: "04772243363", email: "bpstephe2009@gmail.com", website: "" },
+      { province: "Latin Hierarchy - Province of Verapoly", diocese: "Kottapuram", established: "", archbishop: "Rt. Rev. Dr. Joseph Karikkassery", auxiliary: "", address: "Bishop's House, Kottapuram P.O. 680667", tel: "04802802165", email: "bpkarakkassery@gmail.com", website: "www.kottapuramdiocese.org" },
+      { province: "Latin Hierarchy - Province of Verapoly", diocese: "Kannur", established: "", archbishop: "Rt. Rev. Alex Vadakkumthala", auxiliary: "", address: "Bishop's House, Chovva, Kannur 670006", tel: "04972729977", email: "cnn_diocese@sancharnet.in", website: "" },
+      { province: "Latin Hierarchy - Province of Verapoly", diocese: "Sultanpet", established: "", archbishop: "Rt. Rev. Dr. Peter Abir Antonysamy", auxiliary: "", address: "Bishop's House, Kanjikode West, Palakkad 678632", tel: "04912803420", email: "sultanpetdiocese@gmail.com", website: "www.sultanpetdiocese.org" },
+      { province: "Latin Hierarchy - Province of Trivandrum", diocese: "Trivandrum (Latin)", established: "", archbishop: "Most Rev. Dr. Thomas J Netto", auxiliary: "Rt. Rev. Christudas Rajappan", address: "Archbishop's House, PB No. 17, Kowdiar P.O., Thiruvananthapuram 695003", tel: "04712724001", email: "archbishop@archtvm.in", website: "www.latinarchdiocesetrivandrum.org" },
+      { province: "Latin Hierarchy - Province of Trivandrum", diocese: "Kollam", established: "", archbishop: "Rt. Rev. Paul Antony Mullassery", auxiliary: "", address: "Bishop's House, Thangasseri P.O., Kollam 691007", tel: "04742796140", email: "", website: "www.quilondiocese.org" },
+      { province: "Latin Hierarchy - Province of Trivandrum", diocese: "Vijayapuram", established: "", archbishop: "Rt. Rev. Sebastian Thekkethecheril", auxiliary: "", address: "Vijayapuram Bishop's House, PB No. 82, Kottayam 686001", tel: "04812563747", email: "bptcheril@gmail.com", website: "" },
+      { province: "Latin Hierarchy - Province of Trivandrum", diocese: "Punaloor", established: "", archbishop: "Rt. Rev. Selvister Ponnumuthan", auxiliary: "", address: "Bishop's House, PB No. 48, Punaloor 691305", tel: "04752225419", email: "selvister.ponnu@gmail.com", website: "" },
+      { province: "Latin Hierarchy - Province of Trivandrum", diocese: "Neyyatinkara", established: "", archbishop: "Rt. Rev. Vincent Samuel", auxiliary: "", address: "Bishop's House, PB No. 7, Aralummood P.O., Neyyatinkara 695123", tel: "04712223133", email: "ntabishopshous@yahoo.co.in", website: "" }
+    ]
+  },
+
+  // ── Document: bishopsEmeriti ──
+  bishopsEmeriti: {
+    meta: { title: "Bishops Emeriti", type: "emeriti" },
+    items: [
+      { rite: "Syro Malabar", diocese: "Adilabad", name: "Mar Joseph Kunnath CMI", address: "Anudavana, Quany Road, Mancherial P.O., Adilabad, Andhra Pradesh 504 208" },
+      { rite: "Syro Malabar", diocese: "Bijnor", name: "Mar Gratian Mundadan CMI", address: "St. John's Provincial House, Rajarampur, Najibabad, Bijnor, Uttarakhand 246 149" },
+      { rite: "Syro Malabar", diocese: "Bijnor", name: "Mar John Vadakel CMI", address: "St. Mary's Parish, C/o St. Mary's School, Khatauli P.O., Muzaffarnagar Dist., UP 251 201" },
+      { rite: "Syro Malabar", diocese: "Changanacherry", name: "Mar Joseph Powathil", address: "Archbishop House, PB No. 20, Changanacherry P.O., Kottayam 686 101" },
+      { rite: "Syro Malabar", diocese: "Ernakulam - Angamaly", name: "Mar Thomas Chakiath", address: "Niveditha, Chunangamvely, Aluva, Ernakulam 683 112" },
+      { rite: "Syro Malabar", diocese: "Gorakhpur", name: "Mar Dominic Kokkatt CST", address: "Bishop's House, Civil Lines, University P.O., Gorakhpur, UP 273 009" },
+      { rite: "Syro Malabar", diocese: "Kanjirapally", name: "Mar Mathew Arackal", address: "Sahydri Ayurveda Hospital, Pallikkunnu P.O., Peerumedu, Idukki 685 531" },
+      { rite: "Syro Malabar", diocese: "Kothamangalam", name: "Mar George Punnakottil", address: "NESTT, Ninnala College P.O., Muvattupuzha, Ernakulam 686 661" },
+      { rite: "Syro Malabar", diocese: "Palai", name: "Mar Joseph Pallikaparambil", address: "Bishop House, PB No. 18, Palai, Kottayam 686 575" },
+      { rite: "Syro Malabar", diocese: "Trichur", name: "Mar Jacob Thoomkuzhy", address: "St. Mary's Minor Seminary, Madona Nagar, Thrissur 680 005" },
+      { rite: "Syro Malankara", diocese: "Pathanamthitta", name: "Yoohanon Mar Chrysostom", address: "Santhome Catholic Bishop's House, Pathanamthitta 689 645" },
+      { rite: "Latin", diocese: "Thiruvananthapuram", name: "Most Rev. Dr. Maria Calist Soosa Pakiam", address: "Archbishop's House, PB No. 17, Kowdiar P.O., Vellayambalam, Thiruvananthapuram 695 003" }
+    ]
+  }
+};
+
+// Tab config
+const TABS = {
+  catholicChurches:    { label: "Catholic Churches",        icon: "bi-globe2",       pillar: "1" },
+  romanPontiff:        { label: "Roman Pontiff",            icon: "bi-person-circle", pillar: "2" },
+  romanCuria:          { label: "Roman Curia",              icon: "bi-building",      pillar: "3" },
+  orientalChurches:    { label: "Oriental Churches",        icon: "bi-church",        pillar: "4" },
+  fabcAsia:            { label: "FABC (Asia)",              icon: "bi-geo-alt",       pillar: "5" },
+  churchInIndia:       { label: "Church in India",          icon: "bi-flag",          pillar: "6" },
+  cbci:                { label: "CBCI",                     icon: "bi-people",        pillar: "7" },
+  kcbc:                { label: "KCBC",                     icon: "bi-people-fill",   pillar: "8" },
+  syroMalabarHierarchy:{ label: "Syro Malabar Hierarchy",  icon: "bi-diagram-3",     pillar: "9" },
+  bishopsEmeriti:      { label: "Bishops Emeriti",          icon: "bi-person-badge",  pillar: "10"}
+};
+</script>
+
+<!-- ══ FIREBASE MODULE ══ -->
+<script type="module">
+ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+    import {
+      getFirestore, doc, getDoc, setDoc,
+      collection, addDoc, getDocs, updateDoc, deleteDoc,
+      serverTimestamp, query, orderBy
+    } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+    const FC = {
+      apiKey: "AIzaSyArM8sv7J1RUj4XvAJhJd40tzA7Yc8BGXY",
+      authDomain: "admin-dashboard-ed62c.firebaseapp.com",
+      projectId: "admin-dashboard-ed62c",
+      storageBucket: "admin-dashboard-ed62c.firebasestorage.app",
+      messagingSenderId: "560027475135",
+      appId: "1:560027475135:web:3fae0cb0268729ae79fa0a"
+    };
+    const ADMIN_EMAIL = "issacnewton1503@gmail.com";
+    const app = initializeApp(FC);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+    const COLLECTION = "generalInformation";
+
+/* ══ Helpers ══ */
+const esc=s=>String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+function toast(msg,type="",dur=2800){
+  const t=document.getElementById("gi-toast");
+  t.textContent=msg;t.className="show"+(type?" "+type:"");
+  clearTimeout(t._t);t._t=setTimeout(()=>t.className="",dur);
+}
+function cleanObj(obj){return JSON.parse(JSON.stringify(obj,(_,v)=>v===undefined?null:v));}
+
+/* ══ State ══ */
+let currentTab="catholicChurches";
+let liveData={};         // data from Firestore
+let editKey=null;
+let editType=null;
+
+/* ══ Firestore ops ══ */
+async function loadTab(tabId){
+  try{
+    const snap=await getDoc(doc(db,COLLECTION,tabId));
+    if(snap.exists()){
+      liveData[tabId]=snap.data();
+    }else{
+      // Use default
+      liveData[tabId]=JSON.parse(JSON.stringify(GI_DATA[tabId]));
+    }
+  }catch(err){
+    liveData[tabId]=JSON.parse(JSON.stringify(GI_DATA[tabId]));
+  }
+}
+
+async function saveTab(tabId){
+  const payload=cleanObj(liveData[tabId]);
+  payload._updated=serverTimestamp();
+  await setDoc(doc(db,COLLECTION,tabId),payload);
+}
+
+/* ══ Count ══ */
+function countItems(tabId){
+  const d=liveData[tabId];
+  if(!d)return 0;
+  const t=d.meta?.type||"";
+  if(["churches","pontiff","curia","kv","emeriti"].includes(t))return(d.items||[]).length;
+  if(t==="cbci"||t==="kcbc")return(d.commissions||[]).length;
+  if(t==="hierarchy")return(d.provinces||[]).length;
+  return 0;
+}
+
+/* ══ Update badge ══ */
+function updateBadge(tabId){
+  const el=document.getElementById("badge-"+tabId);
+  if(el)el.textContent=countItems(tabId)||"0";
+}
+
+/* ══ Stats row ══ */
+function renderStats(){
+  const icons=[
+    {icon:"bi-globe2",bg:"rgba(146,26,2,.12)",tab:"catholicChurches"},
+    {icon:"bi-person-circle",bg:"rgba(99,102,241,.12)",tab:"romanPontiff"},
+    {icon:"bi-building",bg:"rgba(16,185,129,.12)",tab:"romanCuria"},
+    {icon:"bi-church",bg:"rgba(245,158,11,.12)",tab:"kcbc"},
+  ];
+  const total=Object.keys(TABS).reduce((s,k)=>s+countItems(k),0);
+  document.getElementById("gi-stat-row").innerHTML=`
+    <div class="gi-stat-card"><div class="gi-stat-icon" style="background:rgba(146,26,2,.1);">⛪</div><div><div class="gi-stat-val">${Object.keys(TABS).length}</div><div class="gi-stat-lbl">Total Sections</div></div></div>
+    <div class="gi-stat-card"><div class="gi-stat-icon" style="background:rgba(16,185,129,.1);">📋</div><div><div class="gi-stat-val">${total}</div><div class="gi-stat-lbl">Total Records</div></div></div>
+    <div class="gi-stat-card"><div class="gi-stat-icon" style="background:rgba(99,102,241,.1);">🌐</div><div><div class="gi-stat-val">${countItems("catholicChurches")}</div><div class="gi-stat-lbl">Catholic Churches</div></div></div>
+    <div class="gi-stat-card"><div class="gi-stat-icon" style="background:rgba(245,158,11,.1);">🕍</div><div><div class="gi-stat-val">${countItems("syroMalabarHierarchy")}</div><div class="gi-stat-lbl">Syro Malabar Dioceses</div></div></div>
+  `;
+}
+
+/* ══ Tab Switch ══ */
+window.switchTab=async function(tabId,btn){
+  currentTab=tabId;
+  document.querySelectorAll(".gi-nav-btn").forEach(b=>b.classList.remove("active"));
+  if(btn)btn.classList.add("active");
+  const cfg=TABS[tabId];
+  document.getElementById("topbar-sub").textContent=cfg.label;
+  document.getElementById("current-tab-label").textContent=cfg.label;
+  document.getElementById("card-title").textContent=cfg.label;
+  document.getElementById("card-pill").textContent=cfg.pillar;
+  document.getElementById("gi-search").value="";
+  document.getElementById("gi-content").innerHTML='<div class="gi-spinner"></div>';
+  if(!liveData[tabId])await loadTab(tabId);
+  renderCurrentTab();
+  closeSidebar();
+};
+
+/* ══ Render current tab ══ */
+function renderCurrentTab(){
+  const data=liveData[currentTab];
+  if(!data){document.getElementById("gi-content").innerHTML='<div class="gi-spinner"></div>';return;}
+  const q=document.getElementById("gi-search").value.toLowerCase().trim();
+  document.getElementById("card-count").textContent=countItems(currentTab);
+  const t=data.meta?.type||"";
+  let html="";
+  if(t==="churches")html=renderChurches(data,q);
+  else if(t==="pontiff")html=renderPontiff(data,q);
+  else if(t==="curia")html=renderCuria(data,q);
+  else if(t==="kv")html=renderKV(data,q);
+  else if(t==="cbci")html=renderCBCI(data,q);
+  else if(t==="kcbc")html=renderKCBC(data,q);
+  else if(t==="hierarchy")html=renderHierarchy(data,q);
+  else if(t==="emeriti")html=renderEmeriti(data,q);
+  document.getElementById("gi-content").innerHTML=html||`<p style="text-align:center;color:#94a3b8;padding:40px;">No data found.</p>`;
+}
+
+/* ── Render: Catholic Churches ── */
+function renderChurches(data,q){
+  const items=(data.items||[]).filter(it=>!q||[it.tradition,it.church,it.head].join(" ").toLowerCase().includes(q));
+  if(!items.length)return noData(q);
+  return `<div class="gi-table-wrap"><table class="gi-table"><thead><tr><th>#</th><th>Ecclesial Tradition</th><th>Sui Iuris Church</th><th>Head of Church</th><th>Actions</th></tr></thead><tbody>
+  ${items.map(it=>{const i=(data.items||[]).indexOf(it);return`<tr><td>${i+1}</td><td>${esc(it.tradition)}</td><td>${esc(it.church)}</td><td>${esc(it.head)}</td><td><div class="row-actions"><button class="btn-sm-edit" onclick="openEdit(${i},'item')">✏️ Edit</button><button class="btn-sm-del" onclick="quickDel(${i},'item')">🗑</button></div></td></tr>`;}).join("")}
+  </tbody></table></div>`;
+}
+
+/* ── Render: Roman Pontiff ── */
+function renderPontiff(data,q){
+  const items=(data.items||[]).filter(it=>!q||it.name.toLowerCase().includes(q));
+  if(!items.length)return noData(q);
+  return items.map(it=>{
+    const i=(data.items||[]).indexOf(it);
+    return`<div class="gi-subsec"><span>${esc(it.name)}</span><div class="gi-subsec-actions"><button class="btn-sm-edit" onclick="openEdit(${i},'item')">✏️ Edit</button><button class="btn-sm-del" onclick="quickDel(${i},'item')">🗑</button></div></div>
+    <div class="gi-table-wrap" style="margin-bottom:14px;"><table class="gi-table"><tbody>
+    <tr><td>Date of Birth</td><td>${esc(it.dob)}</td></tr>
+    <tr><td>Place of Birth</td><td>${esc(it.pob)}</td></tr>
+    <tr><td>Ordained Priest</td><td>${esc(it.ordained)}</td></tr>
+    <tr><td>Episcopal Ordination</td><td>${esc(it.episcopal)}</td></tr>
+    <tr><td>Elected Cardinal</td><td>${esc(it.cardinal)}</td></tr>
+    <tr><td>Elected Pope</td><td>${esc(it.elected)}</td></tr>
+    <tr><td>${it.status==="Pope Emeritus"?"Pope Emeritus / Resigned":"Began Papal Ministry"}</td><td>${esc(it.began)}</td></tr>
+    </tbody></table></div>`;
+  }).join("");
+}
+
+/* ── Render: Roman Curia ── */
+function renderCuria(data,q){
+  const items=(data.items||[]).filter(it=>!q||[it.dicastery,it.prefect,it.address].join(" ").toLowerCase().includes(q));
+  if(!items.length)return noData(q);
+  return`<div class="gi-table-wrap"><table class="gi-table"><thead><tr><th>No.</th><th>Dicastery / Congregation</th><th>Prefect / Secretary</th><th>Address</th><th>Actions</th></tr></thead><tbody>
+  ${items.map(it=>{const i=(data.items||[]).indexOf(it);return`<tr><td>${esc(it.no)}</td><td><strong>${esc(it.dicastery)}</strong></td><td>${esc(it.prefect)}</td><td style="font-size:.78rem;">${esc(it.address)}</td><td><div class="row-actions"><button class="btn-sm-edit" onclick="openEdit(${i},'item')">✏️</button><button class="btn-sm-del" onclick="quickDel(${i},'item')">🗑</button></div></td></tr>`;}).join("")}
+  </tbody></table></div>`;
+}
+
+/* ── Render: Key-Value ── */
+function renderKV(data,q){
+  const items=(data.items||[]).filter(it=>!q||[it.field,it.value].join(" ").toLowerCase().includes(q));
+  if(!items.length)return noData(q);
+  return`<div class="gi-table-wrap"><table class="gi-table"><thead><tr><th>Field</th><th>Value</th><th>Actions</th></tr></thead><tbody>
+  ${items.map(it=>{const i=(data.items||[]).indexOf(it);return`<tr><td style="font-weight:700;">${esc(it.field)}</td><td>${esc(it.value)}</td><td><div class="row-actions"><button class="btn-sm-edit" onclick="openEdit(${i},'item')">✏️</button><button class="btn-sm-del" onclick="quickDel(${i},'item')">🗑</button></div></td></tr>`;}).join("")}
+  </tbody></table></div>`;
+}
+
+/* ── Render: CBCI ── */
+function renderCBCI(data,q){
+  const m=data.meta||{};
+  let html=`<div class="gi-subsec"><span>CBCI — Contact Information</span><div class="gi-subsec-actions"><button class="btn-sm-edit" onclick="openEdit('meta','meta')">✏️ Edit</button></div></div>
+  <div class="gi-table-wrap" style="margin-bottom:14px;"><table class="gi-table"><tbody>
+  <tr><td>President</td><td>${esc(m.president)}</td></tr>
+  <tr><td>Vice President I</td><td>${esc(m.vp1)}</td></tr>
+  <tr><td>Vice President II</td><td>${esc(m.vp2)}</td></tr>
+  <tr><td>Secretary General</td><td>${esc(m.secretary)}</td></tr>
+  <tr><td>Address</td><td>${esc(m.address)}</td></tr>
+  <tr><td>Telephone</td><td>${esc(m.telephone)}</td></tr>
+  <tr><td>Email</td><td>${esc(m.email)}</td></tr>
+  <tr><td>Website</td><td>${esc(m.website)}</td></tr>
+  </tbody></table></div>`;
+  const comms=(data.commissions||[]).filter(c=>!q||[c.committee,c.chairman,c.members,c.secretary].join(" ").toLowerCase().includes(q));
+  html+=`<div class="gi-subsec"><span>CBCI Commissions</span></div>
+  <div class="gi-table-wrap"><table class="gi-table"><thead><tr><th>#</th><th>Committee</th><th>Chairman</th><th>Members</th><th>Secretary</th><th>Actions</th></tr></thead><tbody>
+  ${comms.map(c=>{const i=(data.commissions||[]).indexOf(c);return`<tr><td>${i+1}</td><td>${esc(c.committee)}</td><td>${esc(c.chairman)}</td><td style="font-size:.78rem;">${esc(c.members)}</td><td>${esc(c.secretary)}</td><td><div class="row-actions"><button class="btn-sm-edit" onclick="openEdit(${i},'commission')">✏️</button><button class="btn-sm-del" onclick="quickDel(${i},'commission')">🗑</button></div></td></tr>`;}).join("")}
+  </tbody></table></div>`;
+  return html;
+}
+
+/* ── Render: KCBC ── */
+function renderKCBC(data,q){
+  const m=data.meta||{};
+  let html=`<div class="gi-subsec"><span>KCBC — Contact Information</span><div class="gi-subsec-actions"><button class="btn-sm-edit" onclick="openEdit('meta','meta')">✏️ Edit</button></div></div>
+  <div class="gi-table-wrap" style="margin-bottom:14px;"><table class="gi-table"><tbody>
+  <tr><td>President</td><td>${esc(m.president)}</td></tr>
+  <tr><td>Vice President</td><td>${esc(m.vp)}</td></tr>
+  <tr><td>Secretary General</td><td>${esc(m.secretary)}</td></tr>
+  <tr><td>Deputy Secretary General</td><td>${esc(m.deputy)}</td></tr>
+  <tr><td>Address</td><td>${esc(m.address)}</td></tr>
+  <tr><td>Telephone</td><td>${esc(m.telephone)}</td></tr>
+  <tr><td>Email</td><td>${esc(m.email)}</td></tr>
+  <tr><td>Website</td><td>${esc(m.website)}</td></tr>
+  </tbody></table></div>`;
+  const comms=(data.commissions||[]).filter(c=>!q||[c.commission,c.chairman,c.vice,c.secretary].join(" ").toLowerCase().includes(q));
+  html+=`<div class="gi-subsec"><span>KCBC Commissions</span></div>
+  <div class="gi-table-wrap"><table class="gi-table"><thead><tr><th>#</th><th>Commission</th><th>Chairman</th><th>Vice Chairman(s)</th><th>Secretary</th><th>Actions</th></tr></thead><tbody>
+  ${comms.map(c=>{const i=(data.commissions||[]).indexOf(c);return`<tr><td>${i+1}</td><td>${esc(c.commission)}</td><td>${esc(c.chairman)}</td><td style="font-size:.78rem;">${esc(c.vice)}</td><td>${esc(c.secretary)}</td><td><div class="row-actions"><button class="btn-sm-edit" onclick="openEdit(${i},'commission')">✏️</button><button class="btn-sm-del" onclick="quickDel(${i},'commission')">🗑</button></div></td></tr>`;}).join("")}
+  </tbody></table></div>`;
+  return html;
+}
+
+/* ── Render: Syro Malabar Hierarchy ── */
+function renderHierarchy(data,q){
+  let html="";
+  // Major Archbishop
+  const ma=data.majorArchbishop||{};
+  html+=`<div class="gi-subsec"><span>Major Archbishop — Syro-Malabar Church</span><div class="gi-subsec-actions"><button class="btn-sm-edit" onclick="openEdit('majorArchbishop','major')">✏️ Edit</button></div></div>
+  <div class="gi-table-wrap" style="margin-bottom:14px;"><table class="gi-table"><tbody>
+  <tr><td>Name</td><td><strong>${esc(ma.name)}</strong></td></tr>
+  <tr><td>Date of Birth</td><td>${esc(ma.dob)}</td></tr>
+  <tr><td>Ordained Priest</td><td>${esc(ma.ordained)}</td></tr>
+  <tr><td>Episcopal Ordination</td><td>${esc(ma.episcopal)}</td></tr>
+  <tr><td>Elected Major Archbishop</td><td>${esc(ma.elected)}</td></tr>
+  <tr><td>Nominated Cardinal</td><td>${esc(ma.cardinal)}</td></tr>
+  <tr><td>Address</td><td>${esc(ma.address)}</td></tr>
+  <tr><td>Telephone</td><td>${esc(ma.telephone)}</td></tr>
+  <tr><td>Website</td><td>${esc(ma.website)}</td></tr>
+  </tbody></table></div>`;
+   
+
+  // 2. Permanent Synod
+  const ps = data.permanentSynod || { members: [], substitutes: [] };
+  const members = ps.members || [];
+  const subs = ps.substitutes || [];
+
+  const renderSynodRow = (m, i, type) => `
+    <li class="synod-member-item">
+      <span class="synod-member-name">${i + 1}. ${esc(m)}</span>
+      <div class="synod-member-actions">
+        <button class="btn-sm-edit" onclick="openEdit(${i}, '${type}')">✏️</button>
+        <button class="btn-sm-del" onclick="quickDel(${i}, '${type}')">🗑</button>
+      </div>
+    </li>`;
+
+  html += `
+  <div class="gi-subsec">
+    <span>Permanent Synod</span>
+    <div class="gi-subsec-actions">
+      <button class="btn-add-sm" onclick="openEdit(null, 'synodMember')">＋ Add Member</button>
+      <button class="btn-add-sm-outline" onclick="openEdit(null, 'synodSubstitute')">＋ Add Substitute</button>
+    </div>
+  </div>
+  <div class="row g-3 mb-4">
+    <div class="col-md-6">
+      <div class="card border-0 shadow-sm">
+        <div class="card-header bg-white py-2"><small class="fw-bold text-uppercase text-muted" style="font-size:0.65rem">Members</small></div>
+        <ul class="synod-member-list">${members.length ? members.map((m, i) => renderSynodRow(m, i, 'synodMember')).join('') : '<li class="p-3 text-center text-muted small">No members</li>'}</ul>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="card border-0 shadow-sm">
+        <div class="card-header bg-white py-2"><small class="fw-bold text-uppercase text-muted" style="font-size:0.65rem">Substitutes</small></div>
+        <ul class="synod-member-list">${subs.length ? subs.map((m, i) => renderSynodRow(m, i, 'synodSubstitute')).join('') : '<li class="p-3 text-center text-muted small">No substitutes</li>'}</ul>
+      </div>
+    </div>
+  </div>`;
+
+  // 3. Major Archiepiscopal Curia
+  const curia = data.curia || {};
+  const curiaRoles = [
+    { key: 'bishop', label: 'Curia Bishop' },
+    { key: 'chancellor', label: 'Chancellor' },
+    { key: 'viceChancellor', label: 'Vice Chancellor' },
+    { key: 'finance', label: 'Finance Officer' }
+  ];
+
+  html += `
+  <div class="gi-subsec"><span>Major Archiepiscopal Curia</span></div>
+  <div class="gi-table-wrap mb-4">
+    <table class="gi-table">
+      <thead><tr><th>Office</th><th>Name</th><th style="width:100px;">Actions</th></tr></thead>
+      <tbody>
+        ${curiaRoles.map(role => `
+          <tr>
+            <td class="fw-bold text-muted" style="font-size:0.75rem">${role.label}</td>
+            <td>${esc(curia[role.key])}</td>
+            <td>
+              <div class="row-actions">
+                <button class="btn-sm-edit" onclick="openEditCuriaField('${role.key}', '${role.label}', '${esc(curia[role.key])}')">✏️</button>
+                <button class="btn-sm-del" onclick="quickDelCuria('${role.key}')">🗑</button>
+              </div>
+            </td>
+          </tr>
+        `).join('')}
+      </tbody>
+    </table>
+  </div>`;
+  // Synodal Commissions
+  const comms=(data.commissions||[]).filter(c=>!q||[c.name,c.chairman,c.episcopal,c.secretary].join(" ").toLowerCase().includes(q));
+  html+=`<div class="gi-subsec"><span>Synodal Commissions</span></div>
+  <div class="gi-table-wrap" style="margin-bottom:14px;"><table class="gi-table"><thead><tr><th>#</th><th>Commission</th><th>Chairman</th><th>Episcopal Members</th><th>Secretary</th><th>Contact</th><th>Actions</th></tr></thead><tbody>
+  ${comms.map(c=>{const i=(data.commissions||[]).indexOf(c);return`<tr><td>${i+1}</td><td>${esc(c.name)}</td><td>${esc(c.chairman)}</td><td style="font-size:.78rem;">${esc(c.episcopal)}</td><td>${esc(c.secretary)}</td><td style="font-size:.72rem;">${esc(c.email)}<br>${esc(c.mobile)}</td><td><div class="row-actions"><button class="btn-sm-edit" onclick="openEdit(${i},'commission')">✏️</button><button class="btn-sm-del" onclick="quickDel(${i},'commission')">🗑</button></div></td></tr>`;}).join("")}
+  </tbody></table></div>`;
+
+  // Provinces grouped
+  const provinces=data.provinces||[];
+  const groups={};
+  provinces.forEach(p=>{if(!groups[p.province])groups[p.province]=[];groups[p.province].push(p);});
+  Object.keys(groups).forEach(pg=>{
+    const pItems=groups[pg].filter(p=>!q||[p.diocese,p.archbishop,p.address].join(" ").toLowerCase().includes(q));
+    html+=`<div class="gi-subsec"><span>${esc(pg)}</span></div>
+    <div class="gi-table-wrap" style="margin-bottom:14px;"><table class="gi-table"><thead><tr><th>#</th><th>Diocese</th><th>Archbishop / Bishop</th><th>Auxiliary</th><th>Address</th><th>Contact</th><th>Actions</th></tr></thead><tbody>
+    ${pItems.map(p=>{const i=provinces.indexOf(p);return`<tr><td>${i+1}</td><td><strong>${esc(p.diocese)}</strong>${p.established?`<br><small style="color:#94a3b8;">${esc(p.established)}</small>`:""}</td><td>${esc(p.archbishop)}</td><td>${esc(p.auxiliary||"—")}</td><td style="font-size:.78rem;">${esc(p.address)}</td><td style="font-size:.72rem;">${esc(p.tel)}<br><a href="mailto:${esc(p.email)}" style="color:var(--brand);">${esc(p.email)}</a></td><td><div class="row-actions"><button class="btn-sm-edit" onclick="openEdit(${i},'province')">✏️</button><button class="btn-sm-del" onclick="quickDel(${i},'province')">🗑</button></div></td></tr>`;}).join("")}
+    </tbody></table></div>`;
+  });
+  return html;
+}
+
+/* ── Render: Bishops Emeriti ── */
+function renderEmeriti(data,q){
+  const items=(data.items||[]).filter(it=>!q||[it.rite,it.diocese,it.name,it.address].join(" ").toLowerCase().includes(q));
+  if(!items.length)return noData(q);
+  const rites=[...new Set(items.map(it=>it.rite))];
+  let html="";
+  rites.forEach(rite=>{
+    const rItems=items.filter(it=>it.rite===rite);
+    html+=`<div class="gi-subsec"><span>${esc(rite)} Rite</span></div>
+    <div class="gi-table-wrap" style="margin-bottom:14px;"><table class="gi-table"><thead><tr><th>#</th><th>Diocese</th><th>Name</th><th>Address</th><th>Actions</th></tr></thead><tbody>
+    ${rItems.map(it=>{const i=(data.items||[]).indexOf(it);return`<tr><td>${i+1}</td><td>${esc(it.diocese)}</td><td><strong>${esc(it.name)}</strong></td><td style="font-size:.78rem;">${esc(it.address)}</td><td><div class="row-actions"><button class="btn-sm-edit" onclick="openEdit(${i},'item')">✏️</button><button class="btn-sm-del" onclick="quickDel(${i},'item')">🗑</button></div></td></tr>`;}).join("")}
+    </tbody></table></div>`;
+  });
+  return html;
+}
+
+function noData(q){return`<p style="text-align:center;color:#94a3b8;padding:40px;">${q?"No results for \""+esc(q)+"\"":"No entries yet."}</p>`;}
+
+/* ══ Modal Field Builders ══ */
+function f(key,label,val,tag="input",rows=3){
+  return`<div class="mgroup"><label>${esc(label)}</label>${tag==="textarea"?`<textarea id="f_${key}" rows="${rows}">${esc(val||"")}</textarea>`:`<input type="text" id="f_${key}" value="${esc(val||"")}"/>`}</div>`;
+}
+function sel(key,label,val,options){
+  const opts=options.map(o=>`<option value="${esc(o)}"${o===val?" selected":""}>${esc(o)}</option>`).join("");
+  return`<div class="mgroup"><label>${esc(label)}</label><select id="f_${key}">${opts}</select></div>`;
+}
+
+function buildFields(){
+  const data=liveData[currentTab];
+  const t=data.meta?.type||"";
+  let item={};
+  if(editKey!==null&&editKey!==undefined){
+    if(editType==="item")item=(data.items||[])[editKey]||{};
+    else if(editType==="commission")item=(data.commissions||[])[editKey]||{};
+    else if(editType==="province")item=(data.provinces||[])[editKey]||{};
+    else if(editType==="meta")item=data.meta||{};
+    else if(editType==="major")item=data.majorArchbishop||{};
+  }
+  if(t==="churches")return f("tradition","Ecclesial Tradition",item.tradition)+f("church","Sui Iuris Church",item.church)+f("head","Head of Church",item.head);
+  if(t==="pontiff")return f("name","Full Name / Title",item.name)+f("dob","Date of Birth",item.dob)+f("pob","Place of Birth",item.pob)+f("ordained","Ordained Priest",item.ordained)+f("episcopal","Episcopal Ordination",item.episcopal)+f("cardinal","Elected Cardinal",item.cardinal)+f("elected","Elected Pope",item.elected)+f("began","Began Ministry / Emeritus Date",item.began)+sel("status","Status",item.status,["Pope","Pope Emeritus"]);
+  if(t==="curia")return f("no","No.",item.no)+f("dicastery","Dicastery / Congregation",item.dicastery)+f("prefect","Prefect / Secretary",item.prefect)+f("address","Address",item.address,"textarea");
+  if(t==="kv")return f("field","Field Label",item.field)+f("value","Value",item.value,"textarea");
+  if(t==="cbci"){
+    if(editType==="meta")return f("president","President",item.president)+f("vp1","Vice President I",item.vp1)+f("vp2","Vice President II",item.vp2)+f("secretary","Secretary General",item.secretary)+f("address","Address",item.address,"textarea")+f("telephone","Telephone",item.telephone)+f("email","Email",item.email)+f("website","Website",item.website);
+    return f("committee","Committee Name",item.committee)+f("chairman","Chairman",item.chairman)+f("members","Members",item.members,"textarea")+f("secretary","Secretary",item.secretary);
+  }
+  if(t==="kcbc"){
+    if(editType==="meta")return f("president","President",item.president)+f("vp","Vice President",item.vp)+f("secretary","Secretary General",item.secretary)+f("deputy","Deputy Secretary General",item.deputy)+f("address","Address",item.address,"textarea")+f("telephone","Telephone",item.telephone)+f("email","Email",item.email)+f("website","Website",item.website);
+    return f("commission","Commission Name",item.commission)+f("chairman","Chairman",item.chairman)+f("vice","Vice Chairman(s)",item.vice)+f("secretary","Secretary",item.secretary);
+  }
+  if(t==="hierarchy"){
+    if(editType==="major")return f("name","Name",item.name)+f("dob","Date of Birth",item.dob)+f("ordained","Ordained Priest",item.ordained)+f("episcopal","Episcopal Ordination",item.episcopal)+f("elected","Elected Major Archbishop",item.elected)+f("cardinal","Nominated Cardinal",item.cardinal)+f("address","Address",item.address,"textarea")+f("telephone","Telephone",item.telephone)+f("website","Website",item.website);
+    if(editType==="commission")return f("name","Commission Name",item.name)+f("chairman","Chairman",item.chairman)+f("episcopal","Episcopal Members",item.episcopal)+f("secretary","Secretary",item.secretary)+f("email","Email",item.email)+f("mobile","Mobile",item.mobile);
+    if(editType==="province"){
+      const provOpts=["Province of Changanacherry","Province of Trichur","Province of Ernakulam-Angamaly","Province of Tellicherry","Eparchies Outside Metropolitan Provinces","Eparchies Outside India","Syro Malankara Hierarchy","Latin Hierarchy - Province of Verapoly","Latin Hierarchy - Province of Trivandrum"];
+      return sel("province","Province Group",item.province,provOpts)+f("diocese","Diocese Name",item.diocese)+f("established","Date Established",item.established)+f("archbishop","Archbishop / Bishop",item.archbishop)+f("auxiliary","Auxiliary Bishop",item.auxiliary)+f("address","Address",item.address,"textarea")+f("tel","Telephone",item.tel)+f("email","Email",item.email)+f("website","Website",item.website);
+    }
+  }
+  if(t==="emeriti")return sel("rite","Rite",item.rite,["Syro Malabar","Syro Malankara","Latin"])+f("diocese","Diocese / Region",item.diocese)+f("name","Name",item.name)+f("address","Address",item.address,"textarea");
+  // Add this inside buildFields() before the final "return"
+if (editType === "synodMember" || editType === "synodSubstitute") {
+    // If editKey is null, it's a new entry, so item is empty
+    const val = editKey !== null ? (editType === "synodMember" ? data.permanentSynod.members[editKey] : data.permanentSynod.substitutes[editKey]) : "";
+    return f("synodName", "Member Name", val);
+}
+  return "<p>Unknown type</p>";
+}
+
+function collectFields(keys){
+  const obj={};
+  keys.forEach(k=>{const el=document.getElementById("f_"+k);if(el)obj[k]=el.value.trim();});
+  return obj;
+}
+
+/* ══ Open Add ══ */
+window.openAdd=function(){
+  const data=liveData[currentTab];
+  const t=data.meta?.type||"";
+  editKey=null;
+  if(t==="cbci"||t==="kcbc")editType="commission";
+  else if(t==="hierarchy")editType="province";
+  else editType="item";
+  document.getElementById("modal-title").textContent="Add Entry — "+TABS[currentTab].label;
+  document.getElementById("btn-modal-del").style.display="none";
+  document.getElementById("modal-fields").innerHTML=buildFields();
+  document.getElementById("modal-status").textContent="";
+  document.getElementById("btn-modal-save").disabled=false;
+  document.getElementById("btn-modal-save").innerHTML="💾 Save";
+  document.getElementById("m-main").classList.add("show");
+};
+
+/* ══ Open Edit ══ */
+window.openEdit=function(idx,subType){
+  editKey=idx;editType=subType;
+  document.getElementById("modal-title").textContent="Edit Entry";
+  const hide=subType==="meta"||subType==="major";
+  document.getElementById("btn-modal-del").style.display=hide?"none":"";
+  document.getElementById("modal-fields").innerHTML=buildFields();
+  document.getElementById("modal-status").textContent="";
+  document.getElementById("btn-modal-save").disabled=false;
+  document.getElementById("btn-modal-save").innerHTML="💾 Save";
+  document.getElementById("m-main").classList.add("show");
+};
+
+/* ══ Close Modal ══ */
+window.closeModal=function(id="m-main"){document.getElementById(id).classList.remove("show");};
+document.getElementById("m-main").addEventListener("click",ev=>{if(ev.target===document.getElementById("m-main"))closeModal();});
+document.getElementById("m-seed").addEventListener("click",ev=>{if(ev.target===document.getElementById("m-seed"))closeModal("m-seed");});
+
+/* ══ Save Entry ══ */
+window.saveEntry=async function(){
+  const data=liveData[currentTab];
+  const t=data.meta?.type||"";
+  const st=document.getElementById("modal-status");
+  const btn=document.getElementById("btn-modal-save");
+  btn.disabled=true;btn.innerHTML=`<span class="spin-sm"></span> Saving…`;st.textContent="";
+  try{
+    let obj={};
+    if(t==="churches"){obj=collectFields(["tradition","church","head"]);if(!obj.church)throw new Error("Church name is required.");}
+    else if(t==="pontiff"){obj=collectFields(["name","dob","pob","ordained","episcopal","cardinal","elected","began","status"]);if(!obj.name)throw new Error("Name is required.");}
+    else if(t==="curia"){obj=collectFields(["no","dicastery","prefect","address"]);if(!obj.dicastery)throw new Error("Dicastery is required.");}
+    else if(t==="kv"){obj=collectFields(["field","value"]);if(!obj.field)throw new Error("Field label is required.");}
+    else if(t==="cbci"){
+      if(editType==="meta"){const m=collectFields(["president","vp1","vp2","secretary","address","telephone","email","website"]);Object.assign(data.meta,m);}
+      else{obj=collectFields(["committee","chairman","members","secretary"]);if(!obj.committee)throw new Error("Committee name is required.");if(editKey===null)data.commissions.push(obj);else data.commissions[editKey]=obj;}
+    }
+    else if(t==="kcbc"){
+      if(editType==="meta"){const m=collectFields(["president","vp","secretary","deputy","address","telephone","email","website"]);Object.assign(data.meta,m);}
+      else{obj=collectFields(["commission","chairman","vice","secretary"]);if(!obj.commission)throw new Error("Commission name is required.");if(editKey===null)data.commissions.push(obj);else data.commissions[editKey]=obj;}
+    }
+    else if(t==="hierarchy"){
+      if(editType==="major"){const m=collectFields(["name","dob","ordained","episcopal","elected","cardinal","address","telephone","website"]);data.majorArchbishop=m;}
+      else if(editType==="commission"){obj=collectFields(["name","chairman","episcopal","secretary","email","mobile"]);if(!obj.name)throw new Error("Commission name is required.");if(editKey===null)data.commissions.push(obj);else data.commissions[editKey]=obj;}
+      else if(editType==="province"){obj=collectFields(["province","diocese","established","archbishop","auxiliary","address","tel","email","website"]);if(!obj.diocese)throw new Error("Diocese name is required.");if(editKey===null)data.provinces.push(obj);else data.provinces[editKey]=obj;}
+    }
+    else if(t==="emeriti"){obj=collectFields(["rite","diocese","name","address"]);if(!obj.name)throw new Error("Name is required.");}
+
+    // Push to items array for simple types
+    if(["churches","pontiff","curia","kv","emeriti"].includes(t)){
+      if(!data.items)data.items=[];
+      if(editKey===null)data.items.push(obj);
+      else if(editType==="item")data.items[editKey]=obj;
+    }
+
+    await saveTab(currentTab);
+    updateBadge(currentTab);
+    renderCurrentTab();
+    renderStats();
+    closeModal();
+    toast("✅ Entry saved successfully!","success");
+
+    // Add this block inside the try {} of saveEntry()
+if (editType === "synodMember" || editType === "synodSubstitute") {
+    const obj = collectFields(["synodName"]);
+    if (!obj.synodName) throw new Error("Name is required.");
+    
+    if (!data.permanentSynod) data.permanentSynod = { members: [], substitutes: [] };
+    
+    const targetArray = editType === "synodMember" ? data.permanentSynod.members : data.permanentSynod.substitutes;
+    
+    if (editKey === null) {
+        targetArray.push(obj.synodName);
+    } else {
+        targetArray[editKey] = obj.synodName;
+    }
+    
+    await saveTab(currentTab);
+    renderCurrentTab();
+    closeModal();
+    toast("✅ Synod updated", "success");
+    return; // Exit function
+}
+  }catch(err){
+    st.textContent="❌ "+err.message;st.style.color="#dc2626";
+    btn.disabled=false;btn.innerHTML="💾 Save";
+  }
+};
+
+/* ══ Delete from modal ══ */
+window.delEntry=async function(){
+  if(!confirm("Delete this entry permanently?"))return;
+  const data=liveData[currentTab];
+  try{
+    if(editType==="item")(data.items||[]).splice(editKey,1);
+    else if(editType==="commission")(data.commissions||[]).splice(editKey,1);
+    else if(editType==="province")(data.provinces||[]).splice(editKey,1);
+    await saveTab(currentTab);
+    updateBadge(currentTab);renderCurrentTab();renderStats();
+    closeModal();toast("Entry deleted.","success");
+  }catch(err){toast("❌ "+err.message,"error",4000);}
+};
+
+/* ══ Quick delete ══ */
+window.quickDel=async function(idx,subType){
+  if(!confirm("Delete this entry?"))return;
+  const data=liveData[currentTab];
+  try{
+    if(subType==="item")(data.items||[]).splice(idx,1);
+    else if(subType==="commission")(data.commissions||[]).splice(idx,1);
+    else if(subType==="province")(data.provinces||[]).splice(idx,1);
+    await saveTab(currentTab);
+    updateBadge(currentTab);renderCurrentTab();renderStats();
+    toast("Entry deleted.","success");
+  }catch(err){toast("❌ "+err.message,"error",4000);}
+};
+
+/* ══ SEED MODAL ══ */
+window.openSeedModal=function(){
+  const tabIds=Object.keys(TABS);
+  document.getElementById("seed-progress-list").innerHTML=tabIds.map(id=>`
+    <div class="seed-progress-item" id="sp-${id}">
+      <div class="seed-dot" id="sd-${id}"></div>
+      <span>${TABS[id].label}</span>
+      <span id="sm-${id}" style="margin-left:auto;font-size:.75rem;color:#94a3b8;"></span>
+    </div>`).join("");
+  document.getElementById("seed-modal-status").textContent="";
+  document.getElementById("btn-seed-start").disabled=false;
+  document.getElementById("btn-seed-start").innerHTML="☁ Start Seeding";
+  document.getElementById("btn-seed-cancel").disabled=false;
+  document.getElementById("m-seed").classList.add("show");
+};
+
+window.runSeed=async function(){
+  const btn=document.getElementById("btn-seed-start");
+  const cancel=document.getElementById("btn-seed-cancel");
+  btn.disabled=true;cancel.disabled=true;
+  btn.innerHTML=`<span class="spin-sm"></span> Seeding…`;
+  const tabIds=Object.keys(GI_DATA);
+  let ok=0,fail=0;
+  for(const tabId of tabIds){
+    document.getElementById("sd-"+tabId).className="seed-dot active";
+    document.getElementById("sm-"+tabId).textContent="Writing…";
+    try{
+      const payload=cleanObj(GI_DATA[tabId]);
+      payload._seededAt=serverTimestamp();
+      await setDoc(doc(db,COLLECTION,tabId),payload);
+      liveData[tabId]=JSON.parse(JSON.stringify(GI_DATA[tabId]));
+      document.getElementById("sd-"+tabId).className="seed-dot done";
+      document.getElementById("sm-"+tabId).textContent="✓ Done";
+      updateBadge(tabId);ok++;
+    }catch(err){
+      document.getElementById("sd-"+tabId).className="seed-dot error";
+      document.getElementById("sm-"+tabId).textContent="✗ "+err.message;
+      fail++;
+    }
+  }
+  const st=document.getElementById("seed-modal-status");
+  st.textContent=`Seeding complete: ${ok} success, ${fail} failed.`;
+  st.style.color=fail?"#dc2626":"#16a34a";
+  btn.innerHTML="✓ Done";
+  cancel.disabled=false;
+  cancel.textContent="Close";
+  renderCurrentTab();renderStats();
+  toast(fail?`⚠️ ${fail} errors during seed`:"✅ All data seeded to Firebase!",fail?"warn":"success",4000);
+};
+
+/* ══ Sidebar ══ */
+window.openSidebar=function(){document.getElementById("sidebar").classList.add("open");document.getElementById("sidebar-overlay").classList.add("show");};
+window.closeSidebar=function(){document.getElementById("sidebar").classList.remove("open");document.getElementById("sidebar-overlay").classList.remove("show");};
+
+/* ══ INIT ══ */
+(async function init(){
+  document.getElementById("seed-banner").classList.add("show");
+  document.getElementById("seed-msg").textContent="Loading General Information from Firebase…";
+  // Load all tabs in background
+  const tabIds=Object.keys(GI_DATA);
+  for(const tabId of tabIds){
+    await loadTab(tabId);
+    updateBadge(tabId);
+  }
+  document.getElementById("seed-banner").classList.remove("show");
+  renderStats();
+  renderCurrentTab();
+  toast("✅ Data loaded","success",1800);
+})();
+// Quick delete for Curia Fields (clears the value)
+window.quickDelCuria = async function(fieldKey) {
+  if(!confirm(`Clear data for this Curia office?`)) return;
+  const data = liveData[currentTab];
+  if(data.curia) {
+    data.curia[fieldKey] = "";
+    await saveTab(currentTab);
+    renderCurrentTab();
+    toast("Curia field cleared", "success");
+  }
+};
+
+// Update quickDel to handle the new Synod types
+const originalQuickDel = window.quickDel;
+window.quickDel = async function(idx, subType) {
+  const data = liveData[currentTab];
+  if(subType === 'synodMember') {
+    if(!confirm("Remove this member?")) return;
+    data.permanentSynod.members.splice(idx, 1);
+  } else if(subType === 'synodSubstitute') {
+    if(!confirm("Remove this substitute?")) return;
+    data.permanentSynod.substitutes.splice(idx, 1);
+  } else {
+    // Call existing logic for items/provinces
+    return originalQuickDel(idx, subType);
+  }
+  await saveTab(currentTab);
+  renderCurrentTab();
+  toast("Deleted successfully");
+};
+
+</script>
+</body>
+</html>
