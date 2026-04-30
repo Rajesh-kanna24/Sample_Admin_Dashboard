@@ -1,0 +1,1189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Apostolic Life — Admin Panel</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" />
+  <style>
+    :root {
+      --brand: #921a02;
+      --brand-dark: #6e1301;
+      --brand-light: rgba(146,26,2,0.08);
+      --brand-border: rgba(146,26,2,0.18);
+      --gold: #c9a84c;
+    }
+
+    * { box-sizing: border-box; }
+    body { background: #f4f6f9; font-family: 'Segoe UI', system-ui, sans-serif; margin: 0; }
+
+    /* ── Layout shell ── */
+    .dash-layout { display: flex; min-height: 100vh; }
+    .sidebar { width: 240px; background: #1a1a2e; color: #ccc; flex-shrink: 0; display: flex; flex-direction: column; position: fixed; top: 0; left: 0; height: 100vh; z-index: 200; transition: transform .3s; }
+    .sidebar-brand { padding: 18px 16px; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid rgba(255,255,255,.08); }
+    .sidebar-logo { width: 36px; height: 36px; background: var(--brand); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-weight: 900; color: #fff; font-size: .9rem; }
+    .sidebar-brand-text { font-size: .9rem; font-weight: 700; color: #fff; }
+    .sidebar-brand-sub { font-size: .65rem; color: #888; }
+    .sidebar-menu { flex: 1; padding: 12px 0; overflow-y: auto; }
+    .sidebar-section { font-size: .6rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: #555; padding: 10px 16px 4px; margin: 0; }
+    .sidebar-item { display: flex; align-items: center; gap: 10px; padding: 9px 16px; font-size: .8rem; color: #aaa; text-decoration: none; cursor: pointer; transition: all .2s; border-left: 3px solid transparent; }
+    .sidebar-item:hover, .sidebar-item.active { color: #fff; background: rgba(255,255,255,.06); border-left-color: var(--brand); }
+    .sidebar-item.active { color: #fff; background: rgba(146,26,2,.2); border-left-color: var(--brand); }
+    .si-icon { width: 16px; text-align: center; }
+    .si-badge { margin-left: auto; background: var(--brand); color: #fff; font-size: .58rem; padding: 1px 6px; border-radius: 20px; font-weight: 700; }
+    .sidebar-footer { padding: 12px 16px; border-top: 1px solid rgba(255,255,255,.08); }
+    .user-row { display: flex; align-items: center; gap: 10px; }
+    .user-row-avatar { width: 32px; height: 32px; background: var(--brand); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 700; font-size: .8rem; }
+    .user-row-name { font-size: .78rem; color: #ddd; font-weight: 600; }
+    .user-row-role { font-size: .65rem; color: #888; }
+    .sidebar-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.5); z-index: 199; }
+    .sidebar-overlay.show { display: block; }
+
+    .topbar { position: fixed; top: 0; left: 240px; right: 0; height: 58px; background: #fff; border-bottom: 1px solid #e5e7eb; display: flex; align-items: center; justify-content: space-between; padding: 0 24px; z-index: 100; }
+    .topbar-left { display: flex; align-items: center; gap: 14px; }
+    .topbar-title { font-size: .95rem; font-weight: 700; color: #1e293b; }
+    .topbar-sub { font-size: .72rem; color: #94a3b8; }
+    .sidebar-toggle { background: none; border: none; font-size: 1.2rem; cursor: pointer; display: none; }
+    .btn-logout { background: #f1f5f9; border: 1px solid #e2e8f0; color: #64748b; border-radius: 7px; padding: 5px 12px; font-size: .76rem; cursor: pointer; }
+    .btn-logout:hover { background: #fee2e2; color: #dc2626; border-color: #fca5a5; }
+
+    .dash-main { margin-left: 240px; margin-top: 58px; padding: 24px; min-height: calc(100vh - 58px); }
+
+    /* ── Stat Cards ── */
+    .stat-row { display: grid; grid-template-columns: repeat(4,1fr); gap: 16px; margin-bottom: 24px; }
+    .stat-card { background: #fff; border-radius: 12px; padding: 16px 20px; display: flex; align-items: center; gap: 14px; box-shadow: 0 1px 4px rgba(0,0,0,.06); border: 1px solid #e5e7eb; }
+    .stat-icon { width: 44px; height: 44px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; flex-shrink: 0; }
+    .stat-icon.red { background: #fff1f0; color: var(--brand); }
+    .stat-icon.blue { background: #eff6ff; color: #2563eb; }
+    .stat-icon.green { background: #f0fdf4; color: #16a34a; }
+    .stat-icon.gold { background: #fffbeb; color: #d97706; }
+    .stat-val { font-size: 1.5rem; font-weight: 800; color: #1e293b; line-height: 1; }
+    .stat-lbl { font-size: .7rem; color: #64748b; margin-top: 2px; }
+
+    /* ── Main card ── */
+    .main-card { background: #fff; border-radius: 14px; box-shadow: 0 1px 4px rgba(0,0,0,.06); border: 1px solid #e5e7eb; overflow: hidden; }
+    .main-card-header { padding: 16px 20px; border-bottom: 1px solid #f1f5f9; display: flex; align-items: center; justify-content: space-between; }
+    .main-card-header h2 { font-size: 1rem; font-weight: 700; color: #1e293b; margin: 0; }
+    .main-card-body { padding: 0; }
+
+    /* ── Layout: sidebar + content ── */
+    .al-layout { display: flex; min-height: 600px; }
+    .al-sidebar { width: 220px; flex-shrink: 0; border-right: 1px solid #f1f5f9; background: #fafafa; }
+    .al-nav-label { font-size: .6rem; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; color: var(--brand); padding: 14px 16px 8px; }
+    .al-nav-link { display: flex; align-items: center; gap: 8px; padding: 11px 16px; font-size: .8rem; color: #555; font-weight: 500; cursor: pointer; border-left: 3px solid transparent; transition: all .2s; text-decoration: none; }
+    .al-nav-link:hover { color: var(--brand); background: var(--brand-light); }
+    .al-nav-link.active { color: var(--brand); font-weight: 700; border-left-color: var(--brand); background: var(--brand-light); }
+    .al-nav-badge { margin-left: auto; background: var(--brand); color: #fff; font-size: .6rem; padding: 1px 6px; border-radius: 12px; font-weight: 700; }
+    .al-content { flex: 1; padding: 20px; min-width: 0; }
+
+    /* ── Section header ── */
+    .sec-header { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; padding-bottom: 14px; border-bottom: 2px solid var(--brand-border); margin-bottom: 16px; }
+    .sec-header h3 { font-size: 1rem; font-weight: 700; color: #1e293b; margin: 0; }
+
+    /* ── Buttons ── */
+    .btn-primary-al { background: var(--brand); color: #fff; border: none; border-radius: 8px; padding: 7px 16px; font-size: .76rem; font-weight: 700; cursor: pointer; transition: background .15s; display: inline-flex; align-items: center; gap: 5px; }
+    .btn-primary-al:hover { background: var(--brand-dark); }
+    .btn-sm-edit { background: #4f46e5; color: #fff; border: none; border-radius: 5px; padding: 3px 9px; font-size: .68rem; cursor: pointer; }
+    .btn-sm-del { background: #ef4444; color: #fff; border: none; border-radius: 5px; padding: 3px 9px; font-size: .68rem; cursor: pointer; margin-left: 3px; }
+    .btn-sm-info { background: #0891b2; color: #fff; border: none; border-radius: 5px; padding: 3px 9px; font-size: .68rem; cursor: pointer; margin-left: 3px; }
+    .btn-sm-add { background: #16a34a; color: #fff; border: none; border-radius: 5px; padding: 3px 9px; font-size: .68rem; cursor: pointer; }
+
+    /* ── Search bar ── */
+    .search-wrap { margin-bottom: 14px; }
+    .search-input { width: 100%; max-width: 320px; border: 1px solid #e2e8f0; border-radius: 8px; padding: 7px 12px 7px 32px; font-size: .82rem; outline: none; background: #f8fafc url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' fill='%2394a3b8' viewBox='0 0 16 16'%3E%3Cpath d='M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398l3.85 3.85a1 1 0 0 0 1.415-1.415l-3.868-3.833zm-5.242 1.156a5.5 5.5 0 1 1 0-11 5.5 5.5 0 0 1 0 11z'/%3E%3C/svg%3E") no-repeat 10px center; }
+    .search-input:focus { border-color: var(--brand); background-color: #fff; }
+
+    /* ── Congregation Card (live-website style) ── */
+    .cong-card { border: 1px solid #e5e7eb; border-radius: 12px; margin-bottom: 14px; overflow: hidden; background: #fff; transition: box-shadow .2s; }
+    .cong-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,.08); }
+    .cong-card-head { display: flex; align-items: flex-start; justify-content: space-between; padding: 14px 16px; cursor: pointer; gap: 12px; }
+    .cong-card-head:hover { background: #fafafa; }
+    .cong-sno { font-size: .72rem; font-weight: 700; color: #94a3b8; min-width: 36px; }
+    .cong-info { flex: 1; min-width: 0; }
+    .cong-name { font-size: .9rem; font-weight: 700; color: #1e293b; }
+    .cong-short { font-size: .75rem; color: var(--brand); font-weight: 600; margin-bottom: 2px; }
+    .cong-meta { font-size: .72rem; color: #64748b; display: flex; flex-wrap: wrap; gap: 8px; margin-top: 4px; }
+    .badge-type { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: .62rem; font-weight: 700; }
+    .badge-pontifical { background: #eff6ff; color: #2563eb; }
+    .badge-eparchial { background: #f0fdf4; color: #16a34a; }
+    .badge-major { background: #fef9c3; color: #854d0e; }
+    .badge-diocesan { background: #fdf4ff; color: #7e22ce; }
+    .cong-card-actions { display: flex; align-items: center; gap: 5px; flex-shrink: 0; }
+    .cong-chevron { font-size: .8rem; color: #94a3b8; transition: transform .25s; }
+    .cong-chevron.open { transform: rotate(180deg); }
+
+    /* ── Expanded body ── */
+    .cong-body { display: none; border-top: 1px solid #f1f5f9; }
+    .cong-body.show { display: block; }
+
+    .section-tab-strip { display: flex; border-bottom: 1px solid #f1f5f9; background: #fafafa; padding: 0 16px; }
+    .section-tab { padding: 8px 14px; font-size: .75rem; font-weight: 600; color: #64748b; cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -1px; }
+    .section-tab.active { color: var(--brand); border-bottom-color: var(--brand); }
+
+    .cong-section { padding: 14px 16px; }
+
+    /* ── Generalate box ── */
+    .generalate-box { background: #f8fafc; border: 1px solid #e5e7eb; border-radius: 10px; padding: 14px; margin-bottom: 12px; }
+    .generalate-box h5 { font-size: .72rem; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--brand); margin: 0 0 10px; }
+    .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 14px; font-size: .78rem; color: #374151; }
+    .info-label { font-weight: 600; color: #6b7280; font-size: .7rem; }
+
+    /* ── Province list ── */
+    .province-item { border: 1px solid #e5e7eb; border-radius: 8px; margin-bottom: 8px; overflow: hidden; }
+    .province-head { display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; background: #f8fafc; cursor: pointer; }
+    .province-head:hover { background: #f1f5f9; }
+    .province-name { font-size: .82rem; font-weight: 700; color: #1e293b; }
+    .province-meta { font-size: .7rem; color: #64748b; margin-top: 2px; }
+    .province-body { display: none; padding: 12px 14px; border-top: 1px solid #f1f5f9; }
+    .province-body.show { display: block; }
+
+    /* ── Houses table ── */
+    .houses-table { width: 100%; border-collapse: collapse; font-size: .74rem; margin-top: 10px; }
+    .houses-table thead th { background: var(--brand); color: #fff; padding: 7px 10px; font-weight: 600; font-size: .68rem; text-align: left; white-space: nowrap; }
+    .houses-table tbody tr { border-bottom: 1px solid #f1f5f9; }
+    .houses-table tbody tr:hover { background: #fafafa; }
+    .houses-table tbody td { padding: 7px 10px; color: #374151; vertical-align: top; }
+    .houses-empty { text-align: center; color: #94a3b8; font-size: .78rem; padding: 20px; }
+
+    /* ── Study center cards ── */
+    .center-card { background: #fff; border: 1px solid #e5e7eb; border-radius: 10px; padding: 14px; display: flex; gap: 12px; margin-bottom: 10px; }
+    .center-icon { width: 40px; height: 40px; border-radius: 10px; background: var(--brand-light); color: var(--brand); display: flex; align-items: center; justify-content: center; font-size: 1rem; flex-shrink: 0; }
+    .center-body { flex: 1; min-width: 0; }
+    .center-name { font-size: .85rem; font-weight: 700; color: #1e293b; }
+    .center-detail { font-size: .74rem; color: #64748b; margin-top: 3px; }
+    .center-actions { flex-shrink: 0; display: flex; gap: 5px; align-items: flex-start; }
+
+    /* ── Skeleton loader ── */
+    .skel { background: linear-gradient(90deg, #f1f5f9 25%, #e2e8f0 50%, #f1f5f9 75%); background-size: 200% 100%; animation: shimmer 1.4s infinite; border-radius: 8px; }
+    @keyframes shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
+
+    /* ── Toast ── */
+    #al-toast { position: fixed; bottom: 24px; right: 24px; z-index: 99999; background: #1e293b; color: #fff; padding: 12px 20px; border-radius: 10px; font-size: .82rem; font-weight: 600; box-shadow: 0 8px 24px rgba(0,0,0,.25); opacity: 0; transform: translateY(10px); transition: opacity .25s, transform .25s; pointer-events: none; max-width: 320px; }
+    #al-toast.show { opacity: 1; transform: translateY(0); }
+    #al-toast.success { background: #16a34a; }
+    #al-toast.error { background: #dc2626; }
+
+    /* ── Modals ── */
+    .modal-backdrop-al { display: none; position: fixed; inset: 0; z-index: 9998; background: rgba(0,0,0,.55); backdrop-filter: blur(3px); align-items: center; justify-content: center; padding: 20px; }
+    .modal-backdrop-al.show { display: flex; animation: fadeIn .2s ease; }
+    @keyframes fadeIn { from{opacity:0} to{opacity:1} }
+    .modal-box { background: #fff; border-radius: 16px; padding: 24px; width: 100%; max-width: 700px; max-height: 90vh; overflow-y: auto; box-shadow: 0 20px 60px rgba(0,0,0,.25); position: relative; animation: slideUp .25s ease; }
+    .modal-box.sm { max-width: 440px; }
+    .modal-box.lg { max-width: 900px; }
+    @keyframes slideUp { from{transform:translateY(20px);opacity:0} to{transform:translateY(0);opacity:1} }
+    .modal-close { position: absolute; top: 14px; right: 16px; background: none; border: none; font-size: 1.2rem; cursor: pointer; color: #6b7280; }
+    .modal-close:hover { color: #1e293b; }
+    .modal-title { font-size: 1rem; font-weight: 700; margin: 0 0 18px; color: #1e293b; }
+    .form-group { margin-bottom: 12px; }
+    .form-label { display: block; font-size: .7rem; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: #64748b; margin-bottom: 4px; }
+    .form-control-al { width: 100%; border: 1px solid #e2e8f0; border-radius: 8px; padding: 8px 11px; font-size: .83rem; outline: none; transition: border-color .2s; font-family: inherit; }
+    .form-control-al:focus { border-color: var(--brand); }
+    textarea.form-control-al { resize: vertical; min-height: 60px; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .form-row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+    .form-section-label { font-size: .7rem; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--brand); margin: 16px 0 8px; padding-bottom: 6px; border-bottom: 1px solid var(--brand-border); }
+    .modal-footer-al { display: flex; gap: 10px; margin-top: 18px; flex-wrap: wrap; }
+    .btn-modal-save { flex: 1; padding: 9px; border-radius: 8px; border: none; background: var(--brand); color: #fff; font-weight: 600; font-size: .84rem; cursor: pointer; }
+    .btn-modal-save:hover:not(:disabled) { background: var(--brand-dark); }
+    .btn-modal-save:disabled { opacity: .6; cursor: not-allowed; }
+    .btn-modal-cancel { padding: 9px 16px; border-radius: 8px; border: 1px solid #e2e8f0; background: #f8fafc; font-size: .84rem; cursor: pointer; }
+    .btn-modal-del { padding: 9px 14px; border-radius: 8px; border: none; background: #ef4444; color: #fff; font-size: .82rem; cursor: pointer; }
+    .modal-status { font-size: .76rem; text-align: center; margin-top: 8px; min-height: 16px; color: #ef4444; }
+    .spin { width: 13px; height: 13px; border: 2px solid rgba(255,255,255,.4); border-top-color: #fff; border-radius: 50%; animation: spin .6s linear infinite; display: inline-block; }
+    @keyframes spin { to{transform:rotate(360deg)} }
+
+    /* ── Dynamic field group ── */
+    .dynamic-field { border: 1px solid #e5e7eb; border-radius: 8px; padding: 12px; margin-bottom: 8px; background: #fafafa; position: relative; }
+    .dynamic-field .remove-btn { position: absolute; top: 8px; right: 8px; background: #ef4444; color: #fff; border: none; border-radius: 4px; padding: 2px 8px; font-size: .65rem; cursor: pointer; }
+    .btn-add-field { background: transparent; color: var(--brand); border: 1.5px dashed var(--brand-border); border-radius: 8px; padding: 6px 14px; font-size: .74rem; font-weight: 600; cursor: pointer; width: 100%; margin-top: 6px; }
+    .btn-add-field:hover { background: var(--brand-light); border-color: var(--brand); }
+
+    /* ── Confirm dialog ── */
+    .confirm-text { font-size: .84rem; color: #374151; line-height: 1.6; }
+
+    @media (max-width: 991px) {
+      .sidebar { transform: translateX(-100%); }
+      .sidebar.open { transform: translateX(0); }
+      .topbar { left: 0; }
+      .dash-main { margin-left: 0; }
+      .sidebar-toggle { display: block; }
+      .al-layout { flex-direction: column; }
+      .al-sidebar { width: 100%; border-right: none; border-bottom: 1px solid #f1f5f9; }
+      .stat-row { grid-template-columns: repeat(2,1fr); }
+      .form-row, .form-row-3 { grid-template-columns: 1fr; }
+      .info-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div id="al-toast"></div>
+  <div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+  <div class="dash-layout">
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-brand">
+        <div class="sidebar-logo">AF</div>
+        <div>
+          <div class="sidebar-brand-text">AdminForge</div>
+          <div class="sidebar-brand-sub">Management System</div>
+        </div>
+      </div>
+      <div class="sidebar-menu">
+        <p class="sidebar-section">Main</p>
+        <a href="dashboard.html" class="sidebar-item"><span class="si-icon">⬡</span> Home</a>
+        <a href="about.html" class="sidebar-item"><span class="si-icon">ℹ</span> About Us</a>
+        <a href="administration.html" class="sidebar-item"><span class="si-icon">⛪</span> Administration</a>
+        <a href="parishes.html" class="sidebar-item"><span class="si-icon">⛪</span> Parishes</a>
+        <a href="priests.html" class="sidebar-item"><span class="si-icon">✝</span> Priests</a>
+        <a href="seminarians.html" class="sidebar-item"><span class="si-icon">🎓</span> Seminarians</a>
+        <a href="department.html" class="sidebar-item"><span class="si-icon">🏢</span> Departments</a>
+        <a href="mission.html" class="sidebar-item"><span class="si-icon">🌍</span> Missions</a>
+        <a href="apostoliclife-admin.html" class="sidebar-item active"><span class="si-icon">✨</span> Apostolic Life <span class="si-badge" id="sidebar-al-count">0</span></a>
+        <a href="generalinfo.html" class="sidebar-item"><span class="si-icon">ℹ</span> General Information</a>
+        <p class="sidebar-section" style="margin-top:14px;">Account</p>
+        <div class="sidebar-item"><span class="si-icon">⚙</span> Settings</div>
+        <div class="sidebar-item"><span class="si-icon">◉</span> My Profile</div>
+      </div>
+      <div class="sidebar-footer">
+        <div class="user-row">
+          <div class="user-row-avatar" id="sidebar-avatar">?</div>
+          <div>
+            <div class="user-row-name" id="sidebar-username">Loading…</div>
+            <div class="user-row-role" id="sidebar-role">—</div>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <nav class="topbar">
+      <div class="topbar-left">
+        <button class="sidebar-toggle" id="sidebar-toggle">☰</button>
+        <div>
+          <div class="topbar-title">Apostolic Life</div>
+          <div class="topbar-sub">Manage Congregations, Provinces & Study Centers</div>
+        </div>
+      </div>
+      <div class="topbar-right d-flex align-items-center gap-2">
+        <span id="role-badge" class="badge bg-secondary" style="font-size:.8rem;padding:6px 12px;"></span>
+        <button class="btn-logout" id="btn-logout">⏻ Logout</button>
+      </div>
+    </nav>
+
+    <main class="dash-main">
+      <!-- Stats -->
+      <div class="stat-row" id="stat-row">
+        <div class="stat-card"><div class="stat-icon red"><i class="bi bi-people-fill"></i></div><div><div class="stat-val" id="st-men">—</div><div class="stat-lbl">Institutes for Men</div></div></div>
+        <div class="stat-card"><div class="stat-icon blue"><i class="bi bi-person-heart"></i></div><div><div class="stat-val" id="st-women">—</div><div class="stat-lbl">Institutes for Women</div></div></div>
+        <div class="stat-card"><div class="stat-icon green"><i class="bi bi-mortarboard-fill"></i></div><div><div class="stat-val" id="st-study">—</div><div class="stat-lbl">Study & Renewal Centers</div></div></div>
+        <div class="stat-card"><div class="stat-icon gold"><i class="bi bi-building"></i></div><div><div class="stat-val" id="st-houses">—</div><div class="stat-lbl">Houses in Archeparchy</div></div></div>
+      </div>
+
+      <div class="main-card">
+        <div class="main-card-header">
+          <h2>✨ Apostolic Life Sections</h2>
+          <span style="font-size:.72rem;color:#94a3b8;">Click congregation to expand · Admin can edit all fields</span>
+        </div>
+        <div class="main-card-body">
+          <div class="al-layout">
+            <!-- Left Nav -->
+            <div class="al-sidebar">
+              <div class="al-nav-label">Sections</div>
+              <a class="al-nav-link active" data-tab="men" href="#">
+                <i class="bi bi-people"></i> Institutes for Men <span class="al-nav-badge" id="nb-men">0</span>
+              </a>
+              <a class="al-nav-link" data-tab="women" href="#">
+                <i class="bi bi-person-heart"></i> Institutes for Women <span class="al-nav-badge" id="nb-women">0</span>
+              </a>
+              <a class="al-nav-link" data-tab="study" href="#">
+                <i class="bi bi-mortarboard"></i> Study & Renewal Centers <span class="al-nav-badge" id="nb-study">0</span>
+              </a>
+            </div>
+
+            <!-- Content -->
+            <div class="al-content" id="al-content">
+              <div id="al-skeleton">
+                <div class="skel" style="height:40px;margin-bottom:12px;"></div>
+                <div class="skel" style="height:80px;margin-bottom:8px;opacity:.7;"></div>
+                <div class="skel" style="height:80px;margin-bottom:8px;opacity:.5;"></div>
+                <div class="skel" style="height:80px;opacity:.3;"></div>
+              </div>
+              <div id="tab-men" style="display:none;"></div>
+              <div id="tab-women" style="display:none;"></div>
+              <div id="tab-study" style="display:none;"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- ═══ MODAL: Add/Edit Congregation ═══ -->
+  <div id="m-cong" class="modal-backdrop-al">
+    <div class="modal-box">
+      <button class="modal-close" onclick="closeModal('m-cong')">✕</button>
+      <p class="modal-title" id="cong-modal-title">Add Congregation</p>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">SNO</label><input class="form-control-al" id="c-sno" placeholder="e.g. 1.1"></div>
+        <div class="form-group"><label class="form-label">Short Code *</label><input class="form-control-al" id="c-shortCode" placeholder="e.g. CMI"></div>
+      </div>
+      <div class="form-group"><label class="form-label">Full Name *</label><input class="form-control-al" id="c-name" placeholder="e.g. Carmelites of Mary Immaculate"></div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Type</label><input class="form-control-al" id="c-type" placeholder="e.g. Clerical, Pontifical"></div>
+        <div class="form-group"><label class="form-label">Jurisdiction</label><input class="form-control-al" id="c-jurisdiction" placeholder="e.g. Major Archiepiscopal"></div>
+      </div>
+      <div class="form-section-label">Generalate Details</div>
+      <div class="form-group"><label class="form-label">Generalate Name</label><input class="form-control-al" id="c-gen-name" placeholder="CMI Prior General's House"></div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Address</label><input class="form-control-al" id="c-gen-address" placeholder="Full address"></div>
+        <div class="form-group"><label class="form-label">Pin</label><input class="form-control-al" id="c-gen-pin" placeholder="682 030"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Phone (comma separated)</label><input class="form-control-al" id="c-gen-phone" placeholder="0484 2881809, 94000 57006"></div>
+        <div class="form-group"><label class="form-label">Email (comma separated)</label><input class="form-control-al" id="c-gen-email" placeholder="secretary@cmi.in"></div>
+      </div>
+      <div class="form-group"><label class="form-label">Website</label><input class="form-control-al" id="c-gen-website" placeholder="www.cmi.org.in"></div>
+      <div class="modal-footer-al">
+        <button class="btn-modal-cancel" onclick="closeModal('m-cong')">Cancel</button>
+        <button class="btn-modal-save" id="btn-cong-save" onclick="saveCongregation()">💾 Save Congregation</button>
+        <button class="btn-modal-del" id="btn-cong-del" style="display:none;" onclick="askDeleteCong()">🗑 Delete</button>
+      </div>
+      <div class="modal-status" id="cong-status"></div>
+    </div>
+  </div>
+
+  <!-- ═══ MODAL: Add/Edit Province ═══ -->
+  <div id="m-province" class="modal-backdrop-al">
+    <div class="modal-box">
+      <button class="modal-close" onclick="closeModal('m-province')">✕</button>
+      <p class="modal-title" id="prov-modal-title">Add Province</p>
+      <div class="form-group"><label class="form-label">Province Name *</label><input class="form-control-al" id="p-name" placeholder="e.g. St. Joseph's Province"></div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Location</label><input class="form-control-al" id="p-location" placeholder="e.g. Thiruvananthapuram"></div>
+        <div class="form-group"><label class="form-label">Year Established</label><input class="form-control-al" id="p-year" placeholder="e.g. 1979"></div>
+      </div>
+      <div class="form-section-label">Provincialate</div>
+      <div class="form-group"><label class="form-label">Name</label><input class="form-control-al" id="p-ph-name" placeholder="CMI Provincial House"></div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Address</label><input class="form-control-al" id="p-ph-address" placeholder="Full address"></div>
+        <div class="form-group"><label class="form-label">Pin</label><input class="form-control-al" id="p-ph-pin" placeholder="695 027"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Phone (comma separated)</label><input class="form-control-al" id="p-ph-phone" placeholder="81297 41451"></div>
+        <div class="form-group"><label class="form-label">Email (comma separated)</label><input class="form-control-al" id="p-ph-email" placeholder="email@domain.com"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Website</label><input class="form-control-al" id="p-ph-website" placeholder="www.example.org"></div>
+        <div></div>
+      </div>
+      <div class="form-section-label">Houses in Archeparchy</div>
+      <div id="p-houses-wrap"></div>
+      <button class="btn-add-field" onclick="addHouseField('p-houses-wrap')">+ Add House</button>
+      <div class="modal-footer-al">
+        <button class="btn-modal-cancel" onclick="closeModal('m-province')">Cancel</button>
+        <button class="btn-modal-save" id="btn-prov-save" onclick="saveProvince()">💾 Save Province</button>
+        <button class="btn-modal-del" id="btn-prov-del" style="display:none;" onclick="deleteProvince()">🗑 Delete Province</button>
+      </div>
+      <div class="modal-status" id="prov-status"></div>
+    </div>
+  </div>
+
+  <!-- ═══ MODAL: Add/Edit House ═══ -->
+  <div id="m-house" class="modal-backdrop-al">
+    <div class="modal-box">
+      <button class="modal-close" onclick="closeModal('m-house')">✕</button>
+      <p class="modal-title" id="house-modal-title">Add House</p>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">SNO</label><input class="form-control-al" id="h-sno" placeholder="e.g. 1"></div>
+        <div class="form-group"><label class="form-label">Year</label><input class="form-control-al" id="h-year" placeholder="e.g. 1979"></div>
+      </div>
+      <div class="form-group"><label class="form-label">Place</label><input class="form-control-al" id="h-place" placeholder="e.g. Thiruvananthapuram"></div>
+      <div class="form-group"><label class="form-label">House Name *</label><input class="form-control-al" id="h-name" placeholder="e.g. CMI Provincial House"></div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Address</label><input class="form-control-al" id="h-address" placeholder="Full address"></div>
+        <div class="form-group"><label class="form-label">Pin</label><input class="form-control-al" id="h-pin" placeholder="695 027"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Phone (comma separated)</label><input class="form-control-al" id="h-phone" placeholder="81297 41451"></div>
+        <div class="form-group"><label class="form-label">Email</label><input class="form-control-al" id="h-email" placeholder="email@domain.com"></div>
+      </div>
+      <div class="modal-footer-al">
+        <button class="btn-modal-cancel" onclick="closeModal('m-house')">Cancel</button>
+        <button class="btn-modal-save" id="btn-house-save" onclick="saveHouse()">💾 Save House</button>
+        <button class="btn-modal-del" id="btn-house-del" style="display:none;" onclick="deleteHouse()">🗑 Delete House</button>
+      </div>
+      <div class="modal-status" id="house-status"></div>
+    </div>
+  </div>
+
+  <!-- ═══ MODAL: Add/Edit Study Center ═══ -->
+  <div id="m-study" class="modal-backdrop-al">
+    <div class="modal-box sm">
+      <button class="modal-close" onclick="closeModal('m-study')">✕</button>
+      <p class="modal-title" id="study-modal-title">Add Study Center</p>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">SNO</label><input class="form-control-al" id="sc-sno" placeholder="1"></div>
+        <div class="form-group"><label class="form-label">Year Established</label><input class="form-control-al" id="sc-year" placeholder="1972"></div>
+      </div>
+      <div class="form-group"><label class="form-label">Name *</label><input class="form-control-al" id="sc-name" placeholder="e.g. Missionary Orientation Centre"></div>
+      <div class="form-group"><label class="form-label">Address</label><input class="form-control-al" id="sc-address" placeholder="Full address"></div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Pin</label><input class="form-control-al" id="sc-pin" placeholder="686 018"></div>
+        <div class="form-group"><label class="form-label">Phone (comma separated)</label><input class="form-control-al" id="sc-phone" placeholder="85470 23339"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Email</label><input class="form-control-al" id="sc-email" placeholder="email@domain.com"></div>
+        <div class="form-group"><label class="form-label">Website</label><input class="form-control-al" id="sc-website" placeholder="www.example.org"></div>
+      </div>
+      <div class="form-group"><label class="form-label">Notes</label><input class="form-control-al" id="sc-notes" placeholder="Director, programs etc."></div>
+      <div class="modal-footer-al">
+        <button class="btn-modal-cancel" onclick="closeModal('m-study')">Cancel</button>
+        <button class="btn-modal-save" id="btn-sc-save" onclick="saveStudyCenter()">💾 Save</button>
+        <button class="btn-modal-del" id="btn-sc-del" style="display:none;" onclick="askDeleteStudy()">🗑 Delete</button>
+      </div>
+      <div class="modal-status" id="sc-status"></div>
+    </div>
+  </div>
+
+  <!-- ═══ MODAL: Confirm Delete ═══ -->
+  <div id="m-confirm" class="modal-backdrop-al">
+    <div class="modal-box sm">
+      <p class="modal-title">⚠️ Confirm Delete</p>
+      <p class="confirm-text" id="confirm-text">Are you sure you want to delete this item? This action cannot be undone.</p>
+      <div class="modal-footer-al">
+        <button class="btn-modal-cancel" onclick="closeModal('m-confirm')">Cancel</button>
+        <button style="flex:1;padding:9px;border-radius:8px;border:none;background:#ef4444;color:#fff;font-weight:600;font-size:.84rem;cursor:pointer;" id="btn-confirm-del" onclick="confirmDelete()">Yes, Delete</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+    import { getFirestore, doc, getDoc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+    const FC = {
+      apiKey: "AIzaSyArM8sv7J1RUj4XvAJhJd40tzA7Yc8BGXY",
+      authDomain: "admin-dashboard-ed62c.firebaseapp.com",
+      projectId: "admin-dashboard-ed62c",
+      storageBucket: "admin-dashboard-ed62c.firebasestorage.app",
+      messagingSenderId: "560027475135",
+      appId: "1:560027475135:web:3fae0cb0268729ae79fa0a"
+    };
+    const ADMIN_EMAIL = "issacnewton1503@gmail.com";
+    const app = initializeApp(FC);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    // ── State ──
+    let userRole = null;
+    let isAdmin = false;
+    let currentTab = 'men';
+    let allData = { institutesForMen: null, institutesForWomen: null, studyAndRenewalCenters: null };
+    let expandedCongs = {};
+    let expandedProvs = {};
+    let activeCongTabs = {}; // which sub-tab (generalate/provinces) per cong
+
+    // Edit state
+    let editCtx = {};
+    let pendingDelete = null;
+
+    const alDoc = (id) => doc(db, 'apostolicLife', id);
+    const arr = v => Array.isArray(v) ? v : [];
+    const toArr = v => (v||'').split(',').map(s=>s.trim()).filter(Boolean);
+    const fromArr = v => arr(v).join(', ');
+    const esc = s => String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+
+    // ── Toast ──
+    window.alToast = function(msg, type='', dur=3000) {
+      const t = document.getElementById('al-toast');
+      t.textContent = msg; t.className = 'show' + (type?' '+type:'');
+      clearTimeout(t._t); t._t = setTimeout(()=>t.className='', dur);
+    };
+
+    // ── Auth ──
+    document.body.style.display = 'none';
+    onAuthStateChanged(auth, async user => {
+      if(!user) { window.location.href='index.html'; return; }
+      const snap = await getDoc(doc(db,'users',user.uid));
+      if(!snap.exists()) { await signOut(auth); window.location.href='index.html'; return; }
+      const prof = snap.data();
+      userRole = user.email === ADMIN_EMAIL ? 'Admin' : 'User';
+      isAdmin = userRole === 'Admin';
+      const uname = prof.username || user.displayName || user.email;
+      document.getElementById('sidebar-username').textContent = uname;
+      document.getElementById('sidebar-role').textContent = userRole;
+      document.getElementById('sidebar-avatar').textContent = uname[0].toUpperCase();
+      const badge = document.getElementById('role-badge');
+      badge.textContent = userRole;
+      badge.className = isAdmin ? 'badge bg-warning text-dark' : 'badge bg-primary';
+      document.body.style.display = '';
+      await loadAll();
+    });
+
+    document.getElementById('btn-logout').addEventListener('click', async () => { await signOut(auth); window.location.href='index.html'; });
+    document.getElementById('sidebar-toggle').addEventListener('click', () => {
+      document.getElementById('sidebar').classList.toggle('open');
+      document.getElementById('sidebar-overlay').classList.toggle('show');
+    });
+    document.getElementById('sidebar-overlay').addEventListener('click', () => {
+      document.getElementById('sidebar').classList.remove('open');
+      document.getElementById('sidebar-overlay').classList.remove('show');
+    });
+
+    // Tab navigation
+    document.querySelectorAll('.al-nav-link').forEach(link => {
+      link.addEventListener('click', e => {
+        e.preventDefault();
+        const tab = link.dataset.tab;
+        document.querySelectorAll('.al-nav-link').forEach(l=>l.classList.remove('active'));
+        link.classList.add('active');
+        currentTab = tab;
+        renderTab(tab);
+      });
+    });
+
+    // ── Load all data ──
+    async function loadAll() {
+      document.getElementById('al-skeleton').style.display = '';
+      try {
+        for(const id of ['institutesForMen','institutesForWomen','studyAndRenewalCenters']) {
+          const sn = await getDoc(alDoc(id));
+          allData[id] = sn.exists() ? sn.data() : { congregations:[], centers:[] };
+        }
+        updateStats();
+        renderTab('men');
+      } catch(err) {
+        alToast('❌ Load failed: '+err.message,'error');
+      } finally {
+        document.getElementById('al-skeleton').style.display = 'none';
+        document.getElementById('tab-men').style.display = '';
+      }
+    }
+
+    function updateStats() {
+      const men = arr(allData.institutesForMen?.congregations).length;
+      const women = arr(allData.institutesForWomen?.congregations).length;
+      const study = arr(allData.studyAndRenewalCenters?.centers).length;
+      let houses = 0;
+      ['institutesForMen','institutesForWomen'].forEach(sec => {
+        arr(allData[sec]?.congregations).forEach(c => {
+          arr(c.provinces).forEach(p => { houses += arr(p.housesInArcheparchy).length; });
+        });
+      });
+      document.getElementById('st-men').textContent = men;
+      document.getElementById('st-women').textContent = women;
+      document.getElementById('st-study').textContent = study;
+      document.getElementById('st-houses').textContent = houses;
+      document.getElementById('nb-men').textContent = men;
+      document.getElementById('nb-women').textContent = women;
+      document.getElementById('nb-study').textContent = study;
+      document.getElementById('sidebar-al-count').textContent = men + women;
+    }
+
+    function docIdForTab(tab) {
+      return tab==='men' ? 'institutesForMen' : 'institutesForWomen';
+    }
+
+    // ── Render Tab ──
+    function renderTab(tab) {
+      ['men','women','study'].forEach(t => document.getElementById('tab-'+t).style.display = t===tab?'':'none');
+      if(tab==='study') { renderStudy(); return; }
+      renderInstitutes(tab);
+    }
+
+    function typeBadge(type) {
+      if(!type) return '';
+      const lc = type.toLowerCase();
+      let cls = 'badge-pontifical';
+      if(lc.includes('eparch')) cls='badge-eparchial';
+      else if(lc.includes('major')) cls='badge-major';
+      else if(lc.includes('dioc')) cls='badge-diocesan';
+      return `<span class="badge-type ${cls}">${esc(type)}</span>`;
+    }
+
+    function renderInstitutes(tab) {
+      const docId = docIdForTab(tab);
+      const congs = arr(allData[docId]?.congregations);
+      const el = document.getElementById('tab-'+tab);
+
+      const searchVal = (el.querySelector('.search-input')?.value||'').toLowerCase();
+      const filtered = searchVal ? congs.filter(c =>
+        (c.name||'').toLowerCase().includes(searchVal)||
+        (c.shortCode||'').toLowerCase().includes(searchVal)||
+        (c.sno||'').toLowerCase().includes(searchVal)
+      ) : congs;
+
+      const title = tab==='men' ? '👨‍⛪ Institutes for Men' : '👩‍⛪ Institutes for Women';
+      const secKey = tab==='men' ? 'institutesForMen' : 'institutesForWomen';
+
+      let html = `<div class="sec-header">
+        <h3>${title}</h3>
+        ${isAdmin ? `<button class="btn-primary-al" onclick="openAddCong('${secKey}')">+ Add Congregation</button>` : ''}
+      </div>
+      <div class="search-wrap">
+        <input type="text" class="search-input" placeholder="Search congregations…" oninput="renderInstitutes('${tab}')">
+      </div>`;
+
+      if(!filtered.length) {
+        html += `<p style="color:#94a3b8;font-size:.82rem;padding:20px 0 0;">No congregations yet.</p>`;
+        el.innerHTML = html; return;
+      }
+
+      filtered.forEach((c, fi) => {
+        const realIdx = congs.indexOf(c);
+        const expKey = `${tab}-${realIdx}`;
+        const isExp = expandedCongs[expKey];
+        const provCount = arr(c.provinces).length;
+        const houseCount = arr(c.provinces).reduce((s,p)=>s+arr(p.housesInArcheparchy).length,0);
+        const activeSubTab = activeCongTabs[expKey] || 'generalate';
+
+        html += `<div class="cong-card" id="cc-${expKey}">
+          <div class="cong-card-head" onclick="toggleCong('${tab}',${realIdx})">
+            <span class="cong-sno">${esc(c.sno||String(fi+1))}</span>
+            <div class="cong-info">
+              <div class="cong-short">${esc(c.shortCode||'')}</div>
+              <div class="cong-name">${esc(c.name||'')}</div>
+              <div class="cong-meta">
+                ${typeBadge(c.type)}
+                <span>${esc(c.jurisdiction||'')}</span>
+                <span style="color:#374151;">${provCount} province${provCount!==1?'s':''}</span>
+                <span style="color:var(--brand);">${houseCount} house${houseCount!==1?'s':''} in archeparchy</span>
+              </div>
+            </div>
+            <div class="cong-card-actions">
+              ${isAdmin ? `<button class="btn-sm-edit" onclick="event.stopPropagation();openEditCong('${secKey}',${realIdx})">✏️ Edit</button>
+              <button class="btn-sm-del" onclick="event.stopPropagation();askDeleteCongByIdx('${secKey}',${realIdx})">🗑</button>` : ''}
+              <span class="cong-chevron ${isExp?'open':''}">▼</span>
+            </div>
+          </div>`;
+
+        if(isExp) {
+          html += `<div class="cong-body show">
+            <div class="section-tab-strip">
+              <div class="section-tab ${activeSubTab==='generalate'?'active':''}" onclick="setSubTab('${expKey}','generalate')">Generalate</div>
+              <div class="section-tab ${activeSubTab==='provinces'?'active':''}" onclick="setSubTab('${expKey}','provinces')">Provinces (${provCount})</div>
+            </div>`;
+
+          if(activeSubTab === 'generalate') {
+            html += `<div class="cong-section">`;
+            const g = c.generalate || {};
+            html += `<div class="generalate-box">
+              <h5><i class="bi bi-building me-1"></i> Generalate</h5>
+              <div class="info-grid">
+                <div><span class="info-label">Name</span><br>${esc(g.name||'—')}</div>
+                <div><span class="info-label">Address</span><br>${esc(g.address||'—')}</div>
+                <div><span class="info-label">Pin</span><br>${esc(g.pin||'—')}</div>
+                <div><span class="info-label">Website</span><br>${g.website?`<a href="https://${esc(g.website)}" target="_blank" style="color:#2563eb;">${esc(g.website)}</a>`:'—'}</div>
+                <div><span class="info-label">Phone</span><br>${esc(arr(g.phone).join(', ')||'—')}</div>
+                <div><span class="info-label">Email</span><br>${esc(arr(g.email).join(', ')||'—')}</div>
+              </div>
+            </div>`;
+            html += `</div>`;
+          } else {
+            html += `<div class="cong-section">`;
+            if(isAdmin) html += `<div style="margin-bottom:10px;"><button class="btn-primary-al" onclick="openAddProvince('${secKey}',${realIdx})">+ Add Province</button></div>`;
+            if(!provCount) { html += `<p style="color:#94a3b8;font-size:.8rem;">No provinces added yet.</p>`; }
+            arr(c.provinces).forEach((p,pi) => {
+              const provExpKey = `${expKey}-p${pi}`;
+              const isProvExp = expandedProvs[provExpKey];
+              const houses = arr(p.housesInArcheparchy);
+              html += `<div class="province-item" id="pi-${provExpKey}">
+                <div class="province-head" onclick="toggleProv('${provExpKey}')">
+                  <div>
+                    <div class="province-name">${esc(p.name||'Province '+pi)}</div>
+                    <div class="province-meta">${esc(p.location||'')}${p.year?' · Est. '+esc(p.year):''} · ${houses.length} house${houses.length!==1?'s':''}</div>
+                  </div>
+                  <div style="display:flex;gap:5px;align-items:center;">
+                    ${isAdmin ? `<button class="btn-sm-edit" onclick="event.stopPropagation();openEditProvince('${secKey}',${realIdx},${pi})">✏️</button>
+                    <button class="btn-sm-del" onclick="event.stopPropagation();askDeleteProvince('${secKey}',${realIdx},${pi})">🗑</button>` : ''}
+                    <span style="font-size:.75rem;color:#94a3b8;">${isProvExp?'▲':'▼'}</span>
+                  </div>
+                </div>`;
+              if(isProvExp) {
+                html += `<div class="province-body show">`;
+                // Provincialate info
+                if(p.provincialate) {
+                  const ph = p.provincialate;
+                  html += `<div class="generalate-box" style="margin-bottom:12px;">
+                    <h5>Provincialate</h5>
+                    <div class="info-grid">
+                      <div><span class="info-label">Name</span><br>${esc(ph.name||'—')}</div>
+                      <div><span class="info-label">Address</span><br>${esc(ph.address||'—')} ${ph.pin?'('+esc(ph.pin)+')':''}</div>
+                      <div><span class="info-label">Phone</span><br>${esc(arr(ph.phone).join(', ')||'—')}</div>
+                      <div><span class="info-label">Email</span><br>${esc(arr(ph.email).join(', ')||'—')}</div>
+                    </div>
+                  </div>`;
+                }
+                // Houses table
+                html += `<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+                  <span style="font-size:.75rem;font-weight:700;color:#374151;">Houses in Archeparchy (${houses.length})</span>
+                  ${isAdmin ? `<button class="btn-sm-add" onclick="openAddHouse('${secKey}',${realIdx},${pi})">+ Add House</button>` : ''}
+                </div>`;
+                if(!houses.length) {
+                  html += `<p class="houses-empty">No houses listed.</p>`;
+                } else {
+                  html += `<div style="overflow-x:auto;"><table class="houses-table"><thead><tr>
+                    <th>#</th><th>Place</th><th>Name / Address</th><th>Year</th><th>Pin</th><th>Phone</th><th>Email</th>
+                    ${isAdmin?'<th>Actions</th>':''}
+                  </tr></thead><tbody>`;
+                  houses.forEach((h,hi) => {
+                    html += `<tr>
+                      <td>${esc(h.sno||String(hi+1))}</td>
+                      <td style="font-weight:600;">${esc(h.place||'')}</td>
+                      <td>${esc(h.name||'')}${h.address?'<br><span style="color:#94a3b8;font-size:.68rem;">'+esc(h.address)+'</span>':''}</td>
+                      <td>${esc(String(h.year||''))}</td>
+                      <td>${esc(h.pin||'')}</td>
+                      <td>${esc(arr(h.phone).join('<br>'))}</td>
+                      <td style="font-size:.68rem;">${esc(h.email||'')}</td>
+                      ${isAdmin ? `<td>
+                        <button class="btn-sm-edit" onclick="openEditHouse('${secKey}',${realIdx},${pi},${hi})">✏️</button>
+                        <button class="btn-sm-del" onclick="askDeleteHouse('${secKey}',${realIdx},${pi},${hi})">🗑</button>
+                      </td>` : ''}
+                    </tr>`;
+                  });
+                  html += `</tbody></table></div>`;
+                }
+                html += `</div>`;
+              }
+              html += `</div>`;
+            });
+            html += `</div>`;
+          }
+          html += `</div>`;
+        }
+        html += `</div>`;
+      });
+
+      el.innerHTML = html;
+      // re-attach search
+      el.querySelector('.search-input')?.addEventListener('input', ()=>renderInstitutes(tab));
+    }
+
+    window.toggleCong = function(tab, idx) {
+      const key = `${tab}-${idx}`;
+      expandedCongs[key] = !expandedCongs[key];
+      renderInstitutes(tab);
+    };
+    window.toggleProv = function(provExpKey) {
+      expandedProvs[provExpKey] = !expandedProvs[provExpKey];
+      const tab = provExpKey.split('-')[0];
+      const idx = parseInt(provExpKey.split('-')[1]);
+      renderInstitutes(tab);
+    };
+    window.setSubTab = function(expKey, subTab) {
+      activeCongTabs[expKey] = subTab;
+      const tab = expKey.split('-')[0];
+      renderInstitutes(tab);
+    };
+
+    // ── Render Study Centers ──
+    function renderStudy() {
+      const centers = arr(allData.studyAndRenewalCenters?.centers);
+      const el = document.getElementById('tab-study');
+      let html = `<div class="sec-header">
+        <h3>🎓 Study & Renewal Centers</h3>
+        ${isAdmin ? `<button class="btn-primary-al" onclick="openAddStudy()">+ Add Center</button>` : ''}
+      </div>`;
+      if(!centers.length) { html += `<p style="color:#94a3b8;font-size:.82rem;">No centers yet.</p>`; el.innerHTML=html; return; }
+      centers.forEach((c,i) => {
+        html += `<div class="center-card">
+          <div class="center-icon"><i class="bi bi-building-fill"></i></div>
+          <div class="center-body">
+            <div class="center-name">${esc(c.sno?c.sno+'. ':'')}${esc(c.name||'—')}</div>
+            <div class="center-detail">${esc(c.address||'')}${c.pin?' — '+esc(c.pin):''}</div>
+            ${c.year?`<div class="center-detail">Est. ${esc(String(c.year))}</div>`:''}
+            ${arr(c.phone).length?`<div class="center-detail">📞 ${esc(arr(c.phone).join(', '))}</div>`:''}
+            ${c.email||c.gmail?`<div class="center-detail">✉ ${esc(c.email||c.gmail||'')}</div>`:''}
+            ${c.website?`<div class="center-detail"><a href="https://${esc(c.website)}" target="_blank" style="color:#2563eb;">${esc(c.website)}</a></div>`:''}
+            ${c.notes?`<div class="center-detail" style="color:#64748b;font-style:italic;">${esc(c.notes)}</div>`:''}
+          </div>
+          ${isAdmin ? `<div class="center-actions">
+            <button class="btn-sm-edit" onclick="openEditStudy(${i})">✏️</button>
+            <button class="btn-sm-del" onclick="askDeleteStudyByIdx(${i})">🗑</button>
+          </div>` : ''}
+        </div>`;
+      });
+      el.innerHTML = html;
+    }
+
+    // ── CONGREGATION CRUD ──
+    window.openAddCong = function(secKey) {
+      editCtx = { action:'add', secKey };
+      clearCongForm();
+      document.getElementById('cong-modal-title').textContent = 'Add Congregation';
+      document.getElementById('btn-cong-del').style.display = 'none';
+      document.getElementById('cong-status').textContent = '';
+      document.getElementById('m-cong').classList.add('show');
+    };
+    window.openEditCong = function(secKey, idx) {
+      editCtx = { action:'edit', secKey, idx };
+      const c = arr(allData[secKey]?.congregations)[idx];
+      if(!c) return;
+      document.getElementById('c-sno').value = c.sno||'';
+      document.getElementById('c-shortCode').value = c.shortCode||'';
+      document.getElementById('c-name').value = c.name||'';
+      document.getElementById('c-type').value = c.type||'';
+      document.getElementById('c-jurisdiction').value = c.jurisdiction||'';
+      const g = c.generalate||{};
+      document.getElementById('c-gen-name').value = g.name||'';
+      document.getElementById('c-gen-address').value = g.address||'';
+      document.getElementById('c-gen-pin').value = g.pin||'';
+      document.getElementById('c-gen-phone').value = fromArr(g.phone);
+      document.getElementById('c-gen-email').value = fromArr(g.email);
+      document.getElementById('c-gen-website').value = g.website||'';
+      document.getElementById('cong-modal-title').textContent = 'Edit Congregation';
+      document.getElementById('btn-cong-del').style.display = '';
+      document.getElementById('cong-status').textContent = '';
+      document.getElementById('m-cong').classList.add('show');
+    };
+    function clearCongForm() {
+      ['c-sno','c-shortCode','c-name','c-type','c-jurisdiction','c-gen-name','c-gen-address','c-gen-pin','c-gen-phone','c-gen-email','c-gen-website'].forEach(id=>document.getElementById(id).value='');
+    }
+    window.saveCongregation = async function() {
+      const name = document.getElementById('c-name').value.trim();
+      const st = document.getElementById('cong-status');
+      if(!name) { st.textContent='⚠ Name required.'; return; }
+      const btn = document.getElementById('btn-cong-save');
+      btn.disabled=true; btn.innerHTML='<span class="spin"></span> Saving…';
+      const obj = {
+        sno: document.getElementById('c-sno').value.trim(),
+        name,
+        shortCode: document.getElementById('c-shortCode').value.trim(),
+        type: document.getElementById('c-type').value.trim(),
+        jurisdiction: document.getElementById('c-jurisdiction').value.trim(),
+        generalate: {
+          name: document.getElementById('c-gen-name').value.trim(),
+          address: document.getElementById('c-gen-address').value.trim(),
+          pin: document.getElementById('c-gen-pin').value.trim(),
+          phone: toArr(document.getElementById('c-gen-phone').value),
+          email: toArr(document.getElementById('c-gen-email').value),
+          website: document.getElementById('c-gen-website').value.trim()
+        }
+      };
+      try {
+        const { secKey, action, idx } = editCtx;
+        const congs = arr(allData[secKey]?.congregations);
+        if(action==='edit') { obj.provinces = congs[idx].provinces||[]; congs[idx]={...congs[idx],...obj}; }
+        else { obj.provinces=[]; congs.push(obj); }
+        await setDoc(alDoc(secKey), { ...allData[secKey], congregations:congs, updatedAt:serverTimestamp() }, {merge:true});
+        allData[secKey].congregations = congs;
+        alToast('✅ Congregation saved!','success');
+        closeModal('m-cong');
+        updateStats(); renderInstitutes(currentTab);
+      } catch(err) { st.textContent='❌ '+err.message; }
+      finally { btn.disabled=false; btn.innerHTML='💾 Save Congregation'; }
+    };
+    window.askDeleteCong = function() {
+      pendingDelete = { type:'congregation', ...editCtx };
+      document.getElementById('confirm-text').textContent = `Delete "${arr(allData[editCtx.secKey]?.congregations)[editCtx.idx]?.name}" and all its provinces/houses?`;
+      closeModal('m-cong');
+      document.getElementById('m-confirm').classList.add('show');
+    };
+    window.askDeleteCongByIdx = function(secKey, idx) {
+      editCtx = { action:'edit', secKey, idx };
+      askDeleteCong();
+    };
+
+    // ── PROVINCE CRUD ──
+    window.openAddProvince = function(secKey, congIdx) {
+      editCtx = { action:'add', secKey, congIdx };
+      clearProvForm();
+      document.getElementById('prov-modal-title').textContent = 'Add Province';
+      document.getElementById('btn-prov-del').style.display = 'none';
+      document.getElementById('prov-status').textContent = '';
+      document.getElementById('m-province').classList.add('show');
+    };
+    window.openEditProvince = function(secKey, congIdx, provIdx) {
+      editCtx = { action:'edit', secKey, congIdx, provIdx };
+      const p = arr(allData[secKey]?.congregations)[congIdx]?.provinces?.[provIdx];
+      if(!p) return;
+      document.getElementById('p-name').value = p.name||'';
+      document.getElementById('p-location').value = p.location||'';
+      document.getElementById('p-year').value = p.year||'';
+      const ph = p.provincialate||{};
+      document.getElementById('p-ph-name').value = ph.name||'';
+      document.getElementById('p-ph-address').value = ph.address||'';
+      document.getElementById('p-ph-pin').value = ph.pin||'';
+      document.getElementById('p-ph-phone').value = fromArr(ph.phone);
+      document.getElementById('p-ph-email').value = fromArr(ph.email);
+      document.getElementById('p-ph-website').value = ph.website||'';
+      const wrap = document.getElementById('p-houses-wrap');
+      wrap.innerHTML = '';
+      arr(p.housesInArcheparchy).forEach(h => addHouseField('p-houses-wrap', h));
+      document.getElementById('prov-modal-title').textContent = 'Edit Province';
+      document.getElementById('btn-prov-del').style.display = '';
+      document.getElementById('prov-status').textContent = '';
+      document.getElementById('m-province').classList.add('show');
+    };
+    function clearProvForm() {
+      ['p-name','p-location','p-year','p-ph-name','p-ph-address','p-ph-pin','p-ph-phone','p-ph-email','p-ph-website'].forEach(id=>document.getElementById(id).value='');
+      document.getElementById('p-houses-wrap').innerHTML='';
+    }
+    window.saveProvince = async function() {
+      const name = document.getElementById('p-name').value.trim();
+      const st = document.getElementById('prov-status');
+      if(!name) { st.textContent='⚠ Province name required.'; return; }
+      const btn = document.getElementById('btn-prov-save');
+      btn.disabled=true; btn.innerHTML='<span class="spin"></span> Saving…';
+      const phName = document.getElementById('p-ph-name').value.trim();
+      const houses = Array.from(document.querySelectorAll('#p-houses-wrap .dynamic-field')).map(div => ({
+        sno: div.querySelector('[data-f="sno"]')?.value.trim()||'',
+        place: div.querySelector('[data-f="place"]')?.value.trim()||'',
+        name: div.querySelector('[data-f="name"]')?.value.trim()||'',
+        address: div.querySelector('[data-f="address"]')?.value.trim()||'',
+        pin: div.querySelector('[data-f="pin"]')?.value.trim()||'',
+        year: div.querySelector('[data-f="year"]')?.value.trim()||'',
+        phone: toArr(div.querySelector('[data-f="phone"]')?.value||''),
+        email: div.querySelector('[data-f="email"]')?.value.trim()||''
+      })).filter(h=>h.name||h.place);
+      const prov = {
+        name,
+        location: document.getElementById('p-location').value.trim(),
+        year: document.getElementById('p-year').value.trim(),
+        provincialate: phName ? {
+          name: phName,
+          address: document.getElementById('p-ph-address').value.trim(),
+          pin: document.getElementById('p-ph-pin').value.trim(),
+          phone: toArr(document.getElementById('p-ph-phone').value),
+          email: toArr(document.getElementById('p-ph-email').value),
+          website: document.getElementById('p-ph-website').value.trim()
+        } : null,
+        housesInArcheparchy: houses
+      };
+      try {
+        const { secKey, action, congIdx, provIdx } = editCtx;
+        const congs = arr(allData[secKey]?.congregations);
+        const provs = arr(congs[congIdx]?.provinces);
+        if(action==='edit') provs[provIdx]=prov; else provs.push(prov);
+        congs[congIdx].provinces = provs;
+        await setDoc(alDoc(secKey), { ...allData[secKey], congregations:congs, updatedAt:serverTimestamp() }, {merge:true});
+        allData[secKey].congregations = congs;
+        alToast('✅ Province saved!','success');
+        closeModal('m-province');
+        updateStats(); renderInstitutes(currentTab);
+      } catch(err) { st.textContent='❌ '+err.message; }
+      finally { btn.disabled=false; btn.innerHTML='💾 Save Province'; }
+    };
+    window.deleteProvince = function() {
+      const { secKey, congIdx, provIdx } = editCtx;
+      pendingDelete = { type:'province', secKey, congIdx, provIdx };
+      document.getElementById('confirm-text').textContent = `Delete this province and all its houses?`;
+      closeModal('m-province');
+      document.getElementById('m-confirm').classList.add('show');
+    };
+    window.askDeleteProvince = function(secKey, congIdx, provIdx) {
+      editCtx = { action:'edit', secKey, congIdx, provIdx };
+      deleteProvince();
+    };
+
+    // Add house field in province modal
+    window.addHouseField = function(wrapId, data={}) {
+      const wrap = document.getElementById(wrapId);
+      const div = document.createElement('div');
+      div.className = 'dynamic-field';
+      div.innerHTML = `
+        <div class="form-row">
+          <div class="form-group"><label class="form-label">SNO</label><input data-f="sno" class="form-control-al" value="${esc(data.sno||'')}" placeholder="#"></div>
+          <div class="form-group"><label class="form-label">Year</label><input data-f="year" class="form-control-al" value="${esc(String(data.year||''))}" placeholder="1979"></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label class="form-label">Place</label><input data-f="place" class="form-control-al" value="${esc(data.place||'')}" placeholder="e.g. Thiruvananthapuram"></div>
+          <div class="form-group"><label class="form-label">House Name *</label><input data-f="name" class="form-control-al" value="${esc(data.name||data.extra||'')}" placeholder="House name"></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label class="form-label">Address</label><input data-f="address" class="form-control-al" value="${esc(data.address||'')}" placeholder="Full address"></div>
+          <div class="form-group"><label class="form-label">Pin</label><input data-f="pin" class="form-control-al" value="${esc(data.pin||'')}" placeholder="695 027"></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label class="form-label">Phone</label><input data-f="phone" class="form-control-al" value="${esc(Array.isArray(data.phone)?data.phone.join(', '):(data.phone||''))}" placeholder="Phone"></div>
+          <div class="form-group"><label class="form-label">Email</label><input data-f="email" class="form-control-al" value="${esc(data.email||'')}" placeholder="email"></div>
+        </div>
+        <button class="remove-btn" onclick="this.parentElement.remove()">✕ Remove</button>`;
+      wrap.appendChild(div);
+    };
+
+    // ── HOUSE CRUD (standalone modal) ──
+    window.openAddHouse = function(secKey, congIdx, provIdx) {
+      editCtx = { action:'add', secKey, congIdx, provIdx };
+      ['h-sno','h-year','h-place','h-name','h-address','h-pin','h-phone','h-email'].forEach(id=>document.getElementById(id).value='');
+      document.getElementById('house-modal-title').textContent = 'Add House';
+      document.getElementById('btn-house-del').style.display = 'none';
+      document.getElementById('house-status').textContent = '';
+      document.getElementById('m-house').classList.add('show');
+    };
+    window.openEditHouse = function(secKey, congIdx, provIdx, houseIdx) {
+      editCtx = { action:'edit', secKey, congIdx, provIdx, houseIdx };
+      const h = allData[secKey]?.congregations[congIdx]?.provinces[provIdx]?.housesInArcheparchy[houseIdx];
+      if(!h) return;
+      document.getElementById('h-sno').value = h.sno||'';
+      document.getElementById('h-year').value = String(h.year||'');
+      document.getElementById('h-place').value = h.place||'';
+      document.getElementById('h-name').value = h.name||h.extra||'';
+      document.getElementById('h-address').value = h.address||'';
+      document.getElementById('h-pin').value = h.pin||'';
+      document.getElementById('h-phone').value = fromArr(h.phone);
+      document.getElementById('h-email').value = h.email||'';
+      document.getElementById('house-modal-title').textContent = 'Edit House';
+      document.getElementById('btn-house-del').style.display = '';
+      document.getElementById('house-status').textContent = '';
+      document.getElementById('m-house').classList.add('show');
+    };
+    window.saveHouse = async function() {
+      const name = document.getElementById('h-name').value.trim();
+      const st = document.getElementById('house-status');
+      if(!name) { st.textContent='⚠ House name required.'; return; }
+      const btn = document.getElementById('btn-house-save');
+      btn.disabled=true; btn.innerHTML='<span class="spin"></span> Saving…';
+      const house = {
+        sno: document.getElementById('h-sno').value.trim(),
+        year: document.getElementById('h-year').value.trim(),
+        place: document.getElementById('h-place').value.trim(),
+        name,
+        address: document.getElementById('h-address').value.trim(),
+        pin: document.getElementById('h-pin').value.trim(),
+        phone: toArr(document.getElementById('h-phone').value),
+        email: document.getElementById('h-email').value.trim()
+      };
+      try {
+        const { secKey, action, congIdx, provIdx, houseIdx } = editCtx;
+        const congs = arr(allData[secKey]?.congregations);
+        const houses = arr(congs[congIdx]?.provinces[provIdx]?.housesInArcheparchy);
+        if(action==='edit') houses[houseIdx]=house; else houses.push(house);
+        congs[congIdx].provinces[provIdx].housesInArcheparchy = houses;
+        await setDoc(alDoc(secKey), { ...allData[secKey], congregations:congs, updatedAt:serverTimestamp() }, {merge:true});
+        allData[secKey].congregations = congs;
+        alToast('✅ House saved!','success');
+        closeModal('m-house');
+        updateStats(); renderInstitutes(currentTab);
+      } catch(err) { st.textContent='❌ '+err.message; }
+      finally { btn.disabled=false; btn.innerHTML='💾 Save House'; }
+    };
+    window.deleteHouse = function() {
+      const { secKey, congIdx, provIdx, houseIdx } = editCtx;
+      const h = allData[secKey]?.congregations[congIdx]?.provinces[provIdx]?.housesInArcheparchy[houseIdx];
+      pendingDelete = { type:'house', secKey, congIdx, provIdx, houseIdx };
+      document.getElementById('confirm-text').textContent = `Delete house "${h?.name||h?.place}"?`;
+      closeModal('m-house');
+      document.getElementById('m-confirm').classList.add('show');
+    };
+    window.askDeleteHouse = function(secKey, congIdx, provIdx, houseIdx) {
+      editCtx = { action:'edit', secKey, congIdx, provIdx, houseIdx };
+      deleteHouse();
+    };
+
+    // ── STUDY CENTER CRUD ──
+    window.openAddStudy = function() {
+      editCtx = { action:'add' };
+      ['sc-sno','sc-year','sc-name','sc-address','sc-pin','sc-phone','sc-email','sc-website','sc-notes'].forEach(id=>document.getElementById(id).value='');
+      document.getElementById('study-modal-title').textContent = 'Add Study & Renewal Center';
+      document.getElementById('btn-sc-del').style.display = 'none';
+      document.getElementById('sc-status').textContent = '';
+      document.getElementById('m-study').classList.add('show');
+    };
+    window.openEditStudy = function(idx) {
+      editCtx = { action:'edit', idx };
+      const c = allData.studyAndRenewalCenters?.centers[idx];
+      if(!c) return;
+      document.getElementById('sc-sno').value = c.sno||'';
+      document.getElementById('sc-year').value = String(c.year||'');
+      document.getElementById('sc-name').value = c.name||'';
+      document.getElementById('sc-address').value = c.address||'';
+      document.getElementById('sc-pin').value = c.pin||'';
+      document.getElementById('sc-phone').value = fromArr(c.phone);
+      document.getElementById('sc-email').value = c.email||c.gmail||'';
+      document.getElementById('sc-website').value = c.website||'';
+      document.getElementById('sc-notes').value = c.notes||'';
+      document.getElementById('study-modal-title').textContent = 'Edit Center';
+      document.getElementById('btn-sc-del').style.display = '';
+      document.getElementById('sc-status').textContent = '';
+      document.getElementById('m-study').classList.add('show');
+    };
+    window.saveStudyCenter = async function() {
+      const name = document.getElementById('sc-name').value.trim();
+      const st = document.getElementById('sc-status');
+      if(!name) { st.textContent='⚠ Name required.'; return; }
+      const btn = document.getElementById('btn-sc-save');
+      btn.disabled=true; btn.innerHTML='<span class="spin"></span> Saving…';
+      const center = {
+        sno: document.getElementById('sc-sno').value.trim(),
+        year: document.getElementById('sc-year').value.trim(),
+        name,
+        address: document.getElementById('sc-address').value.trim(),
+        pin: document.getElementById('sc-pin').value.trim(),
+        phone: toArr(document.getElementById('sc-phone').value),
+        email: document.getElementById('sc-email').value.trim(),
+        website: document.getElementById('sc-website').value.trim(),
+        notes: document.getElementById('sc-notes').value.trim()
+      };
+      try {
+        const centers = arr(allData.studyAndRenewalCenters?.centers);
+        const { action, idx } = editCtx;
+        if(action==='edit') centers[idx]=center; else centers.push(center);
+        await setDoc(alDoc('studyAndRenewalCenters'), { ...allData.studyAndRenewalCenters, centers, updatedAt:serverTimestamp() }, {merge:true});
+        allData.studyAndRenewalCenters.centers = centers;
+        alToast('✅ Center saved!','success');
+        closeModal('m-study');
+        updateStats(); renderStudy();
+      } catch(err) { st.textContent='❌ '+err.message; }
+      finally { btn.disabled=false; btn.innerHTML='💾 Save'; }
+    };
+    window.askDeleteStudy = function() {
+      pendingDelete = { type:'study', ...editCtx };
+      document.getElementById('confirm-text').textContent = `Delete this study center? This cannot be undone.`;
+      closeModal('m-study');
+      document.getElementById('m-confirm').classList.add('show');
+    };
+    window.askDeleteStudyByIdx = function(idx) {
+      editCtx = { action:'edit', idx };
+      askDeleteStudy();
+    };
+
+    // ── Confirm Delete ──
+    window.confirmDelete = async function() {
+      const btn = document.getElementById('btn-confirm-del');
+      btn.disabled=true; btn.textContent='Deleting…';
+      try {
+        const d = pendingDelete;
+        if(d.type==='congregation') {
+          const congs = arr(allData[d.secKey]?.congregations);
+          congs.splice(d.idx,1);
+          await setDoc(alDoc(d.secKey), { ...allData[d.secKey], congregations:congs, updatedAt:serverTimestamp() }, {merge:true});
+          allData[d.secKey].congregations = congs;
+        } else if(d.type==='province') {
+          const congs = arr(allData[d.secKey]?.congregations);
+          arr(congs[d.congIdx]?.provinces).splice(d.provIdx,1);
+          await setDoc(alDoc(d.secKey), { ...allData[d.secKey], congregations:congs, updatedAt:serverTimestamp() }, {merge:true});
+          allData[d.secKey].congregations = congs;
+        } else if(d.type==='house') {
+          const congs = arr(allData[d.secKey]?.congregations);
+          arr(congs[d.congIdx]?.provinces[d.provIdx]?.housesInArcheparchy).splice(d.houseIdx,1);
+          await setDoc(alDoc(d.secKey), { ...allData[d.secKey], congregations:congs, updatedAt:serverTimestamp() }, {merge:true});
+          allData[d.secKey].congregations = congs;
+        } else if(d.type==='study') {
+          const centers = arr(allData.studyAndRenewalCenters?.centers);
+          centers.splice(d.idx,1);
+          await setDoc(alDoc('studyAndRenewalCenters'), { ...allData.studyAndRenewalCenters, centers, updatedAt:serverTimestamp() }, {merge:true});
+          allData.studyAndRenewalCenters.centers = centers;
+        }
+        closeModal('m-confirm');
+        alToast('Deleted successfully.','success');
+        updateStats();
+        if(d.type==='study') renderStudy();
+        else renderInstitutes(currentTab);
+      } catch(err) { alToast('❌ Delete failed: '+err.message,'error',4000); }
+      finally { btn.disabled=false; btn.textContent='Yes, Delete'; pendingDelete=null; }
+    };
+
+    // ── Modal helpers ──
+    window.closeModal = function(id) { document.getElementById(id).classList.remove('show'); };
+    document.querySelectorAll('.modal-backdrop-al').forEach(bd => {
+      bd.addEventListener('click', e => { if(e.target===e.currentTarget) e.currentTarget.classList.remove('show'); });
+    });
+
+    // Init tab
+    renderTab('men');
+  </script>
+</body>
+</html>
