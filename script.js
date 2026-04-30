@@ -182,7 +182,7 @@ let editingId = null; // null = add mode, number = edit mode
 
 function initDashboard() {
   const tbody = document.getElementById('users-tbody');
-  if (!tbody) return;
+   if (!document.getElementById('section-home')) return;
 
   // Populate logged-in user info
   const session = JSON.parse(sessionStorage.getItem('af_user') || '{}');
