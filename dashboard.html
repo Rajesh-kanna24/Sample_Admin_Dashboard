@@ -17,7 +17,6 @@
   #user-back-btn:hover{background:#6d1201}
   body.home-fullpage #user-back-btn{display:block}
   body.home-fullpage .home-preview-wrap{border:none;border-radius:0;box-shadow:none}
-
   .home-preview-wrap{border:1px solid #e2e8f0;border-radius:14px;overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,.07);background:#fff;font-family:'Poppins','Roboto',sans-serif}
   .home-edit-bar{background:#1e293b;border-radius:10px;padding:10px 16px;display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:8px}
   .home-edit-bar span{color:#94a3b8;font-size:.8rem}.home-edit-bar strong{color:#fff}
@@ -77,7 +76,7 @@
   .hp-team-placeholder{width:70px;height:70px;border-radius:8px;background:#f1f5f9;display:flex;align-items:center;justify-content:center;font-size:1.8rem;flex-shrink:0}
   .hp-team-name{font-size:.85rem;font-weight:700;color:#1e293b;margin:0 0 2px}
   .hp-team-role{font-size:.72rem;color:#921a02;font-weight:600;margin-bottom:4px}
-  .hp-team-bio{font-size:.75rem;color:#64748b;margin:0}
+  .hp-team-bio{font-size:.75rem;color:#64748b;margin:0 0 6px}
   .hp-team-edit-btn{position:absolute;top:8px;right:8px;background:#4f46e5;color:#fff;border:none;border-radius:6px;padding:3px 9px;font-size:.68rem;cursor:pointer;opacity:0;transition:opacity .15s}
   .hp-team-card:hover .hp-team-edit-btn{opacity:1}
   .hp-services{background:#f8fafc}.hp-services-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
@@ -170,81 +169,10 @@
   .n-row input{border:1px solid #e2e8f0;border-radius:6px;padding:6px 10px;font-size:.8rem;outline:none}
   .n-row input:focus{border-color:#921a02}
   .n-row .rm{background:none;border:none;color:#ef4444;cursor:pointer;font-size:1rem}
-
-  /* ═══════════════════════════════════════
-     ADMINISTRATION SECTION STYLES
-  ═══════════════════════════════════════ */
-  .adm-tab-strip{display:flex;gap:0;overflow-x:auto;background:#fff;border-radius:10px;border:1px solid #e2e8f0;box-shadow:0 2px 8px rgba(0,0,0,.05);margin-bottom:20px;scrollbar-width:none}
-  .adm-tab-strip::-webkit-scrollbar{display:none}
-  .adm-tab-btn{padding:11px 15px;font-size:.75rem;font-weight:700;color:#64748b;background:transparent;border:none;border-bottom:3px solid transparent;cursor:pointer;white-space:nowrap;transition:color .2s,border-color .2s,background .15s;font-family:'Raleway',sans-serif;flex-shrink:0}
-  .adm-tab-btn:hover{color:#921a02;background:rgba(146,26,2,.04)}
-  .adm-tab-btn.active{color:#921a02;border-bottom-color:#921a02;background:rgba(146,26,2,.04)}
-  .adm-card{background:#fff;border-radius:12px;border:1px solid #e2e8f0;box-shadow:0 2px 12px rgba(0,0,0,.05);overflow:hidden}
-  .adm-card-header{background:#f8fafc;border-bottom:1px solid #e2e8f0;padding:12px 18px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}
-  .adm-card-title{font-size:.9rem;font-weight:700;color:#1e293b;display:flex;align-items:center;gap:8px}
-  .adm-pill{width:28px;height:28px;border-radius:8px;background:#921a02;color:#fff;display:flex;align-items:center;justify-content:center;font-size:.78rem;font-weight:800}
-  .adm-count{background:rgba(146,26,2,.1);color:#921a02;font-size:.7rem;font-weight:700;padding:2px 9px;border-radius:20px}
-  .adm-card-body{padding:18px}
-  .adm-subsec-hdr{font-size:.8rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:#921a02;padding:8px 12px;background:rgba(146,26,2,.05);border-left:3px solid #921a02;border-radius:0 6px 6px 0;margin:16px 0 8px}
-  .adm-subsec-hdr:first-child{margin-top:0}
-  .adm-table-wrap{overflow-x:auto}
-  .adm-table{width:100%;border-collapse:collapse;font-size:.82rem}
-  .adm-table thead tr{background:#921a02;color:#fff}
-  .adm-table thead th{padding:9px 12px;font-weight:700;white-space:nowrap;text-align:left}
-  .adm-table tbody tr{border-bottom:1px solid #f1f5f9;transition:background .15s}
-  .adm-table tbody tr:hover{background:#fef9f8}
-  .adm-table td{padding:9px 12px;color:#374151;vertical-align:middle}
-  .adm-table td:first-child{color:#64748b;font-size:.78rem}
-  .adm-row-actions{display:flex;gap:6px}
-  .adm-btn-sm{padding:3px 9px;border-radius:5px;border:none;font-size:.72rem;font-weight:600;cursor:pointer;transition:all .15s}
-  .adm-btn-edit{background:#eff6ff;color:#2563eb}
-  .adm-btn-edit:hover{background:#dbeafe}
-  .adm-btn-del{background:#fef2f2;color:#dc2626}
-  .adm-btn-del:hover{background:#fee2e2}
-  .adm-cards-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px}
-  .adm-person-card{background:#fff;border:1px solid #f0e8e8;border-radius:10px;overflow:hidden;transition:box-shadow .2s,transform .2s;position:relative}
-  .adm-person-card:hover{box-shadow:0 4px 16px rgba(146,26,2,.12);transform:translateY(-2px)}
-  .adm-person-img{width:100%;height:150px;object-fit:cover;display:block;background:#f8f4f4}
-  .adm-person-placeholder{width:100%;height:150px;background:#faf4f4;display:flex;align-items:center;justify-content:center;font-size:2.5rem;color:#d4b5b0}
-  .adm-person-body{padding:12px 14px}
-  .adm-person-name{font-size:.82rem;font-weight:700;color:#1e293b;margin:0 0 3px}
-  .adm-person-role{font-size:.73rem;color:#921a02;font-weight:600;margin:0 0 2px}
-  .adm-person-phone{font-size:.7rem;color:#64748b;margin:0}
-  .adm-card-edit-btn{position:absolute;top:8px;right:8px;background:rgba(0,0,0,.6);color:#fff;border:none;border-radius:6px;padding:4px 10px;font-size:.68rem;cursor:pointer;opacity:0;transition:opacity .15s;backdrop-filter:blur(4px);font-weight:600}
-  .adm-person-card:hover .adm-card-edit-btn{opacity:1}
-  .adm-toolbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
-  .adm-search{flex:1;min-width:160px;border:1px solid #e2e8f0;border-radius:8px;padding:7px 12px 7px 32px;font-size:.82rem;outline:none;background:#f8fafc url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' fill='%2394a3b8' viewBox='0 0 16 16'%3E%3Cpath d='M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398l3.85 3.85a1 1 0 0 0 1.415-1.415l-3.868-3.833zm-5.242 1.156a5.5 5.5 0 1 1 0-11 5.5 5.5 0 0 1 0 11z'/%3E%3C/svg%3E") no-repeat 10px center;transition:border-color .2s}
-  .adm-search:focus{border-color:#921a02;background-color:#fff}
-  .adm-add-btn{display:flex;align-items:center;gap:6px;padding:8px 16px;background:#921a02;color:#fff;border:none;border-radius:8px;font-size:.8rem;font-weight:700;cursor:pointer;transition:background .2s;white-space:nowrap;font-family:'Raleway',sans-serif}
-  .adm-add-btn:hover{background:#6d1201}
-  .adm-spinner{width:32px;height:32px;border:3px solid rgba(146,26,2,.2);border-top-color:#921a02;border-radius:50%;animation:admSpin .7s linear infinite;margin:30px auto}
-  @keyframes admSpin{to{transform:rotate(360deg)}}
-  .adm-stat-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px}
-  @media(max-width:900px){.adm-stat-row{grid-template-columns:repeat(2,1fr)}}
-  .adm-modal-bd{display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.55);backdrop-filter:blur(3px);align-items:center;justify-content:center}
-  .adm-modal-bd.show{display:flex;animation:admFadeIn .2s ease}
-  @keyframes admFadeIn{from{opacity:0}to{opacity:1}}
-  .adm-modal-box{background:#fff;border-radius:16px;padding:24px;width:100%;max-width:520px;max-height:92vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.25);position:relative;animation:admSlideUp .25s ease}
-  @keyframes admSlideUp{from{transform:translateY(20px);opacity:0}to{transform:translateY(0);opacity:1}}
-  .adm-modal-box h5{font-size:1rem;font-weight:700;margin:0 0 16px;color:#1e293b}
-  .adm-modal-close{position:absolute;top:14px;right:16px;background:none;border:none;font-size:1.2rem;cursor:pointer;color:#6b7280;transition:color .15s}
-  .adm-modal-close:hover{color:#1e293b}
-  .adm-mgroup{margin-bottom:12px}
-  .adm-mgroup label{display:block;font-size:.71rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#64748b;margin-bottom:5px}
-  .adm-mgroup input,.adm-mgroup select,.adm-mgroup textarea{width:100%;border:1px solid #e2e8f0;border-radius:8px;padding:8px 12px;font-size:.84rem;outline:none;transition:border-color .2s;font-family:inherit}
-  .adm-mgroup input:focus,.adm-mgroup select:focus,.adm-mgroup textarea:focus{border-color:#921a02}
-  .adm-mactions{display:flex;gap:10px;margin-top:18px}
-  .adm-msave{flex:1;padding:10px;border-radius:8px;border:none;background:#921a02;color:#fff;font-weight:700;font-size:.85rem;cursor:pointer;transition:background .15s;display:flex;align-items:center;justify-content:center;gap:6px}
-  .adm-msave:hover:not(:disabled){background:#6d1201}
-  .adm-msave:disabled{opacity:.6;cursor:not-allowed}
-  .adm-mcancel{padding:10px 18px;border-radius:8px;border:1px solid #e2e8f0;background:#f8fafc;font-size:.85rem;cursor:pointer;transition:background .15s}
-  .adm-mcancel:hover{background:#f1f5f9}
-  .adm-mdel{padding:10px 14px;border-radius:8px;border:none;background:#fef2f2;color:#dc2626;font-size:.82rem;cursor:pointer;font-weight:700;transition:background .15s}
-  .adm-mdel:hover{background:#fee2e2}
-  .adm-mstatus{font-size:.78rem;text-align:center;margin-top:8px;min-height:18px}
-  .adm-spin{width:14px;height:14px;border:2px solid rgba(255,255,255,.4);border-top-color:#fff;border-radius:50%;animation:admSpin .6s linear infinite;display:inline-block}
-  .adm-photo-preview{width:80px;height:80px;border-radius:8px;object-fit:cover;border:2px solid #e2e8f0;display:block;margin:0 auto 8px}
-  .adm-photo-placeholder{width:80px;height:80px;border-radius:8px;background:#faf4f4;display:flex;align-items:center;justify-content:center;font-size:1.8rem;margin:0 auto 8px;border:2px solid #e2e8f0}
+  .social-input-row{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+  .social-input-row i{width:20px;text-align:center;color:#374151;font-size:.9rem;flex-shrink:0}
+  .social-input-row input{flex:1;border:1px solid #e2e8f0;border-radius:6px;padding:6px 10px;font-size:.8rem;outline:none;font-family:inherit;transition:border-color .2s}
+  .social-input-row input:focus{border-color:#921a02}
   </style>
 </head>
 <body>
@@ -254,54 +182,18 @@
 <div class="sidebar-overlay" id="sidebar-overlay"></div>
 
 <div class="dash-layout">
-  <!-- SIDEBAR -->
   <aside class="sidebar" id="sidebar">
     <div class="sidebar-brand">
       <div class="sidebar-logo">AF</div>
-      <div>
-        <div class="sidebar-brand-text">AdminForge</div>
-        <div class="sidebar-brand-sub">Management System</div>
-      </div>
+      <div><div class="sidebar-brand-text">AdminForge</div><div class="sidebar-brand-sub">Management System</div></div>
     </div>
     <div class="sidebar-menu">
       <p class="sidebar-section">Main</p>
-      <div class="sidebar-item" id="nav-users" onclick="showSec('users')">
-        <span class="si-icon">⬡</span> Users
-      </div>
-      <div class="sidebar-item" id="nav-add-user" style="display:none;"
-        onclick="showSec('users');setTimeout(()=>document.getElementById('section-form').scrollIntoView({behavior:'smooth'}),120)">
-        <span class="si-icon">＋</span> Add User
-      </div>
-      <div class="sidebar-item"
-        onclick="showSec('users');setTimeout(()=>document.getElementById('section-table').scrollIntoView({behavior:'smooth'}),120)">
-        <span class="si-icon">◧</span> Users Table
-        <span class="si-badge" id="sidebar-count">0</span>
-      </div>
+      <div class="sidebar-item" id="nav-users" onclick="showSec('users')"><span class="si-icon">⬡</span> Users</div>
+      <div class="sidebar-item" id="nav-add-user" style="display:none;" onclick="showSec('users');setTimeout(()=>document.getElementById('section-form').scrollIntoView({behavior:'smooth'}),120)"><span class="si-icon">＋</span> Add User</div>
+      <div class="sidebar-item" onclick="showSec('users');setTimeout(()=>document.getElementById('section-table').scrollIntoView({behavior:'smooth'}),120)"><span class="si-icon">◧</span> Users Table <span class="si-badge" id="sidebar-count">0</span></div>
       <p class="sidebar-section">Pages</p>
-      <div class="sidebar-item active" id="nav-home" onclick="showSec('home')">
-        <span class="si-icon">⬡</span> Home
-      </div>
-       <a href="about.html" class="sidebar-item " id="nav-about">
-        <span class="si-icon">ℹ</span> About Us
-      </a>
-      <!-- ★ ADMINISTRATION SIDEBAR ITEM ★ -->
-      <a href="administration.html" class="sidebar-item">
-  <span class="si-icon">⛪</span> Administration
-</a>
-      <a href="parishes.html" class="sidebar-item">
-        <span class="si-icon">⬡</span> Parishes
-      </a>
-      <a href="priests.html" class="sidebar-item" id="nav-priests">
-        <span class="si-icon">✝</span> Priests
-        <span class="si-badge" id="sidebar-pr-count">0</span>
-      </a>
-      <a href="seminarians.html" class="sidebar-item" id="nav-seminarians">
-        <span class="si-icon">🎓</span> Seminarians
-        <span class="si-badge" id="sidebar-sem-count">0</span>
-      </a>
-       <a href="department.html" class="sidebar-item"><span class="si-icon">🏢</span> Departments</a>
-      <a href="mission.html" class="sidebar-item"><span class="si-icon">🌍</span> Missions <span class="si-badge" id="sidebar-mis-count">0</span></a>
-
+      <div class="sidebar-item active" id="nav-home" onclick="showSec('home')"><span class="si-icon">⬡</span> Home</div>
       <p class="sidebar-section" style="margin-top:14px;">Account</p>
       <div class="sidebar-item" onclick="toast('Settings — coming soon!')"><span class="si-icon">⚙</span> Settings</div>
       <div class="sidebar-item" onclick="toast('Profile editor — coming soon!')"><span class="si-icon">◉</span> My Profile</div>
@@ -309,23 +201,16 @@
     <div class="sidebar-footer">
       <div class="user-row">
         <div class="user-row-avatar" id="sidebar-avatar">?</div>
-        <div>
-          <div class="user-row-name" id="sidebar-username">Loading…</div>
-          <div class="user-row-role" id="sidebar-role">—</div>
-        </div>
+        <div><div class="user-row-name" id="sidebar-username">Loading…</div><div class="user-row-role" id="sidebar-role">—</div></div>
       </div>
     </div>
   </aside>
 
-  <!-- TOPBAR -->
   <nav class="topbar">
     <div class="topbar-left">
       <button class="sidebar-toggle" id="sidebar-toggle">☰</button>
       <div class="topbar-rule d-none d-lg-block"></div>
-      <div>
-        <div class="topbar-title" id="topbar-title">Home Page</div>
-        <div class="topbar-sub" id="topbar-sub">Live Preview</div>
-      </div>
+      <div><div class="topbar-title" id="topbar-title">Home Page</div><div class="topbar-sub" id="topbar-sub">Live Preview</div></div>
     </div>
     <div class="topbar-right">
       <span id="role-badge" class="badge bg-secondary me-2" style="font-size:.8rem;padding:6px 12px;"></span>
@@ -334,11 +219,9 @@
     </div>
   </nav>
 
-  <!-- MAIN -->
   <main class="dash-main">
     <div id="alert-box" class="alert d-none mb-3" role="alert"></div>
 
-    <!-- HOME SECTION -->
     <div class="dash-section active" id="section-home">
       <div class="home-edit-bar" id="home-edit-bar" style="display:none;">
         <div><strong>Home Page</strong><span id="save-status"> — Saved</span></div>
@@ -347,13 +230,17 @@
           <button class="hm-save" id="btn-save-all" style="flex:0;padding:8px 16px;" onclick="saveAll()">💾 Save All</button>
         </div>
       </div>
+
       <div class="home-preview-wrap">
         <div class="hp-contact-bar">
-          <div style="display:flex;gap:16px;"><span><i class="bi bi-envelope"></i> info@archchanganacherry.org</span><span><i class="bi bi-telephone"></i> 0481 2420040</span></div>
+          <div style="display:flex;gap:16px;"><span><i class="bi bi-envelope"></i> <a href="mailto:info@archchanganacherry.org">info@archchanganacherry.org</a></span><span><i class="bi bi-telephone"></i> 0481 2420040</span></div>
           <div style="display:flex;gap:10px;"><a href="#"><i class="bi bi-youtube"></i></a><a href="#"><i class="bi bi-facebook"></i></a><a href="#"><i class="bi bi-mic"></i></a></div>
         </div>
         <div class="hp-navbar"><span>Home</span><span>About Us</span><span>Administration</span><span>Parishes</span><span>Priests</span><span>Seminarians</span><span>Apostolic Life</span><span>Departments</span><span>Missions</span><span>General Info</span></div>
-        <div class="hp-logo-bar"><div style="display:flex;align-items:center;gap:12px;"><div class="hp-logo-icon">AC</div><span class="hp-site-name">Archeparchy of Changanassery</span></div><div style="display:flex;gap:8px;"><span style="border:1px solid #921a02;color:#921a02;padding:4px 12px;border-radius:4px;font-size:.75rem;cursor:default;">Contact Us</span><span style="background:#921a02;color:#fff;padding:4px 12px;border-radius:4px;font-size:.75rem;cursor:default;">Gallery</span></div></div>
+        <div class="hp-logo-bar">
+          <div style="display:flex;align-items:center;gap:12px;"><div class="hp-logo-icon">AC</div><span class="hp-site-name">Archeparchy of Changanassery</span></div>
+          <div style="display:flex;gap:8px;"><span style="border:1px solid #921a02;color:#921a02;padding:4px 12px;border-radius:4px;font-size:.75rem;cursor:default;">Contact Us</span><span style="background:#921a02;color:#fff;padding:4px 12px;border-radius:4px;font-size:.75rem;cursor:default;">Gallery</span></div>
+        </div>
         <div class="hp-hero" id="hp-hero">
           <div class="hp-hero-controls"><button class="hp-hero-btn" onclick="heroNav(-1)">&#8249;</button><button class="hp-hero-btn" onclick="heroNav(1)">&#8250;</button></div>
           <div class="hp-hero-dots" id="hp-hero-dots"></div>
@@ -363,18 +250,55 @@
             <button class="hp-hero-admin-btn del" id="btn-hero-del" onclick="delHero()">🗑 Delete</button>
           </div>
         </div>
-        <div class="hp-quick-menu"><a class="hp-menu-box"><i class="bi bi-newspaper"></i><span>News</span></a><a class="hp-menu-box"><i class="bi bi-journal-bookmark"></i><span>Liturgy</span></a><a class="hp-menu-box"><i class="bi bi-folder2-open"></i><span>Documents</span></a><a class="hp-menu-box"><i class="bi bi-book"></i><span>Daily Readings</span></a><a class="hp-menu-box"><i class="bi bi-calendar-week"></i><span>Calendar</span></a><a class="hp-menu-box"><i class="bi bi-megaphone"></i><span>Announcements</span></a><a class="hp-menu-box"><i class="bi bi-megaphone"></i><span>Samudhaya</span></a></div>
-        <div class="hp-section hp-about"><div class="hp-section-title"><h2>About</h2><p>About Us</p></div><div class="hp-about-grid"><div><p class="hp-about-p" id="hp-p1"></p><ul><li><i class="bi bi-check2-circle"></i><span>Rooted in early Christian traditions.</span></li><li><i class="bi bi-check2-circle"></i><span>Historic hierarchical connection with the Patriarchate of Seleucia-Ctesiphon.</span></li><li><i class="bi bi-check2-circle"></i><span>Evolved into a distinct, self-governing Metropolitan Church.</span></li></ul><button id="btn-edit-about" onclick="openAbout()" style="display:none;margin-top:12px;background:#4f46e5;color:#fff;border:none;border-radius:6px;padding:6px 14px;font-size:.75rem;cursor:pointer;">✏️ Edit About</button></div><div><p class="hp-about-p" id="hp-p2"></p><a href="#" class="hp-read-more">Read More <i class="bi bi-arrow-right"></i></a></div></div></div>
+        <div class="hp-quick-menu">
+          <a class="hp-menu-box"><i class="bi bi-newspaper"></i><span>News</span></a>
+          <a class="hp-menu-box"><i class="bi bi-journal-bookmark"></i><span>Liturgy</span></a>
+          <a class="hp-menu-box"><i class="bi bi-folder2-open"></i><span>Documents</span></a>
+          <a class="hp-menu-box"><i class="bi bi-book"></i><span>Daily Readings</span></a>
+          <a class="hp-menu-box"><i class="bi bi-calendar-week"></i><span>Calendar</span></a>
+          <a class="hp-menu-box"><i class="bi bi-megaphone"></i><span>Announcements</span></a>
+          <a class="hp-menu-box"><i class="bi bi-megaphone"></i><span>Samudhaya</span></a>
+        </div>
+        <div class="hp-section hp-about">
+          <div class="hp-section-title"><h2>About</h2><p>About Us</p></div>
+          <div class="hp-about-grid">
+            <div><p class="hp-about-p" id="hp-p1"></p><ul><li><i class="bi bi-check2-circle"></i><span>Rooted in early Christian traditions shaped by East Syrian ecclesial influence.</span></li><li><i class="bi bi-check2-circle"></i><span>Maintained a historic hierarchical connection with the Patriarchate of Seleucia-Ctesiphon.</span></li><li><i class="bi bi-check2-circle"></i><span>Evolved into a distinct, self-governing Metropolitan Church within the wider Christian communion.</span></li></ul><button id="btn-edit-about" onclick="openAbout()" style="display:none;margin-top:12px;background:#4f46e5;color:#fff;border:none;border-radius:6px;padding:6px 14px;font-size:.75rem;cursor:pointer;">✏️ Edit About</button></div>
+            <div><p class="hp-about-p" id="hp-p2"></p><a href="#" class="hp-read-more">Read More <i class="bi bi-arrow-right"></i></a></div>
+          </div>
+        </div>
         <div class="hp-section hp-stats"><div class="hp-stats-grid" id="hp-stats-grid"></div><div style="text-align:center;margin-top:14px;"><button id="btn-edit-stats" onclick="openStats()" style="display:none;background:#4f46e5;color:#fff;border:none;border-radius:6px;padding:6px 16px;font-size:.75rem;cursor:pointer;">✏️ Edit Stats</button></div></div>
-        <div class="hp-section hp-team"><div class="hp-section-title"><h2>Leads</h2><p>Our Leading Heights</p></div><div class="hp-team-grid" id="hp-team-grid"></div><div style="text-align:center;margin-top:14px;"><button id="btn-add-team" onclick="openTeam(null)" style="display:none;background:#4f46e5;color:#fff;border:none;border-radius:6px;padding:6px 16px;font-size:.75rem;cursor:pointer;">＋ Add Leader</button></div></div>
-        <div class="hp-section hp-services"><div class="hp-section-title"><h2>Instant Services Around You</h2><p>Everything You Need in One Place</p></div><div class="hp-services-grid" id="hp-svc-grid"></div><div style="text-align:center;margin-top:14px;"><button id="btn-edit-svc" onclick="openSvc()" style="display:none;background:#4f46e5;color:#fff;border:none;border-radius:6px;padding:6px 16px;font-size:.75rem;cursor:pointer;">✏️ Edit Services</button></div></div>
-        <div class="hp-section hp-news"><div class="hp-section-title"><h2>News &amp; Updates</h2><p>Latest Announcements and Information</p></div><div class="hp-news-tabs"><button class="hp-news-tab active" onclick="switchNews('diocesan',this)">Diocesan News</button><button class="hp-news-tab" onclick="switchNews('helpdesk',this)">Help Desk</button></div><div class="hp-news-scroll" id="hp-news-scroll"></div><div style="text-align:center;margin-top:14px;"><button id="btn-edit-news" onclick="openNews()" style="display:none;background:#4f46e5;color:#fff;border:none;border-radius:6px;padding:6px 16px;font-size:.75rem;cursor:pointer;">✏️ Edit News</button></div></div>
-        <div class="hp-section hp-gallery"><div class="hp-section-title"><h2>Gallery</h2><p>Celebrating Our Journey Together</p></div><div class="hp-gallery-filters"><button class="hp-gallery-filter active" onclick="filterGal('*',this)">All</button><button class="hp-gallery-filter" onclick="filterGal('Events',this)">Events</button><button class="hp-gallery-filter" onclick="filterGal('Festival',this)">Festival</button><button class="hp-gallery-filter" onclick="filterGal('Madhyastan',this)">Madhyastan</button></div><div class="hp-gallery-grid" id="hp-gal-grid"></div></div>
-        <div class="hp-footer"><div class="hp-footer-grid"><div><p class="hp-footer-title">Archeparchy of Changanassery</p><p class="hp-footer-p">Archbishop's House, Changanacherry, Kerala, India</p><p class="hp-footer-p"><strong style="color:#fff;">Phone:</strong> 0481 2420040, 2420379</p><p class="hp-footer-p"><strong style="color:#fff;">Email:</strong> info@archchanganacherry.org</p><div class="hp-footer-social"><a href="#"><i class="bi bi-youtube"></i></a><a href="#"><i class="bi bi-facebook"></i></a><a href="#"><i class="bi bi-mic"></i></a></div></div><div><p class="hp-footer-title">Useful Links</p><ul class="hp-footer-links"><li><a href="#">Home</a></li><li><a href="#">About Us</a></li><li><a href="#">Administration</a></li><li><a href="#">Contact</a></li><li><a href="#">Missions</a></li></ul></div><div><p class="hp-footer-title">Help Center</p><ul class="hp-footer-links"><li><a href="#">KCBC</a></li><li><a href="#">Syro Malabar</a></li><li><a href="#">Syro Malankara</a></li><li><a href="#">Latin Hierarchy</a></li></ul></div></div><div class="hp-footer-copy">© Archeparchy of Changanassery — All Rights Reserved | Developed by <a href="https://adsofttechnologies.com/" target="_blank" style="color:#94a3b8;">AD Soft Technologies</a></div></div>
+        <div class="hp-section hp-team">
+          <div class="hp-section-title"><h2>Leads</h2><p>Our Leading Heights</p></div>
+          <div class="hp-team-grid" id="hp-team-grid"></div>
+          <div style="text-align:center;margin-top:14px;"><button id="btn-add-team" onclick="openTeam(null)" style="display:none;background:#4f46e5;color:#fff;border:none;border-radius:6px;padding:6px 16px;font-size:.75rem;cursor:pointer;">＋ Add Leader</button></div>
+        </div>
+        <div class="hp-section hp-services">
+          <div class="hp-section-title"><h2>Instant Services Around You</h2><p>Everything You Need in One Place</p></div>
+          <div class="hp-services-grid" id="hp-svc-grid"></div>
+          <div style="text-align:center;margin-top:14px;"><button id="btn-edit-svc" onclick="openSvc()" style="display:none;background:#4f46e5;color:#fff;border:none;border-radius:6px;padding:6px 16px;font-size:.75rem;cursor:pointer;">✏️ Edit Services</button></div>
+        </div>
+        <div class="hp-section hp-news">
+          <div class="hp-section-title"><h2>News &amp; Updates</h2><p>Latest Announcements and Information</p></div>
+          <div class="hp-news-tabs"><button class="hp-news-tab active" onclick="switchNews('diocesan',this)">Diocesan News</button><button class="hp-news-tab" onclick="switchNews('helpdesk',this)">Help Desk</button></div>
+          <div class="hp-news-scroll" id="hp-news-scroll"></div>
+          <div style="text-align:center;margin-top:14px;"><button id="btn-edit-news" onclick="openNews()" style="display:none;background:#4f46e5;color:#fff;border:none;border-radius:6px;padding:6px 16px;font-size:.75rem;cursor:pointer;">✏️ Edit News</button></div>
+        </div>
+        <div class="hp-section hp-gallery">
+          <div class="hp-section-title"><h2>Gallery</h2><p>Celebrating Our Journey Together</p></div>
+          <div class="hp-gallery-filters"><button class="hp-gallery-filter active" onclick="filterGal('*',this)">All</button><button class="hp-gallery-filter" onclick="filterGal('Events',this)">Events</button><button class="hp-gallery-filter" onclick="filterGal('Festival',this)">Festival</button><button class="hp-gallery-filter" onclick="filterGal('Madhyastan',this)">Madhyastan</button></div>
+          <div class="hp-gallery-grid" id="hp-gal-grid"></div>
+        </div>
+        <div class="hp-footer">
+          <div class="hp-footer-grid">
+            <div><p class="hp-footer-title">Archeparchy of Changanassery</p><p class="hp-footer-p">Archbishop's House, Changanacherry, Kerala, India</p><p class="hp-footer-p"><strong style="color:#fff;">Phone:</strong> 0481 2420040, 2420379</p><p class="hp-footer-p"><strong style="color:#fff;">Email:</strong> <a href="mailto:info@archchanganacherry.org">info@archchanganacherry.org</a></p><div class="hp-footer-social"><a href="#"><i class="bi bi-youtube"></i></a><a href="#"><i class="bi bi-facebook"></i></a><a href="#"><i class="bi bi-mic"></i></a></div></div>
+            <div><p class="hp-footer-title">Useful Links</p><ul class="hp-footer-links"><li><a href="#">Home</a></li><li><a href="#">About Us</a></li><li><a href="#">Administration</a></li><li><a href="#">Contact</a></li><li><a href="#">Missions</a></li></ul></div>
+            <div><p class="hp-footer-title">Help Center</p><ul class="hp-footer-links"><li><a href="#">KCBC</a></li><li><a href="#">Syro Malabar</a></li><li><a href="#">Syro Malankara</a></li><li><a href="#">Latin Hierarchy</a></li></ul></div>
+          </div>
+          <div class="hp-footer-copy">© Archeparchy of Changanassery — All Rights Reserved | Developed by <a href="https://adsofttechnologies.com/" target="_blank" style="color:#94a3b8;">AD Soft Technologies</a></div>
+        </div>
       </div>
-    </div><!-- /section-home -->
+    </div>
 
-    <!-- USERS SECTION -->
     <div class="dash-section" id="section-users">
       <div class="row g-3 mb-4">
         <div class="col-6 col-xl-3 fade-up"><div class="stat-card"><div class="stat-icon gold">👥</div><div><div class="stat-value" id="stat-total">0</div><div class="stat-label">Total Users</div></div></div></div>
@@ -392,7 +316,11 @@
                 <div class="col-md-6"><label class="form-label">Phone Number</label><input type="tel" id="f-phone" class="form-control" placeholder="+1 555 000 1234" maxlength="20"/></div>
                 <div class="col-md-6"><label class="form-label">Role</label><select id="f-role" class="form-select"><option>Manager</option><option>Secretary</option><option>Principal</option><option>Vice Principal</option></select></div>
                 <div class="col-12"><label class="form-label">Address</label><textarea id="f-address" class="form-control" rows="2" placeholder="123 Main Street…"></textarea></div>
-                <div class="col-md-6"><label class="form-label">Profile Image</label><div class="upload-zone"><input type="file" id="f-image" accept="image/*"/><div class="upload-zone-icon">📁</div><div class="upload-zone-text">Drop file here or <span>browse</span></div></div><div style="position:relative;display:inline-block;margin-top:8px;"><img id="img-preview" src="" alt="" style="display:none;max-width:80px;height:80px;object-fit:cover;border-radius:8px;"/><button type="button" id="remove-img-btn" onclick="removeFormImg()" style="display:none;position:absolute;top:-6px;right:-6px;width:20px;height:20px;border:none;border-radius:50%;background:#ef4444;color:#fff;font-size:12px;cursor:pointer;">✕</button></div></div>
+                <div class="col-md-6">
+                  <label class="form-label">Profile Image</label>
+                  <div class="upload-zone"><input type="file" id="f-image" accept="image/*"/><div class="upload-zone-icon">📁</div><div class="upload-zone-text">Drop file here or <span>browse</span></div></div>
+                  <div style="position:relative;display:inline-block;margin-top:8px;"><img id="img-preview" src="" alt="" style="display:none;max-width:80px;height:80px;object-fit:cover;border-radius:8px;"/><button type="button" id="remove-img-btn" onclick="removeFormImg()" style="display:none;position:absolute;top:-6px;right:-6px;width:20px;height:20px;border:none;border-radius:50%;background:#ef4444;color:#fff;font-size:12px;cursor:pointer;">✕</button></div>
+                </div>
                 <div class="col-12 d-flex flex-wrap gap-2 pt-2" style="border-top:1px solid var(--rule);"><button type="submit" class="btn btn-primary" id="btn-submit">＋ Add User</button><button type="button" class="btn btn-outline-slate" onclick="clearUForm()">Clear Form</button></div>
               </div>
             </form>
@@ -408,139 +336,226 @@
           </div>
         </div>
       </div>
-    </div><!-- /section-users -->
-
-    <!-- ★ ADMINISTRATION SECTION ★ -->
-    <div class="dash-section" id="section-administration">
-      <!-- Stats row -->
-      <div class="adm-stat-row">
-        <div class="stat-card"><div class="stat-icon gold">⛪</div><div><div class="stat-value" id="adm-stat-curia">6</div><div class="stat-label">Curia Members</div></div></div>
-        <div class="stat-card"><div class="stat-icon blue">🏛</div><div><div class="stat-value" id="adm-stat-offices">8</div><div class="stat-label">Other Offices</div></div></div>
-        <div class="stat-card"><div class="stat-icon green">⚖</div><div><div class="stat-value" id="adm-stat-tribunal">27</div><div class="stat-label">Tribunal Members</div></div></div>
-        <div class="stat-card"><div class="stat-icon" style="background:rgba(234,179,8,.15);">📜</div><div><div class="stat-value" id="adm-stat-presbyters">16</div><div class="stat-label">Proto-Presbyters</div></div></div>
-      </div>
-      <!-- Tab strip -->
-      <div class="adm-tab-strip" id="admTabStrip">
-        <button class="adm-tab-btn active" data-adm-tab="admin-tab-1" onclick="admShowTab('admin-tab-1',this)">Metropolitan Curia</button>
-        <button class="adm-tab-btn" data-adm-tab="admin-tab-2" onclick="admShowTab('admin-tab-2',this)">Other Offices</button>
-        <button class="adm-tab-btn" data-adm-tab="admin-tab-3" onclick="admShowTab('admin-tab-3',this)">Tribunal</button>
-        <button class="adm-tab-btn" data-adm-tab="admin-tab-4" onclick="admShowTab('admin-tab-4',this)">Consultors</button>
-        <button class="adm-tab-btn" data-adm-tab="admin-tab-5" onclick="admShowTab('admin-tab-5',this)">Proto-Presbyters</button>
-        <button class="adm-tab-btn" data-adm-tab="admin-tab-6" onclick="admShowTab('admin-tab-6',this)">Finance Council</button>
-        <button class="adm-tab-btn" data-adm-tab="admin-tab-7" onclick="admShowTab('admin-tab-7',this)">Presbyteral Council</button>
-        <button class="adm-tab-btn" data-adm-tab="admin-tab-8" onclick="admShowTab('admin-tab-8',this)">Pastoral Council</button>
-      </div>
-      <!-- Main card -->
-      <div class="adm-card">
-        <div class="adm-card-header">
-          <div class="adm-card-title">
-            <div class="adm-pill">⛪</div>
-            <span id="adm-card-title">Metropolitan Curia</span>
-            <span class="adm-count" id="adm-card-count">0</span>
-          </div>
-          <div class="adm-toolbar">
-            <input type="text" id="adm-search" class="adm-search" placeholder="Search…" oninput="admFilter()"/>
-            <button class="adm-add-btn" onclick="admOpenAdd()">＋ Add Entry</button>
-          </div>
-        </div>
-        <div class="adm-card-body">
-          <div id="adm-content-area"><div class="adm-spinner"></div></div>
-        </div>
-      </div>
-    </div><!-- /section-administration -->
-
+    </div>
   </main>
 </div>
 
-<!-- HOME MODALS -->
-<div id="m-hero-add" class="hm-backdrop"><div class="hm-box" style="max-width:600px;"><button class="hm-close" onclick="closeM('m-hero-add')">✕</button><h5>Add Hero Images</h5><div class="hm-drop" id="hero-drop"><input type="file" id="hero-files" accept="image/*" multiple onchange="onHeroFiles(event)"/><p>📁 Drop images here or <span>browse</span> — select multiple at once</p><p style="font-size:.7rem;margin-top:4px;">Recommended: 1920×1080px</p></div><div class="uq" id="hero-queue"></div><div class="hm-actions" style="margin-top:14px;"><button class="hm-cancel" onclick="closeM('m-hero-add')">Cancel</button><button class="hm-save" id="btn-ha-save" onclick="saveHeroAdd()">＋ Add to Carousel</button></div><div class="hm-status" id="ha-status"></div></div></div>
-<div id="m-hero-edit" class="hm-backdrop"><div class="hm-box"><button class="hm-close" onclick="closeM('m-hero-edit')">✕</button><h5>Edit Hero Slide</h5><div style="position:relative;border-radius:10px;overflow:hidden;aspect-ratio:16/9;background:#0f172a;margin-bottom:12px;"><img id="he-preview" src="" alt="" style="width:100%;height:100%;object-fit:cover;opacity:.8;display:block;"/><label for="he-file" style="position:absolute;bottom:10px;right:10px;background:rgba(146,26,2,.9);color:#fff;border-radius:8px;padding:6px 14px;cursor:pointer;font-size:.76rem;font-weight:600;">📷 Change Image</label></div><input type="file" id="he-file" accept="image/*" style="display:none;" onchange="onHeroEditFile(event)"/><div class="hm-group"><label>Title</label><input type="text" id="he-title" placeholder="Archeparchy of Changanassery"/></div><div class="hm-group"><label>Subtitle</label><input type="text" id="he-sub" placeholder="A beacon of faith and unity…"/></div><div class="hm-actions"><button class="hm-cancel" onclick="closeM('m-hero-edit')">Cancel</button><button class="hm-save" id="btn-he-save" onclick="saveHeroEdit()">💾 Save Changes</button></div><div class="hm-status" id="he-status"></div></div></div>
-<div id="m-about" class="hm-backdrop"><div class="hm-box"><button class="hm-close" onclick="closeM('m-about')">✕</button><h5>Edit About Section</h5><div class="hm-group"><label>Paragraph 1</label><textarea id="ab-p1" rows="4"></textarea></div><div class="hm-group"><label>Paragraph 2</label><textarea id="ab-p2" rows="3"></textarea></div><div class="hm-actions"><button class="hm-cancel" onclick="closeM('m-about')">Cancel</button><button class="hm-save" id="btn-ab-save" onclick="saveAbout()">💾 Save</button></div><div class="hm-status" id="ab-status"></div></div></div>
-<div id="m-stats" class="hm-backdrop"><div class="hm-box"><button class="hm-close" onclick="closeM('m-stats')">✕</button><h5>Edit Statistics</h5><div id="stats-list"></div><button onclick="addStat()" style="width:100%;padding:8px;border:1px dashed #e2e8f0;border-radius:8px;background:#f8fafc;color:#64748b;cursor:pointer;font-size:.8rem;margin-top:4px;">＋ Add Stat</button><div class="hm-actions"><button class="hm-cancel" onclick="closeM('m-stats')">Cancel</button><button class="hm-save" id="btn-st-save" onclick="saveStats()">💾 Save</button></div><div class="hm-status" id="st-status"></div></div></div>
-<div id="m-team" class="hm-backdrop"><div class="hm-box"><button class="hm-close" onclick="closeM('m-team')">✕</button><h5 id="team-modal-h">Add Leader</h5><div style="display:flex;justify-content:center;margin-bottom:14px;"><div style="position:relative;display:inline-block;"><img id="tm-img" src="https://ui-avatars.com/api/?name=L&background=921a02&color=fff&size=80" style="width:80px;height:80px;border-radius:50%;object-fit:cover;border:3px solid #e2e8f0;"/><label for="tm-file" style="position:absolute;bottom:0;right:0;background:#921a02;color:#fff;border-radius:50%;width:26px;height:26px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:.8rem;">📷</label></div></div><input type="file" id="tm-file" accept="image/*" style="display:none;" onchange="onTeamImg(event)"/><div class="hm-group"><label>Full Name</label><input type="text" id="tm-name" placeholder="Pope Leo XIV"/></div><div class="hm-group"><label>Title / Role</label><input type="text" id="tm-role" placeholder="Holy Father"/></div><div class="hm-group"><label>Biography</label><textarea id="tm-bio" rows="3" placeholder="Short biography…"></textarea></div><div style="display:flex;gap:10px;margin-top:16px;flex-wrap:wrap;"><button class="hm-cancel" onclick="closeM('m-team')">Cancel</button><button class="hm-save" id="btn-tm-save" onclick="saveTeam()" style="flex:1;">💾 Save</button><button id="btn-tm-del" onclick="delTeam()" style="padding:10px 14px;border-radius:8px;border:none;background:#ef4444;color:#fff;font-size:.82rem;cursor:pointer;display:none;">🗑 Delete</button></div><div class="hm-status" id="tm-status"></div></div></div>
-<div id="m-svc" class="hm-backdrop"><div class="hm-box" style="max-width:580px;"><button class="hm-close" onclick="closeM('m-svc')">✕</button><h5>Edit Services</h5><div id="svc-list"></div><button onclick="addSvc()" style="width:100%;padding:8px;border:1px dashed #e2e8f0;border-radius:8px;background:#f8fafc;color:#64748b;cursor:pointer;font-size:.8rem;margin-top:4px;">＋ Add Service</button><div class="hm-actions"><button class="hm-cancel" onclick="closeM('m-svc')">Cancel</button><button class="hm-save" id="btn-sv-save" onclick="saveSvc()">💾 Save</button></div><div class="hm-status" id="sv-status"></div></div></div>
-<div id="m-news" class="hm-backdrop"><div class="hm-box"><button class="hm-close" onclick="closeM('m-news')">✕</button><h5>Edit News &amp; Updates</h5><p style="font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#921a02;margin-bottom:8px;">📰 Diocesan News</p><div id="news-dioc-list"></div><button onclick="addNewsRow('diocesan')" style="width:100%;padding:7px;border:1px dashed #e2e8f0;border-radius:8px;background:#f8fafc;color:#64748b;cursor:pointer;font-size:.78rem;margin-bottom:16px;">＋ Add Item</button><p style="font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#921a02;margin-bottom:8px;">🆘 Help Desk</p><div id="news-help-list"></div><button onclick="addNewsRow('helpdesk')" style="width:100%;padding:7px;border:1px dashed #e2e8f0;border-radius:8px;background:#f8fafc;color:#64748b;cursor:pointer;font-size:.78rem;">＋ Add Item</button><div class="hm-actions"><button class="hm-cancel" onclick="closeM('m-news')">Cancel</button><button class="hm-save" id="btn-nw-save" onclick="saveNews()">💾 Save</button></div><div class="hm-status" id="nw-status"></div></div></div>
-<div id="m-uimg" class="hm-backdrop"><div class="hm-box"><button class="hm-close" onclick="closeM('m-uimg')">✕</button><h5>Edit Profile Image</h5><p style="font-size:.8rem;color:#6b7280;margin-bottom:14px;" id="uimg-name"></p><div style="display:flex;justify-content:center;margin-bottom:14px;"><div style="position:relative;display:inline-block;"><img id="uimg-cur" src="" alt="" style="width:90px;height:90px;border-radius:50%;object-fit:cover;border:3px solid #e2e8f0;"/><label for="uimg-file" style="position:absolute;bottom:0;right:0;background:#4f46e5;color:#fff;border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:.85rem;">📷</label></div></div><input type="file" id="uimg-file" accept="image/*" style="display:none;" onchange="onUImgFile(event)"/><div id="uimg-new-wrap" style="display:none;text-align:center;margin-bottom:12px;"><p style="font-size:.75rem;color:#6b7280;margin-bottom:6px;">New preview:</p><img id="uimg-new" src="" style="width:70px;height:70px;border-radius:50%;object-fit:cover;border:2px solid #22c55e;"/></div><div style="text-align:center;margin-bottom:12px;"><button onclick="removeUImg()" style="background:none;border:none;color:#ef4444;font-size:.78rem;cursor:pointer;text-decoration:underline;">🗑 Remove image</button></div><div class="hm-actions"><button class="hm-cancel" onclick="closeM('m-uimg')">Cancel</button><button class="hm-save" id="btn-ui-save" onclick="saveUImg()">💾 Save</button></div><div class="hm-status" id="ui-status"></div></div></div>
-
-<!-- ★ ADMINISTRATION MODAL ★ -->
-<div id="m-adm" class="adm-modal-bd">
-  <div class="adm-modal-box">
-    <button class="adm-modal-close" onclick="admCloseModal()">✕</button>
-    <h5 id="adm-modal-title">Add Entry</h5>
-    <!-- Card fields (tabs 1 & 2) -->
-    <div id="adm-f-card-fields">
-      <div style="display:flex;justify-content:center;margin-bottom:12px;">
-        <div>
-          <div class="adm-photo-placeholder" id="adm-photo-placeholder">👤</div>
-          <img id="adm-photo-preview" class="adm-photo-preview" src="" alt="" style="display:none;"/>
-          <label for="adm-f-photo" style="display:block;text-align:center;font-size:.72rem;color:#921a02;font-weight:600;cursor:pointer;margin-top:4px;">📷 Change Photo</label>
-          <input type="file" id="adm-f-photo" accept="image/*" style="display:none;" onchange="admOnPhoto(event)"/>
-        </div>
-      </div>
-      <div class="adm-mgroup"><label>Full Name</label><input type="text" id="adm-f-name" placeholder="Very Rev. Fr. John Smith"/></div>
-      <div class="adm-mgroup"><label>Role / Title</label><input type="text" id="adm-f-role" placeholder="Chancellor"/></div>
-      <div class="adm-mgroup"><label>Phone</label><input type="text" id="adm-f-phone" placeholder="94475 07393"/></div>
-      <div class="adm-mgroup"><label>Image URL (optional — leave blank to upload)</label><input type="text" id="adm-f-imageUrl" placeholder="assets/img/photo.jpg" oninput="admPreviewUrl(this.value)"/></div>
-    </div>
-    <!-- Table two-col fields -->
-    <div id="adm-f-table-fields" style="display:none;">
-      <div class="adm-mgroup"><label id="adm-f-col1-label">Office / Forane</label><input type="text" id="adm-f-col1" placeholder="Office or Forane name"/></div>
-      <div class="adm-mgroup"><label>Name</label><input type="text" id="adm-f-col2" placeholder="Rev. Fr. Name"/></div>
-    </div>
-    <!-- One-col fields -->
-    <div id="adm-f-onecol-fields" style="display:none;">
-      <div class="adm-mgroup"><label>Name</label><input type="text" id="adm-f-onecol" placeholder="Rev. Fr. Name"/></div>
-    </div>
-    <!-- Sub-section selector for presbyteral/pastoral -->
-    <div id="adm-f-subsec-wrap" style="display:none;">
-      <div class="adm-mgroup"><label>Sub-section</label><select id="adm-f-subsec"></select></div>
-    </div>
-    <div class="adm-mactions">
-      <button class="adm-mcancel" onclick="admCloseModal()">Cancel</button>
-      <button class="adm-msave" id="btn-adm-save" onclick="admSaveEntry()">💾 Save</button>
-      <button class="adm-mdel" id="btn-adm-del" onclick="admDelEntry()" style="display:none;">🗑 Delete</button>
-    </div>
-    <div class="adm-mstatus" id="adm-modal-status"></div>
+<!-- HERO ADD MODAL -->
+<div id="m-hero-add" class="hm-backdrop">
+  <div class="hm-box" style="max-width:600px;">
+    <button class="hm-close" onclick="closeM('m-hero-add')">✕</button>
+    <h5>Add Hero Images</h5>
+    <div class="hm-drop" id="hero-drop"><input type="file" id="hero-files" accept="image/*" multiple onchange="onHeroFiles(event)"/><p>📁 Drop images here or <span>browse</span> — select multiple at once</p><p style="font-size:.7rem;margin-top:4px;">Recommended: 1920×1080px</p></div>
+    <div class="uq" id="hero-queue"></div>
+    <div class="hm-actions" style="margin-top:14px;"><button class="hm-cancel" onclick="closeM('m-hero-add')">Cancel</button><button class="hm-save" id="btn-ha-save" onclick="saveHeroAdd()">＋ Add to Carousel</button></div>
+    <div class="hm-status" id="ha-status"></div>
   </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-<script>
-(function(){
-  var _get=document.getElementById.bind(document);
-  var stub={addEventListener:function(){},removeEventListener:function(){},dispatchEvent:function(){},querySelector:function(){return stub;},querySelectorAll:function(){return[];},classList:{add:function(){},remove:function(){},toggle:function(){},contains:function(){return false;}},style:{},value:'',textContent:'',innerHTML:'',src:'',href:'',setAttribute:function(){},getAttribute:function(){return'';},closest:function(){return null;},appendChild:function(){},insertBefore:function(){},submit:function(){},reset:function(){},focus:function(){},blur:function(){}};
-  document.getElementById=function(id){var el=_get(id);return el!==null?el:stub;};
-})();
-</script>
-<script src="script.js" onerror="void 0"></script>
-<script>(function(){try{delete document.getElementById;}catch(e){}}());</script>
+<!-- HERO EDIT MODAL -->
+<div id="m-hero-edit" class="hm-backdrop">
+  <div class="hm-box">
+    <button class="hm-close" onclick="closeM('m-hero-edit')">✕</button>
+    <h5>Edit Hero Slide</h5>
+    <div style="position:relative;border-radius:10px;overflow:hidden;aspect-ratio:16/9;background:#0f172a;margin-bottom:12px;"><img id="he-preview" src="" alt="" style="width:100%;height:100%;object-fit:cover;opacity:.8;display:block;"/><label for="he-file" style="position:absolute;bottom:10px;right:10px;background:rgba(146,26,2,.9);color:#fff;border-radius:8px;padding:6px 14px;cursor:pointer;font-size:.76rem;font-weight:600;">📷 Change Image</label></div>
+    <input type="file" id="he-file" accept="image/*" style="display:none;" onchange="onHeroEditFile(event)"/>
+    <div class="hm-group"><label>Title</label><input type="text" id="he-title" placeholder="Archeparchy of Changanassery"/></div>
+    <div class="hm-group"><label>Subtitle</label><input type="text" id="he-sub" placeholder="A beacon of faith and unity…"/></div>
+    <div class="hm-actions"><button class="hm-cancel" onclick="closeM('m-hero-edit')">Cancel</button><button class="hm-save" id="btn-he-save" onclick="saveHeroEdit()">💾 Save Changes</button></div>
+    <div class="hm-status" id="he-status"></div>
+  </div>
+</div>
 
-<!-- ═══════════════════════════════════════════════════════
-     MAIN FIREBASE MODULE — Home + Users + Administration
-═══════════════════════════════════════════════════════ -->
+<!-- ABOUT MODAL -->
+<div id="m-about" class="hm-backdrop">
+  <div class="hm-box">
+    <button class="hm-close" onclick="closeM('m-about')">✕</button>
+    <h5>Edit About Section</h5>
+    <div class="hm-group"><label>Paragraph 1</label><textarea id="ab-p1" rows="4"></textarea></div>
+    <div class="hm-group"><label>Paragraph 2</label><textarea id="ab-p2" rows="3"></textarea></div>
+    <div class="hm-actions"><button class="hm-cancel" onclick="closeM('m-about')">Cancel</button><button class="hm-save" id="btn-ab-save" onclick="saveAbout()">💾 Save</button></div>
+    <div class="hm-status" id="ab-status"></div>
+  </div>
+</div>
+
+<!-- STATS MODAL -->
+<div id="m-stats" class="hm-backdrop">
+  <div class="hm-box">
+    <button class="hm-close" onclick="closeM('m-stats')">✕</button>
+    <h5>Edit Statistics</h5>
+    <div id="stats-list"></div>
+    <button onclick="addStat()" style="width:100%;padding:8px;border:1px dashed #e2e8f0;border-radius:8px;background:#f8fafc;color:#64748b;cursor:pointer;font-size:.8rem;margin-top:4px;">＋ Add Stat</button>
+    <div class="hm-actions"><button class="hm-cancel" onclick="closeM('m-stats')">Cancel</button><button class="hm-save" id="btn-st-save" onclick="saveStats()">💾 Save</button></div>
+    <div class="hm-status" id="st-status"></div>
+  </div>
+</div>
+
+<!-- ✅ TEAM MODAL — Photo via Cloudinary + Social Links -->
+<div id="m-team" class="hm-backdrop">
+  <div class="hm-box">
+    <button class="hm-close" onclick="closeM('m-team')">✕</button>
+    <h5 id="team-modal-h">Add Leader</h5>
+
+    <!-- Photo upload — Cloudinary -->
+    <div style="display:flex;justify-content:center;margin-bottom:14px;">
+      <div style="position:relative;display:inline-block;">
+        <img id="tm-img"
+             src="https://ui-avatars.com/api/?name=L&background=921a02&color=fff&size=80"
+             style="width:80px;height:80px;border-radius:50%;object-fit:cover;border:3px solid #e2e8f0;"/>
+        <label for="tm-file"
+               style="position:absolute;bottom:0;right:0;background:#921a02;color:#fff;border-radius:50%;width:26px;height:26px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:.8rem;">
+          📷
+        </label>
+      </div>
+    </div>
+    <input type="file" id="tm-file" accept="image/*" style="display:none;" onchange="onTeamImg(event)"/>
+
+    <!-- ✅ Remove photo button — shown only when editing a member with existing photo -->
+    <div id="tm-remove-photo-wrap" style="display:none;text-align:center;margin-bottom:10px;">
+      <button onclick="removeTeamPhoto()"
+              style="background:none;border:none;color:#ef4444;font-size:.76rem;cursor:pointer;text-decoration:underline;">
+        🗑 Remove photo
+      </button>
+    </div>
+
+    <div class="hm-group"><label>Full Name</label><input type="text" id="tm-name" placeholder="Pope Leo XIV"/></div>
+    <div class="hm-group"><label>Title / Role</label><input type="text" id="tm-role" placeholder="Holy Father"/></div>
+    <div class="hm-group"><label>Biography</label><textarea id="tm-bio" rows="3" placeholder="Short biography…"></textarea></div>
+
+    <!-- Social Links -->
+    <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:12px;margin-bottom:12px;">
+      <p style="font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#64748b;margin:0 0 10px;">
+        Social Links <span style="font-weight:400;text-transform:none;letter-spacing:0;color:#94a3b8;">— leave blank to hide</span>
+      </p>
+      <div class="social-input-row"><i class="bi bi-twitter-x"></i><input type="url" id="tm-twitter" placeholder="https://x.com/username"/></div>
+      <div class="social-input-row"><i class="bi bi-facebook"></i><input type="url" id="tm-facebook" placeholder="https://facebook.com/username"/></div>
+      <div class="social-input-row"><i class="bi bi-instagram"></i><input type="url" id="tm-instagram" placeholder="https://instagram.com/username"/></div>
+      <div class="social-input-row" style="margin-bottom:0;"><i class="bi bi-linkedin"></i><input type="url" id="tm-linkedin" placeholder="https://linkedin.com/in/username"/></div>
+    </div>
+
+    <div style="display:flex;gap:10px;margin-top:16px;flex-wrap:wrap;">
+      <button class="hm-cancel" onclick="closeM('m-team')">Cancel</button>
+      <button class="hm-save" id="btn-tm-save" onclick="saveTeam()" style="flex:1;">💾 Save</button>
+      <button id="btn-tm-del" onclick="delTeam()"
+              style="padding:10px 14px;border-radius:8px;border:none;background:#ef4444;color:#fff;font-size:.82rem;cursor:pointer;display:none;">
+        🗑 Delete
+      </button>
+    </div>
+    <div class="hm-status" id="tm-status"></div>
+  </div>
+</div>
+
+<!-- SERVICES MODAL -->
+<div id="m-svc" class="hm-backdrop">
+  <div class="hm-box" style="max-width:580px;">
+    <button class="hm-close" onclick="closeM('m-svc')">✕</button>
+    <h5>Edit Services</h5>
+    <div id="svc-list"></div>
+    <button onclick="addSvc()" style="width:100%;padding:8px;border:1px dashed #e2e8f0;border-radius:8px;background:#f8fafc;color:#64748b;cursor:pointer;font-size:.8rem;margin-top:4px;">＋ Add Service</button>
+    <div class="hm-actions"><button class="hm-cancel" onclick="closeM('m-svc')">Cancel</button><button class="hm-save" id="btn-sv-save" onclick="saveSvc()">💾 Save</button></div>
+    <div class="hm-status" id="sv-status"></div>
+  </div>
+</div>
+
+<!-- NEWS MODAL -->
+<div id="m-news" class="hm-backdrop">
+  <div class="hm-box">
+    <button class="hm-close" onclick="closeM('m-news')">✕</button>
+    <h5>Edit News &amp; Updates</h5>
+    <p style="font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#921a02;margin-bottom:8px;">📰 Diocesan News</p>
+    <div id="news-dioc-list"></div>
+    <button onclick="addNewsRow('diocesan')" style="width:100%;padding:7px;border:1px dashed #e2e8f0;border-radius:8px;background:#f8fafc;color:#64748b;cursor:pointer;font-size:.78rem;margin-bottom:16px;">＋ Add Item</button>
+    <p style="font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#921a02;margin-bottom:8px;">🆘 Help Desk</p>
+    <div id="news-help-list"></div>
+    <button onclick="addNewsRow('helpdesk')" style="width:100%;padding:7px;border:1px dashed #e2e8f0;border-radius:8px;background:#f8fafc;color:#64748b;cursor:pointer;font-size:.78rem;">＋ Add Item</button>
+    <div class="hm-actions"><button class="hm-cancel" onclick="closeM('m-news')">Cancel</button><button class="hm-save" id="btn-nw-save" onclick="saveNews()">💾 Save</button></div>
+    <div class="hm-status" id="nw-status"></div>
+  </div>
+</div>
+
+<!-- USER IMAGE MODAL -->
+<div id="m-uimg" class="hm-backdrop">
+  <div class="hm-box">
+    <button class="hm-close" onclick="closeM('m-uimg')">✕</button>
+    <h5>Edit Profile Image</h5>
+    <p style="font-size:.8rem;color:#6b7280;margin-bottom:14px;" id="uimg-name"></p>
+    <div style="display:flex;justify-content:center;margin-bottom:14px;"><div style="position:relative;display:inline-block;"><img id="uimg-cur" src="" alt="" style="width:90px;height:90px;border-radius:50%;object-fit:cover;border:3px solid #e2e8f0;"/><label for="uimg-file" style="position:absolute;bottom:0;right:0;background:#4f46e5;color:#fff;border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:.85rem;">📷</label></div></div>
+    <input type="file" id="uimg-file" accept="image/*" style="display:none;" onchange="onUImgFile(event)"/>
+    <div id="uimg-new-wrap" style="display:none;text-align:center;margin-bottom:12px;"><p style="font-size:.75rem;color:#6b7280;margin-bottom:6px;">New preview:</p><img id="uimg-new" src="" style="width:70px;height:70px;border-radius:50%;object-fit:cover;border:2px solid #22c55e;"/></div>
+    <div style="text-align:center;margin-bottom:12px;"><button onclick="removeUImg()" style="background:none;border:none;color:#ef4444;font-size:.78rem;cursor:pointer;text-decoration:underline;">🗑 Remove image</button></div>
+    <div class="hm-actions"><button class="hm-cancel" onclick="closeM('m-uimg')">Cancel</button><button class="hm-save" id="btn-ui-save" onclick="saveUImg()">💾 Save</button></div>
+    <div class="hm-status" id="ui-status"></div>
+  </div>
+</div>
+
+
+
 <script type="module">
 import{initializeApp}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import{getAuth,onAuthStateChanged,signOut}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 import{getFirestore,doc,getDoc,setDoc,collection,addDoc,getDocs,updateDoc,deleteDoc,serverTimestamp,query,orderBy}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 import{getStorage,ref,uploadBytes,getDownloadURL}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
 
+// ══════════════════════════════════════════════════════════
+// CLOUDINARY — Hero images + News images + ✅ Team photos
+// ══════════════════════════════════════════════════════════
+const CLOUDINARY={cloudName:"dqwayxpbp",uploadPreset:"church_hero_images"};
+
+async function uploadToCloudinary(file,folder="heroImages"){
+  const fd=new FormData();fd.append("file",file);fd.append("upload_preset",CLOUDINARY.uploadPreset);fd.append("folder",folder);
+  const res=await fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY.cloudName}/image/upload`,{method:"POST",body:fd});
+  if(!res.ok){let msg="Cloudinary upload failed";try{const d=await res.json();msg=d.error?.message||msg;}catch(_){}throw new Error(msg);}
+  const data=await res.json();return{url:data.secure_url,publicId:data.public_id};
+}
+
+async function deleteFromCloudinary(publicId){
+  if(!publicId)return{result:"skipped"};
+  try{
+    const fd=new FormData();fd.append("public_id",publicId);fd.append("upload_preset",CLOUDINARY.uploadPreset);
+    const res=await fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY.cloudName}/image/destroy`,{method:"POST",body:fd});
+    const data=await res.json();console.log("[Cloudinary] delete:",publicId,"→",data.result);return data;
+  }catch(err){console.warn("[Cloudinary] delete failed:",err.message);return{result:"error"};}
+}
+
+// ══════════════════════════════════════════════════════════
+// FIREBASE
+// ══════════════════════════════════════════════════════════
 const FC={apiKey:"AIzaSyArM8sv7J1RUj4XvAJhJd40tzA7Yc8BGXY",authDomain:"admin-dashboard-ed62c.firebaseapp.com",projectId:"admin-dashboard-ed62c",storageBucket:"admin-dashboard-ed62c.firebasestorage.app",messagingSenderId:"560027475135",appId:"1:560027475135:web:3fae0cb0268729ae79fa0a"};
 const ADMIN="issacnewton1503@gmail.com";
 const app=initializeApp(FC),auth=getAuth(app),db=getFirestore(app),storage=getStorage(app);
-const UC=collection(db,"managedUsers"),HR=doc(db,"siteConfig","homePage");
-const HERO_COL=collection(db,"siteConfig","homePage","heroImages");
+const UC=collection(db,"managedUsers"),HR=doc(db,"siteConfig","homePage"),HERO_COL=collection(db,"siteConfig","homePage","heroImages");
 
+// Firebase Storage — user profile photos only
 async function uploadImg(file,path){const r=ref(storage,path);await uploadBytes(r,file);return await getDownloadURL(r);}
 async function loadHeroImages(){const sn=await getDocs(query(HERO_COL,orderBy("order","asc")));return sn.docs.map(d=>({id:d.id,...d.data()}));}
 async function saveHeroDoc(id,data){await setDoc(doc(HERO_COL,id),data,{merge:true});}
 async function deleteHeroDoc(id){await deleteDoc(doc(HERO_COL,id));}
 
+// ══════════════════════════════════════════════════════════
+// STATE
+// ══════════════════════════════════════════════════════════
 let role=null,editUID=null,allU=[],hIdx=0,hTimer=null;
-let qFiles=[],heNewFile=null,tmNewFile=null,tmEditIdx=null;
-let uiUID=null,uiNewFile=null,uiRm=false,newTab="diocesan";
+let qFiles=[],heNewFile=null,heNewPreview=null;
+// ✅ Team photo state — tracks new file + whether to remove existing
+let tmNewFile=null,tmNewPreview=null,tmEditIdx=null,tmRemovePhoto=false;
+let uiUID=null,uiNewFile=null,uiNewPreview=null,uiRm=false,newTab="diocesan",newsImgPending={};
 window.qFiles=qFiles;
 
-let hp={heroImages:[],aboutP1:"The Apostolic Church of St. Thomas Christians traces its beginnings to the arrival of St. Thomas the Apostle in Kerala in A.D. 52.",aboutP2:"The Archeparchy of Changanacherry stands as a beacon of faith and unity.",stats:[{label:"Foranes",value:18},{label:"Pilgrim Centers",value:7},{label:"Filial Church",value:46},{label:"Families",value:81534},{label:"Parishes",value:241},{label:"Mission Centers",value:5}],team:[{name:"Pope Leo XIV",role:"Holy Father",bio:"The first Augustinian Pope.",imageUrl:""},{name:"Mar Thomas Tharayil",role:"Archbishop",bio:"Metropolitan Archbishop of the Syro-Malabar Archeparchy.",imageUrl:""}],services:[{icon:"bi-shop",title:"Shops Near You, On Call",desc:"Get instant access to nearby stores."},{icon:"bi-hospital-fill",title:"Instant Health Support",desc:"Quick medical assistance."}],news:{diocesan:[{title:"Parish Youth Meet Announced",date:"2025-11-25"}],helpdesk:[{title:"Help Desk Hours Updated",date:"2025-11-24"}]},gallery:[]};
+let hp={
+  heroImages:[],
+  aboutP1:"The Apostolic Church of St. Thomas Christians traces its beginnings to the arrival of St. Thomas the Apostle in Kerala in A.D. 52.",
+  aboutP2:"The Archeparchy of Changanacherry stands as a beacon of faith and unity, fostering community growth through evangelization, education, and service.",
+  stats:[{label:"Foranes",value:18},{label:"Pilgrim Centers",value:7},{label:"Filial Church",value:46},{label:"Families",value:81534},{label:"Parishes",value:241},{label:"Mission Centers",value:5}],
+  team:[
+    {name:"Pope Leo XIV",role:"Holy Father",bio:"The first Augustinian Pope, Leo XIV is the second Roman Pontiff from the Americas.",imageUrl:"",imagePublicId:"",social:{twitter:"#",facebook:"#",instagram:"#",linkedin:"#"}},
+    {name:"Mar Raphael Thattil",role:"Major Archbishop of the Syro Malabar Church",bio:"Mar Raphael Thattil was born to Ouseph and Thresia on 21 April 1956 in Thrissur.",imageUrl:"",imagePublicId:"",social:{twitter:"#",facebook:"#",instagram:"#",linkedin:"#"}},
+    {name:"Mar Thomas Tharayil",role:"Archbishop",bio:"Mar Thomas Tharayil (born 2 February 1972) is the Metropolitan Archbishop of the Syro-Malabar Archeparchy of Changanassery.",imageUrl:"",imagePublicId:"",social:{twitter:"#",facebook:"#",instagram:"#",linkedin:"#"}},
+    {name:"Mar Joseph Perumthottam",role:"Archbishop Emeritus",bio:"Born on July 5, 1948, at Kongandoor (Punnathura Parish), Joseph (Babychan) had his education in St. Thomas L. P. School Kongandoor.",imageUrl:"",imagePublicId:"",social:{twitter:"#",facebook:"#",instagram:"#",linkedin:"#"}}
+  ],
+  services:[{icon:"bi-shop",title:"Shops Near You, On Call",desc:"Get instant access to nearby stores and services."},{icon:"bi-suitcase-lg-fill",title:"TalentConnect On Call",desc:"Find skilled professionals on demand."},{icon:"bi-hospital-fill",title:"Instant Health Support",desc:"Quick medical assistance and health guidance."},{icon:"bi-cart-check-fill",title:"Online Market",desc:"A wide range of products in one seamless digital marketplace."}],
+  news:{diocesan:[{title:"Parish Youth Meet Announced",date:"2025-11-25",imageUrl:"",imagePublicId:""},{title:"Feast Celebration Next Week",date:"2025-11-22",imageUrl:"",imagePublicId:""},{title:"Community Outreach Program",date:"2025-11-20",imageUrl:"",imagePublicId:""}],helpdesk:[{title:"Help Desk Hours Updated",date:"2025-11-24",imageUrl:"",imagePublicId:""},{title:"New Support Service Added",date:"2025-11-18",imageUrl:"",imagePublicId:""}]},
+  gallery:[]
+};
 window.hp=hp;
 
 const e=s=>String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
@@ -553,114 +568,276 @@ window.closeM=id=>document.getElementById(id).classList.remove("show");
 function openM(id){document.getElementById(id).classList.add("show");}
 document.querySelectorAll(".hm-backdrop").forEach(bd=>{bd.addEventListener("click",ev=>{if(ev.target===bd)bd.classList.remove("show");});});
 
-/* ══ SECTION SWITCH ══ */
 window.showSec=function(name){
   document.querySelectorAll(".dash-section").forEach(s=>s.classList.remove("active"));
   document.querySelectorAll(".sidebar-item").forEach(s=>s.classList.remove("active"));
-  if(name==="home"){
-    document.getElementById("section-home").classList.add("active");
-    document.getElementById("nav-home").classList.add("active");
-    document.getElementById("topbar-title").textContent="Home Page";
-    document.getElementById("topbar-sub").textContent=role==="Admin"?"Admin Preview":"Live Page";
-    if(role!=="Admin")document.body.classList.add("home-fullpage");
-  }else if(name==="administration"){
-    document.getElementById("section-administration").classList.add("active");
-    document.getElementById("nav-administration").classList.add("active");
-    document.getElementById("topbar-title").textContent="Administration";
-    document.getElementById("topbar-sub").textContent="Manage Archeparchial Administration";
-    document.body.classList.remove("home-fullpage");
-    admInitIfNeeded();
-  }else{
-    document.getElementById("section-users").classList.add("active");
-    document.getElementById("nav-users").classList.add("active");
-    document.getElementById("topbar-title").textContent="Dashboard";
-    document.getElementById("topbar-sub").textContent="Users Management";
-    document.body.classList.remove("home-fullpage");
-  }
+  if(name==="home"){document.getElementById("section-home").classList.add("active");document.getElementById("nav-home").classList.add("active");document.getElementById("topbar-title").textContent="Home Page";document.getElementById("topbar-sub").textContent=role==="Admin"?"Admin Preview":"Live Page";if(role!=="Admin")document.body.classList.add("home-fullpage");}
+  else{document.getElementById("section-users").classList.add("active");document.getElementById("nav-users").classList.add("active");document.getElementById("topbar-title").textContent="Dashboard";document.getElementById("topbar-sub").textContent="Users Management";document.body.classList.remove("home-fullpage");}
 };
 window.exitHome=function(){document.body.classList.remove("home-fullpage");showSec("users");};
 
-/* ══ AUTH ══ */
 document.body.style.display="none";
 onAuthStateChanged(auth,async user=>{
   if(!user){window.location.href="index.html";return;}
   const snap=await getDoc(doc(db,"users",user.uid));
   if(!snap.exists()){await signOut(auth);window.location.href="index.html";return;}
-  const prof=snap.data();
-  role=user.email===ADMIN?"Admin":"User";
+  const prof=snap.data();role=user.email===ADMIN?"Admin":"User";
   const uname=prof.username||user.displayName||user.email;
-  document.getElementById("sidebar-username").textContent=uname;
-  document.getElementById("sidebar-role").textContent=role;
-  document.getElementById("sidebar-avatar").textContent=uname[0].toUpperCase();
-  const badge=document.getElementById("role-badge");
-  badge.textContent=role;badge.className=role==="Admin"?"badge bg-warning text-dark me-2":"badge bg-primary me-2";
+  document.getElementById("sidebar-username").textContent=uname;document.getElementById("sidebar-role").textContent=role;document.getElementById("sidebar-avatar").textContent=uname[0].toUpperCase();
+  const badge=document.getElementById("role-badge");badge.textContent=role;badge.className=role==="Admin"?"badge bg-warning text-dark me-2":"badge bg-primary me-2";
   document.body.style.display="";
-  if(role==="Admin"){
-    document.getElementById("section-form").style.display="";
-    document.getElementById("nav-add-user").style.display="";
-    document.getElementById("th-actions").style.display="";
-    document.getElementById("home-edit-bar").style.display="flex";
-    ["hero-admin-bar","btn-edit-about","btn-edit-stats","btn-add-team","btn-edit-svc","btn-edit-news"].forEach(id=>{const el=document.getElementById(id);if(el)el.style.display="";});
-  }else{
-    showSec("home");
-  }
-  await loadUsers();
-  await loadHome();
+  if(role==="Admin"){document.getElementById("section-form").style.display="";document.getElementById("nav-add-user").style.display="";document.getElementById("th-actions").style.display="";document.getElementById("home-edit-bar").style.display="flex";["hero-admin-bar","btn-edit-about","btn-edit-stats","btn-add-team","btn-edit-svc","btn-edit-news"].forEach(id=>{const el=document.getElementById(id);if(el)el.style.display="";});}
+  else{showSec("home");}
+  await loadUsers();await loadHome();
 });
 document.getElementById("btn-logout").addEventListener("click",async()=>{await signOut(auth);window.location.href="index.html";});
 document.getElementById("sidebar-toggle").addEventListener("click",()=>{document.getElementById("sidebar").classList.toggle("open");document.getElementById("sidebar-overlay").classList.toggle("show");});
 document.getElementById("sidebar-overlay").addEventListener("click",()=>{document.getElementById("sidebar").classList.remove("open");document.getElementById("sidebar-overlay").classList.remove("show");});
 
-/* ══ HOME ══ */
 window.loadHome=async function(){
-  try{hp.heroImages=await loadHeroImages();const sn=await getDoc(HR);if(sn.exists()){const d=sn.data();if(d.aboutP1)hp.aboutP1=d.aboutP1;if(d.aboutP2)hp.aboutP2=d.aboutP2;if(d.stats)hp.stats=d.stats;if(d.team)hp.team=d.team;if(d.services)hp.services=d.services;if(d.news)hp.news=d.news;if(d.gallery)hp.gallery=d.gallery;}window.hp=hp;}catch(err){console.warn("loadHome error:",err);}
+  try{
+    hp.heroImages=await loadHeroImages();
+    const sn=await getDoc(HR);
+    if(sn.exists()){
+      const d=sn.data();
+      if(d.aboutP1)hp.aboutP1=d.aboutP1;if(d.aboutP2)hp.aboutP2=d.aboutP2;if(d.stats)hp.stats=d.stats;if(d.services)hp.services=d.services;if(d.gallery)hp.gallery=d.gallery;
+      // ✅ Load team with imagePublicId
+      if(d.team)hp.team=d.team.map(m=>({...m,imagePublicId:m.imagePublicId||"",social:{twitter:m.social?.twitter||"#",facebook:m.social?.facebook||"#",instagram:m.social?.instagram||"#",linkedin:m.social?.linkedin||"#"}}));
+      if(d.news){hp.news.diocesan=(d.news.diocesan||[]).map(n=>({title:n.title||"",date:n.date||"",imageUrl:n.imageUrl||"",imagePublicId:n.imagePublicId||""}));hp.news.helpdesk=(d.news.helpdesk||[]).map(n=>({title:n.title||"",date:n.date||"",imageUrl:n.imageUrl||"",imagePublicId:n.imagePublicId||""}));}
+    }
+    window.hp=hp;
+  }catch(err){console.warn("loadHome error:",err);}
   renderAll();
 };
+
 function clean(obj){return JSON.parse(JSON.stringify(obj,(_k,v)=>v===undefined?null:v));}
+
 window.saveAll=async function(silent=false){
   if(role!=="Admin")return;busy("btn-save-all",true);
-  try{const payload=clean({aboutP1:String(hp.aboutP1||""),aboutP2:String(hp.aboutP2||""),stats:(hp.stats||[]).map(s=>({label:String(s.label||""),value:Number(s.value)||0})),team:(hp.team||[]).map(m=>({name:String(m.name||""),role:String(m.role||""),bio:String(m.bio||""),imageUrl:String(m.imageUrl||"")})),services:(hp.services||[]).map(s=>({icon:String(s.icon||"bi-star"),title:String(s.title||""),desc:String(s.desc||"")})),news:{diocesan:(hp.news?.diocesan||[]).map(n=>({title:String(n.title||""),date:String(n.date||"")})),helpdesk:(hp.news?.helpdesk||[]).map(n=>({title:String(n.title||""),date:String(n.date||"")}))}});payload.updated_at=serverTimestamp();await setDoc(HR,payload);document.getElementById("save-status").textContent=" — Saved ✓";if(!silent)toast("✅ Home page saved!","success");}catch(err){toast("❌ Save failed: "+err.message,"error",4000);}finally{busy("btn-save-all",false,"💾 Save All");}
+  try{
+    const payload=clean({
+      aboutP1:String(hp.aboutP1||""),aboutP2:String(hp.aboutP2||""),
+      stats:(hp.stats||[]).map(s=>({label:String(s.label||""),value:Number(s.value)||0})),
+      // ✅ Save imagePublicId alongside imageUrl for team
+      team:(hp.team||[]).map(m=>({name:String(m.name||""),role:String(m.role||""),bio:String(m.bio||""),imageUrl:String(m.imageUrl||""),imagePublicId:String(m.imagePublicId||""),social:{twitter:String(m.social?.twitter||"#"),facebook:String(m.social?.facebook||"#"),instagram:String(m.social?.instagram||"#"),linkedin:String(m.social?.linkedin||"#")}})),
+      services:(hp.services||[]).map(s=>({icon:String(s.icon||"bi-star"),title:String(s.title||""),desc:String(s.desc||"")})),
+      news:{diocesan:(hp.news?.diocesan||[]).map(n=>({title:String(n.title||""),date:String(n.date||""),imageUrl:String(n.imageUrl||""),imagePublicId:String(n.imagePublicId||"")})),helpdesk:(hp.news?.helpdesk||[]).map(n=>({title:String(n.title||""),date:String(n.date||""),imageUrl:String(n.imageUrl||""),imagePublicId:String(n.imagePublicId||"")}))}
+    });
+    payload.updated_at=serverTimestamp();await setDoc(HR,payload);
+    document.getElementById("save-status").textContent=" — Saved ✓";if(!silent)toast("✅ Home page saved!","success");
+  }catch(err){toast("❌ Save failed: "+err.message,"error",4000);console.error("saveAll error:",err);}
+  finally{busy("btn-save-all",false,"💾 Save All");}
 };
+
 function renderAll(){renderHero();renderAbout();renderStats();renderTeam();renderSvc();renderNews("diocesan");renderGal("*");}
-function renderHero(){const hero=document.getElementById("hp-hero"),dots=document.getElementById("hp-hero-dots");hero.querySelectorAll(".hp-hero-slide").forEach(s=>s.remove());dots.innerHTML="";clearInterval(hTimer);if(!hp.heroImages.length){const ph=document.createElement("div");ph.className="hp-hero-slide active";ph.style.cssText="position:absolute;inset:0;background:#1e293b;display:flex;align-items:center;justify-content:center;opacity:1;pointer-events:auto;";ph.innerHTML=`<div style="color:#475569;text-align:center;"><div style="font-size:2.5rem;margin-bottom:8px;">🖼️</div><p style="margin:0;font-size:.85rem;">${role==="Admin"?"Click 'Add Images' to add hero slides":"No hero images yet"}</p></div>`;hero.insertBefore(ph,hero.querySelector(".hp-hero-controls"));return;}hp.heroImages.forEach((img,i)=>{const s=document.createElement("div");s.className="hp-hero-slide"+(i===0?" active":"");s.innerHTML=`<img src="${e(img.imageUrl)}" alt="${e(img.title||"")}"/><div class="hp-hero-text"><h2>${e(img.title||"Archeparchy of Changanassery")}</h2><p>${e(img.subtitle||"A beacon of faith and unity.")}</p><a href="#">View More</a></div>`;hero.insertBefore(s,hero.querySelector(".hp-hero-controls"));const d=document.createElement("button");d.className="hp-hero-dot"+(i===0?" active":"");d.onclick=()=>goSlide(i);dots.appendChild(d);});hIdx=0;hTimer=setInterval(()=>heroNav(1),5000);}
+
+function renderHero(){
+  const hero=document.getElementById("hp-hero"),dots=document.getElementById("hp-hero-dots");
+  hero.querySelectorAll(".hp-hero-slide").forEach(s=>s.remove());dots.innerHTML="";clearInterval(hTimer);
+  if(!hp.heroImages.length){const ph=document.createElement("div");ph.className="hp-hero-slide active";ph.style.cssText="position:absolute;inset:0;background:#1e293b;display:flex;align-items:center;justify-content:center;opacity:1;pointer-events:auto;";ph.innerHTML=`<div style="color:#475569;text-align:center;"><div style="font-size:2.5rem;margin-bottom:8px;">🖼️</div><p style="margin:0;font-size:.85rem;">${role==="Admin"?"Click 'Add Images' to add hero slides":"No hero images yet"}</p></div>`;hero.insertBefore(ph,hero.querySelector(".hp-hero-controls"));return;}
+  hp.heroImages.forEach((img,i)=>{const s=document.createElement("div");s.className="hp-hero-slide"+(i===0?" active":"");s.innerHTML=`<img src="${e(img.imageUrl)}" alt="${e(img.title||"")}"/><div class="hp-hero-text"><h2>${e(img.title||"Archeparchy of Changanassery")}</h2><p>${e(img.subtitle||"A beacon of faith and unity.")}</p><a href="#">View More</a></div>`;hero.insertBefore(s,hero.querySelector(".hp-hero-controls"));const d=document.createElement("button");d.className="hp-hero-dot"+(i===0?" active":"");d.onclick=()=>goSlide(i);dots.appendChild(d);});
+  hIdx=0;hTimer=setInterval(()=>heroNav(1),5000);
+}
 window.heroNav=function(dir){if(!hp.heroImages.length)return;goSlide((hIdx+dir+hp.heroImages.length)%hp.heroImages.length);};
 function goSlide(i){hIdx=i;document.querySelectorAll(".hp-hero-slide").forEach((s,j)=>s.classList.toggle("active",j===i));document.querySelectorAll(".hp-hero-dot").forEach((d,j)=>d.classList.toggle("active",j===i));}
+
 function renderAbout(){document.getElementById("hp-p1").textContent=hp.aboutP1;document.getElementById("hp-p2").textContent=hp.aboutP2;}
 function renderStats(){document.getElementById("hp-stats-grid").innerHTML=hp.stats.map(s=>`<div class="hp-stat-item"><span class="hp-stat-num">${Number(s.value).toLocaleString()}</span><div class="hp-stat-label">${e(s.label)}</div></div>`).join("");}
-function renderTeam(){document.getElementById("hp-team-grid").innerHTML=hp.team.map((m,i)=>`<div class="hp-team-card">${m.imageUrl?`<img src="${e(m.imageUrl)}" alt="${e(m.name)}"/>`:`<div class="hp-team-placeholder">👤</div>`}<div><p class="hp-team-name">${e(m.name)}</p><p class="hp-team-role">${e(m.role)}</p><p class="hp-team-bio">${e(m.bio)}</p></div>${role==="Admin"?`<button class="hp-team-edit-btn" onclick="openTeam(${i})">✏️ Edit</button>`:""}</div>`).join("");}
+
+// ✅ TEAM RENDER — shows social icons in dashboard preview
+function renderTeam(){
+  document.getElementById("hp-team-grid").innerHTML=hp.team.map((m,i)=>`
+    <div class="hp-team-card">
+      ${m.imageUrl?`<img src="${e(m.imageUrl)}" alt="${e(m.name)}"/>`:`<div class="hp-team-placeholder">👤</div>`}
+      <div style="flex:1;">
+        <p class="hp-team-name">${e(m.name)}</p><p class="hp-team-role">${e(m.role)}</p><p class="hp-team-bio">${e(m.bio)}</p>
+        <div style="display:flex;gap:6px;margin-top:6px;flex-wrap:wrap;">
+          ${[{k:"twitter",ic:"bi-twitter-x"},{k:"facebook",ic:"bi-facebook"},{k:"instagram",ic:"bi-instagram"},{k:"linkedin",ic:"bi-linkedin"}].map(l=>`
+            <a href="${e(m.social?.[l.k]||"#")}" target="_blank"
+               style="width:26px;height:26px;border-radius:50%;background:#f1f5f9;display:flex;align-items:center;justify-content:center;text-decoration:none;color:#374151;font-size:.72rem;transition:background .15s;"
+               onmouseover="this.style.background='#e2e8f0'" onmouseout="this.style.background='#f1f5f9'">
+              <i class="bi ${l.ic}"></i></a>`).join("")}
+        </div>
+      </div>
+      ${role==="Admin"?`<button class="hp-team-edit-btn" onclick="openTeam(${i})">✏️ Edit</button>`:""}
+    </div>`).join("");
+}
+
 function renderSvc(){document.getElementById("hp-svc-grid").innerHTML=hp.services.map(s=>`<div class="hp-service-card"><div class="hp-service-icon"><i class="bi ${e(s.icon)}"></i></div><div><p class="hp-service-title">${e(s.title)}</p><p class="hp-service-desc">${e(s.desc)}</p></div></div>`).join("");}
-function renderNews(tab){newTab=tab;const items=hp.news[tab]||[];document.getElementById("hp-news-scroll").innerHTML=items.map(n=>`<div class="hp-news-card"><div class="hp-news-thumb">📰</div><div class="hp-news-card-body"><p class="hp-news-card-title">${e(n.title)}</p><p class="hp-news-card-date">${e(n.date)}</p></div></div>`).join("")||`<p style="color:#94a3b8;font-size:.8rem;padding:8px;">No items yet.</p>`;}
+function renderNews(tab){newTab=tab;const items=hp.news[tab]||[];document.getElementById("hp-news-scroll").innerHTML=items.map(n=>`<div class="hp-news-card">${n.imageUrl?`<img src="${e(n.imageUrl)}" alt="${e(n.title)}" style="height:90px;width:100%;object-fit:cover;display:block;"/>`:`<div class="hp-news-thumb">📰</div>`}<div class="hp-news-card-body"><p class="hp-news-card-title">${e(n.title)}</p><p class="hp-news-card-date">${e(n.date)}</p></div></div>`).join("")||`<p style="color:#94a3b8;font-size:.8rem;padding:8px;">No items yet.</p>`;}
 window.switchNews=function(tab,btn){document.querySelectorAll(".hp-news-tab").forEach(b=>b.classList.remove("active"));btn.classList.add("active");renderNews(tab);};
 window.filterGal=function(cat,btn){document.querySelectorAll(".hp-gallery-filter").forEach(b=>b.classList.remove("active"));btn.classList.add("active");renderGal(cat);};
 function renderGal(cat){const items=cat==="*"?hp.gallery:hp.gallery.filter(g=>g.cat===cat);document.getElementById("hp-gal-grid").innerHTML=items.map(g=>`<div class="hp-gallery-item"><img src="${e(g.src)}" alt="${e(g.name)}"/><div class="hp-gallery-overlay"><i class="bi bi-zoom-in"></i></div></div>`).join("");}
+
+// HERO CRUD
 window.openHeroAdd=function(){window.qFiles=[];document.getElementById("hero-queue").innerHTML="";document.getElementById("ha-status").textContent="";document.getElementById("hero-files").value="";busy("btn-ha-save",false,"＋ Add to Carousel");openM("m-hero-add");};
 window.onHeroFiles=async function(ev){const files=[...ev.target.files];if(!files.length)return;for(const f of files){const preview=await b64(f);window.qFiles.push({file:f,preview,title:"Archeparchy of Changanassery",subtitle:"A beacon of faith and unity."});}window.renderQ();ev.target.value="";};
 window.renderQ=function(){document.getElementById("hero-queue").innerHTML=window.qFiles.map((f,i)=>`<div class="uq-item"><img src="${f.preview}" alt=""/><div class="uq-fields"><input value="${e(f.title)}" placeholder="Title" oninput="window.qFiles[${i}].title=this.value"/><input value="${e(f.subtitle)}" placeholder="Subtitle" oninput="window.qFiles[${i}].subtitle=this.value"/></div><button class="uq-rm" onclick="window.qFiles.splice(${i},1);window.renderQ();">✕</button></div>`).join("");};
-window.saveHeroAdd=async function(){const st=document.getElementById("ha-status");if(!window.qFiles.length){st.textContent="Please add at least one image.";st.style.color="#ef4444";return;}busy("btn-ha-save",true);const count=window.qFiles.length;try{const baseOrder=hp.heroImages.length;for(let i=0;i<window.qFiles.length;i++){const qf=window.qFiles[i];st.textContent=`Uploading image ${i+1} of ${count}…`;const id="hero_"+Date.now()+"_"+Math.random().toString(36).slice(2);const url=await uploadImg(qf.file,"heroImages/"+id);const imgDoc={imageUrl:url,title:String(qf.title||"Archeparchy of Changanassery"),subtitle:String(qf.subtitle||"A beacon of faith and unity."),order:baseOrder+i,created_at:serverTimestamp()};await saveHeroDoc(id,imgDoc);hp.heroImages.push({id,...imgDoc});}renderHero();closeM("m-hero-add");toast("✅ "+count+" image(s) added!","success");window.qFiles=[];st.textContent="";}catch(err){st.textContent="❌ "+err.message;st.style.color="#ef4444";busy("btn-ha-save",false,"＋ Add to Carousel");}};
-window.openHeroEdit=function(){if(!hp.heroImages.length){toast("No slides to edit.");return;}heNewFile=null;const img=hp.heroImages[hIdx];document.getElementById("he-preview").src=img.imageUrl||"";document.getElementById("he-title").value=img.title||"";document.getElementById("he-sub").value=img.subtitle||"";document.getElementById("he-status").textContent="";document.getElementById("he-file").value="";busy("btn-he-save",false,"💾 Save Changes");openM("m-hero-edit");};
-window.onHeroEditFile=async function(ev){const f=ev.target.files[0];if(!f)return;heNewFile=f;document.getElementById("he-preview").src=await b64(f);};
-window.saveHeroEdit=async function(){if(!hp.heroImages.length)return;busy("btn-he-save",true);const st=document.getElementById("he-status");st.textContent="";try{const slide=hp.heroImages[hIdx];if(heNewFile){st.textContent="Uploading image…";slide.imageUrl=await uploadImg(heNewFile,"heroImages/"+slide.id);}slide.title=document.getElementById("he-title").value.trim()||"Archeparchy of Changanassery";slide.subtitle=document.getElementById("he-sub").value.trim()||"A beacon of faith and unity.";await saveHeroDoc(slide.id,{imageUrl:slide.imageUrl,title:slide.title,subtitle:slide.subtitle,order:slide.order??hIdx,updated_at:serverTimestamp()});hp.heroImages[hIdx]=slide;renderHero();goSlide(hIdx);closeM("m-hero-edit");toast("✅ Slide updated!","success");}catch(err){st.textContent="❌ "+err.message;st.style.color="#ef4444";busy("btn-he-save",false,"💾 Save Changes");}};
-window.delHero=async function(){if(!hp.heroImages.length)return;if(!confirm("Delete this hero slide?"))return;const btn=document.getElementById("btn-hero-del");btn.disabled=true;btn.textContent="Deleting…";try{const slide=hp.heroImages[hIdx];await deleteHeroDoc(slide.id);hp.heroImages.splice(hIdx,1);for(let i=0;i<hp.heroImages.length;i++){await saveHeroDoc(hp.heroImages[i].id,{order:i});}hIdx=Math.max(0,hIdx-1);renderHero();toast("Hero slide deleted.","success");}catch(err){toast("❌ Delete failed: "+err.message,"error",4000);}finally{btn.disabled=false;btn.innerHTML="🗑 Delete";}};
+window.saveHeroAdd=async function(){
+  const st=document.getElementById("ha-status");if(!window.qFiles.length){st.textContent="Please add at least one image.";st.style.color="#ef4444";return;}
+  busy("btn-ha-save",true);const count=window.qFiles.length;
+  try{const baseOrder=hp.heroImages.length;for(let i=0;i<window.qFiles.length;i++){const qf=window.qFiles[i];st.textContent=`☁️ Uploading image ${i+1} of ${count} to Cloudinary…`;st.style.color="#64748b";const{url,publicId}=await uploadToCloudinary(qf.file,"heroImages");st.textContent=`💾 Saving image ${i+1} of ${count}…`;const id="hero_"+Date.now()+"_"+Math.random().toString(36).slice(2);const imgDoc={imageUrl:url,publicId,title:String(qf.title||"Archeparchy of Changanassery"),subtitle:String(qf.subtitle||"A beacon of faith and unity."),order:baseOrder+i,created_at:serverTimestamp()};await saveHeroDoc(id,imgDoc);hp.heroImages.push({id,...imgDoc});}renderHero();closeM("m-hero-add");toast("✅ "+count+" image(s) added!","success");window.qFiles=[];st.textContent="";}
+  catch(err){st.textContent="❌ "+err.message;st.style.color="#ef4444";busy("btn-ha-save",false,"＋ Add to Carousel");}
+};
+window.openHeroEdit=function(){if(!hp.heroImages.length){toast("No slides to edit.");return;}heNewFile=null;heNewPreview=null;const img=hp.heroImages[hIdx];document.getElementById("he-preview").src=img.imageUrl||"";document.getElementById("he-title").value=img.title||"";document.getElementById("he-sub").value=img.subtitle||"";document.getElementById("he-status").textContent="";document.getElementById("he-file").value="";busy("btn-he-save",false,"💾 Save Changes");openM("m-hero-edit");};
+window.onHeroEditFile=async function(ev){const f=ev.target.files[0];if(!f)return;heNewFile=f;heNewPreview=await b64(f);document.getElementById("he-preview").src=heNewPreview;};
+window.saveHeroEdit=async function(){
+  if(!hp.heroImages.length)return;busy("btn-he-save",true);const st=document.getElementById("he-status");st.textContent="";
+  try{const slide=hp.heroImages[hIdx];if(heNewFile){if(slide.publicId){st.textContent="🗑 Removing old image…";await deleteFromCloudinary(slide.publicId);}st.textContent="☁️ Uploading new image…";const{url,publicId}=await uploadToCloudinary(heNewFile,"heroImages");slide.imageUrl=url;slide.publicId=publicId;}slide.title=document.getElementById("he-title").value.trim()||"Archeparchy of Changanassery";slide.subtitle=document.getElementById("he-sub").value.trim()||"A beacon of faith and unity.";st.textContent="💾 Saving…";await saveHeroDoc(slide.id,{imageUrl:slide.imageUrl,publicId:slide.publicId||"",title:slide.title,subtitle:slide.subtitle,order:slide.order??hIdx,updated_at:serverTimestamp()});hp.heroImages[hIdx]=slide;renderHero();goSlide(hIdx);closeM("m-hero-edit");toast("✅ Slide updated!","success");}
+  catch(err){st.textContent="❌ "+err.message;st.style.color="#ef4444";busy("btn-he-save",false,"💾 Save Changes");}
+};
+window.delHero=async function(){
+  if(!hp.heroImages.length)return;if(!confirm("Delete this hero slide? Removes from Cloudinary and database permanently."))return;
+  const btn=document.getElementById("btn-hero-del");btn.disabled=true;btn.textContent="Deleting…";
+  try{const slide=hp.heroImages[hIdx];if(slide.publicId){btn.textContent="🗑 Removing from Cloudinary…";await deleteFromCloudinary(slide.publicId);}btn.textContent="🗑 Removing from database…";await deleteHeroDoc(slide.id);hp.heroImages.splice(hIdx,1);for(let i=0;i<hp.heroImages.length;i++){await saveHeroDoc(hp.heroImages[i].id,{order:i});hp.heroImages[i].order=i;}hIdx=Math.max(0,hIdx-1);renderHero();toast("✅ Slide deleted from Cloudinary + Firebase.","success");}
+  catch(err){toast("❌ Delete failed: "+err.message,"error",4000);}
+  finally{btn.disabled=false;btn.innerHTML="🗑 Delete";}
+};
+
+// ABOUT
 window.openAbout=function(){document.getElementById("ab-p1").value=hp.aboutP1;document.getElementById("ab-p2").value=hp.aboutP2;document.getElementById("ab-status").textContent="";busy("btn-ab-save",false,"💾 Save");openM("m-about");};
 window.saveAbout=async function(){busy("btn-ab-save",true);const st=document.getElementById("ab-status");st.textContent="";try{hp.aboutP1=document.getElementById("ab-p1").value.trim();hp.aboutP2=document.getElementById("ab-p2").value.trim();await saveAll(true);renderAbout();closeM("m-about");toast("✅ About saved!","success");}catch(err){st.textContent="❌ "+err.message;st.style.color="#ef4444";busy("btn-ab-save",false,"💾 Save");}};
+
+// STATS
 window.openStats=function(){window.renderSL();document.getElementById("st-status").textContent="";busy("btn-st-save",false,"💾 Save");openM("m-stats");};
 window.renderSL=function(){document.getElementById("stats-list").innerHTML=window.hp.stats.map((s,i)=>`<div class="s-row"><input type="number" id="sv${i}" value="${s.value}" style="flex:0 0 90px;" placeholder="#"/><input type="text" id="sl${i}" value="${e(s.label)}" style="flex:1;" placeholder="Label"/><button class="rm" onclick="window.hp.stats.splice(${i},1);window.renderSL();">✕</button></div>`).join("");};
 window.addStat=function(){window.hp.stats.push({label:"New Stat",value:0});window.renderSL();};
 window.saveStats=async function(){busy("btn-st-save",true);const st=document.getElementById("st-status");st.textContent="";try{window.hp.stats=window.hp.stats.map((_,i)=>({value:+(document.getElementById("sv"+i)?.value||0),label:document.getElementById("sl"+i)?.value||""}));await saveAll(true);renderStats();closeM("m-stats");toast("✅ Stats saved!","success");}catch(err){st.textContent="❌ "+err.message;st.style.color="#ef4444";busy("btn-st-save",false,"💾 Save");}};
-window.openTeam=function(idx){tmEditIdx=idx;tmNewFile=null;const m=idx!==null?hp.team[idx]:null;document.getElementById("team-modal-h").textContent=idx!==null?"Edit Leader":"Add Leader";document.getElementById("tm-name").value=m?.name||"";document.getElementById("tm-role").value=m?.role||"";document.getElementById("tm-bio").value=m?.bio||"";document.getElementById("tm-img").src=m?.imageUrl||`https://ui-avatars.com/api/?name=${encodeURIComponent(m?.name||"L")}&background=921a02&color=fff&size=80`;document.getElementById("tm-file").value="";document.getElementById("tm-status").textContent="";document.getElementById("btn-tm-del").style.display=idx!==null?"":"none";busy("btn-tm-save",false,"💾 Save");openM("m-team");};
-window.onTeamImg=async function(ev){const f=ev.target.files[0];if(!f)return;tmNewFile=f;document.getElementById("tm-img").src=await b64(f);};
-window.saveTeam=async function(){const name=document.getElementById("tm-name").value.trim();if(!name){document.getElementById("tm-status").textContent="Name is required.";document.getElementById("tm-status").style.color="#ef4444";return;}busy("btn-tm-save",true);const st=document.getElementById("tm-status");st.textContent="";try{let imageUrl=tmEditIdx!==null?(hp.team[tmEditIdx].imageUrl||""):"";if(tmNewFile){st.textContent="Uploading photo…";const id="team_"+Date.now()+"_"+Math.random().toString(36).slice(2);imageUrl=await uploadImg(tmNewFile,"teamPhotos/"+id);}const member={name,role:document.getElementById("tm-role").value.trim(),bio:document.getElementById("tm-bio").value.trim(),imageUrl};if(tmEditIdx!==null)hp.team[tmEditIdx]=member;else hp.team.push(member);await saveAll(true);renderTeam();closeM("m-team");toast("✅ Leader saved!","success");}catch(err){st.textContent="❌ "+err.message;st.style.color="#ef4444";busy("btn-tm-save",false,"💾 Save");}};
-window.delTeam=async function(){if(tmEditIdx===null||!confirm("Remove this leader?"))return;const btn=document.getElementById("btn-tm-del");btn.disabled=true;btn.textContent="Removing…";try{hp.team.splice(tmEditIdx,1);await saveAll(true);renderTeam();closeM("m-team");toast("Leader removed.","success");}finally{btn.disabled=false;btn.textContent="🗑 Delete";}};
+
+// ══════════════════════════════════════════════════════════
+// ✅ TEAM — Cloudinary upload + delete for photos
+// ══════════════════════════════════════════════════════════
+window.openTeam=function(idx){
+  tmEditIdx=idx;tmNewFile=null;tmNewPreview=null;tmRemovePhoto=false;
+  const m=idx!==null?hp.team[idx]:null;
+  document.getElementById("team-modal-h").textContent=idx!==null?"Edit Leader":"Add Leader";
+  document.getElementById("tm-name").value=m?.name||"";
+  document.getElementById("tm-role").value=m?.role||"";
+  document.getElementById("tm-bio").value=m?.bio||"";
+  // Show current photo or avatar placeholder
+  document.getElementById("tm-img").src=m?.imageUrl
+    ||`https://ui-avatars.com/api/?name=${encodeURIComponent(m?.name||"L")}&background=921a02&color=fff&size=80`;
+  // Show "Remove photo" button only if member already has a photo
+  document.getElementById("tm-remove-photo-wrap").style.display=(m?.imageUrl)?"":"none";
+  // Social links
+  document.getElementById("tm-twitter").value  =(m?.social?.twitter  ==="#"?"":m?.social?.twitter  )||"";
+  document.getElementById("tm-facebook").value =(m?.social?.facebook ==="#"?"":m?.social?.facebook )||"";
+  document.getElementById("tm-instagram").value=(m?.social?.instagram==="#"?"":m?.social?.instagram)||"";
+  document.getElementById("tm-linkedin").value =(m?.social?.linkedin ==="#"?"":m?.social?.linkedin )||"";
+  document.getElementById("tm-file").value="";
+  document.getElementById("tm-status").textContent="";
+  document.getElementById("btn-tm-del").style.display=idx!==null?"":"none";
+  busy("btn-tm-save",false,"💾 Save");openM("m-team");
+};
+
+// Pick a new photo — shows preview immediately
+window.onTeamImg=async function(ev){
+  const f=ev.target.files[0];if(!f)return;
+  tmNewFile=f;tmRemovePhoto=false;
+  tmNewPreview=await b64(f);
+  document.getElementById("tm-img").src=tmNewPreview;
+  document.getElementById("tm-remove-photo-wrap").style.display=""; // show remove button
+};
+
+// ✅ Remove photo — marks for deletion, shows avatar placeholder
+window.removeTeamPhoto=function(){
+  tmRemovePhoto=true;tmNewFile=null;tmNewPreview=null;
+  const name=document.getElementById("tm-name").value.trim()||"L";
+  document.getElementById("tm-img").src=`https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=921a02&color=fff&size=80`;
+  document.getElementById("tm-remove-photo-wrap").style.display="none";
+};
+
+// ✅ Save team member — Cloudinary upload/delete for photo
+window.saveTeam=async function(){
+  const name=document.getElementById("tm-name").value.trim();
+  if(!name){document.getElementById("tm-status").textContent="Name is required.";document.getElementById("tm-status").style.color="#ef4444";return;}
+  busy("btn-tm-save",true);const st=document.getElementById("tm-status");st.textContent="";
+  try{
+    const existing=tmEditIdx!==null?hp.team[tmEditIdx]:null;
+    let imageUrl=existing?.imageUrl||"";
+    let imagePublicId=existing?.imagePublicId||"";
+
+    if(tmRemovePhoto){
+      // ✅ Delete old photo from Cloudinary
+      if(imagePublicId){
+        st.textContent="🗑 Removing photo from Cloudinary…";
+        await deleteFromCloudinary(imagePublicId);
+      }
+      imageUrl="";imagePublicId="";
+    } else if(tmNewFile){
+      // ✅ Delete old photo first if replacing
+      if(imagePublicId){
+        st.textContent="🗑 Removing old photo…";
+        await deleteFromCloudinary(imagePublicId);
+      }
+      // ✅ Upload new photo to Cloudinary → teamPhotos folder
+      st.textContent="☁️ Uploading photo to Cloudinary…";
+      const result=await uploadToCloudinary(tmNewFile,"teamPhotos");
+      imageUrl=result.url;
+      imagePublicId=result.publicId;
+    }
+
+    const tw=document.getElementById("tm-twitter").value.trim();
+    const fb=document.getElementById("tm-facebook").value.trim();
+    const ig=document.getElementById("tm-instagram").value.trim();
+    const li=document.getElementById("tm-linkedin").value.trim();
+
+    const member={
+      name,
+      role:document.getElementById("tm-role").value.trim(),
+      bio:document.getElementById("tm-bio").value.trim(),
+      imageUrl,
+      imagePublicId,   // ✅ stored so we can delete from Cloudinary later
+      social:{twitter:tw||"#",facebook:fb||"#",instagram:ig||"#",linkedin:li||"#"}
+    };
+
+    if(tmEditIdx!==null)hp.team[tmEditIdx]=member;else hp.team.push(member);
+    st.textContent="💾 Saving to database…";
+    await saveAll(true);
+    renderTeam();closeM("m-team");toast("✅ Leader saved!","success");
+  }catch(err){st.textContent="❌ "+err.message;st.style.color="#ef4444";busy("btn-tm-save",false,"💾 Save");}
+};
+
+// ✅ Delete team member — removes photo from Cloudinary too
+window.delTeam=async function(){
+  if(tmEditIdx===null||!confirm("Remove this leader? Their photo will also be deleted from Cloudinary."))return;
+  const btn=document.getElementById("btn-tm-del");btn.disabled=true;btn.textContent="Removing…";
+  try{
+    const member=hp.team[tmEditIdx];
+    // ✅ Delete photo from Cloudinary if it exists
+    if(member?.imagePublicId){
+      btn.textContent="🗑 Removing photo from Cloudinary…";
+      await deleteFromCloudinary(member.imagePublicId);
+    }
+    hp.team.splice(tmEditIdx,1);
+    await saveAll(true);renderTeam();closeM("m-team");toast("✅ Leader and photo deleted.","success");
+  }finally{btn.disabled=false;btn.textContent="🗑 Delete";}
+};
+
+// SERVICES
 window.openSvc=function(){window.renderSvcL();document.getElementById("sv-status").textContent="";busy("btn-sv-save",false,"💾 Save");openM("m-svc");};
 window.renderSvcL=function(){document.getElementById("svc-list").innerHTML=window.hp.services.map((s,i)=>`<div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:10px;margin-bottom:8px;"><div style="display:flex;gap:8px;margin-bottom:6px;align-items:center;"><input value="${e(s.icon)}" id="si${i}" placeholder="bi-shop" style="flex:0 0 130px;border:1px solid #e2e8f0;border-radius:6px;padding:5px 8px;font-size:.78rem;outline:none;"/><input value="${e(s.title)}" id="st${i}" placeholder="Title" style="flex:1;border:1px solid #e2e8f0;border-radius:6px;padding:5px 8px;font-size:.78rem;outline:none;"/><button onclick="window.hp.services.splice(${i},1);window.renderSvcL();" style="background:none;border:none;color:#ef4444;cursor:pointer;font-size:1rem;">✕</button></div><textarea rows="2" id="sd${i}" placeholder="Description" style="width:100%;border:1px solid #e2e8f0;border-radius:6px;padding:5px 8px;font-size:.78rem;resize:none;outline:none;">${e(s.desc)}</textarea></div>`).join("");};
 window.addSvc=function(){window.hp.services.push({icon:"bi-star",title:"New Service",desc:""});window.renderSvcL();};
 window.saveSvc=async function(){busy("btn-sv-save",true);const st=document.getElementById("sv-status");st.textContent="";try{window.hp.services=window.hp.services.map((_,i)=>({icon:document.getElementById("si"+i)?.value||"bi-star",title:document.getElementById("st"+i)?.value||"",desc:document.getElementById("sd"+i)?.value||""}));await saveAll(true);renderSvc();closeM("m-svc");toast("✅ Services saved!","success");}catch(err){st.textContent="❌ "+err.message;st.style.color="#ef4444";busy("btn-sv-save",false,"💾 Save");}};
-window.openNews=function(){window.renderNL("diocesan");window.renderNL("helpdesk");document.getElementById("nw-status").textContent="";busy("btn-nw-save",false,"💾 Save");openM("m-news");};
-window.renderNL=function(type){const listId=type==="diocesan"?"news-dioc-list":"news-help-list";document.getElementById(listId).innerHTML=(window.hp.news[type]||[]).map((n,i)=>`<div class="n-row"><input value="${e(n.title)}" id="nt${type}${i}" placeholder="Title" style="flex:1;"/><input value="${e(n.date)}" id="nd${type}${i}" type="date" style="flex:0 0 140px;"/><button class="rm" onclick="window.hp.news['${type}'].splice(${i},1);window.renderNL('${type}');">✕</button></div>`).join("");};
-window.addNewsRow=function(type){if(!window.hp.news[type])window.hp.news[type]=[];window.hp.news[type].push({title:"",date:new Date().toISOString().split("T")[0]});window.renderNL(type);};
-window.saveNews=async function(){busy("btn-nw-save",true);const st=document.getElementById("nw-status");st.textContent="";try{["diocesan","helpdesk"].forEach(type=>{window.hp.news[type]=(window.hp.news[type]||[]).map((_,i)=>({title:document.getElementById("nt"+type+i)?.value||"",date:document.getElementById("nd"+type+i)?.value||""}));});await saveAll(true);renderNews(newTab);closeM("m-news");toast("✅ News updated!","success");}catch(err){st.textContent="❌ "+err.message;st.style.color="#ef4444";busy("btn-nw-save",false,"💾 Save");}};
 
-/* ══ USERS ══ */
+// NEWS
+window.openNews=function(){newsImgPending={};window.renderNL("diocesan");window.renderNL("helpdesk");document.getElementById("nw-status").textContent="";busy("btn-nw-save",false,"💾 Save");openM("m-news");};
+window.renderNL=function(type){const listId=type==="diocesan"?"news-dioc-list":"news-help-list";document.getElementById(listId).innerHTML=(window.hp.news[type]||[]).map((n,i)=>{const key=type+"_"+i;const pending=newsImgPending[key];const thumbSrc=pending?.preview||n.imageUrl||"";return`<div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:10px;margin-bottom:10px;"><div class="n-row" style="margin-bottom:8px;"><input value="${e(n.title)}" id="nt${type}${i}" placeholder="News title" style="flex:1;"/><input value="${e(n.date)}" id="nd${type}${i}" type="date" style="flex:0 0 140px;"/><button class="rm" onclick="window.removeNewsItem('${type}',${i});">✕</button></div><div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">${thumbSrc?`<img src="${thumbSrc}" alt="" style="width:80px;height:54px;object-fit:cover;border-radius:6px;border:1px solid #e2e8f0;flex-shrink:0;"/>`:`<div style="width:80px;height:54px;background:#f1f5f9;border-radius:6px;border:1px dashed #cbd5e1;display:flex;align-items:center;justify-content:center;font-size:1.3rem;flex-shrink:0;">📰</div>`}<div style="display:flex;flex-direction:column;gap:4px;"><label style="display:inline-flex;align-items:center;gap:6px;background:#4f46e5;color:#fff;border-radius:6px;padding:5px 12px;font-size:.75rem;font-weight:600;cursor:pointer;">📷 ${thumbSrc?"Change Image":"Add Image"}<input type="file" accept="image/*" style="display:none;" onchange="window.onNewsImg(event,'${type}',${i})"/></label>${thumbSrc?`<button onclick="window.removeNewsImg('${type}',${i})" style="background:none;border:none;color:#ef4444;font-size:.72rem;cursor:pointer;text-align:left;padding:0;">🗑 Remove image</button>`:""}</div>${pending?`<span style="font-size:.72rem;color:#4f46e5;font-weight:600;">✓ New image ready</span>`:""}</div></div>`;}).join("");};
+window.onNewsImg=async function(ev,type,i){const f=ev.target.files[0];if(!f)return;const preview=await b64(f);const key=type+"_"+i;newsImgPending[key]={file:f,preview,oldPublicId:window.hp.news[type][i]?.imagePublicId||""};window.renderNL(type);};
+window.removeNewsImg=function(type,i){const key=type+"_"+i;newsImgPending[key]={remove:true,oldPublicId:window.hp.news[type][i]?.imagePublicId||""};window.hp.news[type][i].imageUrl="";window.hp.news[type][i].imagePublicId="";window.renderNL(type);};
+window.removeNewsItem=function(type,i){const oldPublicId=window.hp.news[type][i]?.imagePublicId;if(oldPublicId)deleteFromCloudinary(oldPublicId);window.hp.news[type].splice(i,1);delete newsImgPending[type+"_"+i];window.renderNL(type);};
+window.addNewsRow=function(type){if(!window.hp.news[type])window.hp.news[type]=[];window.hp.news[type].push({title:"",date:new Date().toISOString().split("T")[0],imageUrl:"",imagePublicId:""});window.renderNL(type);};
+window.saveNews=async function(){
+  busy("btn-nw-save",true);const st=document.getElementById("nw-status");st.textContent="";
+  try{
+    for(const type of["diocesan","helpdesk"]){window.hp.news[type]=(window.hp.news[type]||[]).map((n,i)=>({title:document.getElementById("nt"+type+i)?.value||"",date:document.getElementById("nd"+type+i)?.value||"",imageUrl:n.imageUrl||"",imagePublicId:n.imagePublicId||""}));}
+    const entries=Object.entries(newsImgPending);const uploadCount=entries.filter(([,v])=>v.file).length;let doneCount=0;
+    for(const[key,pending]of entries){const[type,idxStr]=key.split("_");const i=parseInt(idxStr);if(!window.hp.news[type]?.[i])continue;if(pending.remove){if(pending.oldPublicId)await deleteFromCloudinary(pending.oldPublicId);window.hp.news[type][i].imageUrl="";window.hp.news[type][i].imagePublicId="";}else if(pending.file){if(pending.oldPublicId)await deleteFromCloudinary(pending.oldPublicId);doneCount++;st.textContent=`☁️ Uploading news image ${doneCount} of ${uploadCount}…`;st.style.color="#64748b";const{url,publicId}=await uploadToCloudinary(pending.file,"newsImages");window.hp.news[type][i].imageUrl=url;window.hp.news[type][i].imagePublicId=publicId;}}
+    st.textContent="💾 Saving to database…";await saveAll(true);newsImgPending={};renderNews(newTab);closeM("m-news");toast("✅ News updated!","success");
+  }catch(err){st.textContent="❌ "+err.message;st.style.color="#ef4444";console.error("[News Save] error:",err);busy("btn-nw-save",false,"💾 Save");}
+};
+
+// USERS
 window.loadUsers=async function(){try{const q=query(UC,orderBy("created_at","desc"));const sn=await getDocs(q);allU=sn.docs.map(d=>({id:d.id,...d.data()}));renderTbl(allU);updateUS(allU);}catch(err){alert2("Failed to load users: "+err.message);}};
 function renderTbl(data){const tb=document.getElementById("users-tbody"),em=document.getElementById("empty-state");document.getElementById("table-count").textContent=data.length;document.getElementById("sidebar-count").textContent=data.length;tb.innerHTML="";if(!data.length){em.style.display="flex";return;}em.style.display="none";data.forEach((u,i)=>{const tr=document.createElement("tr");tr.innerHTML=`<td>${i+1}</td><td>${e(u.name)}</td><td>${e(u.email)}</td><td>${e(u.phone)}</td><td><span class="badge ${u.role==="Admin"?"bg-warning text-dark":"bg-secondary"}">${e(u.role||"User")}</span></td><td>${e(u.address)}</td><td>${u.imageUrl?`<div style="position:relative;display:inline-block;"><img src="${e(u.imageUrl)}" style="width:36px;height:36px;border-radius:50%;object-fit:cover;display:block;">${role==="Admin"?`<span onclick="openUImg('${u.id}')" style="position:absolute;inset:0;border-radius:50%;background:rgba(0,0,0,.35);display:flex;align-items:center;justify-content:center;cursor:pointer;opacity:0;transition:opacity .2s;" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0">📷</span>`:""}</div>`:role==="Admin"?`<button onclick="openUImg('${u.id}')" style="background:#f1f5f9;border:1px dashed #cbd5e1;border-radius:6px;padding:4px 8px;font-size:.72rem;cursor:pointer;color:#64748b;">＋ Add</button>`:"—"}</td><td class="td-actions" style="display:${role==="Admin"?"":"none"};"><button class="btn btn-sm btn-outline-primary me-1" onclick="editUser('${u.id}')">✏️</button><button class="btn btn-sm btn-outline-danger" onclick="delUser('${u.id}')">🗑</button></td>`;tb.appendChild(tr);});}
 function updateUS(data){document.getElementById("stat-total").textContent=data.length;document.getElementById("stat-emails").textContent=data.filter(u=>u.email).length;document.getElementById("stat-images").textContent=data.filter(u=>u.imageUrl).length;}
@@ -671,362 +848,10 @@ window.clearUForm=function(){document.getElementById("user-form").reset();docume
 window.removeFormImg=function(){document.getElementById("img-preview").style.display="none";document.getElementById("img-preview").src="";document.getElementById("remove-img-btn").style.display="none";document.getElementById("f-image").value="";};
 window.editUser=function(uid){if(role!=="Admin")return;const u=allU.find(x=>x.id===uid);if(!u)return;editUID=uid;document.getElementById("f-name").value=u.name||"";document.getElementById("f-email").value=u.email||"";document.getElementById("f-phone").value=u.phone||"";document.getElementById("f-role").value=u.role||"Manager";document.getElementById("f-address").value=u.address||"";if(u.imageUrl){const p=document.getElementById("img-preview");p.src=u.imageUrl;p.style.display="block";document.getElementById("remove-img-btn").style.display="block";}document.getElementById("form-mode-label").textContent="Edit User";document.getElementById("btn-submit").textContent="💾 Update User";showSec("users");setTimeout(()=>document.getElementById("section-form").scrollIntoView({behavior:"smooth"}),120);};
 window.delUser=async function(uid){if(role!=="Admin"||!confirm("Delete this user permanently?"))return;try{await deleteDoc(doc(db,"managedUsers",uid));alert2("User deleted.","warning");await loadUsers();}catch(err){alert2("Delete failed: "+err.message);}};
-window.openUImg=function(uid){if(role!=="Admin")return;const u=allU.find(x=>x.id===uid);if(!u)return;uiUID=uid;uiNewFile=null;uiRm=false;document.getElementById("uimg-cur").src=u.imageUrl||`https://ui-avatars.com/api/?name=${encodeURIComponent(u.name||"U")}&background=4f46e5&color=fff&size=90`;document.getElementById("uimg-name").textContent=u.name||u.email||"User";document.getElementById("uimg-new-wrap").style.display="none";document.getElementById("ui-status").textContent="";document.getElementById("uimg-file").value="";busy("btn-ui-save",false,"💾 Save");openM("m-uimg");};
-window.onUImgFile=async function(ev){const f=ev.target.files[0];if(!f)return;uiRm=false;uiNewFile=f;document.getElementById("uimg-new").src=await b64(f);document.getElementById("uimg-new-wrap").style.display="";document.getElementById("ui-status").textContent="";};
-window.removeUImg=function(){uiRm=true;uiNewFile=null;const u=allU.find(x=>x.id===uiUID);document.getElementById("uimg-cur").src=`https://ui-avatars.com/api/?name=${encodeURIComponent(u?.name||"U")}&background=e2e8f0&color=94a3b8&size=90`;document.getElementById("uimg-new-wrap").style.display="none";document.getElementById("ui-status").textContent="Image will be removed on save.";document.getElementById("ui-status").style.color="#f59e0b";};
+window.openUImg=function(uid){if(role!=="Admin")return;const u=allU.find(x=>x.id===uid);if(!u)return;uiUID=uid;uiNewFile=null;uiNewPreview=null;uiRm=false;document.getElementById("uimg-cur").src=u.imageUrl||`https://ui-avatars.com/api/?name=${encodeURIComponent(u.name||"U")}&background=4f46e5&color=fff&size=90`;document.getElementById("uimg-name").textContent=u.name||u.email||"User";document.getElementById("uimg-new-wrap").style.display="none";document.getElementById("ui-status").textContent="";document.getElementById("uimg-file").value="";busy("btn-ui-save",false,"💾 Save");openM("m-uimg");};
+window.onUImgFile=async function(ev){const f=ev.target.files[0];if(!f)return;uiRm=false;uiNewFile=f;uiNewPreview=await b64(f);document.getElementById("uimg-new").src=uiNewPreview;document.getElementById("uimg-new-wrap").style.display="";document.getElementById("ui-status").textContent="";};
+window.removeUImg=function(){uiRm=true;uiNewFile=null;uiNewPreview=null;const u=allU.find(x=>x.id===uiUID);document.getElementById("uimg-cur").src=`https://ui-avatars.com/api/?name=${encodeURIComponent(u?.name||"U")}&background=e2e8f0&color=94a3b8&size=90`;document.getElementById("uimg-new-wrap").style.display="none";document.getElementById("ui-status").textContent="Image will be removed on save.";document.getElementById("ui-status").style.color="#f59e0b";};
 window.saveUImg=async function(){const st=document.getElementById("ui-status");if(!uiNewFile&&!uiRm){st.textContent="No changes.";st.style.color="#6b7280";return;}busy("btn-ui-save",true);st.textContent="";try{let imageUrl="";if(uiNewFile){st.textContent="Uploading photo…";const id="user_"+uiUID+"_"+Date.now();imageUrl=await uploadImg(uiNewFile,"userPhotos/"+id);}await updateDoc(doc(db,"managedUsers",uiUID),{imageUrl,updated_at:serverTimestamp()});await loadUsers();closeM("m-uimg");toast("✅ Image saved!","success");}catch(err){st.textContent="❌ "+err.message;st.style.color="#ef4444";busy("btn-ui-save",false,"💾 Save");}};
-
-/* ════════════════════════════════════════════════════
-   ★ ADMINISTRATION MODULE — Full CRUD with Firestore ★
-════════════════════════════════════════════════════ */
-const ADM_DEFAULTS = {
-  "admin-tab-1":{type:"cards",title:"The Metropolitan Curia",items:[
-    {name:"Archbishop Joseph Perumthottam",role:"The Metropolitan Archbishop",phone:"94475 07393",imageUrl:""},
-    {name:"Bishop Thomas Tharayil",role:"Proto syncellus",phone:"80780 88468",imageUrl:"assets/img/1.png"},
-    {name:"Very Rev. Joseph Vaniapurackal",role:"Syncelli",phone:"0481 2420040, 94952 68877",imageUrl:""},
-    {name:"Very Rev. Dr. Thomas Padiyath",role:"Syncelli",phone:"0481 2421162, 94462 01820",imageUrl:""},
-    {name:"Very Rev. Dr. Isaac Alencherry",role:"Chancellor",phone:"0481 2427372, 90374 40040",imageUrl:""},
-    {name:"Very Rev. Fr. Cherian Karikompil",role:"Finance Officer",phone:"0481 2426922, 95394 20040",imageUrl:""}
-  ]},
-  "admin-tab-2":{type:"cards",title:"The Other Offices",items:[
-    {name:"Rev. Dr. George Puthumanamuzhiyil",role:"Vice Chancellor",phone:"94469 82889",imageUrl:""},
-    {name:"Rev. Fr. Jacob Parackal",role:"Vice Chancellor",phone:"99610 72872",imageUrl:""},
-    {name:"Rev. Fr. Isaac Kooliparambil",role:"Secretary to the Metropolitan Archbishop",phone:"94475 07393",imageUrl:""},
-    {name:"Rev. Fr. Joseph Plathanam",role:"Secretary to the Metropolitan Emeritus",phone:"94474 07724",imageUrl:""},
-    {name:"Rev. Fr. Joseph Plathanam",role:"Secretary to the Auxiliary Bishop",phone:"80780 88468",imageUrl:""},
-    {name:"Rev. Fr. James Kudilil",role:"Assistant Archivist",phone:"94950 20933",imageUrl:""},
-    {name:"Rev. Fr. George Veliyathu",role:"House Procurator",phone:"94005 08582",imageUrl:""},
-    {name:"Rev. Fr. Matthew Malyeckal",role:"Office Assistant to Curia",phone:"99611 06799",imageUrl:""}
-  ]},
-  "admin-tab-3":{type:"table-two-col",title:"Metropolitan Tribunal",officePhone:"80782 75421",items:[
-    {office:"Judicial Vicar",name:"Very Rev. Dr. Mathew Changankary"},{office:"Judges",name:"Rev. Dr. Joseph Thoompunka"},
-    {office:"",name:"Rev. Dr. Tom Puthenkalam"},{office:"",name:"Rev. Dr. George Puthumanamoozhiyil"},
-    {office:"",name:"Rev. Sr. Ancy Poovathanikunnel SABS"},{office:"",name:"Rev. Sr. Maria Tresa FCC"},
-    {office:"Promoter of Justice",name:"Rev. Fr. Jacob Parackal"},{office:"Defenders of Bond",name:"Rev. Dr. Philip Nelpuraparampil"},
-    {office:"",name:"Rev. Fr. Jacob Parackal"},{office:"Auditors and Assessors",name:"Rev. Fr. Gregory Naduviledam"},
-    {office:"",name:"Rev. Dr. Sibychen Puthiyidom OFM Cap."},{office:"Notaries",name:"Rev. Fr. Joseph Kalathil"},
-    {office:"",name:"Rev. Fr. Varkey Manavath"},{office:"",name:"Rev. Sr. Bincy Mangalassery SH"},
-    {office:"Stable Advocate",name:"Very Rev. Dr. Isaac Alencherry"},{office:"Censors of Books",name:"Very Rev. Dr. Thomas Padiyath"},
-    {office:"",name:"Very Rev. Dr. Scaria Kanniyakonil"},{office:"",name:"Rev. Dr. Joseph Nalpathilchira"},
-    {office:"",name:"Rev. Dr. Dominic Muriyankavunkal"},{office:"Administrative Tribunal",name:"Rev. Dr. Joseph Thoompunkal (President)"},
-    {office:"",name:"Rev. Dr. Tom Puthenkalam"},{office:"",name:"Rev. Fr. Abraham Vettuvayalil"},
-    {office:"",name:"Rev. Fr. Abraham Changankary"},{office:"",name:"Rev. Fr. Adv. Joseph Kochuchirayil"},
-    {office:"",name:"Rev. Fr. Joseph Mulavana"},{office:"",name:"Adv. Joji Chirayil"},
-    {office:"",name:"Prof. Dr. PC Aniyankunju"}
-  ]},
-  "admin-tab-4":{type:"table-one-col",title:"Archeparchial Consultors",items:[
-    "Bishop Thomas Tharayil","Very Rev. Fr. Joseph Vaniapurackal","Very Rev. Dr. Thomas Padiyath",
-    "Very Rev. Dr. Mathew Changankary","Very Rev. Dr. Isaac Alencherry","Very Rev. Fr. Cherian Karikompil",
-    "Rev. Fr. Jacob Varikkatt","Rev. Fr. Thomas Mangalath"
-  ]},
-  "admin-tab-5":{type:"table-two-col",title:"Proto-Presbyters",headers:["Forane","Name"],items:[
-    {office:"Changanacherry",name:"Very Rev. Dr. Jose Kochuparampil"},{office:"Alappuzha - Pazhavangadi",name:"Very Rev. Fr. Philip Thayil"},
-    {office:"Amboori",name:"Very Rev. Fr. Jacob Cheeramvelil"},{office:"Athirampuzha",name:"Very Rev. Dr. Joseph Mundakathil"},
-    {office:"Champakulam - Kalloorkad",name:"Very Rev. Fr. Gregory Onamkulam"},{office:"Edathua",name:"Very Rev. Fr. Mathew Chooravady (Sr)"},
-    {office:"Kollam - Ayoor",name:"Very Rev. Fr. Abraham Karippingapuram"},{office:"Kottayam",name:"Very Rev. Dr. Philip Nelpuraparampil"},
-    {office:"Kudamaloor",name:"Very Rev. Dr. Mani Puthiyidam"},{office:"Kurumpanadom",name:"Very Rev. Fr. George Nuzhaithadom"},
-    {office:"Manimala",name:"Very Rev. Fr. George Kochuparampil"},{office:"Nedumkunnam",name:"Very Rev. Fr. Jacob Anchupankil"},
-    {office:"Pulincunnoo",name:"Very Rev. Fr. Mathew Puthenangady"},{office:"Thiruvananthapuram",name:"Very Rev. Fr. Joseph Kaithaparampil (Sr)"},
-    {office:"Thrickodithanam",name:"Very Rev. Fr. Francis Karuvelil"},{office:"Thuruthy",name:"Very Rev. Fr. Jose Varikkappally"}
-  ]},
-  "admin-tab-6":{type:"table-one-col",title:"Finance Council",items:[
-    "Mar Thomas Tharayil","Very Rev. Fr Joseph Vaniapurackal","Very Rev. Dr. Thomas Padiyath",
-    "Very Rev. Fr. Cherian Karikompil (Ex officio)","Very Rev. Dr. Isaac Alencherry",
-    "Rev. Fr. Mathew Padinjarekutt","Rev. Fr. John Manakunnel","Prof. Dr. PC Aniyankunju",
-    "Prof. Jacob Thomas Thayil","Mr. Prem Kuttemperoor","Mr. George Varanath",
-    "Mr. Raju Kannattumadam","Mrs. Tessy Sebastian Panamparampil"
-  ]},
-  "admin-tab-7":{type:"presbyteral",title:"Presbyteral Council",sections:[
-    {title:"I. Ex. Officio Members",type:"table-two-col",items:[
-      {office:"Proto Syncellus",name:"Mar Thomas Tharayil"},{office:"Syncellus",name:"Very Rev. Fr. Joseph Vaniapurackal"},
-      {office:"Syncellus",name:"Very Rev. Dr. Thomas Padiyath"},{office:"Judicial Vicar",name:"Very Rev. Dr. Mathew Changankary"},
-      {office:"Chancellor",name:"Very Rev. Dr. Isaac Alencherry"},{office:"Procurator",name:"Very Rev. Fr. Cherian Karikompil"},
-      {office:"Pastor, Metropolitan Church",name:"Very Rev. Dr. Jose Kochuparampil"},
-      {office:"Rector, Minor Seminary",name:"Very Rev. Dr. Varghese Thanamavunkal"},
-      {office:"Mission Superior",name:"Very Rev. Dr. James Palackal"},{office:"Secretary, PPFA",name:"Rev. Dr. Thomas Aryankala"}
-    ]},
-    {title:"II. Elected Members",type:"table-one-col",items:[
-      "Rev. Fr. Abraham Changankary","Rev. Fr. John Chavara","Rev. Dr. Jacob Chethipuzha","Rev. Fr. Joseph Elamthuruthiyil",
-      "Rev. Fr. Joseph Elanjimattom","Rev. Fr. Antony Ethackad","Rev. Fr. Joseph Ettolil","Rev. Fr. Antony Kachamkode",
-      "Rev. Dr. Thomas Kainikkara","Rev. Fr. Antony Kakkaparambil","Rev. Fr. Joseph Kalarickal","Rev. Dr. Thomas Karukakalam",
-      "Rev. Fr. Jacob Karukayil","Rev. Fr. Joseph Kattappuram","Rev. Dr. Jacob Koippally","Rev. Fr. Varghese Kossackal",
-      "Rev. Fr. Thomas Kulathumkal","Rev. Fr. James Kunnil","Rev. Fr. John Manakunnel","Rev. Dr. Isaac Mundunadackal",
-      "Rev. Fr. Mathew Nadackal","Rev. Fr. Gregory Naduviledam","Rev. Fr. Joseph Nedumparampil","Rev. Dr. Philip Nelpuraparampil",
-      "Rev. Dr. Emmanuel Neriamparampil","Rev. Dr. Joseph Nilavanthara","Rev. Fr. George Panakezham","Rev. Fr. Joseph Panakkezham",
-      "Rev. Dr. Thomas Parathara","Rev. Fr. Abraham Perumbalathussery","Rev. Fr. Antony Porookara","Rev. Fr. Sebastian Punnassery",
-      "Rev. Fr. Chacko Puthiaparampil","Very Rev. Dr. Mani Puthiyidam","Rev. Dr. John V Thadathil","Very Rev. Fr. Philip Thayil",
-      "Rev. Fr. George Thycheril","Rev. Fr. Philip Vaikathukaranveettil","Rev. Fr. George Vallayil"
-    ]},
-    {title:"III. Nominated Members",type:"table-one-col",items:[
-      "Very Rev. Fr. Joseph Kaithaparampil (Sr.)","Very Rev. Dr. Scaria Kaniyakonil","Very Rev. Fr. Abraham Karippingapuram",
-      "Rev. Fr. Thomas Mangalathu","Very Rev. Dr. Joseph Mundakathil","Rev. Fr. Jacob Varikatt","Rev. Fr. Varghese Arackal",
-      "Rev. Fr. George Koottummel","Rev. Fr. Zacharias Kunnakkattuthara","Rev. Dr. Tom Puthenkalam",
-      "Rev. Fr. Joseph Puthuveettilkalam (Teji)","Rev. Dr. Mathew Thekkedathu","Rev. Fr. Jacob Vattackattu"
-    ]}
-  ]},
-  "admin-tab-8":{type:"pastoral",title:"Pastoral Council",sections:[
-    {title:"I. Ex. Officio Members",type:"table-two-col",items:[
-      {office:"President (Archbishop)",name:"Mar Joseph Perumthottam"},{office:"Metropolitan Emeritus",name:"Mar Joseph Powathil"},
-      {office:"Vice President (Proto Syncellus)",name:"Mar Thomas Tharayil"},{office:"Syncelli",name:"Very Rev. Fr. Joseph Vaniapurackal"},
-      {office:"",name:"Very Rev. Dr. Thomas Padiyath"},{office:"Secretary",name:"Dr. Dominic Joseph Vazheeparampil"},
-      {office:"Joint Secretaries",name:"Dr. Rekha Mathews Koottummel"},{office:"",name:"Sri. Antony Thomas Malayil"},
-      {office:"Judicial Vicar",name:"Very Rev. Dr. Mathew Changankary"},{office:"Chancellor",name:"Very Rev. Dr. Isaac Alencherry"},
-      {office:"Procurator",name:"Very Rev. Fr. Cherian Karikompil"},{office:"Secretary (XV Pastoral Council)",name:"Dr. Antony Mathews"},
-      {office:"Corporate Manager",name:"Rev. Fr. Joseph Karukayil (Manoj)"},{office:"Director, Higher Education",name:"Prof. Dr. PC Aniyankunju"}
-    ]},
-    {title:"II. Elected Members",type:"table-two-col",items:[
-      {office:"Forane Council Secretary",name:"Mr. Abin Alexander"},{office:"Women Representative",name:"Mrs. Ancy Mathew"},
-      {office:"Representative of the Consecrated",name:"Rev. Sr. Liz Mary FCC"},{office:"General",name:"Mr. Varghese Antony"},
-      {office:"",name:"Mrs. Beena Sebastian"}
-    ]},
-    {title:"III. Committee Convenors",type:"table-two-col",items:[
-      {office:"Liturgy & Catechism",name:"Mr. Roy Kappankal"},{office:"Ecumenism, Dialogue & Evangelization",name:"Mr. Josukutty Kuttamperoor"},
-      {office:"Bible Apostolate & Kudumbakkoottayma",name:"Mr. Sibi Mukkadan"},{office:"Youth Welfare",name:"Mr. Shijo Mathew"},
-      {office:"Family Welfare",name:"Mr. Laly Elapunkal"},{office:"Social Welfare & Women Empowerment",name:"Adv. Job Michael MLA"},
-      {office:"Education",name:"Mr. VJ Lali"},{office:"Social Communication, Jagrathavedi",name:"Mr. Jose Mathew Anithottam"},
-      {office:"Migrants & Tourism",name:"Mr. Thankachan Ponmankal"},{office:"Labour, Dalit & Nadar Welfare",name:"Mr. James Elavumkal"}
-    ]},
-    {title:"IV. Nominated Members",type:"table-two-col",items:[
-      {office:"General",name:"Adv. Joji Chirayil"},{office:"",name:"Adv. Sunny George Chathukulam"}
-    ]},
-    {title:"V. Agenda Committee",type:"table-one-col",items:["Mar Thomas Tharayil","Dr. Dominic Joseph","Dr. Rekha Mathews","Prof. Dr. PC Aniyankunju","Smt. Beena Sebastian"]},
-    {title:"XVI. Forane Council Secretaries",type:"table-two-col",items:[
-      {office:"Changanacherry",name:"Shijo Jacob"},{office:"Alappuzha",name:"Roy Kottarachira"},
-      {office:"Amboori",name:"John Paul Y"},{office:"Athirampuzha",name:"Boby Thomas"},
-      {office:"Champakulam",name:"Jopan Joy"},{office:"Edathua",name:"Josymon Augsty"},
-      {office:"Kollam",name:"Jose Mathew Anithottam"},{office:"Kottayam",name:"Sebastian K Joseph"},
-      {office:"Kudamaloor",name:"Adv. Lithin Thomas"},{office:"Kurumpanadom",name:"Soby Joseph"},
-      {office:"Manimala",name:"Jose Mathew"},{office:"Nedumkunnam",name:"Jacob John"},
-      {office:"Pulincunnoo",name:"Abin Alexander"},{office:"Thiruvananthapuram",name:"Justin Joseph"},
-      {office:"Thrickodithanam",name:"Sibi Mukadan"},{office:"Thuruthy",name:"Sebastian PJ"}
-    ]}
-  ]}
-};
-
-const ADM_LABELS={"admin-tab-1":"Metropolitan Curia","admin-tab-2":"Other Offices","admin-tab-3":"Metropolitan Tribunal","admin-tab-4":"Archeparchial Consultors","admin-tab-5":"Proto-Presbyters","admin-tab-6":"Finance Council","admin-tab-7":"Presbyteral Council","admin-tab-8":"Pastoral Council"};
-
-let admData={},admCurrentTab="admin-tab-1",admEditIdx=null,admEditSubsec=null,admPhotoFile=null,admInited=false;
-
-// Load tab data from Firestore — fallback to default
-async function admLoadTab(tabId){
-  try{
-    const snap=await getDoc(doc(db,"administration",tabId));
-    if(snap.exists()&&(snap.data().rows||snap.data().items||snap.data().sections)){
-      admData[tabId]=snap.data();
-      if(!admData[tabId].type)admData[tabId].type=ADM_DEFAULTS[tabId].type;
-      if((ADM_DEFAULTS[tabId].type==="presbyteral"||ADM_DEFAULTS[tabId].type==="pastoral")&&!admData[tabId].sections)admData[tabId].sections=ADM_DEFAULTS[tabId].sections;
-    }else{admData[tabId]=JSON.parse(JSON.stringify(ADM_DEFAULTS[tabId]));}
-  }catch(e){admData[tabId]=JSON.parse(JSON.stringify(ADM_DEFAULTS[tabId]));}
-}
-
-// Save to Firestore
-async function admSave(tabId){
-  const payload=JSON.parse(JSON.stringify(admData[tabId],(_k,v)=>v===undefined?null:v));
-  payload.updated_at=serverTimestamp();
-  await setDoc(doc(db,"administration",tabId),payload);
-}
-
-// Seed all default data to Firestore (runs once if doc doesn't exist)
-async function admSeedAll(){
-  for(const[tabId,data]of Object.entries(ADM_DEFAULTS)){
-    try{const snap=await getDoc(doc(db,"administration",tabId));if(!snap.exists()){const p=JSON.parse(JSON.stringify(data,(_k,v)=>v===undefined?null:v));p.updated_at=serverTimestamp();await setDoc(doc(db,"administration",tabId),p);}}catch(e){}
-  }
-}
-
-function admCountItems(data){
-  if(!data)return 0;
-  if(data.type==="cards"||data.type==="table-two-col"||data.type==="table-one-col")return(data.items||[]).length;
-  if(data.type==="presbyteral"||data.type==="pastoral")return(data.sections||[]).reduce((s,sec)=>s+(sec.items||[]).length,0);
-  return 0;
-}
-
-// ── Render ──
-function admRender(filter=""){
-  const data=admData[admCurrentTab];
-  if(!data){document.getElementById("adm-content-area").innerHTML='<div class="adm-spinner"></div>';return;}
-  const q=filter.toLowerCase().trim();
-  document.getElementById("adm-card-count").textContent=admCountItems(data);
-  let html="";
-
-  if(data.type==="cards"){
-    const items=(data.items||[]).filter(it=>!q||it.name.toLowerCase().includes(q)||(it.role||"").toLowerCase().includes(q));
-    if(!items.length){html=`<p style="text-align:center;color:#94a3b8;padding:30px;">No entries found${q?` for "${e(q)}"`:""}.`;}
-    else html=`<div class="adm-cards-grid">${items.map(it=>`<div class="adm-person-card">${it.imageUrl?`<img class="adm-person-img" src="${e(it.imageUrl)}" alt="${e(it.name)}"/>`:`<div class="adm-person-placeholder">👤</div>`}<div class="adm-person-body"><p class="adm-person-name">${e(it.name)}</p><p class="adm-person-role">${e(it.role)}</p>${it.phone?`<p class="adm-person-phone"><i class="bi bi-telephone-fill" style="font-size:.65rem;"></i> ${e(it.phone)}</p>`:""}</div><button class="adm-card-edit-btn" onclick="admOpenEdit(${(data.items||[]).indexOf(it)})">✏️ Edit</button></div>`).join("")}</div>`;
-
-  }else if(data.type==="table-two-col"){
-    const h1=data.headers?data.headers[0]:"Office"; const h2=data.headers?data.headers[1]:"Name";
-    if(data.officePhone)html+=`<p style="font-size:.82rem;color:#555;margin-bottom:12px;"><strong>Office Phone:</strong> ${e(data.officePhone)}</p>`;
-    const items=(data.items||[]).filter(it=>!q||it.name.toLowerCase().includes(q)||(it.office||"").toLowerCase().includes(q));
-    html+=`<div class="adm-table-wrap"><table class="adm-table"><thead><tr><th>${e(h1)}</th><th>${e(h2)}</th><th style="width:80px;">Actions</th></tr></thead><tbody>${items.map(it=>`<tr><td>${e(it.office||"")}</td><td style="font-weight:600;">${e(it.name||"")}</td><td><div class="adm-row-actions"><button class="adm-btn-sm adm-btn-edit" onclick="admOpenEdit(${(data.items||[]).indexOf(it)})">✏️</button><button class="adm-btn-sm adm-btn-del" onclick="admQuickDel(${(data.items||[]).indexOf(it)})">🗑</button></div></td></tr>`).join("")}</tbody></table></div>`;
-    if(!items.length)html+=`<p style="text-align:center;color:#94a3b8;padding:20px;">No entries found.</p>`;
-
-  }else if(data.type==="table-one-col"){
-    const items=(data.items||[]).filter(it=>!q||it.toLowerCase().includes(q));
-    html=`<div class="adm-table-wrap"><table class="adm-table"><thead><tr><th style="width:36px;">#</th><th>Name</th><th style="width:80px;">Actions</th></tr></thead><tbody>${items.map((it,i)=>`<tr><td>${i+1}</td><td style="font-weight:600;">${e(it)}</td><td><div class="adm-row-actions"><button class="adm-btn-sm adm-btn-edit" onclick="admOpenEdit(${(data.items||[]).indexOf(it)})">✏️</button><button class="adm-btn-sm adm-btn-del" onclick="admQuickDel(${(data.items||[]).indexOf(it)})">🗑</button></div></td></tr>`).join("")}</tbody></table></div>`;
-
-  }else if(data.type==="presbyteral"||data.type==="pastoral"){
-    html=(data.sections||[]).map(sec=>{
-      const h1=sec.headers?sec.headers[0]:"Office"; const h2=sec.headers?sec.headers[1]:"Name";
-      let sh=`<div class="adm-subsec-hdr">${e(sec.title)}</div>`;
-      if(sec.type==="table-two-col"){
-        const items=(sec.items||[]).filter(it=>!q||it.name.toLowerCase().includes(q)||(it.office||"").toLowerCase().includes(q));
-        sh+=`<div class="adm-table-wrap"><table class="adm-table"><thead><tr><th>${e(h1)}</th><th>${e(h2)}</th><th style="width:80px;">Actions</th></tr></thead><tbody>${items.map(it=>`<tr><td>${e(it.office||"")}</td><td style="font-weight:600;">${e(it.name||"")}</td><td><div class="adm-row-actions"><button class="adm-btn-sm adm-btn-edit" onclick="admOpenEditSub('${sec.title.replace(/'/g,"\\'")}',${(sec.items||[]).indexOf(it)})">✏️</button><button class="adm-btn-sm adm-btn-del" onclick="admQuickDelSub('${sec.title.replace(/'/g,"\\'")}',${(sec.items||[]).indexOf(it)})">🗑</button></div></td></tr>`).join("")}</tbody></table></div>`;
-      }else{
-        const items=(sec.items||[]).filter(it=>!q||it.toLowerCase().includes(q));
-        sh+=`<div class="adm-table-wrap"><table class="adm-table"><thead><tr><th style="width:36px;">#</th><th>Name</th><th style="width:80px;">Actions</th></tr></thead><tbody>${items.map((it,i)=>`<tr><td>${i+1}</td><td style="font-weight:600;">${e(it)}</td><td><div class="adm-row-actions"><button class="adm-btn-sm adm-btn-edit" onclick="admOpenEditSub('${sec.title.replace(/'/g,"\\'")}',${(sec.items||[]).indexOf(it)})">✏️</button><button class="adm-btn-sm adm-btn-del" onclick="admQuickDelSub('${sec.title.replace(/'/g,"\\'")}',${(sec.items||[]).indexOf(it)})">🗑</button></div></td></tr>`).join("")}</tbody></table></div>`;
-      }
-      return sh;
-    }).join("");
-  }
-  document.getElementById("adm-content-area").innerHTML=html||'<p style="text-align:center;color:#94a3b8;padding:30px;">No data.</p>';
-}
-
-// ── Modal helpers ──
-function admSetupFields(data,subSecTitle){
-  const isCard=data.type==="cards";
-  let secType=null;
-  if(data.type==="presbyteral"||data.type==="pastoral"){
-    const sec=(data.sections||[]).find(s=>s.title===subSecTitle)||data.sections?.[0];
-    secType=sec?.type||"table-one-col";
-  }
-  const isTwoCol=data.type==="table-two-col"||(secType==="table-two-col");
-  const isOneCol=data.type==="table-one-col"||(secType==="table-one-col");
-  const isMulti=data.type==="presbyteral"||data.type==="pastoral";
-  document.getElementById("adm-f-card-fields").style.display=isCard?"":"none";
-  document.getElementById("adm-f-table-fields").style.display=(!isCard&&isTwoCol)?"":"none";
-  document.getElementById("adm-f-onecol-fields").style.display=(!isCard&&isOneCol&&!isTwoCol)?"":"none";
-  const sw=document.getElementById("adm-f-subsec-wrap");
-  if(isMulti){
-    sw.style.display="";
-    const sel=document.getElementById("adm-f-subsec");
-    sel.innerHTML=(data.sections||[]).map(s=>`<option${s.title===subSecTitle?" selected":""}>${e(s.title)}</option>`).join("");
-    sel.onchange=function(){const selSec=(data.sections||[]).find(s=>s.title===this.value);const st=selSec?.type||"table-one-col";document.getElementById("adm-f-table-fields").style.display=st==="table-two-col"?"":"none";document.getElementById("adm-f-onecol-fields").style.display=st==="table-one-col"?"":"none";};
-  }else{sw.style.display="none";}
-  document.getElementById("adm-f-col1-label").textContent=(data.type==="table-two-col"&&data.headers)?data.headers[0]:"Office / Forane";
-  // Reset
-  admPhotoFile=null;
-  document.getElementById("adm-photo-placeholder").style.display="flex";
-  document.getElementById("adm-photo-preview").style.display="none";
-  document.getElementById("adm-photo-preview").src="";
-  ["adm-f-name","adm-f-role","adm-f-phone","adm-f-imageUrl","adm-f-col1","adm-f-col2","adm-f-onecol"].forEach(id=>document.getElementById(id).value="");
-  document.getElementById("adm-modal-status").textContent="";
-  const btn=document.getElementById("btn-adm-save");btn.disabled=false;btn.innerHTML="💾 Save";
-}
-
-window.admShowTab=async function(tabId,btn){
-  admCurrentTab=tabId;admEditIdx=null;admEditSubsec=null;
-  document.querySelectorAll(".adm-tab-btn").forEach(b=>b.classList.remove("active"));
-  btn.classList.add("active");
-  document.getElementById("adm-card-title").textContent=ADM_LABELS[tabId]||tabId;
-  document.getElementById("adm-search").value="";
-  document.getElementById("adm-content-area").innerHTML='<div class="adm-spinner"></div>';
-  if(!admData[tabId])await admLoadTab(tabId);
-  admRender();
-};
-window.admFilter=function(){admRender(document.getElementById("adm-search").value);};
-
-window.admOpenAdd=function(){
-  admEditIdx=null;admEditSubsec=null;
-  document.getElementById("adm-modal-title").textContent="Add Entry";
-  document.getElementById("btn-adm-del").style.display="none";
-  admSetupFields(admData[admCurrentTab],null);
-  document.getElementById("m-adm").classList.add("show");
-};
-window.admOpenEdit=function(idx){
-  const data=admData[admCurrentTab];
-  admEditIdx=idx;admEditSubsec=null;
-  document.getElementById("adm-modal-title").textContent="Edit Entry";
-  document.getElementById("btn-adm-del").style.display="";
-  admSetupFields(data,null);
-  const item=(data.items||[])[idx];
-  if(data.type==="cards"){document.getElementById("adm-f-name").value=item?.name||"";document.getElementById("adm-f-role").value=item?.role||"";document.getElementById("adm-f-phone").value=item?.phone||"";document.getElementById("adm-f-imageUrl").value=item?.imageUrl||"";if(item?.imageUrl){document.getElementById("adm-photo-placeholder").style.display="none";document.getElementById("adm-photo-preview").src=item.imageUrl;document.getElementById("adm-photo-preview").style.display="block";}}
-  else if(data.type==="table-two-col"){document.getElementById("adm-f-col1").value=item?.office||"";document.getElementById("adm-f-col2").value=item?.name||"";}
-  else if(data.type==="table-one-col"){document.getElementById("adm-f-onecol").value=item||"";}
-  document.getElementById("m-adm").classList.add("show");
-};
-window.admOpenEditSub=function(secTitle,idx){
-  const data=admData[admCurrentTab];
-  admEditIdx=idx;admEditSubsec=secTitle;
-  document.getElementById("adm-modal-title").textContent="Edit Entry";
-  document.getElementById("btn-adm-del").style.display="";
-  admSetupFields(data,secTitle);
-  document.getElementById("adm-f-subsec").value=secTitle;
-  const sec=(data.sections||[]).find(s=>s.title===secTitle);
-  const item=(sec?.items||[])[idx];
-  if(sec?.type==="table-two-col"){document.getElementById("adm-f-col1").value=item?.office||"";document.getElementById("adm-f-col2").value=item?.name||"";}
-  else{document.getElementById("adm-f-onecol").value=item||"";}
-  document.getElementById("m-adm").classList.add("show");
-};
-window.admCloseModal=function(){document.getElementById("m-adm").classList.remove("show");};
-document.getElementById("m-adm").addEventListener("click",ev=>{if(ev.target===document.getElementById("m-adm"))window.admCloseModal();});
-
-window.admOnPhoto=async function(ev){const f=ev.target.files[0];if(!f)return;admPhotoFile=f;const reader=new FileReader();reader.onload=ev2=>{document.getElementById("adm-photo-placeholder").style.display="none";document.getElementById("adm-photo-preview").src=ev2.target.result;document.getElementById("adm-photo-preview").style.display="block";document.getElementById("adm-f-imageUrl").value="";};reader.readAsDataURL(f);};
-window.admPreviewUrl=function(url){if(!url){document.getElementById("adm-photo-placeholder").style.display="flex";document.getElementById("adm-photo-preview").style.display="none";return;}document.getElementById("adm-photo-placeholder").style.display="none";document.getElementById("adm-photo-preview").src=url;document.getElementById("adm-photo-preview").style.display="block";};
-
-window.admSaveEntry=async function(){
-  const data=admData[admCurrentTab];
-  const st=document.getElementById("adm-modal-status");
-  const btn=document.getElementById("btn-adm-save");
-  btn.disabled=true;btn.innerHTML=`<span class="adm-spin"></span> Saving…`;st.textContent="";
-  try{
-    if(data.type==="cards"){
-      let imageUrl=admEditIdx!==null?(data.items[admEditIdx]?.imageUrl||""):"";
-      const urlInput=document.getElementById("adm-f-imageUrl").value.trim();
-      if(admPhotoFile){st.textContent="Uploading photo…";const id="adm_"+Date.now()+"_"+Math.random().toString(36).slice(2);imageUrl=await uploadImg(admPhotoFile,"adminPhotos/"+id);}
-      else if(urlInput){imageUrl=urlInput;}
-      const newItem={name:document.getElementById("adm-f-name").value.trim(),role:document.getElementById("adm-f-role").value.trim(),phone:document.getElementById("adm-f-phone").value.trim(),imageUrl};
-      if(!newItem.name){st.textContent="Name is required.";st.style.color="#ef4444";btn.disabled=false;btn.innerHTML="💾 Save";return;}
-      if(admEditIdx!==null)data.items[admEditIdx]=newItem;else data.items.push(newItem);
-    }else if(data.type==="table-two-col"){
-      const newItem={office:document.getElementById("adm-f-col1").value.trim(),name:document.getElementById("adm-f-col2").value.trim()};
-      if(!newItem.name){st.textContent="Name is required.";st.style.color="#ef4444";btn.disabled=false;btn.innerHTML="💾 Save";return;}
-      if(admEditIdx!==null)data.items[admEditIdx]=newItem;else data.items.push(newItem);
-    }else if(data.type==="table-one-col"){
-      const val=document.getElementById("adm-f-onecol").value.trim();
-      if(!val){st.textContent="Name is required.";st.style.color="#ef4444";btn.disabled=false;btn.innerHTML="💾 Save";return;}
-      if(admEditIdx!==null)data.items[admEditIdx]=val;else data.items.push(val);
-    }else{
-      const secTitle=document.getElementById("adm-f-subsec").value;
-      const sec=(data.sections||[]).find(s=>s.title===secTitle)||data.sections?.[0];
-      if(sec){
-        if(sec.type==="table-two-col"){const newItem={office:document.getElementById("adm-f-col1").value.trim(),name:document.getElementById("adm-f-col2").value.trim()};if(!newItem.name){st.textContent="Name is required.";st.style.color="#ef4444";btn.disabled=false;btn.innerHTML="💾 Save";return;}if(admEditIdx!==null&&admEditSubsec)sec.items[admEditIdx]=newItem;else sec.items.push(newItem);}
-        else{const val=document.getElementById("adm-f-onecol").value.trim();if(!val){st.textContent="Name is required.";st.style.color="#ef4444";btn.disabled=false;btn.innerHTML="💾 Save";return;}if(admEditIdx!==null&&admEditSubsec)sec.items[admEditIdx]=val;else sec.items.push(val);}
-      }
-    }
-    await admSave(admCurrentTab);
-    admRender(document.getElementById("adm-search").value);
-    window.admCloseModal();
-    toast("✅ Entry saved!","success");
-  }catch(err){st.textContent="❌ "+err.message;st.style.color="#ef4444";btn.disabled=false;btn.innerHTML="💾 Save";}
-};
-window.admDelEntry=async function(){
-  if(!confirm("Delete this entry?"))return;
-  const data=admData[admCurrentTab];
-  const btn=document.getElementById("btn-adm-del");btn.disabled=true;btn.textContent="Deleting…";
-  try{
-    if(admEditSubsec){const sec=(data.sections||[]).find(s=>s.title===admEditSubsec);if(sec)sec.items.splice(admEditIdx,1);}
-    else{(data.items||[]).splice(admEditIdx,1);}
-    await admSave(admCurrentTab);admRender(document.getElementById("adm-search").value);window.admCloseModal();toast("Entry deleted.","success");
-  }catch(err){toast("❌ "+err.message,"error",4000);}finally{btn.disabled=false;btn.textContent="🗑 Delete";}
-};
-window.admQuickDel=async function(idx){if(!confirm("Delete?"))return;const data=admData[admCurrentTab];try{(data.items||[]).splice(idx,1);await admSave(admCurrentTab);admRender(document.getElementById("adm-search").value);toast("Entry deleted.","success");}catch(err){toast("❌ "+err.message,"error",4000);}};
-window.admQuickDelSub=async function(secTitle,idx){if(!confirm("Delete?"))return;const data=admData[admCurrentTab];try{const sec=(data.sections||[]).find(s=>s.title===secTitle);if(sec)sec.items.splice(idx,1);await admSave(admCurrentTab);admRender(document.getElementById("adm-search").value);toast("Entry deleted.","success");}catch(err){toast("❌ "+err.message,"error",4000);}};
-
-async function admInitIfNeeded(){
-  if(admInited)return;admInited=true;
-  // Seed Firestore with defaults if not already done
-  admSeedAll();
-  // Load first tab
-  await admLoadTab("admin-tab-1");
-  admRender();
-  // Background load rest
-  Object.keys(ADM_DEFAULTS).filter(k=>k!=="admin-tab-1").forEach(id=>admLoadTab(id));
-  // Update stat badges
-  document.getElementById("adm-stat-curia").textContent=(ADM_DEFAULTS["admin-tab-1"].items||[]).length;
-  document.getElementById("adm-stat-offices").textContent=(ADM_DEFAULTS["admin-tab-2"].items||[]).length;
-  document.getElementById("adm-stat-tribunal").textContent=(ADM_DEFAULTS["admin-tab-3"].items||[]).length;
-  document.getElementById("adm-stat-presbyters").textContent=(ADM_DEFAULTS["admin-tab-5"].items||[]).length;
-}
 </script>
 </body>
 </html>
