@@ -406,6 +406,8 @@
       <div class="form-row">
         <div class="form-group"><label class="form-label">Phone (comma separated)</label><input class="form-control-al" id="h-phone" placeholder="81297 41451"></div>
         <div class="form-group"><label class="form-label">Email</label><input class="form-control-al" id="h-email" placeholder="email@domain.com"></div>
+        <div class="form-group"><label class="form-label">Website</label><input class="form-control-al" id="h-website" placeholder="domain.com"></div>
+
       </div>
       <div class="modal-footer-al">
         <button class="btn-modal-cancel" onclick="closeModal('m-house')">Cancel</button>
@@ -712,7 +714,10 @@
                       <div><span class="info-label">Name</span><br>${esc(ph.name||'—')}</div>
                       <div><span class="info-label">Address</span><br>${esc(ph.address||'—')} ${ph.pin?'('+esc(ph.pin)+')':''}</div>
                       <div><span class="info-label">Phone</span><br>${esc(arr(ph.phone).join(', ')||'—')}</div>
-                      <div><span class="info-label">Email</span><br>${esc(arr(ph.email).join(', ')||'—')}</div>
+                      <div>
+  <span class="info-label">Email</span><br>
+  ${esc( [ph.email, ph.website].filter(Boolean).join(', ') || '—' )}
+</div>
                     </div>
                   </div>`;
                 }
@@ -736,7 +741,7 @@
                       <td>${esc(String(h.year||''))}</td>
                       <td>${esc(h.pin||'')}</td>
                       <td>${esc(arr(h.phone).join('<br>'))}</td>
-                      <td style="font-size:.68rem;">${esc(h.email||'')}</td>
+                      <td style="font-size:.68rem;">${esc([h.email, h.website].filter(Boolean).join(', ') || '—')}</td>
                       ${isAdmin ? `<td>
                         <button class="btn-sm-edit" onclick="openEditHouse('${secKey}',${realIdx},${pi},${hi})">✏️</button>
                         <button class="btn-sm-del" onclick="askDeleteHouse('${secKey}',${realIdx},${pi},${hi})">🗑</button>
@@ -1025,6 +1030,7 @@
       document.getElementById('h-pin').value = h.pin||'';
       document.getElementById('h-phone').value = fromArr(h.phone);
       document.getElementById('h-email').value = h.email||'';
+      document.getElementById('h-website').value = h.website || '' ;
       document.getElementById('house-modal-title').textContent = 'Edit House';
       document.getElementById('btn-house-del').style.display = '';
       document.getElementById('house-status').textContent = '';
@@ -1044,7 +1050,8 @@
         address: document.getElementById('h-address').value.trim(),
         pin: document.getElementById('h-pin').value.trim(),
         phone: toArr(document.getElementById('h-phone').value),
-        email: document.getElementById('h-email').value.trim()
+        email: document.getElementById('h-email').value.trim(),
+        website: document.getElementById('h-website').value.trim()
       };
       try {
         const { secKey, action, congIdx, provIdx, houseIdx } = editCtx;
