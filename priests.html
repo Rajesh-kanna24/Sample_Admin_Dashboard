@@ -871,18 +871,31 @@ window.confirmDelete=async function(){
   }
 }; 
 
-/*
-    window.importPriestsJSON = async function(){
-  if(!confirm("priests.json data-ஐ Firestore-க்கு import பண்ணவா?")) return;
+
+ window.importPriestsJSON = async function(){
+  if(!confirm("priests.json data-ஐ Firestore-க்கு import/update பண்ணவா?")) return;
   const btn = document.getElementById("btn-import-priests");
   btn.disabled = true; btn.textContent = "⏳ Importing…";
   try{
     const res  = await fetch("priests.json");
     const data = await res.json();
-    let count  = 0;
+
+    // Firestore-ல் இருக்கும் எல்லா priests-ஐயும் fetch பண்ணு
+    const existingSnap = await getDocs(PR_COL);
+    // name → docId map உருவாக்கு
+    const existingMap = {};
+    existingSnap.forEach(d => {
+      const name = (d.data().name || "").trim().toLowerCase();
+      existingMap[name] = d.id;
+    });
+
+    let updated = 0, added = 0;
+
     for(let i = 0; i < data.length; i++){
       const p = data[i];
-      await addDoc(PR_COL, {
+      const nameKey = (p.name || "").trim().toLowerCase();
+
+      const payload = {
         name:              String(p.name        || ""),
         parish:            String(p.parish      || ""),
         homeTel:           String(p.homeTel     || ""),
@@ -893,23 +906,35 @@ window.confirmDelete=async function(){
         whatsapp:          String(p.whatsapp    || ""),
         email:             String(p.email       || ""),
         image:             String(p.image       || ""),
-        cloudinaryPublicId:"",
-        order:             i,
-        created_at:        serverTimestamp(),
         updated_at:        serverTimestamp()
-      });
-      count++;
-      btn.textContent = `⏳ Imported ${count}…`;
+      };
+
+      if(existingMap[nameKey]){
+        // Already exists → update மட்டும்
+        await updateDoc(doc(db, "priests", existingMap[nameKey]), payload);
+        updated++;
+      } else {
+        // புதுசு → add
+        await addDoc(PR_COL, {
+          ...payload,
+          cloudinaryPublicId: "",
+          order: i,
+          created_at: serverTimestamp()
+        });
+        added++;
+      }
+
+      btn.textContent = `⏳ ${updated} updated, ${added} added…`;
     }
-    prToast(`✅ ${count} priests imported!`, "success");
+
+    prToast(`✅ Done! ${updated} updated, ${added} new added.`, "success");
     await loadPriests();
   }catch(err){
     prToast("❌ Import failed: " + err.message, "error");
   }finally{
     btn.disabled = false; btn.textContent = "⬆ Import priests.json";
   }
-}; */
-
+};
 
 
 </script>
