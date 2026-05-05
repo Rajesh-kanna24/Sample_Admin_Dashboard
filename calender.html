@@ -1,0 +1,1282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Liturgical Calendar — AdminForge</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"/>
+  <link rel="stylesheet" href="style.css"/>
+  <style>
+    :root{--brand:#921a02;--brand-dark:#6d1201;--brand-light:rgba(146,26,2,0.08);--brand-border:rgba(146,26,2,0.18);}
+    .hm-backdrop{display:none;position:fixed;inset:0;z-index:9998;background:rgba(0,0,0,.55);backdrop-filter:blur(3px);align-items:center;justify-content:center}
+    .hm-backdrop.show{display:flex;animation:hmFadeIn .2s ease}
+    @keyframes hmFadeIn{from{opacity:0}to{opacity:1}}
+    .hm-box{background:#fff;border-radius:16px;padding:24px;width:100%;max-width:680px;max-height:92vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.25);position:relative;animation:hmUp .25s ease}
+    @keyframes hmUp{from{transform:translateY(20px);opacity:0}to{transform:translateY(0);opacity:1}}
+    .hm-box h5{font-size:1rem;font-weight:700;margin:0 0 16px}
+    .hm-close{position:absolute;top:14px;right:16px;background:none;border:none;font-size:1.2rem;cursor:pointer;color:#6b7280}
+    .hm-group{margin-bottom:12px}
+    .hm-group label{display:block;font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#64748b;margin-bottom:5px}
+    .hm-group input,.hm-group select,.hm-group textarea{width:100%;border:1px solid #e2e8f0;border-radius:8px;padding:8px 12px;font-size:.84rem;outline:none;transition:border-color .2s;font-family:inherit}
+    .hm-group textarea{resize:vertical;min-height:80px}
+    .hm-group input:focus,.hm-group select:focus,.hm-group textarea:focus{border-color:#921a02}
+    .hm-actions{display:flex;gap:10px;margin-top:16px;flex-wrap:wrap}
+    .hm-save{flex:1;padding:10px;border-radius:8px;border:none;background:#921a02;color:#fff;font-weight:600;font-size:.85rem;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;min-height:40px;min-width:100px}
+    .hm-save:hover:not(:disabled){background:#6d1201}
+    .hm-save:disabled{opacity:.6;cursor:not-allowed}
+    .hm-cancel{padding:10px 18px;border-radius:8px;border:1px solid #e2e8f0;background:#f8fafc;font-size:.85rem;cursor:pointer}
+    .hm-status{font-size:.78rem;text-align:center;margin-top:8px;min-height:18px}
+    .spin{width:14px;height:14px;border:2px solid rgba(255,255,255,.4);border-top-color:#fff;border-radius:50%;animation:spinAnim .6s linear infinite;display:inline-block}
+    @keyframes spinAnim{to{transform:rotate(360deg)}}
+    #dash-toast{position:fixed;bottom:24px;right:24px;z-index:99999;background:#1e293b;color:#fff;padding:12px 20px;border-radius:10px;font-size:.82rem;font-weight:600;box-shadow:0 8px 24px rgba(0,0,0,.25);opacity:0;transform:translateY(10px);transition:opacity .25s,transform .25s;pointer-events:none;max-width:320px}
+    #dash-toast.show{opacity:1;transform:translateY(0)}
+    #dash-toast.success{background:#16a34a}
+    #dash-toast.error{background:#dc2626}
+    #dash-toast.info{background:#2563eb}
+
+    .cal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;flex-wrap:wrap;gap:10px}
+    .cal-title{font-size:1.05rem;font-weight:800;color:#1e293b;margin:0}
+    .cal-sub{font-size:.74rem;color:#64748b;margin:2px 0 0}
+    .ym-bar{display:flex;gap:10px;align-items:center;margin-bottom:18px;flex-wrap:wrap}
+    .ym-bar select{border:1px solid var(--brand-border);border-radius:8px;padding:6px 12px;font-size:.82rem;color:#1e293b;background:#fff;outline:none;cursor:pointer}
+    .ym-bar select:focus{border-color:var(--brand)}
+    .btn-add-entry{display:inline-flex;align-items:center;gap:5px;padding:7px 14px;background:#921a02;color:#fff;border:none;border-radius:8px;font-size:.75rem;font-weight:700;cursor:pointer}
+    .btn-add-entry:hover{background:#6d1201}
+    .btn-import{display:inline-flex;align-items:center;gap:5px;padding:7px 14px;background:#1d4ed8;color:#fff;border:none;border-radius:8px;font-size:.75rem;font-weight:700;cursor:pointer;transition:background .15s}
+    .btn-import:hover{background:#1e3a8a}
+
+    .day-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px}
+    .day-card{background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:14px;position:relative;transition:box-shadow .15s}
+    .day-card:hover{box-shadow:0 4px 16px rgba(146,26,2,.1);border-color:var(--brand-border)}
+    .day-card-num{font-size:1.6rem;font-weight:800;color:var(--brand);line-height:1}
+    .day-card-name{font-size:.72rem;color:#64748b;font-weight:600;text-transform:uppercase;letter-spacing:.06em}
+    .day-card-season{font-size:.78rem;color:#374151;font-weight:600;margin:6px 0 4px;line-height:1.4}
+    .feast-pill{display:inline-block;background:#fffbee;border:1px solid #e8ca6a;color:#7a5500;font-size:.65rem;padding:2px 7px;border-radius:4px;margin:2px 2px 0 0;font-weight:600}
+    .reading-tag{display:inline-block;background:rgba(146,26,2,.08);color:#921a02;font-size:.65rem;padding:2px 7px;border-radius:4px;margin:2px 2px 0 0;font-weight:700}
+    .day-card-actions{position:absolute;top:10px;right:10px;display:flex;gap:4px;opacity:0;transition:opacity .15s}
+    .day-card:hover .day-card-actions{opacity:1}
+    .btn-edit{background:#4f46e5;color:#fff;border:none;border-radius:5px;padding:3px 8px;font-size:.67rem;cursor:pointer}
+    .btn-edit:hover{background:#4338ca}
+    .btn-del2{background:#fee2e2;color:#dc2626;border:none;border-radius:5px;padding:3px 8px;font-size:.67rem;cursor:pointer}
+    .btn-del2:hover{background:#fecaca}
+    .empty-state{text-align:center;padding:40px;color:#94a3b8}
+    .empty-state i{font-size:2rem;display:block;margin-bottom:8px;opacity:.4}
+    .stats-bar{display:grid;grid-template-columns:repeat(auto-fit,minmax(80px,1fr));gap:8px;margin-bottom:16px}
+    .stat-pill{background:#fff;border:1px solid #e2e8f0;border-radius:9px;padding:9px;text-align:center}
+    .stat-num{font-size:1.2rem;font-weight:800;color:#921a02;line-height:1;display:block}
+    .stat-lbl{font-size:.58rem;color:#64748b;margin-top:3px}
+    .panel-card{background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:16px}
+
+    .reading-row-modal{display:flex;gap:6px;align-items:flex-start;margin-bottom:6px}
+    .reading-row-modal input{flex:1;border:1px solid #e2e8f0;border-radius:6px;padding:6px 10px;font-size:.8rem;outline:none}
+    .reading-row-modal input:focus{border-color:#921a02}
+    .reading-row-modal textarea{flex:2;border:1px solid #e2e8f0;border-radius:6px;padding:6px 10px;font-size:.8rem;resize:vertical;min-height:36px;outline:none}
+    .reading-row-modal textarea:focus{border-color:#921a02}
+    .btn-rm-reading{background:#fef2f2;color:#dc2626;border:1px solid #fecaca;border-radius:5px;padding:4px 8px;font-size:.7rem;cursor:pointer;white-space:nowrap;flex-shrink:0}
+    .btn-add-reading{background:rgba(146,26,2,.07);color:#921a02;border:1px dashed rgba(146,26,2,.35);border-radius:6px;padding:5px 12px;font-size:.72rem;font-weight:700;cursor:pointer;margin-top:6px}
+
+    .search-wrap{position:relative;flex:1;min-width:180px}
+    .search-wrap input{width:100%;padding:7px 12px 7px 32px;border:1px solid var(--brand-border);border-radius:8px;font-size:.82rem;outline:none}
+    .search-wrap input:focus{border-color:var(--brand)}
+    .search-wrap i{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:#94a3b8;font-size:.85rem}
+    .month-tabs{display:flex;gap:3px;flex-wrap:wrap;margin-bottom:14px}
+    .month-tab{padding:5px 10px;border-radius:6px;border:1px solid #e2e8f0;background:#fff;color:#64748b;font-size:.7rem;font-weight:700;cursor:pointer;transition:all .15s}
+    .month-tab.active{background:#921a02;color:#fff;border-color:#921a02}
+    .month-tab:hover:not(.active){background:#fdf5f4;color:#921a02;border-color:var(--brand-border)}
+
+    /* ── Import Modal specific ── */
+    .import-box{background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:14px;margin-bottom:12px}
+    .import-box p{margin:0;font-size:.8rem;color:#64748b;line-height:1.6}
+    .import-progress{display:none;margin-top:12px}
+    .import-progress-bar-wrap{background:#e2e8f0;border-radius:999px;height:8px;overflow:hidden;margin-bottom:6px}
+    .import-progress-bar{height:100%;background:#921a02;border-radius:999px;width:0;transition:width .3s}
+    .import-progress-text{font-size:.74rem;color:#64748b;text-align:center}
+    .import-log{background:#0f172a;color:#86efac;font-size:.72rem;border-radius:8px;padding:12px;height:160px;overflow-y:auto;font-family:monospace;margin-top:10px;display:none}
+    .import-year-list{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0}
+    .import-year-chip{display:inline-flex;align-items:center;gap:5px;padding:5px 12px;border-radius:6px;border:1.5px solid #e2e8f0;background:#fff;font-size:.76rem;font-weight:700;cursor:pointer;transition:all .15s;color:#374151}
+    .import-year-chip.selected{border-color:#921a02;background:rgba(146,26,2,.07);color:#921a02}
+    .import-month-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:5px;margin:8px 0}
+    .import-month-btn{padding:6px;text-align:center;border-radius:6px;border:1.5px solid #e2e8f0;background:#fff;font-size:.68rem;font-weight:700;cursor:pointer;transition:all .15s;color:#374151}
+    .import-month-btn.selected{border-color:#921a02;background:rgba(146,26,2,.07);color:#921a02}
+    .import-month-btn.all-months{grid-column:1/-1;background:#f0fdf4;border-color:#86efac;color:#16a34a}
+    .import-month-btn.all-months.selected{background:#dcfce7;border-color:#16a34a}
+    .import-summary{background:#fffbee;border:1px solid #fde68a;border-radius:8px;padding:10px;font-size:.78rem;color:#78350f;margin-top:10px;display:none}
+  </style>
+</head>
+<body>
+<div id="dash-toast"></div>
+<div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+<div class="dash-layout">
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-brand">
+      <div class="sidebar-logo">AF</div>
+      <div><div class="sidebar-brand-text">AdminForge</div><div class="sidebar-brand-sub">Management System</div></div>
+    </div>
+    <div class="sidebar-menu">
+      <p class="sidebar-section">Main</p>
+      <div class="sidebar-item" onclick="location.href='dashboard.html'"><span class="si-icon">⬡</span> Users</div>
+      <p class="sidebar-section">Pages</p>
+      <div class="sidebar-item" onclick="location.href='dashboard.html'"><span class="si-icon">⬡</span> Home</div>
+      <a href="about.html" class="sidebar-item"><span class="si-icon">ℹ</span> About Us</a>
+      <a href="administration.html" class="sidebar-item"><span class="si-icon">⛪</span> Administration</a>
+      <a href="parishes.html" class="sidebar-item"><span class="si-icon">⬡</span> Parishes</a>
+      <a href="priests.html" class="sidebar-item"><span class="si-icon">✝</span> Priests</a>
+      <a href="seminarians.html" class="sidebar-item"><span class="si-icon">🎓</span> Seminarians</a>
+      <a href="department.html" class="sidebar-item"><span class="si-icon">🏢</span> Departments</a>
+      <a href="mission.html" class="sidebar-item"><span class="si-icon">🌍</span> Missions</a>
+      <a href="generalinfo.html" class="sidebar-item"><span class="si-icon">🌍</span> General Information</a>
+      <a href="apostolilife.html" class="sidebar-item"><span class="si-icon">🏢</span> Apostolic Life</a>
+      <div class="sidebar-item active"><span class="si-icon">📅</span> Liturgical Calendar <span class="si-badge" id="sidebar-total">0</span></div>
+      <p class="sidebar-section" style="margin-top:14px;">Account</p>
+      <div class="sidebar-item" onclick="toast('Coming soon!')"><span class="si-icon">⚙</span> Settings</div>
+    </div>
+    <div class="sidebar-footer">
+      <div class="user-row">
+        <div class="user-row-avatar" id="sidebar-avatar">?</div>
+        <div><div class="user-row-name" id="sidebar-username">Loading…</div><div class="user-row-role" id="sidebar-role">—</div></div>
+      </div>
+    </div>
+  </aside>
+
+  <nav class="topbar">
+    <div class="topbar-left">
+      <button class="sidebar-toggle" id="sidebar-toggle">☰</button>
+      <div class="topbar-rule d-none d-lg-block"></div>
+      <div><div class="topbar-title">📅 Liturgical Calendar</div><div class="topbar-sub">Add, edit, import and manage daily liturgical entries</div></div>
+    </div>
+    <div class="topbar-right">
+      <span id="role-badge" class="badge bg-secondary me-2" style="font-size:.8rem;padding:6px 12px;"></span>
+      <button class="btn btn-logout btn-sm" id="btn-logout">⏻ Logout</button>
+    </div>
+  </nav>
+
+  <main class="dash-main">
+    <div id="alert-box" class="alert d-none mb-3" role="alert"></div>
+
+    <div class="stats-bar">
+      <div class="stat-pill"><span class="stat-num" id="st-2025">0</span><div class="stat-lbl">2025 Entries</div></div>
+      <div class="stat-pill"><span class="stat-num" id="st-2026">0</span><div class="stat-lbl">2026 Entries</div></div>
+      <div class="stat-pill" style="border-color:#921a02"><span class="stat-num" id="st-total">0</span><div class="stat-lbl">Total</div></div>
+      <div class="stat-pill"><span class="stat-num" id="st-feasts">0</span><div class="stat-lbl">Feast Days</div></div>
+      <div class="stat-pill"><span class="stat-num" id="st-cur-month">0</span><div class="stat-lbl" id="st-cur-label">This Month</div></div>
+    </div>
+
+    <div class="panel-card">
+      <div class="cal-header">
+        <div>
+          <p class="cal-title">📖 Calendar Entries</p>
+          <p class="cal-sub">Firestore: <code>liturgicalCalendar/{year}_{month}</code> → entries array</p>
+        </div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+          <button class="btn-import" id="btn-open-import" onclick="openImport()"><i class="bi bi-cloud-upload"></i> Import JSON to Firestore</button>
+          <button class="btn-add-entry" onclick="openAdd()"><i class="bi bi-plus-lg"></i> Add Entry</button>
+        </div>
+      </div>
+
+      <div class="ym-bar">
+        <select id="sel-year" onchange="onYearChange()">
+          <option value="2025">2025</option>
+          <option value="2026" selected>2026</option>
+          <option value="2027">2027</option>
+        </select>
+        <div class="search-wrap">
+          <i class="bi bi-search"></i>
+          <input type="text" id="search-input" placeholder="Search by name, season, feast…" oninput="renderGrid()"/>
+        </div>
+      </div>
+
+      <div class="month-tabs" id="month-tabs"></div>
+      <div id="day-grid"></div>
+    </div>
+  </main>
+</div>
+
+<!-- ══════════════════ IMPORT MODAL ══════════════════ -->
+<div id="m-import" class="hm-backdrop">
+  <div class="hm-box" style="max-width:700px;">
+    <button class="hm-close" onclick="closeM('m-import')">✕</button>
+    <h5>📥 Import Liturgical Calendar JSON → Firestore</h5>
+
+    <div class="import-box">
+      <p>This will read the <strong>liturgyData</strong> JSON (from your church website's hardcoded JS) and push each month's data to Firestore as <code>liturgicalCalendar/{year}_{month}</code>.</p>
+      <p style="margin-top:6px;color:#dc2626;font-weight:600;">⚠️ Existing Firestore data for the selected months will be overwritten.</p>
+    </div>
+
+    <!-- Year selection -->
+    <div class="hm-group">
+      <label>Select Year(s) to Import</label>
+      <div class="import-year-list">
+        <div class="import-year-chip selected" data-year="2025" onclick="toggleYearChip(this)">📅 2025</div>
+        <div class="import-year-chip selected" data-year="2026" onclick="toggleYearChip(this)">📅 2026</div>
+      </div>
+    </div>
+
+    <!-- Month selection -->
+    <div class="hm-group">
+      <label>Select Month(s) to Import</label>
+      <div class="import-month-grid" id="import-month-grid">
+        <div class="import-month-btn all-months selected" data-month="ALL" onclick="toggleAllMonths(this)">✅ All Months</div>
+        <!-- Months injected by JS -->
+      </div>
+    </div>
+
+    <!-- Summary preview -->
+    <div class="import-summary" id="import-summary"></div>
+
+    <!-- Progress -->
+    <div class="import-progress" id="import-progress">
+      <div class="import-progress-bar-wrap"><div class="import-progress-bar" id="import-bar"></div></div>
+      <div class="import-progress-text" id="import-progress-text">Preparing…</div>
+    </div>
+    <div class="import-log" id="import-log"></div>
+
+    <div class="hm-actions">
+      <button class="hm-cancel" onclick="closeM('m-import')">Cancel</button>
+      <button class="hm-save" id="btn-do-import" onclick="doImport()">
+        <i class="bi bi-cloud-upload"></i> Start Import
+      </button>
+    </div>
+    <div class="hm-status" id="import-modal-status"></div>
+  </div>
+</div>
+
+<!-- ══════════════════ ADD / EDIT MODAL ══════════════════ -->
+<div id="m-cal" class="hm-backdrop">
+  <div class="hm-box">
+    <button class="hm-close" onclick="closeM('m-cal')">✕</button>
+    <h5 id="modal-title">Add Calendar Entry</h5>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+      <div class="hm-group">
+        <label>Year <span style="color:red">*</span></label>
+        <select id="f-year" onchange="autoFillDayName()">
+  <option value="2025">2025</option>
+  <option value="2026" selected>2026</option>
+  <option value="2027">2027</option>
+</select>
+      </div>
+      <div class="hm-group">
+        <label>Month <span style="color:red">*</span></label>
+<select id="f-month" onchange="autoFillDayName()">
+              <option>January</option><option>February</option><option>March</option>
+          <option>April</option><option>May</option><option>June</option>
+          <option>July</option><option>August</option><option>September</option>
+          <option>October</option><option>November</option><option>December</option>
+        </select>
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+      <div class="hm-group">
+        <label>Day <span style="color:red">*</span></label>
+<input type="number" id="f-day" min="1" max="31" placeholder="1–31" oninput="autoFillDayName()"/>
+      </div>
+      <div class="hm-group">
+        <label>Day Name <span style="color:red">*</span></label>
+        <select id="f-dayname">
+          <option value="ഞായർ">ഞായർ (Sunday)</option>
+          <option value="തിങ്കൾ">തിങ്കൾ (Monday)</option>
+          <option value="ചൊവ്വ">ചൊവ്വ (Tuesday)</option>
+          <option value="ബുധൻ">ബുധൻ (Wednesday)</option>
+          <option value="വ്യാഴം">വ്യാഴം (Thursday)</option>
+          <option value="വെള്ളി">വെള്ളി (Friday)</option>
+          <option value="ശനി">ശനി (Saturday)</option>
+          <option value="Sun">Sun (English)</option>
+          <option value="Mon">Mon (English)</option>
+          <option value="Tue">Tue (English)</option>
+          <option value="Wed">Wed (English)</option>
+          <option value="Thu">Thu (English)</option>
+          <option value="Fri">Fri (English)</option>
+          <option value="Sat">Sat (English)</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="hm-group">
+      <label>Liturgical Season / Title <span style="color:red">*</span></label>
+      <input type="text" id="f-season" placeholder="e.g. ദ്നഹ ഒന്നാം ഞായർ"/>
+    </div>
+
+    <div class="hm-group">
+      <label>Feasts (comma-separated)</label>
+      <input type="text" id="f-feasts" placeholder="e.g. St. Francis Xavier, Christmas"/>
+    </div>
+
+    <div class="hm-group">
+      <label>Readings <span style="color:red">*</span></label>
+      <div id="readings-container"></div>
+      <button class="btn-add-reading" type="button" onclick="addReadingRow()">+ Add Reading</button>
+    </div>
+
+    <div class="hm-actions">
+      <button class="hm-cancel" onclick="closeM('m-cal')">Cancel</button>
+      <button class="hm-save" id="btn-modal-save" onclick="modalSave()">💾 Save</button>
+      <button id="btn-modal-del" onclick="modalDel()" style="display:none;padding:10px 14px;border-radius:8px;border:none;background:#ef4444;color:#fff;font-size:.82rem;cursor:pointer;">🗑 Delete</button>
+    </div>
+    <div class="hm-status" id="modal-status"></div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- ══════════════════ EMBEDDED LITURGY JSON ══════════════════ -->
+<!-- PASTE YOUR FULL liturgyData object here. This is the same data from calendar.html -->
+<script>
+// ════════════════════════════════════════════════════════
+// HARDCODED LITURGY DATA — copied from calendar.html
+// This is the source of truth for the import.
+// When you add new years/months, update this object.
+// ════════════════════════════════════════════════════════
+const LITURGY_SOURCE = {
+
+  "2025": {
+    "November": [
+      { day:30, dayName:"ഞായർ", season:"മംഗളവാർത്ത ഒന്നാം ഞായർ", feasts:[], readings:[{ref:"ഉത്പ 17:1–5; 15–19",desc:"ഇസഹാക്കിന്റെ ജനനം അറിയിക്കപ്പെടുന്നു."},{ref:"മലാ 2:17–3:5",desc:"ഞാൻ എന്റെ ദൂതനെ അയക്കുന്നു."},{ref:"ഹെബ്രാ 11:1–12",desc:"വിശ്വാസം മൂലം അനുഗൃഹീതർ."},{ref:"ലൂക്കാ 1:5–20",desc:"സഖർ‌യായ്ക്ക് അറിയിപ്പ്."}] }
+    ],
+    "December": [
+      { day:1, dayName:"തിങ്കൾ", season:"മംഗളവാർത്ത ഒന്നാം തിങ്കൾ", feasts:[], readings:[{ref:"റോമ 4:1–12",desc:"അബ്രാഹം, നീതിമൽക്കരണത്തിന്റെ മാതൃക."},{ref:"മത്താ 7:21–27",desc:"യഥാർത്ഥ ശിഷ്യൻ."}] },
+      { day:2, dayName:"ചൊവ്വ", season:"മംഗളവാർത്ത ഒന്നാം ചൊവ്വ", feasts:[], readings:[{ref:"റോമ 4:13–21",desc:"അബ്രാഹത്തിന്റെ സന്തതികൾക്കുള്ള കൃപ."},{ref:"യോഹ 1:1–8",desc:"യോഹന്നാൻ, ദൈവം അയച്ച മനുഷ്യൻ."}] },
+      { day:3, dayName:"ബുധൻ", season:"മംഗളവാർത്ത ഒന്നാം ബുധൻ", feasts:["വിശുദ്ധ ഫ്രാൻസിസ് സേവ്യർ"], readings:[{ref:"കൊളോ 1:24–29",desc:"മിശിഹാ, മഹത്ത്വത്തിന്റെ പ്രത്യാശ, നിങ്ങളിൽ."},{ref:"യോഹ 5:31–36",desc:"യോഹന്നാൻ സത്യത്തിന് സാക്ഷ്യം നൽകി."},{ref:"നിയ 26:16–19",desc:"(തിരുനാൾ)"},{ref:"2 കൊറി 6:3–10",desc:"(തിരുനാൾ)"},{ref:"മർക്കോ 6:7–13",desc:"(തിരുനാൾ)"}] },
+      { day:4, dayName:"വ്യാഴം", season:"മംഗളവാർത്ത ഒന്നാം വ്യാഴം", feasts:[], readings:[{ref:"റോമ 9:30–33",desc:"വിശ്വസിക്കുന്നവർ ലജ്ജിക്കില്ല."},{ref:"ലൂക്കാ 1:21–25",desc:"ഏലീശ്വായുടെ അപമാനം നീക്കുന്ന കർത്താവ്."}] },
+      { day:5, dayName:"വെള്ളി", season:"മംഗളവാർത്ത ഒന്നാം വെള്ളി", feasts:[], readings:[{ref:"യാക്കോ 1:22–27",desc:"വചനം അനുസരിച്ചു പ്രവർത്തിക്കുക."},{ref:"മത്താ 5:1–12",desc:"സുവിശേഷഭാഗ്യങ്ങൾ."}] },
+      { day:6, dayName:"ശനി", season:"മംഗളവാർത്ത ഒന്നാം ശനി", feasts:[], readings:[{ref:"1 യോഹ 4:7–12",desc:"ദൈവ സ്‌നേഹത്തിന്റെ പ്രകടനം."},{ref:"യോഹ 3:16–21",desc:"മനുഷ്യ അവതാര ലക്ഷ്യം."}] },
+      { day:7, dayName:"ഞായർ", season:"മംഗളവാർത്ത രണ്ടാം ഞായർ", feasts:["വിശുദ്ധ അംബ്രോസ്"], readings:[{ref:"ഉത്പ 3:8–24",desc:"ഏവക്ക് രക്ഷയുടെ വാഗ്ദത്തം."},{ref:"ജെറ 33:14–26",desc:"ദാവീദിനായി ഒരു ശാഖ മുളയ്പ്പിക്കും."},{ref:"വെളി 5:1–5",desc:"യൂദയുടെ സിംഹം."},{ref:"ലൂക്കാ 1:26–38",desc:"പരിശുദ്ധ മറിയത്തോടുള്ള മംഗളവാർത്ത."}] },
+      { day:8, dayName:"തിങ്കൾ", season:"മംഗളവാർത്ത രണ്ടാം തിങ്കൾ", feasts:["പ. ക. മറിയത്തിന്റെ അമലോദ്ഭവ തിരുനാൾ"], readings:[{ref:"റോമ 1:1–7",desc:"മിശിഹാ: ദാവീദിന്റെ പുത്രനും ദൈവ പുത്രനും."},{ref:"മത്താ 22:41–46",desc:"മിശിഹാ: ദാവീദിന്റെ പുത്രനും കർത്താവും."},{ref:"പ്രഭാ 24:1–14",desc:"(തിരുനാൾ)"},{ref:"ലൂക്കാ 1:46–55",desc:"(തിരുനാൾ)"}] },
+      { day:9, dayName:"ചൊവ്വ", season:"മംഗളവാർത്ത രണ്ടാം ചൊവ്വ", feasts:[], readings:[{ref:"എഫേ 3:1–13",desc:"സുവിശേഷത്തിന്റെ ശുശ്രൂഷകൻ."},{ref:"ലൂക്കാ 1:39–45",desc:"മറിയം ഏലീശ്വായെ സന്ദർശിക്കുന്നു."}] },
+      { day:10, dayName:"ബുധൻ", season:"മംഗളവാർത്ത രണ്ടാം ബുധൻ", feasts:[], readings:[{ref:"എഫേ 3:14–21",desc:"മിശിഹായുടെ സ്‌നേഹത്തിന്റെ ആഴം."},{ref:"ലൂക്കാ 1:46–56",desc:"മറിയത്തിന്റെ കാന്തം."}] },
+      { day:11, dayName:"വ്യാഴം", season:"മംഗളവാർത്ത രണ്ടാം വ്യാഴം", feasts:[], readings:[{ref:"1 യോഹ 5:13–20",desc:"മിശിഹാ യഥാർത്ഥ ദൈവം."},{ref:"ലൂക്കാ 1:67–75",desc:"ദാവീദിന്റെ ഭവനത്തിൽ രക്ഷ."}] },
+      { day:12, dayName:"വെള്ളി", season:"മംഗളവാർത്ത രണ്ടാം വെള്ളി", feasts:[], readings:[{ref:"റോമ 12:9–21",desc:"തിന്മയെ നന്മ കൊണ്ടു ജയിക്കുക."},{ref:"ലൂക്കാ 6:27–36",desc:"ദ്വേഷിക്കുന്നവർക്ക് നന്മ ചെയ്യുക."}] },
+      { day:13, dayName:"ശനി", season:"മംഗളവാർത്ത രണ്ടാം ശനി", feasts:["കുരിശിന്റെ വിശുദ്ധ യോഹന്നാൻ"], readings:[{ref:"കൊളോ 1:12–19",desc:"സർവ്വ സൃഷ്ടിക്കും മുൻപേ ഉള്ളവൻ."},{ref:"യോഹ 8:48–58",desc:"മിശിഹാ അബ്രാഹത്തിനു മുൻപേ."}] },
+      { day:14, dayName:"ഞായർ", season:"മംഗളവാർത്ത മൂന്നാം ഞായർ", feasts:[], readings:[{ref:"ഉത്പ 21:1–12",desc:"ഇസഹാക്കിന്റെ ജനനം."},{ref:"ഏശ 40:1–11",desc:"കർത്താവിനു വഴി ഒരുക്കുക."},{ref:"1 കൊറി 1:26–31",desc:"ദൈവത്തിന്റെ തിരഞ്ഞെടുപ്പ്."},{ref:"ലൂക്കാ 1:57–66",desc:"യോഹന്നാൻ മാമ്ദാനായുടെ ജനന അറിയിപ്പ്."}] },
+      { day:15, dayName:"തിങ്കൾ", season:"മംഗളവാർത്ത മൂന്നാം തിങ്കൾ", feasts:[], readings:[{ref:"എഫേ 1:3–14",desc:"രക്ഷാ പദ്ധതിക്കുള്ള സ്‌തോത്രം."},{ref:"ലൂക്കാ 1:67; 76–80",desc:"സഖർ‌യായുടെ സ്‌തുതിഗീതം."}] },
+      { day:16, dayName:"ചൊവ്വ", season:"മംഗളവാർത്ത മൂന്നാം ചൊവ്വ", feasts:[], readings:[{ref:"2 കൊറി 3:1–11",desc:"ഉടമ്പടിയുടെ ശുശ്രൂഷകർ."},{ref:"മത്താ 11:7–15",desc:"സ്‌ത്രീകളിൽ നിന്നു ജനിച്ചവരിൽ ഏറ്റവും വലിയവൻ."}] },
+      { day:17, dayName:"ബുധൻ", season:"മംഗളവാർത്ത മൂന്നാം ബുധൻ", feasts:[], readings:[{ref:"1 പത്രോ 2:1–10",desc:"നിങ്ങൾ തിരഞ്ഞെടുക്കപ്പെട്ട ജനം."},{ref:"മർക്കോ 3:31–35",desc:"ഈശോയുടെ അമ്മയും സഹോദരരും."}] },
+      { day:18, dayName:"വ്യാഴം", season:"മംഗളവാർത്ത മൂന്നാം വ്യാഴം", feasts:["മൈലാപ്പൂരിലെ അദ്ഭുത ഈ ശ്ലോഹ"], readings:[{ref:"1 കൊറി 10:23–33",desc:"എല്ലാം ദൈവ മഹത്ത്വത്തിനായി."},{ref:"ലൂക്കാ 7:30–35",desc:"ജ്ഞാനം അതിന്റെ പ്രവൃത്തികൾ കൊണ്ടു."}] },
+      { day:19, dayName:"വെള്ളി", season:"മംഗളവാർത്ത മൂന്നാം വെള്ളി", feasts:[], readings:[{ref:"റോമ 2:1–9",desc:"ദൈവത്തിന്റെ വിധി."},{ref:"ലൂക്കാ 6:37–42",desc:"അന്യരെ വിധിക്കരുത്."}] },
+      { day:20, dayName:"ശനി", season:"മംഗളവാർത്ത മൂന്നാം ശനി", feasts:[], readings:[{ref:"ഗലാ 4:12–20",desc:"ശ്ലീഹ വേദനിക്കുന്നു."},{ref:"യോഹ 3:22–30",desc:"അവൻ വളരുകയും ഞാൻ കുറയുകയും."}] },
+      { day:21, dayName:"ഞായർ", season:"മംഗളവാർത്ത നാലാം ഞായർ", feasts:[], readings:[{ref:"പുറ 34:1–9",desc:"ദൈവം മോശേക്കു പ്രത്യക്ഷപ്പെടുന്നു."},{ref:"ഹഗ്ഗ 2:7–13",desc:"ദൈവം ജനത്തോടൊപ്പം."},{ref:"വെളി 21:1–7",desc:"ദൈവം മനുഷ്യരോടൊപ്പം."},{ref:"മത്താ 1:18–25",desc:"ഇമ്മാനുവേലിനെക്കുറിച്ചുള്ള അറിയിപ്പ്."}] },
+      { day:22, dayName:"തിങ്കൾ", season:"മംഗളവാർത്ത നാലാം തിങ്കൾ", feasts:[], readings:[{ref:"ഗലാ 3:15–20",desc:"മിശിഹാ വാഗ്ദത്തത്തിന്റെ നിവൃത്തി."},{ref:"യോഹ 7:37–42",desc:"ബേത്ലഹേമിൽ നിന്നു വരേണ്ട മിശിഹാ."}] },
+      { day:23, dayName:"ചൊവ്വ", season:"മംഗളവാർത്ത നാലാം ചൊവ്വ", feasts:[], readings:[{ref:"തീത്തോ 2:11–3:2",desc:"ഭരണാധികാരികളോടുള്ള കടമ."},{ref:"ലൂക്കാ 2:1–5",desc:"യൗസേഫ് ദാവീദിന്റെ നഗരത്തിലേക്ക്."}] },
+      { day:24, dayName:"ബുധൻ", season:"മംഗളവാർത്ത നാലാം ബുധൻ", feasts:[], readings:[{ref:"റോമ 9:1–5",desc:"പിതാക്കന്മാരുടെ വംശ പരമ്പരയിൽ മിശിഹാ."},{ref:"മർക്കോ 6:1–6",desc:"മിശിഹാ, മറിയത്തിന്റെ മകൻ."}] },
+      { day:25, dayName:"വ്യാഴം", season:"നമ്മുടെ കർത്താവ് ഈശോ മിശിഹായുടെ പിറവിത്തിരുനാൾ", feasts:[], readings:[{ref:"ഏശ 7:10–16; 9:1–3; 6–7",desc:"ഒരു കന്യക ഗർഭം ധരിച്ചു ഒരു പുത്രനെ പ്രസവിക്കും."},{ref:"മിക്ക 4:1–3; 5:1–5",desc:"വരാനിരിക്കുന്ന രാജാവ്."},{ref:"ഗലാ 3:15–4:6",desc:"എല്ലാവരും മിശിഹായിൽ ദൈവ മക്കൾ."},{ref:"ലൂക്കാ 2:1–20",desc:"ഈശോയുടെ ജനനം."}] },
+      { day:26, dayName:"വെള്ളി", season:"പിറവി ഒന്നാം വെള്ളി", feasts:["വിശുദ്ധ സ്‌തേഫാനോസ്"], readings:[{ref:"ഹെബ്രാ 1:1–4",desc:"ദൈവ മഹത്ത്വത്തിന്റെ പ്രഭ."},{ref:"യോഹ 1:14–18",desc:"ദൈവം തന്നെ ആയ ഏകജാതൻ."}] },
+      { day:27, dayName:"ശനി", season:"പിറവി ഒന്നാം ശനി", feasts:["മാർ യോഹന്നാൻ ശ്ലീഹ"], readings:[{ref:"1 കൊറി 1:4–9",desc:"വചനത്താൽ സമ്പന്നനാക്കുന്നവൻ."},{ref:"ലൂക്കാ 2:36–40",desc:"ഈശോ ജ്ഞാനത്തിലും പ്രായത്തിലും വളർന്നു."}] },
+      { day:28, dayName:"ഞായർ", season:"പിറവി ഒന്നാം ഞായർ", feasts:["കുഞ്ഞൈകൾ (ശിശുദിനം)","തിരുക്കുടുംബം"], readings:[{ref:"ഉത്പ 18:1–8",desc:"അബ്രാഹം ദൂതന്മാരെ ആതിഥേയൻ."},{ref:"ഏശ 11:1–12",desc:"ജെസ്സേ ദൃഡ്ടിൽ നിന്ന് ഒരു ശാഖ."},{ref:"റോമ 15:7–13",desc:"ജനതകൾക്കു കർത്താവിൽ പ്രത്യാശ."},{ref:"മത്താ 2:1–12",desc:"ജ്ഞാനികളുടെ സന്ദർശനം."}] },
+      { day:29, dayName:"തിങ്കൾ", season:"പിറവി ഒന്നാം തിങ്കൾ", feasts:[], readings:[{ref:"ഹെബ്രാ 11:23–28",desc:"മോശേ സംരക്ഷിക്കപ്പെടുന്നു."},{ref:"മത്താ 2:13–18",desc:"പലായനം, ശിശുവധം."}] },
+      { day:30, dayName:"ചൊവ്വ", season:"പിറവി ഒന്നാം ചൊവ്വ", feasts:[], readings:[{ref:"റോമ 8:14–17",desc:"ദൈവ ആത്മാവിനാൽ നയിക്കപ്പെടുന്നവർ."},{ref:"മത്താ 2:19–23",desc:"ഈശോ ഈജിപ്‌തിൽ നിന്ന് നസ്‌രേ'ത്തിലേക്ക്."}] },
+      { day:31, dayName:"ബുധൻ", season:"പിറവി ഒന്നാം ബുധൻ", feasts:["വർഷാന്ത്യം"], readings:[{ref:"റോമ 8:31–39",desc:"മിശിഹായുടെ സ്‌നേഹത്തിൽ നിന്ന് ആർ?"},{ref:"ലൂക്കാ 2:25–35",desc:"ഒരു വാൾ ഹൃദയ'ത്തിൽ."},{ref:"ലേവ്യ 6:1–7",desc:"(വർഷ'ന്ത്യം)"},{ref:"ലൂക്കാ 13:6–9",desc:"(വർഷ'ന്ത്യം)"}] }
+    ]
+  },
+  "2026": {
+    "January": [
+      { day:1, dayName:"വ്യാഴം", season:"പിറവി ഒന്നാം വ്യാഴം", feasts:["നമ്മുടെ കർത്താവിന്റെ നാമകരണം","വർഷാരംഭം"], readings:[{ref:"1 യോഹ 4:12–16"},{ref:"യോഹ 10:31–38"},{ref:"ഉത്പ 17:1–14",desc:"(നാമകരണം)"},{ref:"മത്താ 6:25–34",desc:"(വർഷാരംഭം)"}] },
+      { day:2, dayName:"വെള്ളി", season:"പിറവി ഒന്നാം വെള്ളി", feasts:["ദൈവ മാതൃത്വ തിരുനാൾ"], readings:[{ref:"ഹെബ്ര 1:1–4"},{ref:"യോഹ 1:14–18"}] },
+      { day:3, dayName:"ശനി", season:"പിറവി ഒന്നാം ശനി", feasts:["കുർ‌യ്യാക്കോസ് ഏലിയ്യാസ്"], readings:[{ref:"1 കൊറി 1:4–9"},{ref:"ലൂക്കാ 2:36–40"}] },
+      { day:4, dayName:"ഞായർ", season:"പിറവി രണ്ടാം ഞായർ", feasts:[], readings:[{ref:"പുറ 34:28–35"},{ref:"1 സാമ്യ 3:1–10"},{ref:"ലൂക്കാ 2:22–24; 41–52",desc:"ഈശോ ദൈവാലയത്തിൽ."}] },
+      { day:5, dayName:"തിങ്കൾ", season:"പിറവി രണ്ടാം തിങ്കൾ", feasts:[], readings:[{ref:"1 യോഹ 5:1–5"},{ref:"യോഹ 5:19–23"}] },
+      { day:6, dayName:"ചൊവ്വ", season:"നമ്മുടെ കർത്താവിന്റെ ദ്നഹ", feasts:[], readings:[{ref:"പുറ 19:16–25"},{ref:"യോ'യ്'ലേ 2:28–32"},{ref:"2 തിമോ 1:6–10"},{ref:"മർക്കോ 1:1–11"}] },
+      { day:7, dayName:"ബുധൻ", season:"ദ്നഹ ഒന്നാം ബുധൻ", feasts:[], readings:[{ref:"2 തിമോ 3:10–17"},{ref:"ലൂക്കാ 4:23–30"}] },
+      { day:8, dayName:"വ്യാഴം", season:"ദ്നഹ ഒന്നാം വ്യാഴം", feasts:[], readings:[{ref:"ഫിലി 1:12–18"},{ref:"യോഹ 3:22–30"}] },
+      { day:9, dayName:"വെള്ളി", season:"ദ്നഹ ഒന്നാം വെള്ളി", feasts:[], readings:[{ref:"2 സാമ്യ 12:1–10"},{ref:"മത്താ 14:1–12"}] },
+      { day:10, dayName:"ശനി", season:"ദ്നഹ ഒന്നാം ശനി", feasts:[], readings:[{ref:"വെളി 4:1–8"},{ref:"ലൂക്കാ 7:18–23"}] },
+      { day:11, dayName:"ഞായർ", season:"ദ്നഹ രണ്ടാം ഞായർ", feasts:[], readings:[{ref:"പുറ 3:9–16"},{ref:"വെളി 1:4–8"},{ref:"യോഹ 8:21–30"}] },
+      { day:12, dayName:"തിങ്കൾ", season:"ദ്നഹ രണ്ടാം തിങ്കൾ", feasts:[], readings:[{ref:"എഫേ 1:15–23"},{ref:"യോഹ 3:31–36"}] },
+      { day:13, dayName:"ചൊവ്വ", season:"ദ്നഹ രണ്ടാം ചൊവ്വ", feasts:[], readings:[{ref:"1 യോഹ 3:1–10"},{ref:"മർക്കോ 1:21–28"}] },
+      { day:14, dayName:"ബുധൻ", season:"ദ്നഹ രണ്ടാം ബുധൻ", feasts:["വിശുദ്ധ ദേവസഹായം"], readings:[{ref:"വെളി 19:5–10"},{ref:"യോഹ 2:1–12"}] },
+      { day:15, dayName:"വ്യാഴം", season:"ദ്നഹ രണ്ടാം വ്യാഴം", feasts:[], readings:[{ref:"1 കൊറി 6:12–20"},{ref:"യോഹ 2:13–25"}] },
+      { day:16, dayName:"വെള്ളി", season:"ദ്നഹ രണ്ടാം വെള്ളി", feasts:[], readings:[{ref:"പുറ 19:1–8"},{ref:"യോഹ 21:15–19"}] },
+      { day:17, dayName:"ശനി", season:"ദ്നഹ രണ്ടാം ശനി", feasts:[], readings:[{ref:"ഫിലി 2:5–11"},{ref:"മത്താ 11:25–30"}] },
+      { day:18, dayName:"ഞായർ", season:"ദ്നഹ മൂന്നാം ഞായർ", feasts:[], readings:[{ref:"നിയ 31:1–8"},{ref:"ഫിലി 3:4–16"},{ref:"മർക്കോ 3:7–19"}] },
+      { day:19, dayName:"തിങ്കൾ", season:"ദ്നഹ മൂന്നാം തിങ്കൾ", feasts:[], readings:[{ref:"1 കൊറി 2:1–7"},{ref:"മർക്കോ 6:7–13"}] },
+      { day:20, dayName:"ചൊവ്വ", season:"ദ്നഹ മൂന്നാം ചൊവ്വ", feasts:[], readings:[{ref:"2 കൊറി 2:12–17"},{ref:"മത്താ 4:12–17"}] },
+      { day:21, dayName:"ബുധൻ", season:"ദ്നഹ മൂന്നാം ബുധൻ", feasts:[], readings:[{ref:"1 യോഹ 2:7–11"},{ref:"3 യോഹ 9:1–11"}] },
+      { day:22, dayName:"വ്യാഴം", season:"ദ്നഹ മൂന്നാം വ്യാഴം", feasts:[], readings:[{ref:"പ്രവൃത്തി 3:19–26"},{ref:"യോഹ 5:39–47"}] },
+      { day:23, dayName:"വെള്ളി", season:"ദ്നഹ മൂന്നാം വെള്ളി", feasts:[], readings:[{ref:"ഉത്പ 2:5–17"},{ref:"ലൂക്കാ 8:4–15"}] },
+      { day:24, dayName:"ശനി", season:"ദ്നഹ മൂന്നാം ശനി", feasts:[], readings:[{ref:"റോമ 10:5–13"},{ref:"മർക്കോ 1:40–45"}] },
+      { day:25, dayName:"ഞായർ", season:"ദ്നഹ നാലാം ഞായർ", feasts:[], readings:[{ref:"ഉത്പ 29:1–14"},{ref:"യോഹ 4:1–26"}] },
+      { day:26, dayName:"തിങ്കൾ", season:"ദ്നഹ നാലാം തിങ്കൾ", feasts:[], readings:[{ref:"നിയ 30:1–6"},{ref:"മത്താ 9:9–13"}] },
+      { day:27, dayName:"ചൊവ്വ", season:"ദ്നഹ നാലാം ചൊവ്വ", feasts:[], readings:[{ref:"2 ദിനവ 6:24–30"},{ref:"യോഹ 1:29–34"}] },
+      { day:28, dayName:"ബുധൻ", season:"ദ്നഹ നാലാം ബുധൻ", feasts:[], readings:[{ref:"ഉത്പ 29:15–30"},{ref:"ലൂക്കാ 7:36–50"}] },
+      { day:29, dayName:"വ്യാഴം", season:"ദ്നഹ നാലാം വ്യാഴം", feasts:[], readings:[{ref:"എസക്ക്യേ 33:10–16"},{ref:"ലൂക്കാ 15:1–10"}] },
+      { day:30, dayName:"വെള്ളി", season:"ദ്നഹ നാലാം വെള്ളി", feasts:["ലോകസമാധാനദിനം"], readings:[{ref:"ഉത്പ 4:1–12"},{ref:"ലൂക്കാ 23:33–43"}] },
+      { day:31, dayName:"ശനി", season:"ദ്നഹ നാലാം ശനി", feasts:[], readings:[{ref:"എഫേ 4:25–32"},{ref:"മത്താ 6:5–15"}] }
+    ],
+     "February": [
+    {"day":1,"dayName":"ഞായർ","season":"ദ്നഹ അഞ്ചാം ഞായർ","feasts":[],"readings":[{"ref":"ലേവ്യ 4:13–21"},{"ref":"ദാൻ 9:1–9"},{"ref":"കൊളോ 1:12–19"},{"ref":"മർക്കോ 2:1–12","desc":"പാപം മോചിക്കുന്ന മിശിഹാ."}]},
+    {"day":2,"dayName":"തിങ്കൾ","season":"ദ്നഹ അഞ്ചാം തിങ്കൾ","feasts":["ദേവാലയത്തിലേക്കുള്ള കർത്താവിന്റെ ആഗമന തിരുനാൾ"],"readings":[{"ref":"കൊളോ 2:16–19"},{"ref":"മത്താ 12:1–8","desc":"മനുഷ്യപുത്രൻ സാബത്തിന്റെയും കർത്താവ്."},{"ref":"ലേവ്യ 12:1–8"},{"ref":"ഏശ 42:1–7"},{"ref":"റോമ 9:30–10:4"},{"ref":"ലൂക്കാ 2:22–38","desc":"ഈശോ ദേവാലയത്തിൽ സമർപ്പിക്കപ്പെടുന്നു."}]},
+    {"day":3,"dayName":"ചൊവ്വ","season":"ദ്നഹ അഞ്ചാം ചൊവ്വ","feasts":[],"readings":[{"ref":"ശ്ലീഹ. നട. 5:12–20"},{"ref":"മത്താ 12:9–14","desc":"സാബത്തിൽ നന്മ ചെയ്യുന്നവൻ."}]},
+    {"day":4,"dayName":"ബുധൻ","season":"ദ്നഹ അഞ്ചാം ബുധൻ","feasts":["വിശുദ്ധ ജോൺ ബ്രിട്ടോ, വൈദികൻ"],"readings":[{"ref":"ഗലാ 3:7–14"},{"ref":"യോഹ 5:1–18","desc":"സാബത്തിൽ രോഗശാന്തി."},{"ref":"1 കൊറി 9:19–23"},{"ref":"യോഹ 15:18–25","desc":"എന്നെ പ്രതി ലോകം നിങ്ങളെ വെറുക്കും."}]},
+    {"day":5,"dayName":"വ്യാഴം","season":"ദ്നഹ അഞ്ചാം വ്യാഴം","feasts":[],"readings":[{"ref":"റോമ 2:25–29"},{"ref":"മത്താ 12:15–21","desc":"നീതിയെ വിജയത്തിലെത്തിക്കുന്ന ദൈവദാസൻ."}]},
+    {"day":6,"dayName":"വെള്ളി","season":"ദ്നഹ അഞ്ചാം വെള്ളി","feasts":["ഗ്രീക്കു സഭാപിതാക്കൻമാർ"],"readings":[{"ref":"1 രാജ 4:29–34"},{"ref":"ജ്ഞാനം 7:22–30"},{"ref":"1 കൊറി 1:18–29"},{"ref":"യോഹ 12:20–26","desc":"ഗ്രീക്കുകാർ ഈശോയെ തേടിവരുന്നു."},{"ref":"സുഭാ 4:1–13"},{"ref":"ദാനി 2:14–23"},{"ref":"2 കൊറി 4:1–6–8"},{"ref":"മത്താ 5:13–19","desc":"ഭൂമിയുടെ ഉപ്പും ലോകത്തിന്റെ പ്രകാശവും."},{"ref":"പുറ 4:10–17"},{"ref":"ഏശ 49:6–10"},{"ref":"2 കൊറി 6:1–13"},{"ref":"യോഹ 15:1–8","desc":"ഇടവകമധ്യസ്ഥന്റെ തിരുനാൾ — തായ്ത്തടിയോടു ചേർന്നു നിൽക്കുക."}]},
+    {"day":7,"dayName":"ശനി","season":"ദ്നഹ അഞ്ചാം ശനി","feasts":[],"readings":[{"ref":"റോമ 13:8–14"},{"ref":"ലൂക്കാ 10:25–37","desc":"ദൈവസ്നേഹവും പരസ്നേഹവും."}]},
+    {"day":8,"dayName":"ഞായർ","season":"ദ്നഹ ആറാം ഞായർ","feasts":[],"readings":[{"ref":"പുറ 20:1–17"},{"ref":"എസേ 11:14–21"},{"ref":"കൊളോ 3:5–14"},{"ref":"മത്താ 5:17–26","desc":"ഈശോ നിയമത്തിന്റെ പൂർത്തീകരണം."}]},
+    {"day":9,"dayName":"തിങ്കൾ","season":"ദ്നഹ ആറാം തിങ്കൾ","feasts":[],"readings":[{"ref":"കൊളോ 2:16–19"},{"ref":"മത്താ 12:1–8","desc":"മനുഷ്യപുത്രൻ സാബത്തിന്റെയും കർത്താവ്."}]},
+    {"day":10,"dayName":"ചൊവ്വ","season":"ദ്നഹ ആറാം ചൊവ്വ","feasts":[],"readings":[{"ref":"ശ്ലീഹ. നട. 5:12–20"},{"ref":"മത്താ 12:9–14","desc":"സാബത്തിൽ നന്മ ചെയ്യുന്നവൻ."}]},
+    {"day":11,"dayName":"ബുധൻ","season":"ദ്നഹ ആറാം ബുധൻ","feasts":["ലൂർദ്ദ് മാതാവ് (രോഗിദിനം)"],"readings":[{"ref":"ഗലാ 3:7–14"},{"ref":"യോഹ 5:1–18","desc":"സാബത്തിൽ രോഗശാന്തി."},{"ref":"വെളി 12:1–6"},{"ref":"യോഹ 2:1–11","desc":"ഈശോ പറയുന്നത് ചെയ്‌വിൻ."}]},
+    {"day":12,"dayName":"വ്യാഴം","season":"ദ്നഹ ആറാം വ്യാഴം","feasts":[],"readings":[{"ref":"റോമ 2:25–29"},{"ref":"മത്താ 12:15–21","desc":"നീതിയെ വിജയത്തിലെത്തിക്കുന്ന ദൈവദാസൻ."}]},
+    {"day":13,"dayName":"വെള്ളി","season":"ദ്നഹ ആറാം വെള്ളി — സകല മരിച്ചവരുടെയും ഓർമ","feasts":[],"readings":[{"ref":"നിയ 30:15–20"},{"ref":"സുഭാ 15:19–25"},{"ref":"വെളി 20:11–15"},{"ref":"യോഹ 5:19–29","desc":"നന്മ ചെയ്തവർ ജീവന്റെ ഉയിർപ്പിനായി പുറത്തുവരും."}]},
+    {"day":14,"dayName":"ശനി","season":"ദ്നഹ ആറാം ശനി","feasts":[],"readings":[{"ref":"വെളി 7:11–17"},{"ref":"യോഹ 7:32–39","desc":"മിശിഹാ ജീവജലത്തിന്റെ ഉറവ."}]},
+    {"day":15,"dayName":"ഞായർ","season":"നോമ്പ് ഒന്നാം ഞായർ","feasts":[],"readings":[{"ref":"പുറ 24:12–18"},{"ref":"പ്രഭാ 2:1–11"},{"ref":"ഹെബ്രാ 2:10–18"},{"ref":"ലൂക്കാ 4:1–13","desc":"മിശിഹായുടെ നാൽപ്പതുദിവസത്തെ ഉപവാസം."}]},
+    {"day":16,"dayName":"തിങ്കൾ","season":"നോമ്പ് ഒന്നാം തിങ്കൾ — വലിയ നോമ്പ് ആരംഭം (ഉപവാസദിനം)","feasts":[],"readings":[{"ref":"ഉത്പ 3:1–13"},{"ref":"ജ്ഞാനം 12:16–20"},{"ref":"റോമ 12:1–8"},{"ref":"മത്താ 21:28–32","desc":"പശ്ചാത്തപിച്ച് പിതാവിന്റെ ഇഷ്ടം നിറവേറ്റിയ പുത്രൻ."}]},
+    {"day":17,"dayName":"ചൊവ്വ","season":"നോമ്പ് ഒന്നാം ചൊവ്വ","feasts":[],"readings":[{"ref":"1 രാജ 8:41–50"},{"ref":"നെഹ 8:17–9:3"},{"ref":"ശ്ലീഹ. നട. 8:14–25"},{"ref":"മർക്കോ 9:14–29","desc":"പ്രാർത്ഥനയുടെയും ഉപവാസത്തിന്റെയും പ്രാധാന്യം."}]},
+    {"day":18,"dayName":"ബുധൻ","season":"നോമ്പ് ഒന്നാം ബുധൻ","feasts":[],"readings":[{"ref":"മലാ 2:1–9"},{"ref":"ശ്ലീഹ. നട. 5:1–11"},{"ref":"യാക്കോ 4:1–10"},{"ref":"മത്താ 18:1–10","desc":"ഇടർച്ച നൽകുന്നവന് ദുരിതം."}]},
+    {"day":19,"dayName":"വ്യാഴം","season":"നോമ്പ് ഒന്നാം വ്യാഴം","feasts":[],"readings":[{"ref":"1 മക്കാ 2:49–61"},{"ref":"ജോബ് 23:8–14"},{"ref":"1 തെസ 2:17–3:5"},{"ref":"ലൂക്കാ 22:24–30","desc":"എന്റെ പരീക്ഷകളിൽ എന്നോടൊപ്പം നിന്നവരാണ് നിങ്ങൾ."}]},
+    {"day":20,"dayName":"വെള്ളി","season":"നോമ്പ് ഒന്നാം വെള്ളി","feasts":[],"readings":[{"ref":"പ്രഭാ 44:19–23"},{"ref":"ജെറ 17:5–10"},{"ref":"യാക്കോ 1:12–18"},{"ref":"ലൂക്കാ 22:39–46","desc":"പരീക്ഷയിൽ ഉൾപ്പെടാതിരിക്കാൻ പ്രാർത്ഥിക്കുക."}]},
+    {"day":21,"dayName":"ശനി","season":"നോമ്പ് ഒന്നാം ശനി","feasts":[],"readings":[{"ref":"2 കൊറി 2:5–11"},{"ref":"ലൂക്കാ 15:11–24","desc":"ധൂർത്തപുത്രന്റെ ഉപമ."}]},
+    {"day":22,"dayName":"ഞായർ","season":"നോമ്പ് രണ്ടാം ഞായർ","feasts":[],"readings":[{"ref":"ഉത്പ 13:1–13"},{"ref":"പ്രഭാ 31:1–11"},{"ref":"1 തിമോ 6:3–10"},{"ref":"ലൂക്കാ 19:1–10","desc":"സക്കേവൂസിന്റെ മാനസാന്തരം."}]},
+    {"day":23,"dayName":"തിങ്കൾ","season":"നോമ്പ് രണ്ടാം തിങ്കൾ","feasts":["വിശുദ്ധ പൊലിക്കാർപ്പ്","വിശുദ്ധ പൊലിക്കാർപ്പ്"],"readings":[{"ref":"യാക്കോ 2:1–9"},{"ref":"ലൂക്കാ 16:19–31","desc":"ധനവാനും ലാസറും."},{"ref":"പുറ 3:1–6"},{"ref":"ദാനി 3:19–26"},{"ref":"2 കൊറി 6:3–10"},{"ref":"ലൂക്കാ 11:43–52","desc":"പ്രവാചകൻമാർ പീഡിപ്പിക്കപ്പെടും."}]},
+    {"day":24,"dayName":"ചൊവ്വ","season":"നോമ്പ് രണ്ടാം ചൊവ്വ","feasts":[],"readings":[{"ref":"യാക്കോ 5:1–6"},{"ref":"ലൂക്കാ 18:18–30","desc":"സമ്പത്തും ശിഷ്യത്വവും."}]},
+    {"day":25,"dayName":"ബുധൻ","season":"നോമ്പ് രണ്ടാം ബുധൻ","feasts":["വാഴ്ത്തപ്പെട്ട സി. റാണി മരിയ"],"readings":[{"ref":"1 തിമോ 6:17–21"},{"ref":"ലൂക്കാ 12:13–21","desc":"ധനികന്റെ വ്യർഥ സുരക്ഷിതത്വം."},{"ref":"ഉത്പ 22:1–13"},{"ref":"2 മക്കാ 7:1–11"},{"ref":"2 കൊറി 4:7–15"},{"ref":"മത്താ 10:16–25","desc":"സുവിശേഷത്തിന് സാക്ഷ്യം വഹിക്കുക."}]},
+    {"day":26,"dayName":"വ്യാഴം","season":"നോമ്പ് രണ്ടാം വ്യാഴം","feasts":[],"readings":[{"ref":"റോമ 8:1–6"},{"ref":"മത്താ 6:19–24","desc":"നിക്ഷേപം എവിടെയോ അവിടെയായിരിക്കും ഹൃദയം."}]},
+    {"day":27,"dayName":"വെള്ളി","season":"നോമ്പ് രണ്ടാം വെള്ളി","feasts":[],"readings":[{"ref":"നിയ 8:11–18"},{"ref":"പ്രഭാ 29:1–2; 10–13"},{"ref":"യാക്കോ 1:9–11; 4:13–16"},{"ref":"ലൂക്കാ 14:7–14","desc":"സ്ഥാനമാനങ്ങളുടെയും സമ്പത്തിന്റെയും വിനിയോഗം."}]},
+    {"day":28,"dayName":"ശനി","season":"നോമ്പ് രണ്ടാം ശനി","feasts":[],"readings":[{"ref":"ഫിലി 3:4–11"},{"ref":"ലൂക്കാ 5:1–11","desc":"സർവ്വവും ഉപേക്ഷിച്ച് മിശിഹായെ അനുഗമിച്ചവർ."}]}
+  ],
+  "March": [
+    {"day":1,"dayName":"ഞായർ","season":"നോമ്പ് മൂന്നാം ഞായർ","feasts":[],"readings":[{"ref":"നിയ 15:7–15"},{"ref":"തോബി 12:6–15"},{"ref":"2 കൊറി 8:9–15"},{"ref":"മത്താ 6:1–8; 16–18","desc":"ധർമദാനം, പ്രാർത്ഥന, ഉപവാസം."}]},
+    {"day":2,"dayName":"തിങ്കൾ","season":"നോമ്പ് മൂന്നാം തിങ്കൾ","feasts":[],"readings":[{"ref":"ഫിലി 4:10–20"},{"ref":"മർക്കോ 9:33–41","desc":"മിശിഹായുടെ നാമത്തിൽ ചെയ്യുന്ന പ്രവൃത്തിക്ക് പ്രതിഫലം."}]},
+    {"day":3,"dayName":"ചൊവ്വ","season":"നോമ്പ് മൂന്നാം ചൊവ്വ","feasts":[],"readings":[{"ref":"2 കൊറി 9:1–5"},{"ref":"മർക്കോ 12:38–44","desc":"വിധവയുടെ നാണയത്തുട്ടുകൾ."}]},
+    {"day":4,"dayName":"ബുധൻ","season":"നോമ്പ് മൂന്നാം ബുധൻ","feasts":[],"readings":[{"ref":"2 കൊറി 9:6–10"},{"ref":"ലൂക്കാ 6:32–38","desc":"കൊടുക്കുവിൻ നിങ്ങൾക്കും കിട്ടും."}]},
+    {"day":5,"dayName":"വ്യാഴം","season":"നോമ്പ് മൂന്നാം വ്യാഴം","feasts":[],"readings":[{"ref":"യാക്കോ 2:10–17"},{"ref":"മത്താ 7:21–28","desc":"സ്വർഗസ്ഥനായ പിതാവിന്റെ ഇഷ്ടം നിറവേറ്റുക."}]},
+    {"day":6,"dayName":"വെള്ളി","season":"നോമ്പ് മൂന്നാം വെള്ളി","feasts":[],"readings":[{"ref":"സുഭാ 8:12–21"},{"ref":"ആമോ 5:1–7"},{"ref":"2 കൊറി 9:11–15"},{"ref":"ലൂക്കാ 12:29–34","desc":"ദൈവരാജ്യം അന്വേഷിക്കുവിൻ."}]},
+    {"day":7,"dayName":"ശനി","season":"നോമ്പ് മൂന്നാം ശനി","feasts":[],"readings":[{"ref":"2 കൊറി 6:14–7:1"},{"ref":"ലൂക്കാ 8:42b–48","desc":"രക്തസ്രാവക്കാരി സുഖം പ്രാപിക്കുന്നു."}]},
+    {"day":8,"dayName":"ഞായർ","season":"നോമ്പ് നാലാം ഞായർ","feasts":[],"readings":[{"ref":"ഉത്പ 19:1–7, 10–11"},{"ref":"2 സാമ്യ 12:1–7; 13–17"},{"ref":"2 തിമോ 2:22–26"},{"ref":"മത്താ 5:27–32","desc":"വിശുദ്ധി പാലിക്കുക."}]},
+    {"day":9,"dayName":"തിങ്കൾ","season":"നോമ്പ് നാലാം തിങ്കൾ","feasts":["സേബസ്ത്യായിലെ 40 രക്തസാക്ഷികൾ"],"readings":[{"ref":"പുറ 19:9–15"},{"ref":"എസേ 22:6–15"},{"ref":"2 പത്രോ 1:1–9"},{"ref":"മർക്കോ 7:14–23","desc":"മനുഷ്യനെ അശുദ്ധനാക്കുന്നവ."},{"ref":"ദാനി 3:25–45"},{"ref":"ശ്ലീഹ. നട. 6:8–7:10"},{"ref":"ഹെബ്രാ 11:3–10, 32–12:3"},{"ref":"മത്താ 10:16–33","desc":"നിർദ്ദയം സാക്ഷ്യം വഹിക്കുക."}]},
+    {"day":10,"dayName":"ചൊവ്വ","season":"നോമ്പ് നാലാം ചൊവ്വ","feasts":[],"readings":[{"ref":"പുറ 3:1–6"},{"ref":"പ്രഭാ 4:11–18"},{"ref":"ഹെബ്രാ 12:14–17"},{"ref":"ലൂക്കാ 11:33–41","desc":"പ്രകാശമുള്ളവരായിരിക്കുക."}]},
+    {"day":11,"dayName":"ബുധൻ","season":"നോമ്പ് നാലാം ബുധൻ — പാതിനോമ്പ്","feasts":[],"readings":[{"ref":"1 രാജ 19:19–21"},{"ref":"ജോബ് 22:23–30"},{"ref":"വെളി 3:1–6"},{"ref":"മർക്കോ 10:46–52","desc":"പുറങ്കുപ്പായം ദൂരെ എറിഞ്ഞ് ഈശോയെ അനുഗമിച്ചു."}]},
+    {"day":12,"dayName":"വ്യാഴം","season":"നോമ്പ് നാലാം വ്യാഴം","feasts":[],"readings":[{"ref":"പുറ 29:31–37"},{"ref":"2 മക്കാ 1:24–29"},{"ref":"1 തെസ 4:1–8"},{"ref":"ലൂക്കാ 5:12–16","desc":"കുഷ്ഠരോഗിയെ ശുദ്ധനാക്കുന്നു."}]},
+    {"day":13,"dayName":"വെള്ളി","season":"നോമ്പ് നാലാം വെള്ളി","feasts":[],"readings":[{"ref":"പുറ 28:40–43"},{"ref":"സുഭാ 20:5–9"},{"ref":"ഹെബ്രാ 10:1–10"},{"ref":"യോഹ 17:9–19","desc":"അവർക്കുവേണ്ടി എന്നെത്തന്നെ വിശുദ്ധീകരിക്കുന്നു."}]},
+    {"day":14,"dayName":"ശനി","season":"നോമ്പ് നാലാം ശനി","feasts":[],"readings":[{"ref":"വെളി 3:14–22"},{"ref":"ലൂക്കാ 24:44–49","desc":"പാപമോചനത്തിനായുള്ള അനുതാപം പ്രസംഗിക്കപ്പെടും."}]},
+    {"day":15,"dayName":"ഞായർ","season":"നോമ്പ് അഞ്ചാം ഞായർ","feasts":[],"readings":[{"ref":"ഉത്പ 4:8–16"},{"ref":"1 സാമ്യ 24:1–8"},{"ref":"1 യോഹ 1:5–10"},{"ref":"യോഹ 8:1–11","desc":"പാപിനിക്ക് രക്ഷ."}]},
+    {"day":16,"dayName":"തിങ്കൾ","season":"നോമ്പ് അഞ്ചാം തിങ്കൾ","feasts":[],"readings":[{"ref":"എഫേ 4:1–6"},{"ref":"ലൂക്കാ 17:1–6","desc":"പശ്ചാത്തപിക്കുന്നവനോടു ക്ഷമിക്കുക."}]},
+    {"day":17,"dayName":"ചൊവ്വ","season":"നോമ്പ് അഞ്ചാം ചൊവ്വ","feasts":[],"readings":[{"ref":"1 പത്രോ 3:8–12"},{"ref":"മത്താ 5:38–48","desc":"ശത്രുക്കളെ സ്നേഹിക്കുക."}]},
+    {"day":18,"dayName":"ബുധൻ","season":"നോമ്പ് അഞ്ചാം ബുധൻ","feasts":[],"readings":[{"ref":"1 തെസ 5:12–18"},{"ref":"മത്താ 18:15–20","desc":"സഹോദരനോടുള്ള ഉത്തരവാദിത്വം."}]},
+    {"day":19,"dayName":"വ്യാഴം","season":"നോമ്പ് അഞ്ചാം വ്യാഴം","feasts":["മാർ യൗസേഫ് തിരുനാൾ"],"readings":[{"ref":"1 കൊറി 13:1–8, 12–13"},{"ref":"മത്താ 18:21–35","desc":"സഹോദരനോടു ഹൃദയപൂർവം ക്ഷമിക്കുക."},{"ref":"ഏശ 41:8–16"},{"ref":"ശ്ലീഹ. നട. 19:8–20"},{"ref":"2 കൊറി 10:3–18"},{"ref":"മത്താ 1:18–25","desc":"നീതിമാനായ യൗസേഫ്."}]},
+    {"day":20,"dayName":"വെള്ളി","season":"നോമ്പ് അഞ്ചാം വെള്ളി","feasts":[],"readings":[{"ref":"സംഖ്യ 29:1–6"},{"ref":"എസ്രാ 8:31–35"},{"ref":"ഹെബ്രാ 9:23–28"},{"ref":"മത്താ 20:20–28","desc":"മോചനദ്രവ്യമായി സ്വജീവൻ അർപ്പിക്കാൻ വന്നവൻ."}]},
+    {"day":21,"dayName":"ശനി","season":"നോമ്പ് അഞ്ചാം ശനി","feasts":[],"readings":[{"ref":"1 കൊറി 2:1–8"},{"ref":"മത്താ 17:1–9","desc":"ഈശോയുടെ തേജസ്കരണം; രൂപാന്തരീകരണം."}]},
+    {"day":22,"dayName":"ഞായർ","season":"നോമ്പ് ആറാം ഞായർ","feasts":[],"readings":[{"ref":"നിയ 8:1–10"},{"ref":"2 മക്കാ 6:18–31"},{"ref":"1 പത്രോ 4:12–19"},{"ref":"മർക്കോ 8:31–9:1","desc":"സഹനം രക്ഷാകരം."}]},
+    {"day":23,"dayName":"തിങ്കൾ","season":"നോമ്പ് ആറാം തിങ്കൾ","feasts":[],"readings":[{"ref":"1 പത്രോ 2:18–23"},{"ref":"മത്താ 12:15–21","desc":"ഈശോ ദൈവദാസൻ."}]},
+    {"day":24,"dayName":"ചൊവ്വ","season":"നോമ്പ് ആറാം ചൊവ്വ","feasts":[],"readings":[{"ref":"കൊളോ 1:24–29"},{"ref":"യോഹ 15:18–27","desc":"എന്നെ പീഡിപ്പിച്ചെങ്കിൽ നിങ്ങളെയും പീഡിപ്പിക്കും."}]},
+    {"day":25,"dayName":"ബുധൻ","season":"നോമ്പ് ആറാം ബുധൻ","feasts":["മംഗളവാർത്ത തിരുനാൾ"],"readings":[{"ref":"റോമ 8:31–39"},{"ref":"മത്താ 10:17–22","desc":"അവസാനംവരെ സഹിച്ചുനിൽക്കുന്നവൻ ജീവിക്കും."},{"ref":"പുറ 15:1–21"},{"ref":"ശ്ലീഹ. നട. 1:11–14"},{"ref":"ഹെബ്രാ 1:1–13"},{"ref":"ലൂക്കാ 1:26–38","desc":"രക്ഷകന്റെ ജനനത്തെക്കുറിച്ചുള്ള അറിയിപ്പ്."}]},
+    {"day":26,"dayName":"വ്യാഴം","season":"നോമ്പ് ആറാം വ്യാഴം","feasts":[],"readings":[{"ref":"2 തിമോ 1:6–14"},{"ref":"മർക്കോ 10:32–34","desc":"സഹനവും ഉത്ഥാനവും: മൂന്നാം പ്രവചനം."}]},
+    {"day":27,"dayName":"വെള്ളി","season":"നോമ്പ് ആറാം വെള്ളി — നാൽപ്പതാം വെള്ളി (ലാസറിന്റെ വെള്ളി)","feasts":[],"readings":[{"ref":"1 രാജ 17:17–24"},{"ref":"ശ്ലീഹ. നട. 9:36–42"},{"ref":"റോമ 5:12–17"},{"ref":"യോഹ 11:32–44","desc":"ലാസറിനെ ഉയിർപ്പിക്കുന്നു."}]},
+    {"day":28,"dayName":"ശനി","season":"നോമ്പ് ആറാം ശനി","feasts":[],"readings":[{"ref":"2 കൊറി 2:14–17"},{"ref":"യോഹ 12:1–11","desc":"ബേത്താനിയായിലെ തൈലാഭിഷേകം."}]},
+    {"day":29,"dayName":"ഞായർ","season":"നോമ്പ് ഏഴാം ഞായർ (ഓശാന ഞായർ)","feasts":[],"readings":[{"ref":"പുറ 15:1–3, 11–15, 20–21"},{"ref":"ഏശ 62:10–12"},{"ref":"ഗലാ 4:12–20"},{"ref":"ലൂക്കാ 19:28–40","desc":"ഈശോയുടെ ജറുസലേം പ്രവേശനം."}]},
+    {"day":30,"dayName":"തിങ്കൾ","season":"നോമ്പ് ഏഴാം തിങ്കൾ","feasts":[],"readings":[{"ref":"1 രാജ 9:1–9"},{"ref":"വിലാ 2:1–7"},{"ref":"റോമ 11:17–24"},{"ref":"ലൂക്കാ 19:41–48","desc":"ജറുസലേമിന്റെ നാശത്തെ‌പ്പറ്റി പ്രവചനം."}]},
+    {"day":31,"dayName":"ചൊവ്വ","season":"നോമ്പ് ഏഴാം ചൊവ്വ","feasts":[],"readings":[{"ref":"ഉത്പ 37:5–24"},{"ref":"2 ദിന 24:17–22"},{"ref":"ഹെബ്രാ 13:10–16"},{"ref":"ലൂക്കാ 20:9–19","desc":"അവർ അവനെ മുന്തിരിത്തോട്ടത്തിനു പുറത്തുകൊണ്ടുപോയി കൊന്നുകളഞ്ഞു."}]}
+  ],
+  "April": [
+    {"day":1,"dayName":"ബുധൻ","season":"നോമ്പ് ഏഴാം ബുധൻ","feasts":[],"readings":[{"ref":"ഉത്പ 45:3–15"},{"ref":"ജെറ 20:7–13"},{"ref":"2 കൊറി 5:1–10"},{"ref":"യോഹ 12:20–36","desc":"ഗോതമ്പുമണി നിലത്തുവീണ് അഴിയണം."}]},
+    {"day":2,"dayName":"വ്യാഴം","season":"പെസഹാ വ്യാഴം","feasts":[],"readings":[{"ref":"പുറ 12:1–14, 21–28"},{"ref":"എസേ 45:18–25"},{"ref":"1 കൊറി 5:6–8; 11:23–30"},{"ref":"ലൂക്കാ 22:7–13 + യോഹ 13:1–15 + ലൂക്കാ 22:15–21","desc":"പെസഹാ ഭക്ഷണം."}]},
+    {"day":3,"dayName":"വെള്ളി","season":"പീഡാനുഭവ വെള്ളി","feasts":[],"readings":[{"ref":"ഉത്പ 22:1–19"},{"ref":"ഏശ 53:1–12"},{"ref":"ശ്ലീഹ. നട. 8:26–39"},{"ref":"ലൂക്കാ 22:63–23:12 + മത്താ 27:19 + ലൂക്കാ 22:13–23 + മത്താ 27:24–25 + ലൂക്കാ 23:24–45 + മത്താ 27:51–54 + യോഹ 19:23–42","desc":"കർത്താവിന്റെ പീഡാനുഭവം."}]},
+    {"day":4,"dayName":"ശനി","season":"വലിയ ശനി","feasts":[],"readings":[{"ref":"നിയ 34:1–9"},{"ref":"യോനാ 1:1–17"},{"ref":"ഹെബ്രാ 6:1–8"},{"ref":"മത്താ 27:62–66","desc":"കല്ലറയ്ക്കു കാവൽ."}]},
+    {"day":5,"dayName":"ഞായർ","season":"നമ്മുടെ കർത്താവ് ഈശോ മിശിഹായുടെ ഉയിർപ്പ് തിരുനാൾ","feasts":[],"readings":[{"ref":"ഏശ 60:1–7"},{"ref":"1 സാമ 2:1–10"},{"ref":"റോമ 5:20–6:23"},{"ref":"മത്താ 28:1–6","desc":"ഈശോയുടെ ഉത്ഥാനം."}]},
+    {"day":6,"dayName":"തിങ്കൾ","season":"ഉയിർപ്പ് ഒന്നാം തിങ്കൾ","feasts":[],"readings":[{"ref":"ഏശ 37:1–10"},{"ref":"യോനാ 2:1–10"},{"ref":"ശ്ലീഹ. നട. 2:22–28"},{"ref":"യോഹ 20:11–23","desc":"ഉത്ഥിതന്റെ പ്രത്യക്ഷീകരണങ്ങൾ."}]},
+    {"day":7,"dayName":"ചൊവ്വ","season":"ഉയിർപ്പ് ഒന്നാം ചൊവ്വ","feasts":[],"readings":[{"ref":"1 ദിന 22:7–13"},{"ref":"സഖ 8:11–17"},{"ref":"കൊളോ 1:15–22"},{"ref":"യോഹ 14:25–31","desc":"ഞാൻ നിങ്ങൾക്കു സമാധാനം തരുന്നു."}]},
+    {"day":8,"dayName":"ബുധൻ","season":"ഉയിർപ്പ് ഒന്നാം ബുധൻ","feasts":[],"readings":[{"ref":"ഉത്പ 28:10–19"},{"ref":"തോബി 12:15–22"},{"ref":"ശ്ലീഹ. നട. 9:1–15"},{"ref":"ലൂക്കാ 24:13–35","desc":"എമ്മാവൂസിലേക്കു പോയവർക്കു ദർശനം."}]},
+    {"day":9,"dayName":"വ്യാഴം","season":"ഉയിർപ്പ് ഒന്നാം വ്യാഴം","feasts":[],"readings":[{"ref":"പുറ 33:7–11"},{"ref":"ഏശ 40:27–31"},{"ref":"വെളി 1:10–18"},{"ref":"ലൂക്കാ 24:36–43","desc":"നിങ്ങൾ ഭയപ്പെടേണ്ട."}]},
+    {"day":10,"dayName":"വെള്ളി","season":"ഉയിർപ്പ് ഒന്നാം വെള്ളി — വേദസാക്ഷികളുടെ തിരുനാൾ","feasts":["സകല വിശുദ്ധരുടെയും തിരുനാൾ"],"readings":[{"ref":"ദാനി 3:14–28"},{"ref":"ശ്ലീഹ. നട. 6:8–15 + 7:54–60"},{"ref":"ഹെബ്രാ 11:1–6, 32–39"},{"ref":"ലൂക്കാ 12:1–9","desc":"ഈശോയെ അംഗീകരിച്ചുപറയുന്നവരെ ഈശോ അംഗീകരിച്ചുപറയും."}]},
+    {"day":11,"dayName":"ശനി","season":"ഉയിർപ്പ് ഒന്നാം ശനി","feasts":[],"readings":[{"ref":"2 കൊറി 3:4–11"},{"ref":"ലൂക്കാ 24:44–48","desc":"നിങ്ങൾ ഇവയ്ക്കു സാക്ഷികളാണ്."}]},
+    {"day":12,"dayName":"ഞായർ","season":"ഉയിർപ്പ് രണ്ടാം ഞായർ","feasts":[],"readings":[{"ref":"ലേവ്യ 26:1–13"},{"ref":"ഏശ 44:1–8"},{"ref":"1 യോഹ 1:1–4"},{"ref":"യോഹ 20:24–31","desc":"തോമാ ശ്ലീഹായുടെ വിശ്വാസ പ്രഖ്യാപനം."}]},
+    {"day":13,"dayName":"തിങ്കൾ","season":"ഉയിർപ്പ് രണ്ടാം തിങ്കൾ","feasts":[],"readings":[{"ref":"ഹെബ്രാ 10:19–25"},{"ref":"മത്താ 8:1–4","desc":"മനസ്സുണ്ടെങ്കിൽ നിന്നെ ശുദ്ധനാക്കാൻ കഴിയും."}]},
+    {"day":14,"dayName":"ചൊവ്വ","season":"ഉയിർപ്പ് രണ്ടാം ചൊവ്വ","feasts":[],"readings":[{"ref":"റോമ 3:27–31"},{"ref":"മത്താ 8:5–13","desc":"ശതാധിപന്റെ വിശ്വാസം."}]},
+    {"day":15,"dayName":"ബുധൻ","season":"ഉയിർപ്പ് രണ്ടാം ബുധൻ","feasts":[],"readings":[{"ref":"റോമ 4:13–25"},{"ref":"മത്താ 9:18–26","desc":"നിന്റെ വിശ്വാസം നിന്നെ രക്ഷിച്ചിരിക്കുന്നു."}]},
+    {"day":16,"dayName":"വ്യാഴം","season":"ഉയിർപ്പ് രണ്ടാം വ്യാഴം","feasts":[],"readings":[{"ref":"റോമ 5:1–5"},{"ref":"മത്താ 15:21–28","desc":"കാനാൻകാരിയുടെ വലിയ വിശ്വാസം."}]},
+    {"day":17,"dayName":"വെള്ളി","season":"ഉയിർപ്പ് രണ്ടാം വെള്ളി","feasts":[],"readings":[{"ref":"യാക്കോ 5:13–20"},{"ref":"ലൂക്കാ 5:17–26","desc":"തളർവാതരോഗിയെ സുഖപ്പെടുത്തുന്നു."}]},
+    {"day":18,"dayName":"ശനി","season":"ഉയിർപ്പ് രണ്ടാം ശനി","feasts":[],"readings":[{"ref":"ഗലാ 2:15–21"},{"ref":"യോഹ 9:35–41","desc":"ദൈവപുത്രനിൽ വിശ്വസിക്കുക."}]},
+    {"day":19,"dayName":"ഞായർ","season":"ഉയിർപ്പ് മൂന്നാം ഞായർ","feasts":[],"readings":[{"ref":"പുറ 3:1–12"},{"ref":"എസേ 34:20–26"},{"ref":"എഫേ 4:7–16"},{"ref":"യോഹ 21:15–19","desc":"പത്രോസ് അജപാലകൻ."}]},
+    {"day":20,"dayName":"തിങ്കൾ","season":"ഉയിർപ്പ് മൂന്നാം തിങ്കൾ","feasts":[],"readings":[{"ref":"1 യോഹ 2:1–6"},{"ref":"യോഹ 17:20–26","desc":"ഈശോ പിതാവിനും മനുഷ്യർക്കും ഇടയിലുള്ള മദ്ധ്യസ്ഥൻ."}]},
+    {"day":21,"dayName":"ചൊവ്വ","season":"ഉയിർപ്പ് മൂന്നാം ചൊവ്വ","feasts":[],"readings":[{"ref":"1 തിമോ 1:18–19; 2:1–7"},{"ref":"ലൂക്കാ 22:24–32","desc":"നിന്റെ സഹോദരരെ ശക്തിപ്പെടുത്തണം."}]},
+    {"day":22,"dayName":"ബുധൻ","season":"ഉയിർപ്പ് മൂന്നാം ബുധൻ","feasts":[],"readings":[{"ref":"കൊളോ 3:12–17"},{"ref":"ലൂക്കാ 1:46–56","desc":"ദൈവസ്തുതി പാടി ശുശ്രൂഷിക്കുന്ന മറിയം."}]},
+    {"day":23,"dayName":"വ്യാഴം","season":"ഉയിർപ്പ് മൂന്നാം വ്യാഴം","feasts":[],"readings":[{"ref":"എഫേ 6:1–9"},{"ref":"മത്താ 20:17–28","desc":"ശുശ്രൂഷിക്കപ്പെടാനല്ല; ശുശ്രൂഷിക്കാൻ."}]},
+    {"day":24,"dayName":"വെള്ളി","season":"ഉയിർപ്പ് മൂന്നാം വെള്ളി","feasts":["മാർ ഗ്യോർഗ്യീസ് സഹദാ"],"readings":[{"ref":"ദാനി 6:12–25"},{"ref":"ശ്ലീഹ. നട. 12:1–23 (12:1–5)"},{"ref":"2 കൊറി 12:1–14 (12:1–10)"},{"ref":"മത്താ 10:37–42+16:24–27+19:29–30 (10:37–42)","desc":"മിശിഹായെ‌പ്രതി ജീവൻ നഷ്ടപ്പെടുത്തുക."}]},
+    {"day":25,"dayName":"ശനി","season":"ഉയിർപ്പ് മൂന്നാം ശനി","feasts":["മാർ മർക്കോസ് സുവിശേഷകൻ"],"readings":[{"ref":"വെളി 3:15–22"},{"ref":"യോഹ 10:14–16, 22–30","desc":"എന്റെ ആടുകൾ എന്റെ സ്വരം ശ്രവിക്കുന്നു."},{"ref":"ഉത്പ 41:39–45"},{"ref":"എസേ 1:10–14"},{"ref":"2 തിമോ 4:6–18"},{"ref":"മർക്കോ 16:15–20","desc":"ലോകമെങ്ങും സുവിശേഷം പ്രഘോഷിക്കുവിൻ."}]},
+    {"day":26,"dayName":"ഞായർ","season":"ഉയിർപ്പ് നാലാം ഞായർ — ലോകദൈവവിളി പ്രാർത്ഥനാദിനം","feasts":[],"readings":[{"ref":"ജോഷ്വ 1:1–9"},{"ref":"2 ദിന 15:1–7"},{"ref":"2 കൊറി 13:5–10"},{"ref":"മത്താ 28:16–20","desc":"ലോകാവസാനംവരെ ഞാൻ നിങ്ങളോടൊന്നിച്ചുണ്ട്."}]},
+    {"day":27,"dayName":"തിങ്കൾ","season":"ഉയിർപ്പ് നാലാം തിങ്കൾ","feasts":[],"readings":[{"ref":"വെളി 21:1–7"},{"ref":"യോഹ 14:15–24","desc":"പരിശുദ്ധ ത്രിത്വം വിശ്വാസികളിൽ വസിക്കും."}]},
+    {"day":28,"dayName":"ചൊവ്വ","season":"ഉയിർപ്പ് നാലാം ചൊവ്വ","feasts":["സ്യേൻനായിലെ വിശുദ്ധ കത്രീന"],"readings":[{"ref":"1 കൊറി 3:18–23"},{"ref":"മർക്കോ 3:13–19","desc":"മിശിഹായോടൊന്നിക്കായിരിക്കാനുള്ള വിളി."},{"ref":"1 യോഹ 1:5– 2:2"},{"ref":"മത്താ 11:25–30","desc":"രഹസ്യവും നിഗൂഢവുമായ ജ്ഞാനം."}]},
+    {"day":29,"dayName":"ബുധൻ","season":"ഉയിർപ്പ് നാലാം ബുധൻ","feasts":[],"readings":[{"ref":"ഫിലി 1:21–25"},{"ref":"യോഹ 1:35–42","desc":"അവർ അവനോടൊന്നിച്ചവിടെ താമസിച്ചു."}]},
+    {"day":30,"dayName":"വ്യാഴം","season":"ഉയിർപ്പ് നാലാം വ്യാഴം","feasts":[],"readings":[{"ref":"കൊളോ 1:24–29"},{"ref":"യോഹ 6:52–59","desc":"എന്റെ ശരീരം ഭക്ഷിക്കുന്നവനിൽ ഞാൻ വസിക്കുന്നു."}]}
+  ],
+  "May": [
+    {"day":1,"dayName":"വെള്ളി","season":"ഉയിർപ്പ് നാലാം വെള്ളി","feasts":["വിശുദ്ധ യൗസേഫ് തൊഴിലാളി"],"readings":[{"ref":"2 കൊറി 5:14–20"},{"ref":"യോഹ 3:1–12"},{"ref":"ഉത്പ 3:17–19, 23–24"},{"ref":"ജ്ഞാനം 9:10–18"},{"ref":"കൊളോ 3:14–17"},{"ref":"മത്താ 13:53–58","desc":"തച്ചന്റെ മകനായ ഈശോ."}]},
+    {"day":2,"dayName":"ശനി","season":"ഉയിർപ്പ് നാലാം ശനി","feasts":["മാർ അഥനേഷ്യസ്"],"readings":[{"ref":"റോമ 11:25–32"},{"ref":"മത്താ 18:10–14","desc":"നശിച്ചുപോയതിനെ രക്ഷിക്കാൻ വന്നവൻ."},{"ref":"2 സാമ 22:1–7"},{"ref":"പ്രഭാ 45:1–5"},{"ref":"2 കൊറി 4:5–14"},{"ref":"മത്താ 10:23–28","desc":"മിശിഹായെ‌പ്രതി നിന്ദിക്കപ്പെടുന്നവർ."}]},
+    {"day":3,"dayName":"ഞായർ","season":"ഉയിർപ്പ് അഞ്ചാം ഞായർ (മാർ അദ്ദായി)","feasts":[],"readings":[{"ref":"പുറ 4:27–31"},{"ref":"തോബി 5:1–10, 17–23"},{"ref":"ശ്ലീഹ. നട. 12:24–13:3"},{"ref":"ലൂക്കാ 10:1–12","desc":"എഴുപതുശിഷ്യരെ ഈരണ്ടുപേരായി അയക്കുന്നു."}]},
+    {"day":4,"dayName":"തിങ്കൾ","season":"ഉയിർപ്പ് അഞ്ചാം തിങ്കൾ","feasts":[],"readings":[{"ref":"2 കൊറി 12:5–10"},{"ref":"ലൂക്കാ 9:1–6","desc":"യാത്രയ്ക്ക് വടിയോ സഞ്ചിയോ അപ്പമോ പണമോ എടുക്കരുത്."}]},
+    {"day":5,"dayName":"ചൊവ്വ","season":"ഉയിർപ്പ് അഞ്ചാം ചൊവ്വ","feasts":[],"readings":[{"ref":"ഫിലി 2:19–30"},{"ref":"ലൂക്കാ 8:1–8","desc":"ഈശോയെ അനുഗമിച്ച സ്ത്രീകൾ."}]},
+    {"day":6,"dayName":"ബുധൻ","season":"ഉയിർപ്പ് അഞ്ചാം ബുധൻ","feasts":["വിശുദ്ധ ഡൊമിനിക് സാവിയോ"],"readings":[{"ref":"ഫിലി 4:10–20"},{"ref":"ലൂക്കാ 17:5–10","desc":"വിശ്വാസത്തിന്റെ ശക്തിയാലുള്ള ശുശ്രൂഷ."},{"ref":"1 യോഹ 2:14–17"},{"ref":"മർക്കോ 10:13–16","desc":"ദൈവരാജ്യം ശിശുക്കൾക്ക്."}]},
+    {"day":7,"dayName":"വ്യാഴം","season":"ഉയിർപ്പ് അഞ്ചാം വ്യാഴം","feasts":[],"readings":[{"ref":"1 കൊറി 15:1–11"},{"ref":"ലൂക്കാ 9:57–62","desc":"ദൈവരാജ്യ‌പ്രഘോഷണത്തിനു വിളിക്കപ്പെടുന്നവർ."}]},
+    {"day":8,"dayName":"വെള്ളി","season":"ഉയിർപ്പ് അഞ്ചാം വെള്ളി","feasts":[],"readings":[{"ref":"1 കൊറി 3:1–9"},{"ref":"മത്താ 13:24–30","desc":"കളകളുടെ ഉപമ."}]},
+    {"day":9,"dayName":"ശനി","season":"ഉയിർപ്പ് അഞ്ചാം ശനി","feasts":[],"readings":[{"ref":"റോമ 11:11–16"},{"ref":"ലൂക്കാ 7:1–10","desc":"ജനതകളും വിശ്വാസത്തിലേക്ക്."}]},
+    {"day":10,"dayName":"ഞായർ","season":"ഉയിർപ്പ് ആറാം ഞായർ","feasts":[],"readings":[{"ref":"ഉത്പ 9:8–17"},{"ref":"2 രാജ 2:1–15"},{"ref":"റോമ 8:1–11"},{"ref":"യോഹ 5:19–29","desc":"വിശ്വസിക്കുന്നവൻ ഉയിർപ്പിക്കപ്പെടും."}]},
+    {"day":11,"dayName":"തിങ്കൾ","season":"ഉയിർപ്പ് ആറാം തിങ്കൾ","feasts":[],"readings":[{"ref":"റോമ 3:21–26"},{"ref":"യോഹ 4:27–30, 39–42","desc":"ഈശോ മിശിഹാ ലോകരക്ഷകൻ."}]},
+    {"day":12,"dayName":"ചൊവ്വ","season":"ഉയിർപ്പ് ആറാം ചൊവ്വ","feasts":[],"readings":[{"ref":"റോമ 6:19–23"},{"ref":"യോഹ 5:36–47","desc":"നിത്യജീവൻ പ്രാപിക്കാൻ മിശിഹായുടെ പക്കൽ ചെല്ലണം."}]},
+    {"day":13,"dayName":"ബുധൻ","season":"ഉയിർപ്പ് ആറാം ബുധൻ","feasts":[],"readings":[{"ref":"ശ്ലീഹ. നട. 20:7–12"},{"ref":"മർക്കോ 5:21–24, 35–43","desc":"ജായ്റോസിന്റെ മകളെ ഉയിർപ്പിക്കുന്നു."}]},
+    {"day":14,"dayName":"വ്യാഴം","season":"ഉയിർപ്പ് ആറാം വ്യാഴം — നമ്മുടെ കർത്താവിന്റെ സ്വർഗാരോഹണം","feasts":["മാർ മത്തിയാസ് ശ്ലീഹ"],"readings":[{"ref":"ഉത്പ 5:18–24"},{"ref":"ശ്ലീഹ. നട. 1:1–14"},{"ref":"ഹെബ്രാ 10:1–14"},{"ref":"മർക്കോ 16:9–20","desc":"ഈശോയുടെ സ്വർഗാരോഹണം."},{"ref":"1 സാമ 16:1–13 (16:4–13)"},{"ref":"ശ്ലീഹ. നട. 1:15–26"},{"ref":"1 കൊറി 1:26–30"},{"ref":"മത്താ 11:25–30","desc":"ക്ലേശിതർക്കാശ്രയമായ മിശിഹാ."}]},
+    {"day":15,"dayName":"വെള്ളി","season":"ഉയിർപ്പ് ആറാം വെള്ളി","feasts":["വിളവുകളുടെ സംരക്ഷകയായ മർത്ത് മറിയത്തിന്റെ തിരുനാൾ"],"readings":[{"ref":"വെളി 5:1–14"},{"ref":"യോഹ 1:35–39","desc":"ദൈവത്തിന്റെ കുഞ്ഞാട്."},{"ref":"പുറ 23:14–16"},{"ref":"ജോ'യ്ലേ 2:21–29"},{"ref":"റോമ 11:25–32"},{"ref":"മത്താ 18:10–14","desc":"വഴി‌തെറ്റിപ്പോയതിനെ സംരക്ഷിക്കാൻ‌ വന്ന‌ ദൈവം."}]},
+    {"day":16,"dayName":"ശനി","season":"ഉയിർപ്പ് ആറാം ശനി","feasts":[],"readings":[{"ref":"ഹെബ്രാ 8:1–6"},{"ref":"യോഹ 17:9–19","desc":"ശിഷ്യന്മാർക്കുവേണ്ടി പ്രാർത്ഥിക്കുന്നു."}]},
+    {"day":17,"dayName":"ഞായർ","season":"ഉയിർപ്പ് ഏഴാം ഞായർ","feasts":[],"readings":[{"ref":"ഉത്പ 28:10–19"},{"ref":"മിക്ക 4:1–5"},{"ref":"1 പത്രോ 1:3–9"},{"ref":"ലൂക്കാ 24:44–53","desc":"ദൈവാലയത്തിൽ സദാ‌സമയവും പ്രാർത്ഥിച്ചിരിക്കുന്ന ശിഷ്യർ."}]},
+    {"day":18,"dayName":"തിങ്കൾ","season":"ഉയിർപ്പ് ഏഴാം തിങ്കൾ","feasts":[],"readings":[{"ref":"1 തിമോ 2:1–7"},{"ref":"ലൂക്കാ 18:1–8","desc":"നിരന്തരം പ്രാർത്ഥിക്കുക."}]},
+    {"day":19,"dayName":"ചൊവ്വ","season":"ഉയിർപ്പ് ഏഴാം ചൊവ്വ","feasts":[],"readings":[{"ref":"റോമ 8:26–30"},{"ref":"ലൂക്കാ 18:9–14","desc":"പ്രാർത്ഥിക്കുമ്പോൾ ഉണ്ടാകേണ്ട മനോഭാവം."}]},
+    {"day":20,"dayName":"ബുധൻ","season":"ഉയിർപ്പ് ഏഴാം ബുധൻ","feasts":[],"readings":[{"ref":"റോമ 8:12–17"},{"ref":"ലൂക്കാ 11:1–4","desc":"ഈശോ പഠിപ്പിച്ച പ്രാർത്ഥന."}]},
+    {"day":21,"dayName":"വ്യാഴം","season":"ഉയിർപ്പ് ഏഴാം വ്യാഴം","feasts":[],"readings":[{"ref":"ശ്ലീഹ. നട. 10:44–48"},{"ref":"മത്താ 7:7–14","desc":"നന്മകൾ നൽകുന്ന പിതാവ്."}]},
+    {"day":22,"dayName":"വെള്ളി","season":"ഉയിർപ്പ് ഏഴാം വെള്ളി","feasts":[],"readings":[{"ref":"എഫേ 6:14–20"},{"ref":"യോഹ 4:19–24","desc":"ആത്മാവിലും സത്യത്തിലും ഉള്ള ആരാധന."}]},
+    {"day":23,"dayName":"ശനി","season":"ഉയിർപ്പ് ഏഴാം ശനി","feasts":[],"readings":[{"ref":"2 കൊറി 1:17–22"},{"ref":"ലൂക്കാ 11:5–13","desc":"ചോദിക്കുന്നവർക്കു പരിശുദ്ധാത്മാവിനെ നൽകും."}]},
+    {"day":24,"dayName":"ഞായർ","season":"ഒന്നാം ഞായർ ശ്ലീഹൻമാർ (പന്തക്കോസ്താ)","feasts":[],"readings":[{"ref":"ഉത്പ 2:1–8"},{"ref":"ജോബ് 33:2–4 + 34:14–15"},{"ref":"ശ്ലീഹ. നട. 2:1–21"},{"ref":"യോഹ 20:19–23","desc":"ശിഷ്യന്മാർക്കു പരിശുദ്ധാത്മാവിനെ നൽകുന്നു."}]},
+    {"day":25,"dayName":"തിങ്കൾ","season":"ശ്ലീഹ ഒന്നാം തിങ്കൾ","feasts":[],"readings":[{"ref":"ഗലാ 3:10–14"},{"ref":"യോഹ 16:5–15","desc":"പരിശുദ്ധ‌രൂഹ സഹായകനും ഗുരുനാഥനും."}]},
+    {"day":26,"dayName":"ചൊവ്വ","season":"ശ്ലീഹ ഒന്നാം ചൊവ്വ","feasts":[],"readings":[{"ref":"1 കൊറി 12:4–11, 28–31"},{"ref":"ലൂക്കാ 19:11–27","desc":"താലന്തുകൾ വർധിപ്പിക്കുക."}]},
+    {"day":27,"dayName":"ബുധൻ","season":"ശ്ലീഹ ഒന്നാം ബുധൻ","feasts":[],"readings":[{"ref":"റോമ 12:3–13"},{"ref":"ലൂക്കാ 1:39–45","desc":"മറിയം ഏലീശ്വായെ സന്ദർശിക്കുന്നു."}]},
+    {"day":28,"dayName":"വ്യാഴം","season":"ശ്ലീഹ ഒന്നാം വ്യാഴം","feasts":[],"readings":[{"ref":"റോമ 15:7–13"},{"ref":"ലൂക്കാ 10:17–22","desc":"ഈശോ പരിശുദ്ധാത്മാവിൽ ആനന്ദിച്ചു സ്തുതിക്കുന്നു."}]},
+    {"day":29,"dayName":"വെള്ളി","season":"ശ്ലീഹ ഒന്നാം വെള്ളി (സ്വർണ‌വെള്ളി)","feasts":[],"readings":[{"ref":"തോബി 11:1–17"},{"ref":"ഏശ 35:1–10"},{"ref":"ശ്ലീഹ. നട. 3:1–10"},{"ref":"യോഹ 16:19–24","desc":"ഈശോയുടെ നാമത്തിൽ ചോദിക്കുന്നതു നൽകപ്പെടും."}]},
+    {"day":30,"dayName":"ശനി","season":"ശ്ലീഹ ഒന്നാം ശനി","feasts":["മർത്ത് മറിയത്തിന്റെ സന്ദർശനം (മേയ് 31)"],"readings":[{"ref":"റോമ 14:1–9"},{"ref":"മർക്കോ 13:9–13"},{"ref":"റോമ 12:9–16"},{"ref":"ലൂക്കാ 1:39–45","desc":"കന്യകാ‌മറിയം ഏലീശ്വയെ സന്ദർശിക്കുന്നു."}]},
+    {"day":31,"dayName":"ഞായർ","season":"ശ്ലീഹ രണ്ടാം ഞായർ","feasts":["പരിശുദ്ധ ത്രിത്വ തിരുനാൾ"],"readings":[{"ref":"പുറ 19:1–8"},{"ref":"ഏശ 48:12–17"},{"ref":"1 തിമോ 1:12–19"},{"ref":"യോഹ 11:1–16","desc":"നമുക്കും അവനോടൊന്നിച്ചു പോയി മരിക്കാം."},{"ref":"ഉത്പ 18:1–8"},{"ref":"റോമ 5:1–5"},{"ref":"യോഹ 16:12–15","desc":"സത്യാത്മാവിലൂടെ പൂർണത."}]}
+  ],
+  "June": [
+    {"day":1,"dayName":"തിങ്കൾ","season":"ശ്ലീഹ രണ്ടാം തിങ്കൾ","feasts":["വിശുദ്ധ ജസ്റ്റിൻ"],"readings":[{"ref":"റോമ 8:31–39"},{"ref":"മർക്കോ 3:13–19","desc":"മിശിഹായോടൊന്നിക്കായിരിക്കാനുള്ള വിളി."},{"ref":"ഉത്പ 18:23–32"},{"ref":"ജ്ഞാനം 10:9–14"},{"ref":"1 കൊറി 1:18–25"},{"ref":"ലൂക്കാ 12:2–8","desc":"ഭയപ്പെടാതെ സാക്ഷ്യം നൽകുക."}]},
+    {"day":2,"dayName":"ചൊവ്വ","season":"ശ്ലീഹ രണ്ടാം ചൊവ്വ","feasts":[],"readings":[{"ref":"വെളി 18:1–8"},{"ref":"മർക്കോ 8:34–38","desc":"ലോകം‌മുഴുവൻ നേടിയാലും ആത്മാവ് നശിച്ചാൽ എന്തു ഫലം?"}]},
+    {"day":3,"dayName":"ബുധൻ","season":"ശ്ലീഹ രണ്ടാം ബുധൻ","feasts":[],"readings":[{"ref":"ഹെബ്രാ 10:11–18"},{"ref":"ലൂക്കാ 14:25–35","desc":"മിശിഹായ്ക്കുവേണ്ടി സർവവും ഉപേക്ഷിക്കുക."}]},
+    {"day":4,"dayName":"വ്യാഴം","season":"ശ്ലീഹ രണ്ടാം വ്യാഴം — പരിശുദ്ധ കുർബാനയുടെ തിരുനാൾ","feasts":["കോർപ്പസ് ക്രിസ്തി തിരുനാൾ"],"readings":[{"ref":"ഉത്പ 14:17–20"},{"ref":"മലാ 1:6–11"},{"ref":"1 കൊറി 11:23–30"},{"ref":"മത്താ 26:17–29","desc":"പരിശുദ്ധ കുർബാനയുടെ സ്ഥാപനം."}]},
+    {"day":5,"dayName":"വെള്ളി","season":"ശ്ലീഹ രണ്ടാം വെള്ളി","feasts":[],"readings":[{"ref":"ഹെബ്രാ 10:32–39"},{"ref":"മർക്കോ 10:23–31","desc":"മിശിഹായെ അനുഗമിക്കുന്നവർക്കുള്ള പ്രതിഫലം."}]},
+    {"day":6,"dayName":"ശനി","season":"ശ്ലീഹ രണ്ടാം ശനി","feasts":[],"readings":[{"ref":"2 കൊറി 3:1–6"},{"ref":"യോഹ 10:31–42","desc":"ഞാൻ എന്റെ പിതാവിന്റെ പ്രവൃത്തികൾ ചെയ്യുന്നു."}]},
+    {"day":7,"dayName":"ഞായർ","season":"ശ്ലീഹ മൂന്നാം ഞായർ","feasts":[],"readings":[{"ref":"പുറ 23:20–26"},{"ref":"യോനാ 4:1–11"},{"ref":"റോമ 15:14–21"},{"ref":"ലൂക്കാ 9:1–6","desc":"ശ്ലീഹന്മാരെ അയക്കുന്നു."}]},
+    {"day":8,"dayName":"തിങ്കൾ","season":"ശ്ലീഹ മൂന്നാം തിങ്കൾ","feasts":["മർത്ത് മറിയം ത്രേസ്യ"],"readings":[{"ref":"റോമ 1:1–7"},{"ref":"ലൂക്കാ 4:14–22","desc":"ദരിദ്രരോടു സുവിശേഷം പ്രസംഗിക്കാൻ അയക്കപ്പെട്ടവൻ."},{"ref":"ഉത്പ 12:1–4"},{"ref":"പ്രഭ 2:1–6"},{"ref":"ഗലാ 2:19–21"},{"ref":"മത്താ 25:31–40","desc":"ദൈവ‌സ്‌നേഹം പരസ്‌നേഹ‌പ്രവൃത്തികളിലൂടെ പ്രകടമാക്കുക."}]},
+    {"day":9,"dayName":"ചൊവ്വ","season":"ശ്ലീഹ മൂന്നാം ചൊവ്വ","feasts":["മാർ അ‍ഫ്രേം"],"readings":[{"ref":"ശ്ലീഹ. നട. 19:11–20"},{"ref":"മത്താ 17:14–21","desc":"അപസ്മാരം ബാധിച്ച ബാലനെ സുഖപ്പെടുത്തുന്നു."},{"ref":"നിയ 26:16–19"},{"ref":"പ്രഭ 45:1–5"},{"ref":"റോമ 5:1–5"},{"ref":"മത്താ 5:13–20","desc":"നിങ്ങൾ ഭൂമിയുടെ ഉപ്പും ലോകത്തിന്റെ പ്രകാശവും."}]},
+    {"day":10,"dayName":"ബുധൻ","season":"ശ്ലീഹ മൂന്നാം ബുധൻ","feasts":[],"readings":[{"ref":"വെളി 3:14–22"},{"ref":"യോഹ 9:1–11","desc":"പോയി ശിലോഹായ്ക്കുളത്തിൽ കഴുകുക."}]},
+    {"day":11,"dayName":"വ്യാഴം","season":"ശ്ലീഹ മൂന്നാം വ്യാഴം","feasts":["മാർ ബർണബാസ് ശ്ലീഹ"],"readings":[{"ref":"കൊളോ 2:8–17"},{"ref":"മർക്കോ 3:1–12","desc":"കൈ ശോഷിച്ചവന് സൗഖ്യം."},{"ref":"1 ദിന 16:8–12"},{"ref":"ശ്ലീഹ 11:21–26"},{"ref":"ഗലാ 2:1–10"},{"ref":"മത്താ 10:16–22","desc":"മിശിഹായ്ക്കു സാക്ഷ്യം വഹിക്കുന്നവർക്കു പീഡകൾ."}]},
+    {"day":12,"dayName":"വെള്ളി","season":"ശ്ലീഹ മൂന്നാം വെള്ളി — ഈശോയുടെ തിരുഹൃദയ തിരുനാൾ","feasts":["ഈശോയുടെ തിരുഹൃദയ തിരുനാൾ"],"readings":[{"ref":"ഉത്പ 22:9–14"},{"ref":"ഏശ 52:13–53:9"},{"ref":"ഹെബ്രാ 10:19–24"},{"ref":"യോഹ 19:31–37","desc":"കുത്തിപ്പിളർക്കപ്പെട്ട ഹൃദയം."}]},
+    {"day":13,"dayName":"ശനി","season":"ശ്ലീഹ മൂന്നാം ശനി — പരിശുദ്ധ കന്യകാ‌മറിയത്തിന്റെ വിമലഹൃദയ തിരുനാൾ","feasts":["പരിശുദ്ധ കന്യകാ‌മറിയത്തിന്റെ വിമലഹൃദയ തിരുനാൾ","പാദുവായിലെ വിശുദ്ധ അന്തോണീസ്"],"readings":[{"ref":"ഉത്പ 17:15–22"},{"ref":"ഏശ 7:10–16"},{"ref":"ഹെബ്രാ 4:12–16"},{"ref":"മർക്കോ 4:1–9","desc":"വിതക്കാരന്റെ ഉപമ."},{"ref":"1 കൊറി 2:1–10"},{"ref":"ലൂക്കാ 10:1–9","desc":"ദൈവരാജ്യത്തിന്റെ സുവിശേഷം പ്രസംഗിക്കുവിൻ."}]},
+    {"day":14,"dayName":"ഞായർ","season":"ശ്ലീഹ നാലാം ഞായർ","feasts":[],"readings":[{"ref":"പുറ 20:1–17"},{"ref":"എസേ 3:1–11"},{"ref":"റോമ 10:5–15"},{"ref":"യോഹ 6:60–69","desc":"നിത്യജീവന്റെ വചനങ്ങൾ."}]},
+    {"day":15,"dayName":"തിങ്കൾ","season":"ശ്ലീഹ നാലാം തിങ്കൾ","feasts":[],"readings":[{"ref":"2 തിമോ 3:10–17"},{"ref":"മർക്കോ 4:10–20","desc":"വിതക്കാരന്റെ ഉപമയുടെ വിശദീകരണം."}]},
+    {"day":16,"dayName":"ചൊവ്വ","season":"ശ്ലീഹ നാലാം ചൊവ്വ","feasts":[],"readings":[{"ref":"ഹെബ്രാ 8:7–13"},{"ref":"യോഹ 6:41–46","desc":"ദൈവം എല്ലാവരെയും പഠിപ്പിക്കും."}]},
+    {"day":17,"dayName":"ബുധൻ","season":"ശ്ലീഹ നാലാം ബുധൻ","feasts":[],"readings":[{"ref":"എഫേ 6:10–20"},{"ref":"യോഹ 14:21–24","desc":"ഈ വചനം എന്റേതല്ല; പിതാവിന്റേതാണ്."}]},
+    {"day":18,"dayName":"വ്യാഴം","season":"ശ്ലീഹ നാലാം വ്യാഴം","feasts":[],"readings":[{"ref":"ശ്ലീഹ. നട. 5:12–20"},{"ref":"യോഹ 17:1–8","desc":"നീ എനിക്കു തന്ന വചനം ഞാൻ അവർക്കു കൊടുത്തു."}]},
+    {"day":19,"dayName":"വെള്ളി","season":"ശ്ലീഹ നാലാം വെള്ളി","feasts":[],"readings":[{"ref":"യാക്കോ 1:19–27"},{"ref":"ലൂക്കാ 6:46–49","desc":"ദൈവ‌വചനത്തിനനുസൃതം പ്രവർത്തിക്കുന്നവൻ."}]},
+    {"day":20,"dayName":"ശനി","season":"ശ്ലീഹ നാലാം ശനി","feasts":[],"readings":[{"ref":"വെളി 3:7–13"},{"ref":"യോഹ 5:19–24","desc":"വചനം കേൾക്കുന്നവന് നിത്യജീവൻ."}]},
+    {"day":21,"dayName":"ഞായർ","season":"ശ്ലീഹ അഞ്ചാം ഞായർ","feasts":[],"readings":[{"ref":"പുറ 7:1–6"},{"ref":"ജെറ 11:18–23"},{"ref":"2 കൊറി 4:7–18"},{"ref":"മത്താ 10:16–33","desc":"ഭയപ്പെടാതെ സാക്ഷ്യം നൽകുവിൻ."}]},
+    {"day":22,"dayName":"തിങ്കൾ","season":"ശ്ലീഹ അഞ്ചാം തിങ്കൾ","feasts":["വിശുദ്ധ ജോൺ ഫിഷർ-, വിശുദ്ധ തോമസ് മൂർ"],"readings":[{"ref":"1 പത്രോ 2:18–25"},{"ref":"യോഹ 15:18–27","desc":"ശിഷ്യരെയും ലോകം പീഡിപ്പിക്കും."},{"ref":"1 പത്രോ 4:12–19"},{"ref":"മത്താ 10:16–22","desc":"അവസാനംവരെ സഹിച്ചുനിൽക്കുന്നവർ രക്ഷപ്പെടും."}]},
+    {"day":23,"dayName":"ചൊവ്വ","season":"ശ്ലീഹ അഞ്ചാം ചൊവ്വ","feasts":[],"readings":[{"ref":"2 തെസ 1:3–10"},{"ref":"യോഹ 16:1–7","desc":"നിങ്ങൾക്ക് ഇടർച്ചയുണ്ടാകരുത്."}]},
+    {"day":24,"dayName":"ബുധൻ","season":"ശ്ലീഹ അഞ്ചാം ബുധൻ","feasts":["മാർ‌ യോഹന്നാൻ‌ മാമ്ദാന്റെ ജൻമ‌തിരുനാൾ"],"readings":[{"ref":"1 പത്രോ 3:13–19"},{"ref":"യോഹ 12:20–28","desc":"ഗോതമ്പുമണി മണ്ണിൽ വീണ് അഴിയണം."},{"ref":"2 സാമ 12:1–10"},{"ref":"ജെറ 1:4–10, 16–19"},{"ref":"ഗലാ 4:1–7"},{"ref":"ലൂക്കാ 1:57–66","desc":"യോഹന്നാൻ മാമ്ദാനയുടെ ജനനം."}]},
+    {"day":25,"dayName":"വ്യാഴം","season":"ശ്ലീഹ അഞ്ചാം വ്യാഴം","feasts":[],"readings":[{"ref":"2 കൊറി 10:1–6"},{"ref":"ലൂക്കാ 13:31–35","desc":"ധീരതയോടെ ദൗത്യം നിർവഹിക്കുക."}]},
+    {"day":26,"dayName":"വെള്ളി","season":"ശ്ലീഹ അഞ്ചാം വെള്ളി","feasts":[],"readings":[{"ref":"ഫിലി 1:27–30"},{"ref":"ലൂക്കാ 12:4–12","desc":"ഭയപ്പെടാതെ മിശിഹായെ അംഗീകരിച്ചുപറയുക."}]},
+    {"day":27,"dayName":"ശനി","season":"ശ്ലീഹ അഞ്ചാം ശനി","feasts":["മാർ ഇ‌റേനേവൂസ് (ജൂൺ 28)"],"readings":[{"ref":"റോമ 8:18–25"},{"ref":"ലൂക്കാ 21:12–19","desc":"സഹനം‌വഴി നിങ്ങൾ ജീവൻ‌നേടും."},{"ref":"പുറ 28:28–30"},{"ref":"മലാ 2:4–7"},{"ref":"2 തിമോ 3:14–17"},{"ref":"യോഹ 14:26–30","desc":"എല്ലാം പഠിപ്പിക്കുന്ന പരിശുദ്ധാത്മാവ്."}]},
+    {"day":28,"dayName":"ഞായർ","season":"ശ്ലീഹ ആറാം ഞായർ","feasts":[],"readings":[{"ref":"ലേവ്യ 8:1–13"},{"ref":"ഏശ 6:1–8"},{"ref":"1 കൊറി 1:26–31"},{"ref":"മത്താ 9:27–38","desc":"വിളവിന്റെ നാഥനോടു പ്രാർത്ഥിക്കുവിൻ."}]},
+    {"day":29,"dayName":"തിങ്കൾ","season":"ശ്ലീഹ ആറാം തിങ്കൾ","feasts":["മാർ കേപ്പ, പൗലോസ് ശ്ലീഹൻ‌മാർ"],"readings":[{"ref":"ശ്ലീഹ 1:15–26"},{"ref":"ലൂക്കാ 6:12–19","desc":"മിശിഹാ പ്രാർത്ഥിച്ചശേഷം ശ്ലീഹന്മാരെ തിരഞ്ഞെടുക്കുന്നു."},{"ref":"2 രാജ 4:8–37 (4:16–21, 32–37)"},{"ref":"ശ്ലീഹ 9:36–42"},{"ref":"2 കൊറി 10:1–7+11:21b–33 (11:21b–33)"},{"ref":"മത്താ 16:13–19 + യോഹ 21:15–19 (യോഹ 21:15–19)","desc":"എന്റെ ആടുകളെ മേയ്ക്കുക."}]},
+    {"day":30,"dayName":"ചൊവ്വ","season":"ശ്ലീഹ ആറാം ചൊവ്വ","feasts":[],"readings":[{"ref":"2 തെസ 2:13–17"},{"ref":"യോഹ 17:9–19","desc":"ഈശോ ശിഷ്യന്മാർക്കുവേണ്ടി പ്രാർത്ഥിക്കുന്നു."}]}
+  ],
+  "July": [
+    {"day":1,"dayName":"ബുധൻ","season":"ശ്ലീഹ ആറാം ബുധൻ","feasts":[],"readings":[{"ref":"2 കൊറി 3:4–11"},{"ref":"ലൂക്കാ 1:26–38","desc":"മറിയം മിശിഹായുടെ അമ്മയാകാൻ വിളിക്കപ്പെട്ടവൾ."}]},
+    {"day":2,"dayName":"വ്യാഴം","season":"ശ്ലീഹ ആറാം വ്യാഴം","feasts":[],"readings":[{"ref":"എഫേ 3:14–21"},{"ref":"യോഹ 17:20–26","desc":"ഈശോ വിശ്വാസികൾക്കുവേണ്ടി പ്രാർത്ഥിക്കുന്നു."}]},
+    {"day":3,"dayName":"വെള്ളി","season":"മാർ തോമ ശ്ലീഹായുടെ ദൂഖ്‌റാന തിരുനാൾ","feasts":["മാർ തോമ ശ്ലീഹ ദൂഖ്‌റാന"],"readings":[{"ref":"ഉത്പ 2:8–17"},{"ref":"സൂക്തി 4:10–18"},{"ref":"എഫേ 2:19–22"},{"ref":"യോഹ 20:24–29","desc":"മിശിഹായെ കർത്താവും ദൈവവുമായി ഏറ്റുപറയുന്ന തോമ‌ശ്ലീഹ."}]},
+    {"day":4,"dayName":"ശനി","season":"ശ്ലീഹ ആറാം ശനി","feasts":[],"readings":[{"ref":"ശ്ലീഹ. നട. 6:1–7"},{"ref":"ലൂക്കാ 8:1–8","desc":"ഈശോയെ അനുഗമിച്ച സ്ത്രീകൾ."}]},
+    {"day":5,"dayName":"ഞായർ","season":"ശ്ലീഹ ഏഴാം ഞായർ","feasts":[],"readings":[{"ref":"സംഖ്യ 11:16–18, 24–30"},{"ref":"1 സാമ 16:14–23"},{"ref":"ഗലാ 5:16–26"},{"ref":"യോഹ 14:15–20, 25–26","desc":"ഈശോ‌യുടെ പ്രാർത്ഥനയാൽ പിതാവ് അയക്കുന്ന സഹായകൻ."}]},
+    {"day":6,"dayName":"തിങ്കൾ","season":"ശ്ലീഹ ഏഴാം തിങ്കൾ","feasts":[],"readings":[{"ref":"എഫേ 1:3–14"},{"ref":"മത്താ 3:4–12","desc":"പരിശുദ്ധാത്മാവിനാൽ മാമ്മോദീസ നൽകുന്നവൻ."}]},
+    {"day":7,"dayName":"ചൊവ്വ","season":"ശ്ലീഹ ഏഴാം ചൊവ്വ","feasts":[],"readings":[{"ref":"തീത്തോ 3:1–7"},{"ref":"യോഹ 3:1–12","desc":"ജലത്താലും ആത്മാവിനാലും ഉള്ള ജനനം."}]},
+    {"day":8,"dayName":"ബുധൻ","season":"ശ്ലീഹ ഏഴാം ബുധൻ","feasts":[],"readings":[{"ref":"1 കൊറി 12:1–11"},{"ref":"മർക്കോ 3:20–30","desc":"ദൈവ‌ആത്മാവിനെ‌തിരായ ദൂഷണം ക്ഷമിക്കപ്പെടുകയില്ല."}]},
+    {"day":9,"dayName":"വ്യാഴം","season":"ശ്ലീഹ ഏഴാം വ്യാഴം","feasts":[],"readings":[{"ref":"ഹെബ്രാ 3:7–19"},{"ref":"മത്താ 16:1–12","desc":"ഈശോയെ പരീക്ഷിക്കുന്ന പ്രീശരും സദൂക്കായരും."}]},
+    {"day":10,"dayName":"വെള്ളി","season":"ശ്ലീഹ ഏഴാം വെള്ളി — കർത്താവിന്റെ എഴുപതുശിഷ്യന്മാർ","feasts":["കർത്താവിന്റെ എഴുപതുശിഷ്യൻ‌മാർ"],"readings":[{"ref":"പുറ 24:1–11"},{"ref":"ഏശ 50:4–10"},{"ref":"2 കൊറി 6:1–10"},{"ref":"ലൂക്കാ 10:1–12, 17–20","desc":"എഴുപതുശിഷ്യൻ‌മാർ."}]},
+    {"day":11,"dayName":"ശനി","season":"ശ്ലീഹ ഏഴാം ശനി","feasts":["നർസിയായിലെ വിശുദ്ധ ബനഡിക്ട്"],"readings":[{"ref":"റോമ 14:13–19"},{"ref":"യോഹ 16:16–24","desc":"എടുത്തുകളയപ്പെടാത്ത സന്തോഷം."},{"ref":"ഉത്പ 17:1–8"},{"ref":"ജ്ഞാനം 9:1–12"},{"ref":"റോമ 8:12–17"},{"ref":"മത്താ 5:1–12","desc":"സുവിശേഷഭാഗ്യങ്ങൾ."}]},
+    {"day":12,"dayName":"ഞായർ","season":"ഒന്നാം ഞായർ‌ ഗ്രീഷ്മം (12 ശ്ലീഹൻ‌മാർ‌ തിരുനാൾ)","feasts":["12 ശ്ലീഹൻ‌മാർ‌ തിരുനാൾ (നൂസർദ്ദൽ)"],"readings":[{"ref":"ഉത്പ 35:23–29"},{"ref":"ജോഷ്വ 4:1–9"},{"ref":"വെളി 21:9–21"},{"ref":"മത്താ 10:1–15","desc":"പന്ത്രണ്ടു ശ്ലീഹൻ‌മാർ."}]},
+    {"day":13,"dayName":"തിങ്കൾ","season":"ഗ്രീഷ്മം ഒന്നാം തിങ്കൾ","feasts":[],"readings":[{"ref":"എഫേ 2:11–22"},{"ref":"മത്താ 16:13–20","desc":"കേപ്പായ്മേൽ സഭ പണിയപ്പെടും."}]},
+    {"day":14,"dayName":"ചൊവ്വ","season":"ഗ്രീഷ്മം ഒന്നാം ചൊവ്വ","feasts":[],"readings":[{"ref":"ഗലാ 1:10–16"},{"ref":"യോഹ 4:31–38","desc":"അയച്ചവന്റെ ഇഷ്ടം നിറവേറ്റുക."}]},
+    {"day":15,"dayName":"ബുധൻ","season":"ഗ്രീഷ്മം ഒന്നാം ബുധൻ","feasts":["മാർ കുര്യാക്കോസ്-, മർത്ത് ജൂലിത്ത രക്തസാക്ഷികൾ"],"readings":[{"ref":"1 തിമോ 4:12–16"},{"ref":"ലൂക്കാ 12:41–48","desc":"വിശ്വസ്തനായ കാര്യസ്ഥൻ."},{"ref":"ദാനി 3:25–45"},{"ref":"ശ്ലീഹ. നട. 6:8–15 (6:8–15)"},{"ref":"ഹെബ്രാ 11:3–10, 32–40 + 12:1–2 (11:3–10)"},{"ref":"മത്താ 10:16–33","desc":"മനുഷ്യരുടെ മുൻ‌പിൽ മിശിഹായ്ക്കു സാക്ഷ്യം."}]},
+    {"day":16,"dayName":"വ്യാഴം","season":"ഗ്രീഷ്മം ഒന്നാം വ്യാഴം","feasts":["കർമ്മേലമാതാവ്"],"readings":[{"ref":"വെളി 14:1–5"},{"ref":"യോഹ 21:20–25","desc":"ഈശോ സ്‌നേഹിച്ച ശിഷ്യൻ."},{"ref":"1 രാജ 18:41–46"},{"ref":"ഏശ 35:1–4"},{"ref":"2 കൊറി 1:3–7"},{"ref":"ലൂക്കാ 11:24–28","desc":"ഭാഗ്യവതിയായ മറിയം."}]},
+    {"day":17,"dayName":"വെള്ളി","season":"ഗ്രീഷ്മം ഒന്നാം വെള്ളി (നിസ്സിബിസിലെ മാർ യാക്കോബ്)","feasts":["നിസ്സിബിസിലെ മാർ യാക്കോബ്"],"readings":[{"ref":"പുറ 3:1–10"},{"ref":"ഏശ 41:8–16"},{"ref":"ഗലാ 1:6–10"},{"ref":"ലൂക്കാ 1:67, 76–80","desc":"ഇസ്രായേലിനു വെളിപ്പെടുന്നത്‌വരെ മരുഭൂമിയിലായിരുന്നവൻ."}]},
+    {"day":18,"dayName":"ശനി","season":"ഗ്രീഷ്മം ഒന്നാം ശനി","feasts":[],"readings":[{"ref":"ഫിലി 1:19–26"},{"ref":"യോഹ 11:1–16","desc":"നമുക്കും അവനോടൊന്നിച്ചു പോയി മരിക്കാം."}]},
+    {"day":19,"dayName":"ഞായർ","season":"ഗ്രീഷ്മം രണ്ടാം ഞായർ","feasts":[],"readings":[{"ref":"നിയ 28:1–14"},{"ref":"പ്രഭ 10:19–25"},{"ref":"റോമ 11:17–24"},{"ref":"യോഹ 15:1–8","desc":"മുന്തിരിച്ചെടിയും ശാഖകളും."}]},
+    {"day":20,"dayName":"തിങ്കൾ","season":"ഗ്രീഷ്മം രണ്ടാം തിങ്കൾ","feasts":[],"readings":[{"ref":"കൊളോ 1:1–8"},{"ref":"യോഹ 15:9–17","desc":"ഫലം പുറപ്പെടുവിക്കുവാനുള്ള നിയോഗം."}]},
+    {"day":21,"dayName":"ചൊവ്വ","season":"ഗ്രീഷ്മം രണ്ടാം ചൊവ്വ","feasts":[],"readings":[{"ref":"2 പത്രോ 3:8–13"},{"ref":"മത്താ 20:1–16","desc":"മുന്തിരിത്തോട്ടത്തിലെ വേലക്കാർ."}]},
+    {"day":22,"dayName":"ബുധൻ","season":"ഗ്രീഷ്മം രണ്ടാം ബുധൻ","feasts":["വിശുദ്ധ മഗ്‌ദലേന മറിയം"],"readings":[{"ref":"1 തെസ 5:12–22"},{"ref":"ലൂക്കാ 17:11–19","desc":"പത്ത് കുഷ്ഠരോഗികൾ."},{"ref":"റോമ 8:35–39"},{"ref":"യോഹ 20:1–18","desc":"മഗ്‌ദലേന‌മറിയം ഉത്ഥിതനെ പ്രഘോഷിക്കുന്നു."}]},
+    {"day":23,"dayName":"വ്യാഴം","season":"ഗ്രീഷ്മം രണ്ടാം വ്യാഴം","feasts":[],"readings":[{"ref":"ഗലാ 6:6–10"},{"ref":"മത്താ 21:18–22","desc":"അത്തിമരത്തിന് ശാപം."}]},
+    {"day":24,"dayName":"വെള്ളി","season":"ഗ്രീഷ്മം രണ്ടാം വെള്ളി (മാർ മാറി, മാർ അദ്ദായിയുടെ ശിഷ്യൻ)","feasts":["മാർ മാറി, മാർ അദ്ദായിയുടെ ശിഷ്യൻ"],"readings":[{"ref":"പുറ 29:38–46"},{"ref":"ശ്ലീഹ. നട. 2:37–42"},{"ref":"1 കൊറി 3:5–11"},{"ref":"യോഹ 14:1–11","desc":"ഈശോ പിതാവിലേക്കുള്ള വഴി."}]},
+    {"day":25,"dayName":"ശനി","season":"ഗ്രീഷ്മം രണ്ടാം ശനി","feasts":["മാർ യാക്കോബ് ശ്ലീഹ","മാർ യോവാക്കിം-, മർത്ത് അന്ന (ജൂലൈ 26)"],"readings":[{"ref":"റോമ 15:30–33"},{"ref":"മത്താ 7:7–11","desc":"പ്രാർത്ഥിക്കുന്നവർക്ക് നന്മകൾ നൽകപ്പെടും."},{"ref":"പുറ 24:12–18"},{"ref":"ശ്ലീഹ. നട. 11:27–12:3"},{"ref":"1 കൊറി 4:6–15"},{"ref":"മത്താ 20:20–28 (20:20–28)","desc":"ശുശ്രൂഷിക്കപ്പെടാനല്ല-, ശുശ്രൂഷിക്കാൻ."},{"ref":"1 സാമ 2:1–10"},{"ref":"ഏശ 54:1–8"},{"ref":"ഹെബ്രാ 11:8–12"},{"ref":"മത്താ 1:1–16","desc":"ഈശോ‌യുടെ വംശാവലി."}]},
+    {"day":26,"dayName":"ഞായർ","season":"ഗ്രീഷ്മം മൂന്നാം ഞായർ","feasts":[],"readings":[{"ref":"രൂത്ത് 1:6–18"},{"ref":"പ്രഭ 33:7–13"},{"ref":"റോമ 12:3–8"},{"ref":"ലൂക്കാ 10:38–42","desc":"മർത്തായും മറിയവും."}]},
+    {"day":27,"dayName":"തിങ്കൾ","season":"ഗ്രീഷ്മം മൂന്നാം തിങ്കൾ","feasts":[],"readings":[{"ref":"തീത്തോ 2:1–10"},{"ref":"മത്താ 7:12–20","desc":"സ്വർണ‌നിയമം."}]},
+    {"day":28,"dayName":"ചൊവ്വ","season":"ഗ്രീഷ്മം മൂന്നാം ചൊവ്വ","feasts":["മർത്ത് അൽഫോൻസ"],"readings":[{"ref":"1 കൊറി 7:1–7"},{"ref":"മത്താ 19:3–12","desc":"വിവാഹം-, ബ്രഹ്മചര്യം."},{"ref":"നിയ 28:8–12"},{"ref":"ഏശ 53:10–12"},{"ref":"ഗലാ 2:19–21"},{"ref":"യോഹ 12:20–26","desc":"ഗോതമ്പുമണിപോലെ നിലത്തുവീണ് അഴിയണം."}]},
+    {"day":29,"dayName":"ബുധൻ","season":"ഗ്രീഷ്മം മൂന്നാം ബുധൻ","feasts":["വിശുദ്ധ മർത്ത"],"readings":[{"ref":"റോമ 12:14–21"},{"ref":"യോഹ 13:1–15","desc":"മിശിഹായുടെ മാതൃക."},{"ref":"1 യോഹ 4:7–16"},{"ref":"യോഹ 11:3–26 (11:17–26)","desc":"ഉത്ഥാനവും ജീവനുമായ ഈശോ."}]},
+    {"day":30,"dayName":"വ്യാഴം","season":"ഗ്രീഷ്മം മൂന്നാം വ്യാഴം","feasts":[],"readings":[{"ref":"1 തിമോ 6:1–6"},{"ref":"മത്താ 21:28–32","desc":"ഭിന്ന‌സ്വഭാവ്‌ക്കാരായ പുത്രൻ‌മാർ."}]},
+    {"day":31,"dayName":"വെള്ളി","season":"ഗ്രീഷ്മം മൂന്നാം വെള്ളി","feasts":["വിശുദ്ധ ഇഗ്‌നേഷ്യസ് ലൊയൊള"],"readings":[{"ref":"റോമ 15:1–6"},{"ref":"മത്താ 18:21–35","desc":"കഠിന‌ഹൃദയനായ അധമർണൻ."},{"ref":"1 കൊറി 10:31–11:1"},{"ref":"ലൂക്കാ 14:25–33","desc":"മിശിഹായുടെ ശിഷ്യൻ സ്വയം ത്യജിക്കണം."}]}
+  ],
+  "August": [
+    {"day":1,"dayName":"ശനി","season":"ഗ്രീഷ്മം മൂന്നാം ശനി","feasts":["വിശുദ്ധ അൽഫോൻസ് ലിഗോരി"],"readings":[{"ref":"റോമ 13:1–7"},{"ref":"മത്താ 17:24–27","desc":"ദൈവാലയ‌നികുതി."},{"ref":"റോമ 8:1–11"},{"ref":"മർക്കോ 12:28–33","desc":"നീ ദൈവ‌രാജ്യത്തിൽ‌നിന്ന് അകലെയല്ല."}]},
+    {"day":2,"dayName":"ഞായർ","season":"ഗ്രീഷ്മം നാലാം ഞായർ","feasts":[],"readings":[{"ref":"നിയ 6:1–9"},{"ref":"എസേ 3:16–21"},{"ref":"2 തെസ 2:13–17"},{"ref":"മത്താ 13:44–52","desc":"ദൈവ‌രാജ്യത്തിന്റെ വളർച്ച."}]},
+    {"day":3,"dayName":"തിങ്കൾ","season":"ഗ്രീഷ്മം നാലാം തിങ്കൾ","feasts":[],"readings":[{"ref":"എഫേ 1:15–20"},{"ref":"മർക്കോ 8:22–30","desc":"അന്ധന് കാഴ്ച."}]},
+    {"day":4,"dayName":"ചൊവ്വ","season":"ഗ്രീഷ്മം നാലാം ചൊവ്വ","feasts":["വി. ജോൺ മറിയ വിയാനി"],"readings":[{"ref":"1 കൊറി 1:10–17"},{"ref":"യോഹ 3:22–30","desc":"അവൻ വളരുകയും ഞാൻ കുറയുകയും വേണം."},{"ref":"1 സാമ 21:1–6"},{"ref":"എസേ 36:22–27"},{"ref":"2 കൊറി 1:3–7"},{"ref":"മത്താ 9:35–10:1","desc":"ജനത്തോടു അനുകമ്പ‌തോന്നിയ ഈശോ."}]},
+    {"day":5,"dayName":"ബുധൻ","season":"ഗ്രീഷ്മം നാലാം ബുധൻ","feasts":[],"readings":[{"ref":"ഗലാ 3:19–25"},{"ref":"ലൂക്കാ 10:25–37","desc":"നല്ല സമരിയാക്കാരൻ."}]},
+    {"day":6,"dayName":"വ്യാഴം","season":"ഗ്രീഷ്മം നാലാം വ്യാഴം — നമ്മുടെ കർത്താവ് ഈശോ മിശിഹായുടെ രൂപാന്തരീകരണ തിരുനാൾ","feasts":["കർത്താവിന്റെ രൂപാന്തരീകരണ‌തിരുനാൾ"],"readings":[{"ref":"പുറ 19:1–8 + 20:18–21"},{"ref":"ശ്ലീഹ. നട. 1:15–26"},{"ref":"ഹെബ്രാ 12:18–29"},{"ref":"മത്താ 17:1–9","desc":"കർത്താവിന്റെ രൂപാന്തരീകരണം."}]},
+    {"day":7,"dayName":"വെള്ളി","season":"ഗ്രീഷ്മം നാലാം വെള്ളി","feasts":[],"readings":[{"ref":"റോമ 14:13–23"},{"ref":"മർക്കോ 9:42–50","desc":"ഇടർച്ച നൽകുന്നവന് ദുരിതം."}]},
+    {"day":8,"dayName":"ശനി","season":"ഗ്രീഷ്മം നാലാം ശനി","feasts":["വിശുദ്ധ ഡൊമിനിക്, വൈദികൻ"],"readings":[{"ref":"റോമ 2:17–24"},{"ref":"മത്താ 15:10–20","desc":"അന്ധരെ നയിക്കുന്ന അന്ധരായ മാർഗദർശികൾ."},{"ref":"1 കൊറി 2:1–10"},{"ref":"ലൂക്കാ 9:57–62","desc":"നീ പോയി ദൈവ‌രാജ്യം പ്രസംഗിക്കുക."}]},
+    {"day":9,"dayName":"ഞായർ","season":"ഗ്രീഷ്മം അഞ്ചാം ഞായർ","feasts":[],"readings":[{"ref":"ലേവ്യ 16:20–28"},{"ref":"ഏശ 14:1–15"},{"ref":"യൂദ 1:8–13"},{"ref":"ലൂക്കാ 11:14–26","desc":"അന്തശ്ഛിദ്ര‌മുള്ള ഭവനം നശിക്കും."}]},
+    {"day":10,"dayName":"തിങ്കൾ","season":"ഗ്രീഷ്മം അഞ്ചാം തിങ്കൾ","feasts":[],"readings":[{"ref":"വെളി 12:7–12"},{"ref":"ലൂക്കാ 8:26–39","desc":"പിശാചു‌ബാധിതനെ സുഖപ്പെടുത്തുന്നു."}]},
+    {"day":11,"dayName":"ചൊവ്വ","season":"ഗ്രീഷ്മം അഞ്ചാം ചൊവ്വ","feasts":["വിശുദ്ധ ക്ലാര, കന്യക"],"readings":[{"ref":"1 യോഹ 3:1–10"},{"ref":"യോഹ 8:37–47","desc":"ദൈവത്തിൽ‌നിന്നുള്ളവൻ ദൈവ‌വചനം ശ്രവിക്കുന്നു."},{"ref":"നിയ 17:2–9"},{"ref":"ഏശ 62:1–5"},{"ref":"ഫിലി 3:8–14"},{"ref":"മത്താ 19:27–29","desc":"നൂറിരട്ടി പ്രതിഫലം."}]},
+    {"day":12,"dayName":"ബുധൻ","season":"ഗ്രീഷ്മം അഞ്ചാം ബുധൻ","feasts":[],"readings":[{"ref":"1 തെസ 4:1–8"},{"ref":"മത്താ 21:12–17","desc":"ദൈവാലയ‌ശുദ്ധീകരണം."}]},
+    {"day":13,"dayName":"വ്യാഴം","season":"ഗ്രീഷ്മം അഞ്ചാം വ്യാഴം","feasts":[],"readings":[{"ref":"1 തെസ 3:6–13"},{"ref":"മർക്കോ 1:40–45","desc":"കുഷ്ഠരോഗിയെ ശുദ്ധ‌മാക്കുന്നു."}]},
+    {"day":14,"dayName":"വെള്ളി","season":"ഗ്രീഷ്മം അഞ്ചാം വെള്ളി — മർത്ത് ശ്‌മോനിയും ഏഴുമക്കളും","feasts":["മർത്ത് ശ്‌മോനിയും ഏഴുമക്കളും","വിശുദ്ധ മാക്‌സിമിലിയൻ കോൾബേ, വൈദികൻ"],"readings":[{"ref":"2 മക്കാ 7:1–6, 20–23, 41"},{"ref":"ദാനി 6:1–17"},{"ref":"2 കൊറി 6:1–10"},{"ref":"യോഹ 16:25–33","desc":"ധൈര്യപ്പെടുവിൻ, ഞാൻ ലോകത്തെ ജയിച്ചിരിക്കുന്നു."},{"ref":"1 പത്രോ 3:14–17"},{"ref":"ലൂക്കാ 9:23–26","desc":"മിശിഹായെ‌പ്രതി ജീവൻ ത്യജിക്കുക."}]},
+    {"day":15,"dayName":"ശനി","season":"പരിശുദ്ധ‌മറിയത്തിന്റെ സ്ഥൽദൈഹിക ആരോഹണ‌തിരുനാൾ (ദോർമിഷൻ)","feasts":["പരിശുദ്ധ‌മറിയത്തിന്റെ സ്ഥൽദൈഹിക ആരോഹണ‌തിരുനാൾ (ദോർമിഷൻ)","ഇന്ത്യൻ സ്വാതന്ത്ര്യദിനം"],"readings":[{"ref":"പുറ 15:11–18"},{"ref":"ശ്ലീഹ. നട. 1:6–14"},{"ref":"റോമ 16:17–27 (16:17–27)"},{"ref":"യോഹ 2:1–12 + മത്താ 12:46–50 + 13:53–57 + ലൂക്കാ 11:27–28 (യോഹ 2:1–12)","desc":"ഈശോ നിങ്ങളോടു പറയുന്നതു ചെയ്യുവിൻ."}]},
+    {"day":16,"dayName":"ഞായർ","season":"ഗ്രീഷ്മം ആറാം ഞായർ","feasts":[],"readings":[{"ref":"ഉത്പ 8:1–11"},{"ref":"ഉത്ത. ഗാ. 6:1–4"},{"ref":"വെളി 21:9–14"},{"ref":"യോഹ 6:16–24","desc":"സഭയാകുന്ന നൗകയെ സംരക്ഷിക്കുന്ന മിശിഹാ."}]},
+    {"day":17,"dayName":"തിങ്കൾ","season":"ഗ്രീഷ്മം ആറാം തിങ്കൾ","feasts":[],"readings":[{"ref":"എഫേ 5:22–33"},{"ref":"മത്താ 16:13–20","desc":"പാതാളവാതിലുകൾ സഭയ്‌ക്കെതിരേ പ്രബലപ്പെടുകയില്ല."}]},
+    {"day":18,"dayName":"ചൊവ്വ","season":"ഗ്രീഷ്മം ആറാം ചൊവ്വ","feasts":[],"readings":[{"ref":"ശ്ലീഹ. നട. 4:32–37"},{"ref":"ലൂക്കാ 12:22–34","desc":"ദൈവ‌പരിപാലനയിൽ ആശ്രയിക്കുക."}]},
+    {"day":19,"dayName":"ബുധൻ","season":"ഗ്രീഷ്മം ആറാം ബുധൻ","feasts":[],"readings":[{"ref":"എഫേ 4:1–6"},{"ref":"യോഹ 21:1–12","desc":"ഭാരം ഉണ്ടായിട്ടും വല കീറിയില്ല."}]},
+    {"day":20,"dayName":"വ്യാഴം","season":"ഗ്രീഷ്മം ആറാം വ്യാഴം","feasts":[],"readings":[{"ref":"2 കൊറി 3:12–18"},{"ref":"യോഹ 8:31–38","desc":"സത്യം നിങ്ങളെ സ്വതന്ത്രരാക്കും."}]},
+    {"day":21,"dayName":"വെള്ളി","season":"ഗ്രീഷ്മം ആറാം വെള്ളി — മാർ ശിമ്യോൻ ബർ‌സബ്ബായും സഹ‌രക്ത‌സാക്ഷികളും","feasts":["മാർ ശിമ്യോൻ ബർ‌സബ്ബായും സഹ‌രക്ത‌സാക്ഷികളും","വിശുദ്ധ പത്താം പീയൂസ് മാർ‌പ്പാപ്പ"],"readings":[{"ref":"ഏശ 50:4–10"},{"ref":"ശ്ലീഹ. നട. 20:17–24"},{"ref":"2 കൊറി 6:1–10"},{"ref":"യോഹ 15:18–21; 16:1–4","desc":"എന്നെ പീഡിപ്പിച്ചുവെങ്കിൽ നിങ്ങളെയും പീഡിപ്പിക്കും."},{"ref":"1 രാജ 19:3–8"},{"ref":"സൂക്തി 9:1–5"},{"ref":"1 തെസ 2:2–4"},{"ref":"യോഹ 21:15–19","desc":"എന്റെ ആടുകളെ മേയ്ക്കുക."}]},
+    {"day":22,"dayName":"ശനി","season":"ഗ്രീഷ്മം ആറാം ശനി","feasts":[],"readings":[{"ref":"1 കൊറി 12:12–27"},{"ref":"മത്താ 18:15–20","desc":"നിങ്ങളുടെ മദ്ധ്യേ ഞാൻ ഉണ്ടായിരിക്കും."}]},
+    {"day":23,"dayName":"ഞായർ","season":"ഗ്രീഷ്മം ഏഴാം ഞായർ","feasts":[],"readings":[{"ref":"ഉത്പ 6:13–22"},{"ref":"ജെറ 32:36–41"},{"ref":"യാക്കോ 4:1–10"},{"ref":"മത്താ 6:19–24","desc":"സ്വർഗത്തിൽ നിക്ഷേപം സൂക്ഷിക്കുക."}]},
+    {"day":24,"dayName":"തിങ്കൾ","season":"ഗ്രീഷ്മം ഏഴാം തിങ്കൾ","feasts":["മാർ ബർ‌ത്തൊലൊമേ ശ്ലീഹ"],"readings":[{"ref":"1 കൊറി 9:24–27"},{"ref":"മർക്കോ 12:28–34","desc":"ദൈവ‌രാജ്യത്തിലേക്കുള്ള സ്വർണ‌നിയമം."},{"ref":"നിയ 18:15–19"},{"ref":"ഏശ 22:15–22"},{"ref":"1 കൊറി 12:27–31"},{"ref":"ലൂക്കാ 6:12–19","desc":"ശ്ലീഹന്മാരെ തിരഞ്ഞെടുക്കുന്നു."}]},
+    {"day":25,"dayName":"ചൊവ്വ","season":"ഗ്രീഷ്മം ഏഴാം ചൊവ്വ","feasts":[],"readings":[{"ref":"2 പത്രോ 1:1–11"},{"ref":"ലൂക്കാ 12:13–21","desc":"ഭോഷ്‌നായ ധനികൻ."}]},
+    {"day":26,"dayName":"ബുധൻ","season":"ഗ്രീഷ്മം ഏഴാം ബുധൻ","feasts":[],"readings":[{"ref":"1 യോഹ 3:11–18"},{"ref":"ലൂക്കാ 16:19–31","desc":"ധനവാനും ദരിദ്രനും."}]},
+    {"day":27,"dayName":"വ്യാഴം","season":"ഗ്രീഷ്മം ഏഴാം വ്യാഴം","feasts":[],"readings":[{"ref":"1 കൊറി 6:1–11"},{"ref":"ലൂക്കാ 6:27–36","desc":"നിങ്ങളുടെ പ്രതിഫലം വലുതായിരിക്കും."}]},
+    {"day":28,"dayName":"വെള്ളി","season":"ഗ്രീഷ്മം ഏഴാം വെള്ളി","feasts":["വിശുദ്ധ അഗസ്റ്റിൻ, ബിഷപ്പ്","മർത്ത് ഏവ്‌പ്രേഷ്യ"],"readings":[{"ref":"2 കൊറി 9:6–15"},{"ref":"മത്താ 19:13–24","desc":"സ്വർഗത്തിൽ നിനക്കു നിക്ഷേപ‌മുണ്ടാകും."},{"ref":"ദാനി 6:6–24"},{"ref":"ശ്ലീഹ. നട. 12:1–13"},{"ref":"2 കൊറി 12:1–14"},{"ref":"മത്താ 10:37–42 + 16:24–27 + 19:27–31","desc":"ഒന്നാമൻ ഏവരുടെയും ദാസൻ."},{"ref":"നിയ 10:12–17"},{"ref":"ജ്ഞാനം 7:10–14"},{"ref":"2 കൊറി 5:14–21"},{"ref":"മത്താ 5:13–19","desc":"ഭൂമിയുടെ ഉപ്പും ലോകത്തിന്റെ പ്രകാശവും."}]},
+    {"day":29,"dayName":"ശനി","season":"ഗ്രീഷ്മം ഏഴാം ശനി","feasts":["മർത്ത് ഏവ്‌പ്രേഷ്യ"],"readings":[{"ref":"ഫിലേ 1:8–20"},{"ref":"മത്താ 10:5–15","desc":"ശിഷ്യരെ സ്വീകരിക്കുന്നവർക്ക് സ്വർഗ‌രാജ്യത്തിൽ പ്രതിഫലം."},{"ref":"ഉത്പ 12:1–4"},{"ref":"പ്രഭ 2:1–6"},{"ref":"1 തെസ 4:1–8"},{"ref":"മർക്കോ 10:35–45","desc":"ഒന്നാമൻ ഏവരുടെയും ദാസൻ."}]},
+    {"day":30,"dayName":"ഞായർ","season":"ഏലിയ ഒന്നാം ഞായർ","feasts":[],"readings":[{"ref":"പുറ 34:28–35"},{"ref":"2 ദിന 5:11–14"},{"ref":"1 കൊറി 15:35–50"},{"ref":"മർക്കോ 9:2–13","desc":"ഈശോ‌യുടെ രൂപാന്തരഭാവം."}]},
+    {"day":31,"dayName":"തിങ്കൾ","season":"ഏലിയ ഒന്നാം തിങ്കൾ","feasts":[],"readings":[{"ref":"1 കൊറി 2:9–15"},{"ref":"ലൂക്കാ 23:33–43","desc":"നിന്റെ രാജ്യത്തിൽ എന്നെ ഓർക്കണമേ."}]}
+  ],
+  "September": [
+    {"day":1,"dayName":"ചൊവ്വ","season":"ഏലിയ ഒന്നാം ചൊവ്വ (എട്ടുനോമ്പ്‌ ആരംഭം)","feasts":[],"readings":[{"ref":"1 യോഹ 1:1–7"},{"ref":"യോഹ 8:12–20","desc":"ഈശോ ലോകത്തിന്റെ പ്രകാശം."}]},
+    {"day":2,"dayName":"ബുധൻ","season":"ഏലിയ ഒന്നാം ബുധൻ","feasts":[],"readings":[{"ref":"1 കൊറി 6:12–20"},{"ref":"മത്താ 5:27–32","desc":"വ്യഭിചാരം ചെയ്യരുത്."}]},
+    {"day":3,"dayName":"വ്യാഴം","season":"ഏലിയ ഒന്നാം വ്യാഴം","feasts":[],"readings":[{"ref":"ഫിലി 3:17–21"},{"ref":"മത്താ 18:1–5","desc":"സ്വർഗ‌രാജ്യത്തിലെ വലിയവൻ."}]},
+    {"day":4,"dayName":"വെള്ളി","season":"ഏലിയ ഒന്നാം വെള്ളി","feasts":[],"readings":[{"ref":"1 കൊറി 15:12–22"},{"ref":"യോഹ 11:17–27","desc":"ഞാൻ ആകുന്നു ഉത്ഥാനവും ജീവനും."}]},
+    {"day":5,"dayName":"ശനി","season":"ഏലിയ ഒന്നാം ശനി","feasts":["കൊൽക്കത്തയിലെ വി. തേരേസ, കന്യക"],"readings":[{"ref":"1 കൊറി 15:50–58"},{"ref":"മത്താ 22:23–33","desc":"മരിച്ചവരുടെ ഉത്ഥാനം."},{"ref":"യാക്കോ 2:14–17"},{"ref":"മത്താ 25:31–40","desc":"എളിയ സഹോദരരിൽ ഈശോയെ കാണണം."}]},
+    {"day":6,"dayName":"ഞായർ","season":"ഏലിയ രണ്ടാം ഞായർ","feasts":[],"readings":[{"ref":"നിയ 18:14–22"},{"ref":"പ്രഭ 48:1–11"},{"ref":"ഹെബ്രാ 11:23–29"},{"ref":"മത്താ 17:9–13","desc":"ഏലിയായുടെ ആഗമനം."}]},
+    {"day":7,"dayName":"തിങ്കൾ","season":"ഏലിയ രണ്ടാം തിങ്കൾ","feasts":[],"readings":[{"ref":"ഗലാ 5:19–26"},{"ref":"ലൂക്കാ 3:7–14","desc":"യോഹന്നാൻ മാമ്ദാനായുടെ പ്രസംഗം."}]},
+    {"day":8,"dayName":"ചൊവ്വ","season":"പരിശുദ്ധ‌മറിയത്തിന്റെ ജൻമ‌തിരുനാൾ","feasts":["പരിശുദ്ധ‌മറിയത്തിന്റെ ജൻമ‌തിരുനാൾ"],"readings":[{"ref":"ഉത്പ 17:1–27 (17:15–22)"},{"ref":"ഏശ 42:18–43:13 (43:1–7)"},{"ref":"വെളി 12:1–6"},{"ref":"മത്താ 1:1–16","desc":"ഈശോ‌യുടെ വംശാവലി."}]},
+    {"day":9,"dayName":"ബുധൻ","season":"ഏലിയ രണ്ടാം ബുധൻ","feasts":[],"readings":[{"ref":"യാക്കോ 3:1–12"},{"ref":"മത്താ 12:33–37","desc":"വ്യർഥ‌മായ ഓരോ വചനത്തിനും വിധിദിവസം കണക്കു കേൾക്കണം."}]},
+    {"day":10,"dayName":"വ്യാഴം","season":"ഏലിയ രണ്ടാം വ്യാഴം","feasts":[],"readings":[{"ref":"ഗലാ 5:13–18"},{"ref":"ലൂക്കാ 21:29–38","desc":"മുൻ‌അറിയിപ്പുകൾ."}]},
+    {"day":11,"dayName":"വെള്ളി","season":"ഏലിയ രണ്ടാം വെള്ളി","feasts":[],"readings":[{"ref":"2 തിമോ 3:1–9"},{"ref":"മത്താ 24:1–14","desc":"യാതനകളുടെ ആരംഭം."}]},
+    {"day":12,"dayName":"ശനി","season":"ഏലിയ രണ്ടാം ശനി","feasts":["വിശുദ്ധ ജോൺ ക്രിസോസ്‌തോം (സെപ്‌തംബർ 13)"],"readings":[{"ref":"വെളി 2:1–7"},{"ref":"ലൂക്കാ 13:1–5","desc":"അനുതപിക്കുകയില്ലെങ്കിൽ നിങ്ങളും നശിക്കും."},{"ref":"എഫേ 4:1–7, 11–13"},{"ref":"മർക്കോ 4:1–9","desc":"വിതക്കപ്പെട്ട വചനം."}]},
+    {"day":13,"dayName":"ഞായർ","season":"ഏലിയ മൂന്നാം ഞായർ — മാർ ശ്ലോഹ കണ്ടെ‌ത്തിയ തിരുനാൾ","feasts":[],"readings":[{"ref":"സംഖ്യ 24:15–24"},{"ref":"സഖ 14:1–9"},{"ref":"1 കൊറി 7:29–35"},{"ref":"മത്താ 24:32–44","desc":"ഉണർന്നിരിക്കുവിൻ."}]},
+    {"day":14,"dayName":"തിങ്കൾ","season":"വിശുദ്ധ കുർശ്ശിന്റെ ഉന്നമന‌തിരുനാൾ — മാർ ശ്ലോഹായുടെ പ്രശസ്തിയുടെ തിരുനാൾ","feasts":["വിശുദ്ധ‌കുർശ്ശിന്റെ ഉന്നമന‌തിരുനാൾ"],"readings":[{"ref":"സംഖ്യ 21:4–9"},{"ref":"ഏശ 42:13–17 (42:13–17)"},{"ref":"1 കൊറി 1:18–31 (1:18–25)"},{"ref":"ലൂക്കാ 24:13–35 (24:13–27)","desc":"മിശിഹാ സഹനത്തിലൂടെ മഹത്ത്വത്തിലേക്ക്."}]},
+    {"day":15,"dayName":"ചൊവ്വ","season":"ഏലിയ മൂന്നാം ചൊവ്വ","feasts":[],"readings":[{"ref":"വെളി 3:14–22"},{"ref":"മർക്കോ 11:12–14, 20–26","desc":"അത്തിമരത്തെ ശപിക്കുന്നു."}]},
+    {"day":16,"dayName":"ബുധൻ","season":"ഏലിയ മൂന്നാം ബുധൻ","feasts":[],"readings":[{"ref":"വെളി 22:10–19"},{"ref":"മത്താ 25:1–13","desc":"വിവേക‌മതികൾ അകത്തു പ്രവേശിക്കും."}]},
+    {"day":17,"dayName":"വ്യാഴം","season":"ഏലിയ മൂന്നാം വ്യാഴം","feasts":[],"readings":[{"ref":"1 തിമോ 4:1–11"},{"ref":"മർക്കോ 13:32–37","desc":"സദാ ജാഗ്രൂകത."}]},
+    {"day":18,"dayName":"വെള്ളി","season":"ഏലിയ മൂന്നാം വെള്ളി","feasts":[],"readings":[{"ref":"1 പത്രോ 5:5–11"},{"ref":"ലൂക്കാ 22:39–46","desc":"പ്രലോഭനത്തിൽ ഉൾ‌പ്പെടാതിരിക്കാൻ ഉണർന്നിരുന്നു പ്രാർത്ഥിക്കുവിൻ."}]},
+    {"day":19,"dayName":"ശനി","season":"ഏലിയ മൂന്നാം ശനി","feasts":[],"readings":[{"ref":"എഫേ 6:10–18"},{"ref":"ലൂക്കാ 12:35–40","desc":"ജാഗ്രൂകരായ ഭൃത്യൻ‌മാർ."}]},
+    {"day":20,"dayName":"ഞായർ","season":"ശ്ലോഹ ഒന്നാം ഞായർ (ശ്ലോഹ‌ ഒന്നാം ഞായർ)","feasts":[],"readings":[{"ref":"സംഖ്യ 21:1–9"},{"ref":"സഖ 10:8–12"},{"ref":"ഗലാ 6:11–18"},{"ref":"മത്താ 10:34–42","desc":"കുരിശുമെടുത്ത് എന്നെ അനുഗമിക്കാത്തവൻ എനിക്കു യോജിച്ചവനല്ല."}]},
+    {"day":21,"dayName":"തിങ്കൾ","season":"ശ്ലോഹ ഒന്നാം തിങ്കൾ","feasts":["മാർ മത്തായി ശ്ലീഹ"],"readings":[{"ref":"2 കൊറി 10:1–6"},{"ref":"ലൂക്കാ 18:31–34","desc":"സഹനവും ഉത്ഥാനവും: മൂന്നാം പ്രവചനം."},{"ref":"1 ദിന 29:10–19"},{"ref":"എസേ 1:1–14"},{"ref":"ഹെബ്രാ 11:23–26"},{"ref":"മത്താ 9:9–13","desc":"ലേവിയെ ശിഷ്യനാക്കുന്ന ഈശോ."}]},
+    {"day":22,"dayName":"ചൊവ്വ","season":"ശ്ലോഹ ഒന്നാം ചൊവ്വ","feasts":[],"readings":[{"ref":"കൊളോ 2:6–15"},{"ref":"യോഹ 3:13–21","desc":"ഈശോ ഉയർത്തപ്പെടേണ്ടതിരിക്കുന്നു."}]},
+    {"day":23,"dayName":"ബുധൻ","season":"ശ്ലോഹ ഒന്നാം ബുധൻ","feasts":[],"readings":[{"ref":"ഹെബ്രാ 12:1–3"},{"ref":"ലൂക്കാ 24:13–35","desc":"എമ്മാവൂസിലേക്കു പോയവരോടൊന്നിച്ച് ഈശോ‌യും യാത്ര ചെയ്തു."}]},
+    {"day":24,"dayName":"വ്യാഴം","season":"ശ്ലോഹ ഒന്നാം വ്യാഴം","feasts":[],"readings":[{"ref":"എഫേ 2:11–22"},{"ref":"യോഹ 11:45–57","desc":"ജനത്തിനുവേണ്ടിയുള്ള ഈശോ‌യുടെ മരണം."}]},
+    {"day":25,"dayName":"വെള്ളി","season":"ശ്ലോഹ ഒന്നാം വെള്ളി","feasts":[],"readings":[{"ref":"ശ്ലീഹ. നട. 4:1–12"},{"ref":"ലൂക്കാ 20:9–19","desc":"പണിക്കാർ ഉപേക്ഷിച്ചുകളഞ്ഞ കല്ല് പ്രധാന‌ മൂലക്കല്ലായിത്തീർന്നു."}]},
+    {"day":26,"dayName":"ശനി","season":"ശ്ലോഹ ഒന്നാം ശനി","feasts":["വിശുദ്ധ വിൻ‌സെന്റ് ദ പോൾ, വൈദികൻ (സെപ്‌തംബർ 27)"],"readings":[{"ref":"ഫിലി 3:17–21"},{"ref":"മത്താ 16:21–27","desc":"കുരിശിനെ നിരസിക്കുന്നവൻ സാത്താൻ."},{"ref":"നിയ 24:10–18"},{"ref":"ഏശ 42:1–9"},{"ref":"1 കൊറി 1:26–31"},{"ref":"മത്താ 9:35–38","desc":"നന്മ ചെയ്‌തുകൊണ്ടു ചുറ്റി സഞ്ചരിച്ച ഈശോ."}]},
+    {"day":27,"dayName":"ഞായർ","season":"ശ്ലോഹ രണ്ടാം ഞായർ","feasts":[],"readings":[{"ref":"ഉത്പ 9:8–17"},{"ref":"ദാനി 7:9–14"},{"ref":"1 കൊറി 1:18–25"},{"ref":"മത്താ 24:29–36","desc":"മനുഷ്യ‌പുത്രന്റെ അടയാളം."}]},
+    {"day":28,"dayName":"തിങ്കൾ","season":"ശ്ലോഹ രണ്ടാം തിങ്കൾ","feasts":[],"readings":[{"ref":"1 കൊറി 10:1–13"},{"ref":"മത്താ 24:15–28","desc":"യുഗാന്തത്തെക്കുറിച്ചുള്ള മുൻ‌അറിയിപ്പുകൾ."}]},
+    {"day":29,"dayName":"ചൊവ്വ","season":"ശ്ലോഹ രണ്ടാം ചൊവ്വ","feasts":["പ്രധാന മാലാഖ‌മാരായ മിഖായേൽ, ഗബ്രിയേൽ, റഫായേൽ"],"readings":[{"ref":"1 യോഹ 2:18–29"},{"ref":"യോഹ 7:25–31, 40–43","desc":"ഇവനാണ് മിശിഹാ."},{"ref":"പുറ 23:20–26"},{"ref":"തോബി 12:6–15"},{"ref":"വെളി 12:7–12"},{"ref":"യോഹ 1:43–51","desc":"മാലാഖ‌മാർ കയറിപ്പോകുന്നതും ഇറങ്ങിവരുന്നതും."}]},
+    {"day":30,"dayName":"ബുധൻ","season":"ശ്ലോഹ രണ്ടാം ബുധൻ","feasts":["വിശുദ്ധ ജെറോം, വൈദികൻ"],"readings":[{"ref":"വെളി 19:11–15"},{"ref":"ലൂക്കാ 12:54–59","desc":"വഴിയിൽ വച്ചുതന്നെ ശത്രുവിനോടു രമ്യ‌പ്പെടുക."},{"ref":"നിയ 7:6–11 (7:6–11)"},{"ref":"പ്രഭ 24:12–17"},{"ref":"2 തിമോ 3:12–17"},{"ref":"മത്താ 13:44–52","desc":"ദൈവ‌രാജ്യത്തെ‌പ്പറ്റി ഉപമകൾ."}]}
+  ],
+ 
+     "October": [
+    {"day":1,"dayName":"വ്യാഴം","season":"ശ്ലോഹ രണ്ടാം വ്യാഴം","feasts":["വിശുദ്ധ കൊച്ചു‌ത്രേസ്യ"],"readings":[{"ref":"1 കൊറി 5:9–13; 6:9–11"},{"ref":"ലൂക്കാ 17:20–25","desc":"ദൈവ‌രാജ്യം നിങ്ങളിൽ‌തന്നെ."},{"ref":"നിയ 32:8–12"},{"ref":"ഏശ 66:12–18 (66:12–18)"},{"ref":"എഫേ 3:14–19"},{"ref":"മത്താ 18:1–5","desc":"ശിശുക്കളെ‌പ്പോലെ‌യാവുക."}]},
+    {"day":2,"dayName":"വെള്ളി","season":"ശ്ലോഹ രണ്ടാം വെള്ളി","feasts":["കാവൽ‌മാലാഖ‌മാർ"],"readings":[{"ref":"2 പത്രോ 3:1–7"},{"ref":"ലൂക്കാ 17:26–35","desc":"മനുഷ്യ‌പുത്രന്റെ ആഗമനം."},{"ref":"ശ്ലീഹ. നട. 12:6–11"},{"ref":"മത്താ 18:10–14","desc":"ഇവരുടെ ദൂതൻ‌മാർ നിരന്തരം ദൈവത്തെ കാണുന്നു."}]},
+    {"day":3,"dayName":"ശനി","season":"ശ്ലോഹ രണ്ടാം ശനി","feasts":["വിശുദ്ധ ഫ്രാൻസിസ് അസ്സീസി (ഒക്‌ടോബർ 4)"],"readings":[{"ref":"2 പത്രോ 3:10–13"},{"ref":"മത്താ 4:12–17","desc":"സ്വർഗ‌രാജ്യം സമീപിച്ചിരിക്കുന്നു."},{"ref":"നിയ 15:7–11"},{"ref":"ഏശ 6:1–7"},{"ref":"ഗലാ 6:14–17"},{"ref":"മത്താ 11:25–30","desc":"ക്ലേശിതർക്കാശ്രയ‌മായ ഈശോ."}]},
+    {"day":4,"dayName":"ഞായർ","season":"ശ്ലോഹ മൂന്നാം ഞായർ","feasts":[],"readings":[{"ref":"ഉത്പ 41:37–45"},{"ref":"പ്രഭ 47:2–3, 8–11"},{"ref":"ഹെബ്രാ 1:1–4"},{"ref":"യോഹ 12:27–36","desc":"മനുഷ്യ‌പുത്രൻ ഉയർത്തപ്പെടും."}]},
+    {"day":5,"dayName":"തിങ്കൾ","season":"ശ്ലോഹ മൂന്നാം തിങ്കൾ","feasts":[],"readings":[{"ref":"1 യോഹ 4:1–6"},{"ref":"യോഹ 3:31–36","desc":"ഉന്നതത്തിൽ‌നിന്നു വന്നവൻ."}]},
+    {"day":6,"dayName":"ചൊവ്വ","season":"ശ്ലോഹ മൂന്നാം ചൊവ്വ","feasts":[],"readings":[{"ref":"ഹെബ്രാ 2:5–10"},{"ref":"ലൂക്കാ 14:7–11","desc":"സ്വയം താഴ്ത്തുന്നവൻ ഉയർത്തപ്പെടും."}]},
+    {"day":7,"dayName":"ബുധൻ","season":"ശ്ലോഹ മൂന്നാം ബുധൻ","feasts":["ജപ‌മാല‌ തിരുനാൾ"],"readings":[{"ref":"ഫിലി 1:19–26"},{"ref":"യോഹ 13:31–35","desc":"മനുഷ്യ‌പുത്രൻ മഹത്ത്വ‌പ്പെട്ടിരിക്കുന്നു."},{"ref":"ശ്ലീഹ. നട. 1:12–14"},{"ref":"ലൂക്കാ 1:26–31","desc":"(തിരുനാൾ)"}]},
+    {"day":8,"dayName":"വ്യാഴം","season":"ശ്ലോഹ മൂന്നാം വ്യാഴം","feasts":[],"readings":[{"ref":"ഫിലി 2:5–11"},{"ref":"യോഹ 17:1–8","desc":"നിന്റെ പുത്രനെ നീ മഹത്ത്വ‌പ്പെടുത്തണമേ."}]},
+    {"day":9,"dayName":"വെള്ളി","season":"ശ്ലോഹ മൂന്നാം വെള്ളി","feasts":[],"readings":[{"ref":"റോമ 8:12–17"},{"ref":"യോഹ 17:9–19","desc":"ഞാൻ അവരിൽ മഹത്ത്വ‌പ്പെടുന്നു."}]},
+    {"day":10,"dayName":"ശനി","season":"ശ്ലോഹ മൂന്നാം ശനി","feasts":[],"readings":[{"ref":"2 കൊറി 3:12–18"},{"ref":"യോഹ 17:20–26","desc":"എന്റെ മഹത്ത്വം വിശ്വാസികളും കാണണം."}]},
+    {"day":11,"dayName":"ഞായർ","season":"മൂശ ഒന്നാം ഞായർ","feasts":[],"readings":[{"ref":"പുറ 20:18–21"},{"ref":"ജോ'യ്ലേ 2:1–11"},{"ref":"ഹെബ്രാ 10:19–25"},{"ref":"മത്താ 25:31–46","desc":"അന്ത്യ‌വിധി."}]},
+    {"day":12,"dayName":"തിങ്കൾ","season":"മൂശ ഒന്നാം തിങ്കൾ","feasts":[],"readings":[{"ref":"1 കൊറി 15:29–34"},{"ref":"യോഹ 5:24–29","desc":"മരിച്ചവർ ദൈവ‌പുത്രന്റെ സ്വരം കേൾക്കുന്ന സമയം വരുന്നു."}]},
+    {"day":13,"dayName":"ചൊവ്വ","season":"മൂശ ഒന്നാം ചൊവ്വ","feasts":[],"readings":[{"ref":"റോമ 3:1–8"},{"ref":"ലൂക്കാ 15:11–32","desc":"നഷ്ടപ്പെട്ട പുത്രന്റെ ഉപമ."}]},
+    {"day":14,"dayName":"ബുധൻ","season":"മൂശ ഒന്നാം ബുധൻ","feasts":[],"readings":[{"ref":"ഹെബ്രാ 12:25–29"},{"ref":"മർക്കോ 13:24–31","desc":"മനുഷ്യ‌പുത്രന്റെ ആഗമനം."}]},
+    {"day":15,"dayName":"വ്യാഴം","season":"മൂശ ഒന്നാം വ്യാഴം","feasts":["ആവിലായിലെ വിശുദ്ധ തേരേസ, കന്യക"],"readings":[{"ref":"1 പത്രോ 1:13–21"},{"ref":"മത്താ 15:1–9","desc":"ഹൃദയ‌പരിശുദ്ധിയാണ് പ്രധാനം."},{"ref":"നിയ 11:13–17"},{"ref":"ഏശ 61:10–11"},{"ref":"കൊളോ 2:20–3:4"},{"ref":"യോഹ 14:18–24","desc":"സ്‌നേഹ‌വും ദൈവൈക്യ‌വും."}]},
+    {"day":16,"dayName":"വെള്ളി","season":"മൂശ ഒന്നാം വെള്ളി","feasts":["വാഴ്ത്ത‌പ്പെട്ട കുഞ്ഞ‌ച്ചൻ (തേവർ‌പ്പ‌ടി)","വിശുദ്ധ ലൂക്ക സുവിശേഷകൻ (ഒക്‌ടോബർ 18)"],"readings":[{"ref":"1 തെസ 5:1–11"},{"ref":"മത്താ 24:43–51","desc":"നിങ്ങൾ ഒരുങ്ങിയിരിക്കുവിൻ."},{"ref":"ഉത്പ 12:1–4"},{"ref":"ഏശ 44:1–4"},{"ref":"1 പത്രോ 4:12–19"},{"ref":"യോഹ 10:1–15","desc":"ഞാൻ നല്ല ഇടയനാണ്."},{"ref":"തോബി 12:6–15"},{"ref":"പ്രഭ 38:1–9"},{"ref":"കൊളോ 4:10–15"},{"ref":"ലൂക്കാ 10:1–9","desc":"എഴുപതു ശിഷ്യൻ‌മാർ."}]},
+    {"day":17,"dayName":"ശനി","season":"മൂശ ഒന്നാം ശനി","feasts":["അന്ത്യോക്യായിലെ വിശുദ്ധ ഇഗ്‌നേഷ്യസ്, ശഹീദൻ"],"readings":[{"ref":"2 പത്രോ 3:14–18"},{"ref":"ലൂക്കാ 14:15–24","desc":"അത്താഴ‌വിരുന്നിന്റെ ഉപമ."},{"ref":"2 സാമ 22:31–35"},{"ref":"ജ്ഞാനം 3:1–6"},{"ref":"റോമ 8:35–39"},{"ref":"യോഹ 12:20–26","desc":"ഗോതമ്പുമണിപോലെ നിലത്തുവീണ് അഴിയുക."}]},
+    {"day":18,"dayName":"ഞായർ","season":"മൂശ രണ്ടാം ഞായർ","feasts":["മിഷൻ ഞായർ"],"readings":[{"ref":"ഉത്പ 19:23–29"},{"ref":"മലാ 4:1–6"},{"ref":"1 തെസ 4:13–18"},{"ref":"ലൂക്കാ 21:20–28","desc":"നിങ്ങളുടെ രക്ഷ അടുത്തിരിക്കുന്നു."},{"ref":"പുറ 3:1–14"},{"ref":"ഏശ 61:1–6, 10–11"},{"ref":"1 കൊറി 9:13–18"},{"ref":"മത്താ 10:1–15","desc":"ഈശോ പന്ത്രണ്ടു ശ്ലീഹൻ‌മാരെ അയക്കുന്നു."}]},
+    {"day":19,"dayName":"തിങ്കൾ","season":"മൂശ രണ്ടാം തിങ്കൾ","feasts":[],"readings":[{"ref":"ഫിലി 4:1–9"},{"ref":"ലൂക്കാ 21:29–36","desc":"ദൈവ‌രാജ്യം സമീപിച്ചിരിക്കുന്നു."}]},
+    {"day":20,"dayName":"ചൊവ്വ","season":"മൂശ രണ്ടാം ചൊവ്വ","feasts":[],"readings":[{"ref":"വെളി 14:6–13"},{"ref":"മത്താ 3:1–12","desc":"ഫലം കായ്‌ക്കാത്ത വൃക്ഷം വെട്ടി തീ‌യിൽ എറിയ‌പ്പെടും."}]},
+    {"day":21,"dayName":"ബുധൻ","season":"മൂശ രണ്ടാം ബുധൻ","feasts":[],"readings":[{"ref":"യാക്കോ 1:12–18"},{"ref":"ലൂക്കാ 15:1–10","desc":"നഷ്ടപ്പെട്ട ആടും നാണ‌യ‌വും."}]},
+    {"day":22,"dayName":"വ്യാഴം","season":"മൂശ രണ്ടാം വ്യാഴം","feasts":["വിശുദ്ധ ജോൺ പോൾ രണ്ടാമൻ"],"readings":[{"ref":"ഫിലി 2:12–18"},{"ref":"ലൂക്കാ 13:22–30","desc":"രക്ഷ‌പ്രാപിക്കുന്നവർ."},{"ref":"വെളി 21:1–8"},{"ref":"യോഹ 21:4–17 (21:4–14)","desc":"വഹ‌ലിന്റെ വലത്തുവശ‌ത്തേക്കു വലയിടുക."}]},
+    {"day":23,"dayName":"വെള്ളി","season":"മൂശ രണ്ടാം വെള്ളി","feasts":[],"readings":[{"ref":"എഫേ 2:1–10"},{"ref":"യോഹ 12:44–50","desc":"ലോകത്തെ രക്ഷിക്കാൻ വന്ന ഈശോ."}]},
+    {"day":24,"dayName":"ശനി","season":"മൂശ രണ്ടാം ശനി","feasts":[],"readings":[{"ref":"ഫിലി 1:27–2:4"},{"ref":"ലൂക്കാ 9:49–56","desc":"നിങ്ങൾക്ക് എതിരല്ലാത്തവൻ നിങ്ങളുടെ ഭാഗ‌ത്താണ്."}]},
+    {"day":25,"dayName":"ഞായർ","season":"മൂശ മൂന്നാം ഞായർ","feasts":[],"readings":[{"ref":"നിയ 11:1–7"},{"ref":"ജ്ഞാനം 6:1–10"},{"ref":"1 തെസ 5:12–24"},{"ref":"മത്താ 12:22–32","desc":"പരിശുദ്ധ‌രൂഹ‌ായ്‌ക്കെതിരേ സംസാരിക്കുന്നവന് മാപ്പ് ലഭിക്കില്ല."}]},
+    {"day":26,"dayName":"തിങ്കൾ","season":"മൂശ മൂന്നാം തിങ്കൾ","feasts":[],"readings":[{"ref":"2 തെസ 2:1–12"},{"ref":"മത്താ 24:1–8","desc":"ആരും നിങ്ങളെ വഴി‌തെറ്റിക്കാതിരിക്കട്ടെ."}]},
+    {"day":27,"dayName":"ചൊവ്വ","season":"മൂശ മൂന്നാം ചൊവ്വ","feasts":[],"readings":[{"ref":"2 കൊറി 11:12–15"},{"ref":"മത്താ 24:23–28","desc":"വ്യാജ‌മിശിഹ‌ാമാരും വ്യാജ‌പ്രവാചകൻ‌മാരും."}]},
+    {"day":28,"dayName":"ബുധൻ","season":"മൂശ മൂന്നാം ബുധൻ","feasts":["വിശുദ്ധ ശിമ‌യോൻ-, യൂദ‌ ‌തദേവൂസ് ശ്ലീഹൻ‌മാർ"],"readings":[{"ref":"2 പത്രോ 2:1–10"},{"ref":"മർക്കോ 13:1–8; 21–23","desc":"പലരും എന്റെ നാമ‌ത്തിൽ വന്ന് അനേകരെ വഞ്ചിക്കും."},{"ref":"പുറ 15:11–13"},{"ref":"ജ്ഞാനം 10:15–21"},{"ref":"എഫേ 6:10–17"},{"ref":"യോഹ 15:18–25","desc":"മിശിഹാ നമ്മെ തിരഞ്ഞെടുത്തു."}]},
+    {"day":29,"dayName":"വ്യാഴം","season":"മൂശ മൂന്നാം വ്യാഴം","feasts":[],"readings":[{"ref":"യൂദ 1:8–16"},{"ref":"ലൂക്കാ 11:37–44","desc":"പ്രീശർക്ക് ദുരിതം."}]},
+    {"day":30,"dayName":"വെള്ളി","season":"മൂശ മൂന്നാം വെള്ളി","feasts":[],"readings":[{"ref":"2 കൊറി 12:14–15; 19–21"},{"ref":"ലൂക്കാ 11:45–54","desc":"പ്രീശർക്കും നിയമ‌ജ്ഞർക്കും ദുരിതം."}]},
+    {"day":31,"dayName":"ശനി","season":"മൂശ മൂന്നാം ശനി (സർവ‌വിശുദ്ധ‌ദിന‌ ഒരുക്കം)","feasts":["സർവ‌വിശുദ്ധ‌ദിന‌ ഒരുക്കം"],"readings":[{"ref":"1 കൊറി 3:10–17"},{"ref":"മത്താ 13:34–43","desc":"കളകൾ അഗ്നിക്കിരയാകും."},{"ref":"1 യോഹ 3:1–3"},{"ref":"മത്താ 5:1–12"}]}
+  ],
+  "November": [
+    {"day":1,"dayName":"ഞായർ","season":"പള്ളിക്കൂദാശ ഒന്നാം ഞായർ — സഭ‌ സമർ‌പ്പണ‌ തിരുനാൾ","feasts":[],"readings":[{"ref":"പുറ 33:1–11"},{"ref":"ഏശ 40:21–31"},{"ref":"ഹെബ്രാ 9:1–14"},{"ref":"മത്താ 25:1–13","desc":"ഒരുങ്ങിയിരിക്കുന്നവർ മണ‌വറ‌യിൽ‌ പ്രവേശിക്കും."}]},
+    {"day":2,"dayName":"തിങ്കൾ","season":"പള്ളിക്കൂദാശ ഒന്നാം തിങ്കൾ","feasts":["വിശുദ്ധർ ആത്മ‌കൾ‌ സ്മരണ‌ദിനം"],"readings":[{"ref":"2 കൊറി 4:13–18"},{"ref":"യോഹ 16:16–24","desc":"നിങ്ങളുടെ സന്തോഷം പൂർണ‌മാകും."},{"ref":"1 കൊറി 15:51–58","desc":"(ആത്മ‌കൾ‌ദിനം)"},{"ref":"യോഹ 11:17–27","desc":"(ആത്മ‌കൾ‌ദിനം)"}]},
+    {"day":3,"dayName":"ചൊവ്വ","season":"പള്ളിക്കൂദാശ ഒന്നാം ചൊവ്വ","feasts":[],"readings":[{"ref":"2 കൊറി 5:1–5"},{"ref":"ലൂക്കാ 15:11–24","desc":"പിതാവിന്റെ ഭവനത്തിലേക്ക് തിരിച്ചുചെല്ലുന്ന പുത്രൻ."}]},
+    {"day":4,"dayName":"ബുധൻ","season":"പള്ളിക്കൂദാശ ഒന്നാം ബുധൻ","feasts":[],"readings":[{"ref":"1 പത്രോ 5:1–4"},{"ref":"യോഹ 21:15–19","desc":"ദൈവത്തിന്റെ അജ‌ഗണ‌ത്തെ മേയ്ക്കുക."}]},
+    {"day":5,"dayName":"വ്യാഴം","season":"പള്ളിക്കൂദാശ ഒന്നാം വ്യാഴം","feasts":["വിശുദ്ധ സഖ‌ര്യ-, വിശുദ്ധ ഏലിശ്വ"],"readings":[{"ref":"എഫേ 3:1–6"},{"ref":"മത്താ 8:5–13","desc":"ശതാധിപന്റെ ദാസന് സൗഖ്യം."},{"ref":"കൊളോ 1:21–23"},{"ref":"ലൂക്കാ 1:5–25","desc":"സഖ‌ര്യ‌ായ്ക്കും ഏലിശ്വ‌ായ്ക്കും കർത്താവിന്റെ കരുണ."}]},
+    {"day":6,"dayName":"വെള്ളി","season":"പള്ളിക്കൂദാശ ഒന്നാം വെള്ളി","feasts":[],"readings":[{"ref":"എഫേ 6:1–9"},{"ref":"മത്താ 21:28–32","desc":"പശ്ചാ‌ത്തപിച്ചു വിശ്വസിക്കുന്നവർക്കുള്ള പ്രതിഫലം."}]},
+    {"day":7,"dayName":"ശനി","season":"പള്ളിക്കൂദാശ ഒന്നാം ശനി","feasts":[],"readings":[{"ref":"റോമ 12:9–18"},{"ref":"ലൂക്കാ 10:25–37","desc":"സ്‌നേഹം നിത്യ‌ജീവൻ അവകാശ‌മാക്കാനുള്ള‌ മാർഗ്ഗം."}]},
+    {"day":8,"dayName":"ഞായർ","season":"പള്ളിക്കൂദാശ രണ്ടാം ഞായർ","feasts":[],"readings":[{"ref":"പുറ 6:1–8"},{"ref":"ഏശ 49:1–7"},{"ref":"1 പത്രോ 1:3–7"},{"ref":"മത്താ 19:23–30","desc":"പന്ത്രണ്ടു സിം‌ഹാസ‌നങ്ങളിൽ ഉപ‌വിഷ്ടരാകുന്ന ശ്ലീഹൻ‌മാർ."}]},
+    {"day":9,"dayName":"തിങ്കൾ","season":"പള്ളിക്കൂദാശ രണ്ടാം തിങ്കൾ","feasts":[],"readings":[{"ref":"കൊളോ 1:12–20"},{"ref":"മത്താ 16:13–20","desc":"പത്രോസിന്റെ വിശ്വാസ‌പ്രഖ്യാപനം."}]},
+    {"day":10,"dayName":"ചൊവ്വ","season":"പള്ളിക്കൂദാശ രണ്ടാം ചൊവ്വ","feasts":[],"readings":[{"ref":"2 പത്രോ 1:12–21"},{"ref":"ലൂക്കാ 9:28–36","desc":"ഈശോ‌യുടെ രൂപാന്തരീകരണം."}]},
+    {"day":11,"dayName":"ബുധൻ","season":"പള്ളിക്കൂദാശ രണ്ടാം ബുധൻ","feasts":[],"readings":[{"ref":"വെളി 19:1–10"},{"ref":"മത്താ 22:1–14","desc":"വിവാഹ‌വിരുന്ത്."}]},
+    {"day":12,"dayName":"വ്യാഴം","season":"പള്ളിക്കൂദാശ രണ്ടാം വ്യാഴം","feasts":[],"readings":[{"ref":"2 കൊറി 11:1–4"},{"ref":"യോഹ 3:22–30","desc":"മണ‌വാട്ടി ഉള്ളവനാണ് മണ‌വാളൻ."}]},
+    {"day":13,"dayName":"വെള്ളി","season":"പള്ളിക്കൂദാശ രണ്ടാം വെള്ളി","feasts":[],"readings":[{"ref":"2 കൊറി 12:1–5"},{"ref":"യോഹ 3:31–36","desc":"സ്വർഗീ‌യൻ‌ സ്വർഗീ‌യ‌കാ‌ര്യ‌ങ്ങൾ‌ സം‌സ‌രി‌ക്കു‌ന്നു."}]},
+    {"day":14,"dayName":"ശനി","season":"പള്ളിക്കൂദാശ രണ്ടാം ശനി","feasts":[],"readings":[{"ref":"വെളി 22:1–5"},{"ref":"മത്താ 19:13–14","desc":"ആരാണ് വലിയവൻ?"}]},
+    {"day":15,"dayName":"ഞായർ","season":"പള്ളിക്കൂദാശ മൂന്നാം ഞായർ","feasts":[],"readings":[{"ref":"ഉത്പ 29:15–30"},{"ref":"പ്രഭ 11:20–27"},{"ref":"2 തെസ 3:6–15"},{"ref":"മത്താ 25:14–30","desc":"ഭര‌മേൽ‌പ്പിച്ച‌ ‌താ‌ലന്തുകൾ."}]},
+    {"day":16,"dayName":"തിങ്കൾ","season":"പള്ളിക്കൂദാശ മൂന്നാം തിങ്കൾ","feasts":[],"readings":[{"ref":"1 കൊറി 13:1–10"},{"ref":"മർക്കോ 12:28–34","desc":"ഏറ്റവും പ്രധാനമായ കൽ‌പ്പന."}]},
+    {"day":17,"dayName":"ചൊവ്വ","season":"പള്ളിക്കൂദാശ മൂന്നാം ചൊവ്വ","feasts":[],"readings":[{"ref":"1 കൊറി 4:1–5"},{"ref":"ലൂക്കാ 16:1–13","desc":"എല്ലാ കാര്യ‌ങ്ങളിലും വിശ്വസ്ത‌രായിരിക്കുക."}]},
+    {"day":18,"dayName":"ബുധൻ","season":"പള്ളിക്കൂദാശ മൂന്നാം ബുധൻ","feasts":[],"readings":[{"ref":"1 കൊറി 6:1–11"},{"ref":"ലൂക്കാ 16:13–17","desc":"ദൈവ‌രാജ്യ‌ത്തിൽ‌ പ്ര‌വേ‌ശി‌ക്കാ‌ൻ‌ ബ‌ല‌പ്ര‌യോ‌ഗം‌ ആ‌വ‌ശ്യ‌ം."}]},
+    {"day":19,"dayName":"വ്യാഴം","season":"പള്ളിക്കൂദാശ മൂന്നാം വ്യാഴം","feasts":[],"readings":[{"ref":"കൊളോ 1:3–11"},{"ref":"മത്താ 13:10–23","desc":"ഫലം പുറ‌പ്പെ‌ടു‌വി‌ക്കുന്ന‌വ‌രാ‌കു‌ക."}]},
+    {"day":20,"dayName":"വെള്ളി","season":"പള്ളിക്കൂദാശ മൂന്നാം വെള്ളി","feasts":[],"readings":[{"ref":"ഹെബ്രാ 12:4–13"},{"ref":"യോഹ 15:1–8","desc":"എന്നിൽ വസിക്കുന്നവൻ വളരെ ഫലം പുറ‌പ്പെ‌ടു‌ത്തും."}]},
+    {"day":21,"dayName":"ശനി","season":"പള്ളിക്കൂദാശ മൂന്നാം ശനി","feasts":[],"readings":[{"ref":"1 കൊറി 15:12–34"},{"ref":"ലൂക്കാ 20:27–40","desc":"മരിച്ചവർ ഉയിർ‌ത്തപ്പെടും."}]},
+   
+    { "day": 22, "dayName": "Sun", "season": "4th Sunday of Dedication (Feast of Christ the King)", "feasts": ["Feast of Christ the King"], "readings": [{ "ref": "Gen 14:17-24" }, { "ref": "1 Sam 8:1-9" }, { "ref": "Rev 19:11-16" }, { "ref": "Jn 18:33-37" }] },
+        { "day": 23, "dayName": "Mon", "season": "4th Monday of Dedication", "feasts": [], "readings": [{ "ref": "Eph 2:14-22" }, { "ref": "Jn 14:1-14" }] },
+        { "day": 24, "dayName": "Tue", "season": "4th Tuesday of Dedication", "feasts": [], "readings": [{ "ref": "1 Pet 2:1-10" }, { "ref": "Jn 10:7-16" }] },
+        { "day": 25, "dayName": "Wed", "season": "4th Wednesday of Dedication", "feasts": [], "readings": [{ "ref": "Eph 1:3-12" }, { "ref": "Lk 1:46-55" }] },
+        { "day": 26, "dayName": "Thu", "season": "4th Thursday of Dedication", "feasts": [], "readings": [{ "ref": "Heb 13:9-16" }, { "ref": "Lk 10:17-21" }] },
+        { "day": 27, "dayName": "Fri", "season": "4th Friday of Dedication", "feasts": [], "readings": [{ "ref": "Rev 7:9-12" }, { "ref": "Mk 12:18-27" }] },
+        { "day": 28, "dayName": "Sat", "season": "4th Saturday of Dedication", "feasts": ["St. Andrew the Apostle (Vigil)"], "readings": [{ "ref": "Rev 21:22-27" }, { "ref": "Jn 4:19-26" }, { "ref": "Gen 28:10-17" }, { "ref": "Zech 8:20-23" }, { "ref": "Rom 10:9-18" }, { "ref": "Mt 4:18-22" }] },
+        { "day": 29, "dayName": "Sun", "season": "1st Sunday of Annunciation (Mangalavartha)", "feasts": [], "readings": [{ "ref": "Gen 17:15-22" }, { "ref": "Is 43:1-7, 10-11" }, { "ref": "Eph 5:21-6:4" }, { "ref": "Lk 1:5-25" }] },
+        { "day": 30, "dayName": "Mon", "season": "1st Monday of Annunciation", "feasts": [], "readings": [{ "ref": "Gal 3:9-14" }, { "ref": "Lk 9:37-43" }] }
+      ],
+      "December": [
+        { "day": 1, "dayName": "Tue", "season": "1st Tuesday of Annunciation", "feasts": [], "readings": [{ "ref": "Rom 13:8-14" }, { "ref": "Lk 1:18-20" }] },
+        { "day": 2, "dayName": "Wed", "season": "1st Wednesday of Annunciation", "feasts": [], "readings": [{ "ref": "1 Cor 1:4-9" }, { "ref": "Jn 8:26-30" }] },
+        { "day": 3, "dayName": "Thu", "season": "1st Thursday of Annunciation", "feasts": ["St. Francis Xavier"], "readings": [{ "ref": "1 Tim 4:11-16" }, { "ref": "Mt 24:45-51" }, { "ref": "Deut 26:16-19" }, { "ref": "Is 45:20-24" }, { "ref": "2 Cor 6:3-10" }, { "ref": "Mk 6:7-13" }] },
+        { "day": 4, "dayName": "Fri", "season": "1st Friday of Annunciation", "feasts": [], "readings": [{ "ref": "Col 3:1-10" }, { "ref": "Mt 13:12-17" }] },
+        { "day": 5, "dayName": "Sat", "season": "1st Saturday of Annunciation", "feasts": [], "readings": [{ "ref": "Gal 3:1-9" }, { "ref": "Lk 9:57-62" }] },
+        { "day": 6, "dayName": "Sun", "season": "2nd Sunday of Annunciation", "feasts": [], "readings": [{ "ref": "Num 22:20-35" }, { "ref": "Is 43:25-44:5" }, { "ref": "Col 4:2-6" }, { "ref": "Lk 1:26-38" }] },
+        { "day": 7, "dayName": "Mon", "season": "2nd Monday of Annunciation", "feasts": ["St. Ambrose, Bishop"], "readings": [{ "ref": "Eph 4:13-16" }, { "ref": "Jn 14:11-14" }, { "ref": "Deut 7:1-11" }, { "ref": "Sir 15:1-6" }, { "ref": "2 Tim 4:1-8" }, { "ref": "Lk 14:25-33" }] },
+        { "day": 8, "dayName": "Tue", "season": "Feast of the Immaculate Conception of the B.V.M.", "feasts": ["Feast of the Immaculate Conception of the B.V.M."], "readings": [{ "ref": "Sir 24:1-14" }, { "ref": "Is 7:10-16" }, { "ref": "Heb 1:1-3 + 2:16-18" }, { "ref": "Lk 1:46-55" }] },
+        { "day": 9, "dayName": "Wed", "season": "2nd Wednesday of Annunciation", "feasts": [], "readings": [{ "ref": "Eph 1:3-12" }, { "ref": "Lk 1:34-38" }] },
+        { "day": 10, "dayName": "Thu", "season": "2nd Thursday of Annunciation", "feasts": [], "readings": [{ "ref": "Rom 12:9-18" }, { "ref": "Lk 1:39-45" }] },
+        { "day": 11, "dayName": "Fri", "season": "2nd Friday of Annunciation", "feasts": [], "readings": [{ "ref": "2 Cor 8:11-15" }, { "ref": "Lk 1:46-56" }] },
+        { "day": 12, "dayName": "Sat", "season": "2nd Saturday of Annunciation", "feasts": [], "readings": [{ "ref": "Heb 3:12-19" }, { "ref": "Lk 11:33-36" }] },
+        { "day": 13, "dayName": "Sun", "season": "3rd Sunday of Annunciation", "feasts": [], "readings": [{ "ref": "Gen 18:1-10" }, { "ref": "Judg 13:2-7, 24" }, { "ref": "Eph 3:1-13" }, { "ref": "Lk 1:57-66" }] },
+        { "day": 14, "dayName": "Mon", "season": "3rd Monday of Annunciation", "feasts": ["St. John of the Cross"], "readings": [{ "ref": "1 Cor 5:1-8" }, { "ref": "Lk 6:43-45" }, { "ref": "1 Cor 2:1-10" }, { "ref": "Lk 14:25-33" }] },
+        { "day": 15, "dayName": "Tue", "season": "3rd Tuesday of Annunciation", "feasts": [], "readings": [{ "ref": "Eph 2:1-10" }, { "ref": "Mt 3:1-6" }] },
+        { "day": 16, "dayName": "Wed", "season": "3rd Wednesday of Annunciation", "feasts": [], "readings": [{ "ref": "1 Thes 2:13-17" }, { "ref": "Lk 16:10-13" }] },
+        { "day": 17, "dayName": "Thu", "season": "3rd Thursday of Annunciation", "feasts": [], "readings": [{ "ref": "Gal 3:26-29" }, { "ref": "Lk 1:67-79" }] },
+        { "day": 18, "dayName": "Fri", "season": "3rd Friday of Annunciation", "feasts": ["Miraculous Cross of Mylapore"], "readings": [{ "ref": "Col 1:10-16" }, { "ref": "Mk 1:1-8" }, { "ref": "Ex 17:4-6" }, { "ref": "Acts 2:29-36" }, { "ref": "Eph 2:14-22" }, { "ref": "Jn 14:1-6" }] },
+        { "day": 19, "dayName": "Sat", "season": "3rd Saturday of Annunciation", "feasts": [], "readings": [{ "ref": "Gal 1:11-17" }, { "ref": "Jn 3:31-36" }] },
+        { "day": 20, "dayName": "Sun", "season": "4th Sunday of Annunciation", "feasts": [], "readings": [{ "ref": "Gen 24:50-67" }, { "ref": "1 Sam 1:1-18" }, { "ref": "Eph 5:5-21" }, { "ref": "Mt 1:18-24" }] },
+        { "day": 21, "dayName": "Mon", "season": "4th Monday of Annunciation", "feasts": [], "readings": [{ "ref": "Eph 6:18-20" }, { "ref": "Jn 1:1-5" }] },
+        { "day": 22, "dayName": "Tue", "season": "4th Tuesday of Annunciation", "feasts": [], "readings": [{ "ref": "Gal 4:1-7" }, { "ref": "Jn 1:6-13" }] },
+        { "day": 23, "dayName": "Wed", "season": "4th Wednesday of Annunciation", "feasts": [], "readings": [{ "ref": "Eph 4:17-24" }, { "ref": "Jn 1:43-51" }] },
+        { "day": 24, "dayName": "Thu", "season": "1st Thursday of Nativity", "feasts": [], "readings": [{ "ref": "Heb 5:11-14" }, { "ref": "Mt 12:43-45" }] },
+        { "day": 25, "dayName": "Fri", "season": "Feast of the Nativity of Our Lord Jesus Christ (Christmas)", "feasts": ["Christmas"], "readings": [{ "ref": "Is 7:10-16 + 9:1-3, 6-7" }, { "ref": "Mic 4:1-3 + 5:1-5, 8-9" }, { "ref": "Gal 3:15-4:6" }, { "ref": "Lk 2:1-20" }] },
+        { "day": 26, "dayName": "Sat", "season": "1st Saturday of Nativity", "feasts": ["St. Stephen", "St. John the Apostle (Vigil)"], "readings": [{ "ref": "1 Jn 2:26-29" }, { "ref": "Jn 1:19-29" }, { "ref": "Acts 6:8-10 + 7:54-60" }, { "ref": "Mt 10:16-22" }, { "ref": "Ex 33:12-23" }, { "ref": "Sir 15:1-6" }, { "ref": "Rom 8:35-39" }, { "ref": "Jn 21:20-24" }] },
+        { "day": 27, "dayName": "Sun", "season": "2nd Sunday of Nativity", "feasts": ["The Holy Family"], "readings": [{ "ref": "Ex 2:1-10" }, { "ref": "Is 49:1-6" }, { "ref": "2 Tim 2:16-26" }, { "ref": "Lk 2:21-35" }, { "ref": "Gen 1:26-28" }, { "ref": "Sir 3:1-9" }, { "ref": "Col 3:18-21" }, { "ref": "Mt 2:13-14, 19-23" }] },
+        { "day": 28, "dayName": "Mon", "season": "2nd Monday of Nativity", "feasts": ["The Holy Innocents (Children's Day)"], "readings": [{ "ref": "Eph 4:7-12" }, { "ref": "Mt 6:16-21" }, { "ref": "Gen 4:3-8" }, { "ref": "Jer 31:15-17" }, { "ref": "Heb 11:32-38" }, { "ref": "Mt 2:13-18" }] },
+        { "day": 29, "dayName": "Tue", "season": "2nd Tuesday of Nativity", "feasts": [], "readings": [{ "ref": "Gal 6:1-10" }, { "ref": "Lk 2:41-52" }] },
+        { "day": 30, "dayName": "Wed", "season": "2nd Wednesday of Nativity", "feasts": [], "readings": [{ "ref": "2 Cor 12:6-10" }, { "ref": "Jn 6:16-24" }] },
+        { "day": 31, "dayName": "Thu", "season": "2nd Thursday of Nativity", "feasts": ["End of the Year"], "readings": [{ "ref": "Acts 3:20-26" }, { "ref": "Mt 4:12-17" }, { "ref": "Lev 6:1-7" }, { "ref": "Wis 5:7-10, 14-16" }, { "ref": "1 Tim 6:6-12" }, { "ref": "Lk 13:6-9" }] }
+      ]
+    }
+
+
+};
+// ════════════════════════════════════════════════════════
+// NOTE: Replace LITURGY_SOURCE above with your FULL
+// liturgyData object from calendar.html for a complete import.
+// ════════════════════════════════════════════════════════
+</script>
+
+<script type="module">
+import{initializeApp}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import{getAuth,onAuthStateChanged,signOut}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import{getFirestore,doc,getDoc,setDoc,serverTimestamp}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+const FC={apiKey:"AIzaSyArM8sv7J1RUj4XvAJhJd40tzA7Yc8BGXY",authDomain:"admin-dashboard-ed62c.firebaseapp.com",projectId:"admin-dashboard-ed62c",storageBucket:"admin-dashboard-ed62c.firebasestorage.app",messagingSenderId:"560027475135",appId:"1:560027475135:web:3fae0cb0268729ae79fa0a"};
+const ADMIN="issacnewton1503@gmail.com";
+const app=initializeApp(FC),auth=getAuth(app),db=getFirestore(app);
+window._db=db; // expose to non-module functions
+
+const MONTHS=["January","February","March","April","May","June","July","August","September","October","November","December"];
+const MONTHS_ML={January:"ജനുവരി",February:"ഫെബ്രുവരി",March:"മാർച്ച്",April:"ഏപ്രിൽ",May:"മേയ്",June:"ജൂൺ",July:"ജൂലൈ",August:"ഓഗസ്‌ത്",September:"സെപ്‌തംബർ",October:"ഒക്‌ടോബർ",November:"നവംബർ",December:"ഡിസംബർ"};
+window.MONTHS_ML = MONTHS_ML;
+window.MONTHS = MONTHS;
+
+let allData={}, role=null, currentYear="2026", currentMonth="January";
+let editKey=null;
+
+const esc=s=>String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+window.toast=function(msg,type="",dur=3500){
+  const t=document.getElementById("dash-toast");
+  t.textContent=msg;t.className="show"+(type?" "+type:"");
+  clearTimeout(t._t);t._t=setTimeout(()=>t.className="",dur);
+};
+window.closeM=id=>document.getElementById(id).classList.remove("show");
+function openM(id){document.getElementById(id).classList.add("show");}
+function busy(id,on){
+  const b=document.getElementById(id);if(!b)return;
+  if(on){b._l=b.innerHTML;b.disabled=true;b.innerHTML=`<span class="spin"></span> Saving…`;}
+  else{b.disabled=false;b.innerHTML=b._l||"Save";}
+}
+
+/* ── AUTH ── */
+document.body.style.display="none";
+onAuthStateChanged(auth,async user=>{
+  if(!user){location.href="index.html";return;}
+  const snap=await getDoc(doc(db,"users",user.uid));
+  if(!snap.exists()){await signOut(auth);location.href="index.html";return;}
+  const prof=snap.data();
+  role=user.email===ADMIN?"Admin":"Viewer";
+  const uname=prof.username||user.displayName||user.email;
+  document.getElementById("sidebar-username").textContent=uname;
+  document.getElementById("sidebar-role").textContent=role;
+  document.getElementById("sidebar-avatar").textContent=uname[0].toUpperCase();
+  const badge=document.getElementById("role-badge");
+  badge.textContent=role;badge.className=role==="Admin"?"badge bg-warning text-dark me-2":"badge bg-primary me-2";
+  document.body.style.display="";
+  if(role!=="Admin"){
+    document.querySelectorAll(".btn-add-entry,.btn-import").forEach(b=>b.style.display="none");
+  }
+  await loadAll();
+});
+document.getElementById("btn-logout").addEventListener("click",async()=>{await signOut(auth);location.href="index.html";});
+document.getElementById("sidebar-toggle").addEventListener("click",()=>{
+  document.getElementById("sidebar").classList.toggle("open");
+  document.getElementById("sidebar-overlay").classList.toggle("show");
+});
+document.getElementById("sidebar-overlay").addEventListener("click",()=>{
+  document.getElementById("sidebar").classList.remove("open");
+  document.getElementById("sidebar-overlay").classList.remove("show");
+});
+
+/* ── LOAD FROM FIRESTORE ── */
+async function loadAll(){
+  allData={};
+  for(const yr of ["2025","2026","2027"]){
+    allData[yr]={};
+    for(const mo of MONTHS){
+      try{
+        const snap=await getDoc(doc(db,"liturgicalCalendar",yr+"_"+mo));
+        if(snap.exists()&&Array.isArray(snap.data().entries)){
+          allData[yr][mo]=snap.data().entries;
+        } else { allData[yr][mo]=[]; }
+      }catch(e){ allData[yr][mo]=[]; }
+    }
+  }
+  const now=new Date();
+  currentYear=String(now.getFullYear());
+  currentMonth=MONTHS[now.getMonth()];
+  if(!allData[currentYear]) currentYear="2026";
+  document.getElementById("sel-year").value=currentYear;
+  updateStats();
+  buildMonthTabs();
+  renderGrid();
+}
+window._loadAll=loadAll; // expose for import
+
+/* ── STATS ── */
+function updateStats(){
+  let t2025=0,t2026=0,feasts=0;
+  for(const mo of MONTHS){
+    t2025+=(allData["2025"]?.[mo]||[]).length;
+    t2026+=(allData["2026"]?.[mo]||[]).length;
+  }
+  const all=Object.values(allData).flatMap(y=>Object.values(y)).flat();
+  feasts=all.filter(e=>e.feasts&&e.feasts.length>0).length;
+  const total=t2025+t2026;
+  document.getElementById("st-2025").textContent=t2025;
+  document.getElementById("st-2026").textContent=t2026;
+  document.getElementById("st-total").textContent=total;
+  document.getElementById("st-feasts").textContent=feasts;
+  document.getElementById("sidebar-total").textContent=total;
+  const curEntries=(allData[currentYear]?.[currentMonth]||[]).length;
+  document.getElementById("st-cur-month").textContent=curEntries;
+  document.getElementById("st-cur-label").textContent=(MONTHS_ML[currentMonth]||currentMonth)+" "+currentYear;
+}
+
+/* ── MONTH TABS ── */
+function buildMonthTabs(){
+  const cont=document.getElementById("month-tabs");
+  cont.innerHTML=MONTHS.map(m=>`
+    <button class="month-tab${m===currentMonth?" active":""}" onclick="switchMonth('${m}',this)">
+      ${MONTHS_ML[m]||m}
+    </button>`).join("");
+}
+window.switchMonth=function(m,btn){
+  currentMonth=m;
+  document.querySelectorAll(".month-tab").forEach(b=>b.classList.remove("active"));
+  btn.classList.add("active");
+  updateStats();renderGrid();
+};
+window.onYearChange=function(){
+  currentYear=document.getElementById("sel-year").value;
+  updateStats();renderGrid();
+};
+
+/* ── RENDER GRID ── */
+window.renderGrid=function(){
+  const entries=(allData[currentYear]?.[currentMonth]||[]).slice().sort((a,b)=>a.day-b.day);
+  const q=(document.getElementById("search-input").value||"").toLowerCase().trim();
+  const filtered=q?entries.filter(e=>
+    String(e.day).includes(q)||
+    (e.season||"").toLowerCase().includes(q)||
+    (e.dayName||"").toLowerCase().includes(q)||
+    (e.feasts||[]).some(f=>(f||"").toLowerCase().includes(q))||
+    (e.readings||[]).some(r=>(r.ref||"").toLowerCase().includes(q)||(r.desc||"").toLowerCase().includes(q))
+  ):entries;
+
+  const grid=document.getElementById("day-grid");
+  if(!filtered.length){
+    grid.innerHTML=`<div class="empty-state"><i class="bi bi-calendar-x"></i>No entries for ${MONTHS_ML[currentMonth]||currentMonth} ${currentYear}${q?" matching '"+q+"'":""}<br><small style="color:#cbd5e1">Click "Add Entry" or use "Import JSON to Firestore".</small></div>`;
+    return;
+  }
+  const isAdmin=role==="Admin";
+  grid.innerHTML=`<div class="day-grid">${filtered.map(e=>{
+    const realIdx=entries.indexOf(e);
+    const feasts=(e.feasts||[]).map(f=>`<span class="feast-pill">${esc(f)}</span>`).join("");
+    const readings=(e.readings||[]).slice(0,3).map(r=>`<span class="reading-tag">${esc(r.ref)}</span>`).join("")+(e.readings&&e.readings.length>3?`<span class="reading-tag">+${e.readings.length-3} more</span>`:"");
+    return `<div class="day-card">
+      ${isAdmin?`<div class="day-card-actions">
+        <button class="btn-edit" onclick="openEdit('${currentYear}','${currentMonth}',${realIdx})">✏️ Edit</button>
+        <button class="btn-del2" onclick="delEntry('${currentYear}','${currentMonth}',${realIdx})">🗑</button>
+      </div>`:""}
+      <div style="display:flex;align-items:baseline;gap:8px;margin-bottom:6px;">
+        <span class="day-card-num">${e.day}</span>
+        <span class="day-card-name">${esc(e.dayName||"")}</span>
+      </div>
+      <div class="day-card-season">${esc(e.season||"")}</div>
+      ${feasts?`<div style="margin-top:5px;">${feasts}</div>`:""}
+      ${readings?`<div style="margin-top:5px;">${readings}</div>`:""}
+    </div>`;
+  }).join("")}</div>`;
+};
+
+/* ── OPEN ADD ── */
+window.openAdd=function(){
+  if(role!=="Admin"){toast("Admin access required","error");return;}
+  editKey=null;
+  document.getElementById("modal-title").textContent="Add Calendar Entry";
+  document.getElementById("f-year").value=currentYear;
+  document.getElementById("f-month").value=currentMonth;
+  document.getElementById("f-day").value="";
+  document.getElementById("f-dayname").value="ഞായർ";
+  document.getElementById("f-season").value="";
+  document.getElementById("f-feasts").value="";
+  document.getElementById("btn-modal-del").style.display="none";
+  document.getElementById("modal-status").textContent="";
+  buildReadingsUI([]);
+  busy("btn-modal-save",false);
+  openM("m-cal");
+};
+
+/* ── OPEN EDIT ── */
+window.openEdit=function(yr,mo,idx){
+  if(role!=="Admin"){toast("Admin access required","error");return;}
+  const entry=(allData[yr]?.[mo]||[])[idx];
+  if(!entry)return;
+  editKey={year:yr,month:mo,dayIdx:idx};
+  document.getElementById("modal-title").textContent="Edit Calendar Entry";
+  document.getElementById("f-year").value=yr;
+  document.getElementById("f-month").value=mo;
+  document.getElementById("f-day").value=entry.day;
+  document.getElementById("f-dayname").value=entry.dayName||"ഞായർ";
+  document.getElementById("f-season").value=entry.season||"";
+  document.getElementById("f-feasts").value=(entry.feasts||[]).join(", ");
+  document.getElementById("btn-modal-del").style.display="";
+  document.getElementById("modal-status").textContent="";
+  buildReadingsUI(entry.readings||[]);
+  busy("btn-modal-save",false);
+  openM("m-cal");
+};
+
+/* ── READINGS UI ── */
+function buildReadingsUI(readings){
+  const cont=document.getElementById("readings-container");
+  cont.innerHTML="";
+  if(!readings.length) readings=[{ref:"",desc:""}];
+  readings.forEach(r=>addReadingRowData(r));
+}
+window.addReadingRow=function(){addReadingRowData({ref:"",desc:""});};
+function addReadingRowData(r){
+  const cont=document.getElementById("readings-container");
+  const div=document.createElement("div");
+  div.className="reading-row-modal";
+  div.innerHTML=`
+    <input type="text" placeholder="Reference (e.g. ലൂക്കാ 1:26–38)" value="${esc(r.ref||"")}"/>
+    <textarea placeholder="Description (optional)">${esc(r.desc||"")}</textarea>
+    <button class="btn-rm-reading" type="button" onclick="this.parentElement.remove()">✕</button>`;
+  cont.appendChild(div);
+}
+function getReadings(){
+  return [...document.querySelectorAll("#readings-container .reading-row-modal")].map(row=>{
+    const inputs=row.querySelectorAll("input,textarea");
+    return{ref:(inputs[0]?.value||"").trim(),desc:(inputs[1]?.value||"").trim()};
+  }).filter(r=>r.ref);
+}
+
+/* ── SAVE (add/edit) ── */
+window.modalSave=async function(){
+  const yr=document.getElementById("f-year").value;
+  const mo=document.getElementById("f-month").value;
+  const day=parseInt(document.getElementById("f-day").value);
+  const dayName=document.getElementById("f-dayname").value;
+  const season=document.getElementById("f-season").value.trim();
+  const feastsRaw=document.getElementById("f-feasts").value.trim();
+  const feasts=feastsRaw?feastsRaw.split(",").map(s=>s.trim()).filter(Boolean):[];
+  const readings=getReadings();
+  const st=document.getElementById("modal-status");
+
+  if(!day||day<1||day>31){st.textContent="Valid day (1–31) required.";st.style.color="#ef4444";return;}
+  if(!season){st.textContent="Season/title is required.";st.style.color="#ef4444";return;}
+  if(!readings.length){st.textContent="At least one reading reference required.";st.style.color="#ef4444";return;}
+
+  const entry={day,dayName,season,feasts,readings};
+  busy("btn-modal-save",true);st.textContent="";
+
+  try{
+    if(!allData[yr]) allData[yr]={};
+    if(!allData[yr][mo]) allData[yr][mo]=[];
+    if(editKey){
+      if(editKey.year!==yr||editKey.month!==mo){
+        allData[editKey.year][editKey.month].splice(editKey.dayIdx,1);
+        await saveMonthDoc(editKey.year,editKey.month);
+        allData[yr][mo].push(entry);
+      } else {
+        allData[yr][mo][editKey.dayIdx]=entry;
+      }
+    } else {
+      allData[yr][mo].push(entry);
+    }
+    await saveMonthDoc(yr,mo);
+    updateStats();renderGrid();
+    closeM("m-cal");
+    toast("✅ Saved to Firestore!","success");
+  }catch(err){
+    st.textContent="❌ "+err.message;st.style.color="#ef4444";
+    busy("btn-modal-save",false);
+  }
+};
+const ML_DAYS = ["ഞായർ","തിങ്കൾ","ചൊവ്വ","ബുധൻ","വ്യാഴം","വെള്ളി","ശനി"];
+
+window.autoFillDayName = function(){
+  const yr = parseInt(document.getElementById("f-year").value);
+  const mo = document.getElementById("f-month").value;
+  const day = parseInt(document.getElementById("f-day").value);
+  if(!yr || !mo || !day || day < 1 || day > 31) return;
+  const moIdx = MONTHS.indexOf(mo);
+  if(moIdx === -1) return;
+  const date = new Date(yr, moIdx, day);
+  // Invalid date check (e.g., Feb 30)
+  if(date.getMonth() !== moIdx) return;
+  const dayOfWeek = date.getDay(); // 0=Sun, 1=Mon...
+  document.getElementById("f-dayname").value = ML_DAYS[dayOfWeek];
+};
+
+
+/* ── DELETE ── */
+window.delEntry=async function(yr,mo,idx){
+  const entry=(allData[yr]?.[mo]||[])[idx];
+  if(!entry||!confirm(`Delete Day ${entry.day} (${entry.season})?`)) return;
+  allData[yr][mo].splice(idx,1);
+  try{await saveMonthDoc(yr,mo);updateStats();renderGrid();toast("Deleted.","success");}
+  catch(err){toast("❌ "+err.message,"error");}
+};
+window.modalDel=async function(){
+  if(!editKey)return;
+  const entry=(allData[editKey.year]?.[editKey.month]||[])[editKey.dayIdx];
+  if(!entry||!confirm(`Delete Day ${entry.day}?`)) return;
+  allData[editKey.year][editKey.month].splice(editKey.dayIdx,1);
+  try{
+    await saveMonthDoc(editKey.year,editKey.month);
+    updateStats();renderGrid();
+    closeM("m-cal");toast("Deleted.","success");
+  }catch(err){toast("❌ "+err.message,"error");}
+};
+
+/* ── SAVE MONTH DOC ── */
+async function saveMonthDoc(yr,mo){
+  const entries=(allData[yr]?.[mo]||[]).map(e=>({
+    day:Number(e.day),dayName:String(e.dayName||""),season:String(e.season||""),
+    feasts:(e.feasts||[]).map(f=>String(f)),
+    readings:(e.readings||[]).map(r=>({ref:String(r.ref||""),desc:String(r.desc||"")}))
+  }));
+  await setDoc(doc(db,"liturgicalCalendar",yr+"_"+mo),{entries,updated_at:serverTimestamp()});
+}
+window._saveMonthDoc=saveMonthDoc;
+window._allData=allData;
+window._updateStats=updateStats;
+window._renderGrid=()=>renderGrid();
+window._buildMonthTabs=buildMonthTabs;
+
+document.querySelectorAll(".hm-backdrop").forEach(bd=>{
+  bd.addEventListener("click",ev=>{if(ev.target===bd)bd.classList.remove("show");});
+});
+</script>
+
+<!-- ══════════════════ IMPORT LOGIC (non-module) ══════════════════ -->
+<script>
+const IMPORT_MONTHS = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+const IMPORT_MONTHS_ML = {January:"ജനുവരി",February:"ഫെബ്",March:"മാർ",April:"ഏപ്",May:"മേ",June:"ജൂൺ",July:"ജൂ",August:"ഓഗ്",September:"സെ",October:"ഒക്",November:"നവ",December:"ഡി"};
+
+let importSelectedYears = new Set(["2025","2026"]);
+let importSelectedMonths = new Set(["ALL"]); // ALL = all months
+let importAllMonths = true;
+
+function buildImportMonthGrid(){
+  const grid = document.getElementById("import-month-grid");
+  // Keep the ALL button, inject individual months
+  const allBtn = grid.querySelector('[data-month="ALL"]');
+  // Remove old month buttons
+  grid.querySelectorAll('[data-month]:not([data-month="ALL"])').forEach(b=>b.remove());
+  IMPORT_MONTHS.forEach(m=>{
+    const btn = document.createElement("div");
+    btn.className = "import-month-btn" + (importAllMonths ? " selected" : "");
+    btn.dataset.month = m;
+    btn.textContent = (IMPORT_MONTHS_ML[m]||m);
+    btn.onclick = function(){ toggleMonthBtn(this); };
+    grid.appendChild(btn);
+  });
+}
+
+window.toggleYearChip = function(el){
+  el.classList.toggle("selected");
+  importSelectedYears = new Set(
+    [...document.querySelectorAll(".import-year-chip.selected")].map(c=>c.dataset.year)
+  );
+  updateImportSummary();
+};
+
+window.toggleAllMonths = function(btn){
+  importAllMonths = !importAllMonths;
+  btn.classList.toggle("selected", importAllMonths);
+  document.querySelectorAll(".import-month-btn:not([data-month='ALL'])").forEach(b=>{
+    b.classList.toggle("selected", importAllMonths);
+  });
+  updateImportSummary();
+};
+
+window.toggleMonthBtn = function(btn){
+  btn.classList.toggle("selected");
+  const anyDeselected = [...document.querySelectorAll(".import-month-btn:not([data-month='ALL'])")].some(b=>!b.classList.contains("selected"));
+  importAllMonths = !anyDeselected;
+  document.querySelector(".import-month-btn.all-months").classList.toggle("selected", importAllMonths);
+  updateImportSummary();
+};
+
+function getSelectedMonths(){
+  if(importAllMonths) return IMPORT_MONTHS;
+  return [...document.querySelectorAll(".import-month-btn.selected:not([data-month='ALL'])")].map(b=>b.dataset.month);
+}
+
+function updateImportSummary(){
+  const years = [...importSelectedYears];
+  const months = getSelectedMonths();
+  let totalEntries = 0, totalFeasts = 0;
+  years.forEach(yr=>{
+    months.forEach(mo=>{
+      const entries = (LITURGY_SOURCE[yr]||{})[mo]||[];
+      totalEntries += entries.length;
+      totalFeasts += entries.filter(e=>e.feasts&&e.feasts.length>0).length;
+    });
+  });
+  const docs = years.length * months.length;
+  const s = document.getElementById("import-summary");
+  if(years.length===0||months.length===0){
+    s.style.display="none";return;
+  }
+  s.style.display="block";
+  s.innerHTML = `Will write <strong>${docs}</strong> Firestore documents across years [${years.join(", ")}] and ${months.length} month(s). Total: <strong>${totalEntries}</strong> day entries, <strong>${totalFeasts}</strong> feast days.`;
+}
+
+window.openImport = function(){
+  document.getElementById("import-progress").style.display="none";
+  document.getElementById("import-log").style.display="none";
+  document.getElementById("import-log").textContent="";
+  document.getElementById("import-modal-status").textContent="";
+  document.getElementById("btn-do-import").disabled=false;
+  document.getElementById("btn-do-import").innerHTML='<i class="bi bi-cloud-upload"></i> Start Import';
+  buildImportMonthGrid();
+  updateImportSummary();
+  document.getElementById("m-import").classList.add("show");
+};
+
+function importLog(msg, color="#86efac"){
+  const log = document.getElementById("import-log");
+  log.style.display="block";
+  const line = document.createElement("div");
+  line.style.color=color;
+  line.textContent="› "+msg;
+  log.appendChild(line);
+  log.scrollTop=log.scrollHeight;
+}
+
+window.doImport = async function(){
+  const years = [...importSelectedYears];
+  const months = getSelectedMonths();
+  if(!years.length){alert("Select at least one year.");return;}
+  if(!months.length){alert("Select at least one month.");return;}
+
+  const db = window._db;
+  if(!db){alert("Firebase not ready yet. Try again.");return;}
+
+  // Collect all docs to write
+  const tasks = [];
+  years.forEach(yr=>{
+    months.forEach(mo=>{
+      const entries = (LITURGY_SOURCE[yr]||{})[mo];
+      if(entries!==undefined) tasks.push({yr,mo,entries});
+    });
+  });
+
+  document.getElementById("btn-do-import").disabled=true;
+  document.getElementById("btn-do-import").innerHTML='<span class="spin"></span> Importing…';
+  document.getElementById("import-progress").style.display="block";
+  document.getElementById("import-log").style.display="block";
+  document.getElementById("import-log").textContent="";
+
+  const bar = document.getElementById("import-bar");
+  const txt = document.getElementById("import-progress-text");
+  let done=0;
+
+  importLog("Starting import of "+tasks.length+" documents…","#93c5fd");
+
+  const { doc, setDoc, serverTimestamp } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js");
+
+  for(const {yr, mo, entries} of tasks){
+    try{
+      const cleaned = (entries||[]).map(e=>({
+        day: Number(e.day),
+        dayName: String(e.dayName||""),
+        season: String(e.season||""),
+        feasts: (e.feasts||[]).map(f=>String(f)),
+        readings: (e.readings||[]).map(r=>({ref:String(r.ref||""),desc:String(r.desc||"")}))
+      }));
+      await setDoc(doc(db,"liturgicalCalendar",yr+"_"+mo),{
+        entries: cleaned,
+        updated_at: serverTimestamp(),
+        imported_from: "liturgy_source_js",
+        import_time: new Date().toISOString()
+      });
+      done++;
+      bar.style.width=(done/tasks.length*100)+"%";
+      txt.textContent=`${done}/${tasks.length} — ${yr} ${mo} (${cleaned.length} entries)`;
+      importLog(`✅ ${yr}/${mo} — ${cleaned.length} entries saved`,"#86efac");
+
+      // Update local allData cache
+      if(window._allData){
+        if(!window._allData[yr]) window._allData[yr]={};
+        window._allData[yr][mo] = cleaned;
+      }
+    }catch(err){
+      importLog(`❌ ${yr}/${mo} — Error: ${err.message}`,"#fca5a5");
+    }
+  }
+
+  // Months that exist in LITURGY_SOURCE but had no entries — still write empty
+  // (skip — only write what has data)
+
+  bar.style.width="100%";
+  txt.textContent=`Done! ${done}/${tasks.length} documents written.`;
+  importLog("Import complete! "+done+" documents written to Firestore.","#34d399");
+
+  document.getElementById("btn-do-import").innerHTML='✅ Import Complete';
+  document.getElementById("import-modal-status").textContent="✅ Successfully imported "+done+" month-documents to Firestore.";
+  document.getElementById("import-modal-status").style.color="#16a34a";
+
+  // Refresh UI
+  if(window._updateStats) window._updateStats();
+  if(window._renderGrid) window._renderGrid();
+  if(window._buildMonthTabs) window._buildMonthTabs();
+  if(window._loadAll){
+    setTimeout(()=>window._loadAll(), 800);
+  }
+
+  window.toast("✅ Imported "+done+" documents to Firestore!","success",5000);
+};
+</script>
+</body>
+</html>
