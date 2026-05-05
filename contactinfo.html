@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Contact Info — AdminForge</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"/>
+  <link rel="stylesheet" href="style.css"/>
+  <style>
+    .ci-card { background:#fff; border-radius:12px; border:1px solid #e2e8f0; box-shadow:0 2px 12px rgba(0,0,0,.05); padding:22px 24px; margin-bottom:18px; }
+    .ci-card-title { font-size:1rem; font-weight:700; color:#1e293b; margin:0 0 4px; display:flex; align-items:center; gap:8px; }
+    .ci-card-title i { color:#921a02; }
+    .ci-card-sub { font-size:.78rem; color:#94a3b8; margin:0 0 16px; }
+    .ci-group { margin-bottom:14px; }
+    .ci-group label { display:block; font-size:.72rem; font-weight:700; text-transform:uppercase; letter-spacing:.05em; color:#64748b; margin-bottom:5px; }
+    .ci-group input, .ci-group textarea {
+      width:100%; border:1px solid #e2e8f0; border-radius:8px; padding:8px 12px;
+      font-size:.85rem; outline:none; transition:border-color .2s; font-family:inherit;
+    }
+    .ci-group input:focus, .ci-group textarea:focus { border-color:#921a02; }
+    .ci-group textarea { resize:vertical; min-height:70px; }
+    .ci-row { display:flex; gap:8px; align-items:center; margin-bottom:8px; }
+    .ci-row input { flex:1; border:1px solid #e2e8f0; border-radius:6px; padding:7px 10px; font-size:.82rem; outline:none; }
+    .ci-row input:focus { border-color:#921a02; }
+    .ci-row .rm { background:none; border:none; color:#ef4444; cursor:pointer; font-size:1rem; padding:4px 8px; border-radius:6px; transition:background .15s; }
+    .ci-row .rm:hover { background:#fee2e2; }
+    .ci-add-btn {
+      width:100%; padding:8px; border:1px dashed #cbd5e1; border-radius:8px;
+      background:#f8fafc; color:#64748b; cursor:pointer; font-size:.8rem;
+      transition:border-color .15s, color .15s; margin-top:4px;
+    }
+    .ci-add-btn:hover { border-color:#921a02; color:#921a02; }
+    .ci-save-bar {
+      position:sticky; top:0; z-index:50;
+      background:#1e293b; color:#fff; padding:12px 18px; border-radius:10px;
+      display:flex; justify-content:space-between; align-items:center; margin-bottom:18px;
+      flex-wrap:wrap; gap:8px;
+    }
+    .ci-save-bar .info { font-size:.82rem; }
+    .ci-save-bar .info strong { color:#fff; }
+    .ci-save-bar .info span { color:#94a3b8; }
+    .ci-save-btn {
+      background:#921a02; color:#fff; border:none; border-radius:8px;
+      padding:9px 22px; font-size:.86rem; font-weight:600; cursor:pointer;
+      display:flex; align-items:center; gap:6px; transition:background .15s;
+    }
+    .ci-save-btn:hover:not(:disabled) { background:#6d1201; }
+    .ci-save-btn:disabled { opacity:.6; cursor:not-allowed; }
+    .ci-spin { width:13px; height:13px; border:2px solid rgba(255,255,255,.4); border-top-color:#fff; border-radius:50%; animation:ci-spin .6s linear infinite; display:inline-block; }
+    @keyframes ci-spin { to { transform:rotate(360deg); } }
+    .ci-toast {
+      position:fixed; bottom:24px; right:24px; z-index:99999;
+      background:#1e293b; color:#fff; padding:12px 20px; border-radius:10px;
+      font-size:.82rem; font-weight:600; box-shadow:0 8px 24px rgba(0,0,0,.25);
+      opacity:0; transform:translateY(10px); transition:opacity .25s, transform .25s;
+      pointer-events:none; max-width:300px;
+    }
+    .ci-toast.show { opacity:1; transform:translateY(0); }
+    .ci-toast.success { background:#16a34a; }
+    .ci-toast.error { background:#dc2626; }
+    .ci-loading { text-align:center; padding:40px; color:#64748b; font-size:.9rem; }
+    .ci-hint { font-size:.7rem; color:#94a3b8; margin-top:4px; line-height:1.4; }
+    .ci-preview-iframe { width:100%; height:180px; border:1px solid #e2e8f0; border-radius:8px; margin-top:8px; }
+  </style>
+</head>
+<body>
+
+<div id="ci-toast" class="ci-toast"></div>
+<div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+<div class="dash-layout">
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-brand">
+      <div class="sidebar-logo">AF</div>
+      <div>
+        <div class="sidebar-brand-text">AdminForge</div>
+        <div class="sidebar-brand-sub">Management System</div>
+      </div>
+    </div>
+    <div class="sidebar-menu">
+      <p class="sidebar-section">Main</p>
+      <a href="dashboard.html" class="sidebar-item"><span class="si-icon">⬡</span> Dashboard</a>
+      <a href="about.html" class="sidebar-item"><span class="si-icon">ℹ</span> About Us</a>
+      <a href="administration.html" class="sidebar-item"><span class="si-icon">⛪</span> Administration</a>
+      <a href="parishes.html" class="sidebar-item"><span class="si-icon">⬡</span> Parishes</a>
+      <a href="priests.html" class="sidebar-item"><span class="si-icon">✝</span> Priests</a>
+      <a href="seminarians.html" class="sidebar-item"><span class="si-icon">🎓</span> Seminarians</a>
+      <a href="apostolilife.html" class="sidebar-item"><span class="si-icon">🏢</span> Apostoliclife</a>
+      <a href="department.html" class="sidebar-item"><span class="si-icon">🏢</span> Departments</a>
+      <a href="mission.html" class="sidebar-item"><span class="si-icon">🏢</span> Missions</a>
+      <a href="generalinfo.html" class="sidebar-item"><span class="si-icon">🏢</span> GeneralInformation</a>
+
+      <p class="sidebar-section">Communications</p>
+      <a href="userquery.html" class="sidebar-item"><span class="si-icon">✉</span> User Queries</a>
+      <a href="contactinfo.html" class="sidebar-item active"><span class="si-icon">📞</span> Contact Info</a>
+    </div>
+    <div class="sidebar-footer">
+      <div class="user-row">
+        <div class="user-row-avatar" id="sidebar-avatar">?</div>
+        <div>
+          <div class="user-row-name" id="sidebar-username">Loading…</div>
+          <div class="user-row-role" id="sidebar-role">Admin</div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <nav class="topbar">
+    <div class="topbar-left">
+      <button class="sidebar-toggle" id="sidebar-toggle">☰</button>
+      <div>
+        <div class="topbar-title">Contact Page</div>
+        <div class="topbar-sub">Manage public contact details</div>
+      </div>
+    </div>
+    <div class="topbar-right">
+      <button class="btn btn-logout btn-sm" onclick="location.href='index.html'">⏻ Logout</button>
+    </div>
+  </nav>
+
+  <main class="dash-main">
+    <div id="ci-loading" class="ci-loading">⏳ Loading contact information…</div>
+
+    <div id="ci-form" style="display:none;">
+
+      <!-- ★ SEED IMPORT BANNER (same pattern as priests.html) ★ -->
+      <div id="import-contact-banner"
+        style="background:linear-gradient(135deg,#fff7ed,#fef3c7);border:1px solid #fcd34d;border-radius:12px;padding:16px 20px;margin-bottom:18px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;">
+        <i class="bi bi-database-fill-up" style="font-size:1.4rem;color:#d97706;"></i>
+        <div style="flex:1;min-width:200px;">
+          <p style="font-size:.85rem;font-weight:700;color:#92400e;margin:0 0 2px;">Import contactinfo.json data</p>
+          <p style="font-size:.76rem;color:#b45309;margin:0;">Seeds the Firestore <code>contactinfo/main</code> document from the local JSON file. Overwrites existing values.</p>
+        </div>
+        <button id="btn-import-contact" onclick="importContactJSON()"
+          style="background:#d97706;color:#fff;border:none;border-radius:8px;padding:9px 18px;font-size:.8rem;font-weight:700;cursor:pointer;">
+          ⬆ Import contactinfo.json
+        </button>
+      </div>
+
+      <div class="ci-save-bar">
+        <div class="info">
+          <strong>Contact Page</strong>
+          <span id="ci-save-status"> — Loaded</span>
+        </div>
+        <button class="ci-save-btn" id="ci-save-btn" onclick="saveAll()">
+          <i class="bi bi-check-lg"></i> Save All Changes
+        </button>
+      </div>
+
+      <!-- MAP -->
+      <div class="ci-card">
+        <p class="ci-card-title"><i class="bi bi-geo-alt-fill"></i> Map Location</p>
+        <p class="ci-card-sub">The Google Maps embed shown on the contact page.</p>
+
+        <div class="ci-group">
+          <label>Map Embed URL <span style="color:#dc2626;">*</span></label>
+          <textarea id="f-mapEmbed" rows="3" placeholder="https://www.google.com/maps/embed?pb=..."></textarea>
+          <p class="ci-hint">From Google Maps → Share → Embed a map → copy the <code>src</code> URL inside the <code>&lt;iframe&gt;</code>.</p>
+          <iframe id="f-mapPreview" class="ci-preview-iframe" style="display:none;" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+        </div>
+
+        <div class="ci-group">
+          <label>Map Click-Through URL</label>
+          <input type="url" id="f-mapExternal" placeholder="https://maps.google.com/maps?q=..."/>
+          <p class="ci-hint">Where the user lands when they click the map or address card.</p>
+        </div>
+
+        <div class="ci-group" style="margin-bottom:0;">
+          <label>Map Caption</label>
+          <input type="text" id="f-mapCaption" placeholder="Archbishop's House, Changanacherry — Click to open in Maps"/>
+        </div>
+      </div>
+
+      <!-- ADDRESS -->
+      <div class="ci-card">
+        <p class="ci-card-title"><i class="bi bi-house-door-fill"></i> Address</p>
+        <p class="ci-card-sub">Each line will appear on its own row in the address card.</p>
+        <div id="addr-list"></div>
+        <button type="button" class="ci-add-btn" onclick="addAddrLine()">＋ Add Address Line</button>
+      </div>
+
+      <!-- PHONES -->
+      <div class="ci-card">
+        <p class="ci-card-title"><i class="bi bi-telephone-fill"></i> Phone Numbers</p>
+        <p class="ci-card-sub">"Display" is what users see. "Tel" is the dial number (with country code, e.g. +914812420040).</p>
+        <div id="phone-list"></div>
+        <button type="button" class="ci-add-btn" onclick="addPhone()">＋ Add Phone Number</button>
+      </div>
+
+      <!-- EMAIL -->
+      <div class="ci-card">
+        <p class="ci-card-title"><i class="bi bi-envelope-fill"></i> Email</p>
+        <div class="ci-group" style="margin-bottom:0;">
+          <label>Email Address</label>
+          <input type="email" id="f-email" placeholder="info@archchanganacherry.org"/>
+        </div>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+  import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+  import {
+    getFirestore, doc, getDoc, setDoc, serverTimestamp
+  } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+  const FC = {
+    apiKey: "AIzaSyArM8sv7J1RUj4XvAJhJd40tzA7Yc8BGXY",
+    authDomain: "admin-dashboard-ed62c.firebaseapp.com",
+    projectId: "admin-dashboard-ed62c",
+    storageBucket: "admin-dashboard-ed62c.firebasestorage.app",
+    messagingSenderId: "560027475135",
+    appId: "1:560027475135:web:3fae0cb0268729ae79fa0a"
+  };
+  const ADMIN_EMAIL = "issacnewton1503@gmail.com";
+  const app  = initializeApp(FC);
+  const auth = getAuth(app);
+  const db   = getFirestore(app);
+  const DOC_REF = doc(db, "contactinfo", "main");
+
+  /* Default values — match what's currently hardcoded in contact.html */
+  const DEFAULTS = {
+    mapEmbedUrl: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3935.662671439568!2d76.54072647502399!3d9.450948990628236!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3b06260605dd5457%3A0xbf0abb9ff0d64128!2sArchbishop&#39;s%20House!5e0!3m2!1sen!2sin!4v1776362333618!5m2!1sen!2sin",
+    mapExternalUrl: "https://maps.google.com/maps?q=Archbishop+House+Changanacherry+Kottayam+Kerala+686101",
+    mapCaption: "Archbishop's House, Changanacherry — Click to open in Maps",
+    addressLines: [
+      "Archbishop House, P.B. No. 20",
+      "Changanacherry P.O., Kottayam 686 101",
+      "Kerala, India"
+    ],
+    phones: [
+      { label: "0481 2420040",          tel: "+914812420040" },
+      { label: "2420379",               tel: "+914812420379" },
+      { label: "2420614",               tel: "+914812420614" },
+      { label: "Mobile: +91 9037440040", tel: "+919037440040" }
+    ],
+    email: "info@archchanganacherry.org"
+  };
+
+  /* ── Toast ── */
+  function toast(msg, type = "", dur = 2800) {
+    const t = document.getElementById("ci-toast");
+    t.textContent = msg;
+    t.className = "ci-toast show" + (type ? " " + type : "");
+    clearTimeout(t._t);
+    t._t = setTimeout(() => t.className = "ci-toast", dur);
+  }
+
+  /* ── Render dynamic rows ── */
+  function renderAddrLines(lines) {
+    const wrap = document.getElementById("addr-list");
+    wrap.innerHTML = "";
+    lines.forEach((line, i) => {
+      const row = document.createElement("div");
+      row.className = "ci-row";
+      row.innerHTML = `
+        <input type="text" value="${esc(line)}" placeholder="Address line ${i + 1}" data-addr-idx="${i}"/>
+        <button type="button" class="rm" title="Remove">✕</button>
+      `;
+      row.querySelector(".rm").addEventListener("click", () => {
+        row.remove();
+      });
+      wrap.appendChild(row);
+    });
+  }
+
+  function renderPhones(phones) {
+    const wrap = document.getElementById("phone-list");
+    wrap.innerHTML = "";
+    phones.forEach(p => {
+      const row = document.createElement("div");
+      row.className = "ci-row";
+      row.innerHTML = `
+        <input type="text" value="${esc(p.label || "")}" placeholder="Display (e.g. 0481 2420040)" style="flex:1.2;"/>
+        <input type="text" value="${esc(p.tel || "")}" placeholder="Tel (+914812420040)" style="flex:1;"/>
+        <button type="button" class="rm" title="Remove">✕</button>
+      `;
+      row.querySelector(".rm").addEventListener("click", () => row.remove());
+      wrap.appendChild(row);
+    });
+  }
+
+  window.addAddrLine = function() {
+    const wrap = document.getElementById("addr-list");
+    const row = document.createElement("div");
+    row.className = "ci-row";
+    row.innerHTML = `
+      <input type="text" value="" placeholder="Address line"/>
+      <button type="button" class="rm" title="Remove">✕</button>
+    `;
+    row.querySelector(".rm").addEventListener("click", () => row.remove());
+    wrap.appendChild(row);
+  };
+
+  window.addPhone = function() {
+    const wrap = document.getElementById("phone-list");
+    const row = document.createElement("div");
+    row.className = "ci-row";
+    row.innerHTML = `
+      <input type="text" value="" placeholder="Display (e.g. 0481 2420040)" style="flex:1.2;"/>
+      <input type="text" value="" placeholder="Tel (+914812420040)" style="flex:1;"/>
+      <button type="button" class="rm" title="Remove">✕</button>
+    `;
+    row.querySelector(".rm").addEventListener("click", () => row.remove());
+    wrap.appendChild(row);
+  };
+
+  function esc(s) {
+    return String(s ?? "").replace(/&/g,"&amp;").replace(/</g,"&lt;")
+      .replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+  }
+
+  /* ── Load doc ── */
+  async function load() {
+    try {
+      const snap = await getDoc(DOC_REF);
+      const data = snap.exists() ? { ...DEFAULTS, ...snap.data() } : { ...DEFAULTS };
+
+      document.getElementById("f-mapEmbed").value     = data.mapEmbedUrl    || "";
+      document.getElementById("f-mapExternal").value  = data.mapExternalUrl || "";
+      document.getElementById("f-mapCaption").value   = data.mapCaption     || "";
+      document.getElementById("f-email").value        = data.email          || "";
+
+      const addrLines = Array.isArray(data.addressLines) && data.addressLines.length ? data.addressLines : [""];
+      renderAddrLines(addrLines);
+
+      const phones = Array.isArray(data.phones) && data.phones.length ? data.phones : [{ label:"", tel:"" }];
+      renderPhones(phones);
+
+      updateMapPreview();
+
+      document.getElementById("ci-loading").style.display = "none";
+      document.getElementById("ci-form").style.display = "block";
+
+      const status = document.getElementById("ci-save-status");
+      if (snap.exists()) {
+        status.textContent = " — Loaded from Firestore";
+      } else {
+        status.textContent = " — Showing defaults (not yet saved)";
+      }
+    } catch (err) {
+      console.error("Load failed:", err);
+      toast("Failed to load: " + err.message, "error", 4000);
+      document.getElementById("ci-loading").textContent = "❌ Failed to load. Check console.";
+    }
+  }
+
+  /* ── Map preview ── */
+  function updateMapPreview() {
+    const url = document.getElementById("f-mapEmbed").value.trim();
+    const iframe = document.getElementById("f-mapPreview");
+    if (url) {
+      iframe.src = url;
+      iframe.style.display = "block";
+    } else {
+      iframe.style.display = "none";
+      iframe.src = "";
+    }
+  }
+
+  /* ── Collect & save ── */
+  window.saveAll = async function() {
+    const btn = document.getElementById("ci-save-btn");
+    const status = document.getElementById("ci-save-status");
+    const originalHTML = btn.innerHTML;
+
+    /* Collect address lines (non-empty) */
+    const addressLines = Array.from(document.querySelectorAll("#addr-list input"))
+      .map(i => i.value.trim()).filter(Boolean);
+
+    /* Collect phones (need at least display OR tel) */
+    const phoneRows = Array.from(document.querySelectorAll("#phone-list .ci-row"));
+    const phones = phoneRows.map(r => {
+      const inputs = r.querySelectorAll("input");
+      return { label: inputs[0].value.trim(), tel: inputs[1].value.trim() };
+    }).filter(p => p.label || p.tel);
+
+    const payload = {
+      mapEmbedUrl:    document.getElementById("f-mapEmbed").value.trim(),
+      mapExternalUrl: document.getElementById("f-mapExternal").value.trim(),
+      mapCaption:     document.getElementById("f-mapCaption").value.trim(),
+      addressLines,
+      phones,
+      email:          document.getElementById("f-email").value.trim(),
+      _updated:       serverTimestamp()
+    };
+
+    btn.disabled = true;
+    btn.innerHTML = '<span class="ci-spin"></span> Saving…';
+    status.textContent = " — Saving…";
+
+    try {
+      await setDoc(DOC_REF, payload);
+      toast("Contact info saved! ✓", "success");
+      status.textContent = " — Saved " + new Date().toLocaleTimeString();
+      updateMapPreview();
+    } catch (err) {
+      console.error("Save failed:", err);
+      toast("Save failed: " + err.message, "error", 4000);
+      status.textContent = " — Save failed";
+    } finally {
+      btn.disabled = false;
+      btn.innerHTML = originalHTML;
+    }
+  };
+
+  /* ── Seed import: read contactinfo.json → write to Firestore → reload ── */
+  window.importContactJSON = async function() {
+    if (!confirm("Import contactinfo.json into Firestore?\n\nThis will overwrite the current contactinfo/main document.")) return;
+
+    const btn = document.getElementById("btn-import-contact");
+    const original = btn.innerHTML;
+    btn.disabled = true;
+    btn.innerHTML = "⏳ Importing…";
+
+    try {
+      const res = await fetch("contactinfo.json", { cache: "no-store" });
+      if (!res.ok) throw new Error("Could not read contactinfo.json (HTTP " + res.status + ")");
+      const json = await res.json();
+
+      const payload = {
+        mapEmbedUrl:    String(json.mapEmbedUrl    || ""),
+        mapExternalUrl: String(json.mapExternalUrl || ""),
+        mapCaption:     String(json.mapCaption     || ""),
+        addressLines:   Array.isArray(json.addressLines) ? json.addressLines.map(String) : [],
+        phones:         Array.isArray(json.phones) ? json.phones.map(p => ({
+                          label: String(p.label || ""),
+                          tel:   String(p.tel   || "")
+                        })) : [],
+        email:          String(json.email || ""),
+        _updated:       serverTimestamp(),
+        _seededFromJson: true
+      };
+
+      await setDoc(DOC_REF, payload);
+      toast("contactinfo.json imported! ✓", "success");
+      await load();
+    } catch (err) {
+      console.error("Import failed:", err);
+      toast("Import failed: " + err.message, "error", 4000);
+    } finally {
+      btn.disabled = false;
+      btn.innerHTML = original;
+    }
+  };
+
+  /* ── Live map preview on change ── */
+  document.addEventListener("input", (e) => {
+    if (e.target && e.target.id === "f-mapEmbed") updateMapPreview();
+  });
+
+  /* ── Sidebar toggle ── */
+  document.addEventListener("DOMContentLoaded", () => {
+    const tog = document.getElementById("sidebar-toggle");
+    if (tog) tog.addEventListener("click", () => {
+      document.getElementById("sidebar").classList.toggle("open");
+      document.getElementById("sidebar-overlay").classList.toggle("show");
+    });
+    const ov = document.getElementById("sidebar-overlay");
+    if (ov) ov.addEventListener("click", () => {
+      document.getElementById("sidebar").classList.remove("open");
+      ov.classList.remove("show");
+    });
+  });
+
+  /* ── Auth gate ── */
+  onAuthStateChanged(auth, (user) => {
+    if (user && user.email === ADMIN_EMAIL) {
+      const u = user.email;
+      document.getElementById("sidebar-username").textContent = u.split("@")[0] || "Admin";
+      document.getElementById("sidebar-avatar").textContent = (u[0] || "A").toUpperCase();
+      load();
+    } else {
+      console.warn("Unauthorized — redirecting to login.");
+      window.location.href = "index.html";
+    }
+  });
+</script>
+</body>
+</html>

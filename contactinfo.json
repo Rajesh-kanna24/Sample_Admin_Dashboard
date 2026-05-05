@@ -1,0 +1,17 @@
+{
+  "mapEmbedUrl": "https://maps.google.com/maps?q=9.450948,76.540726&hl=en&z=16&output=embed",
+  "mapExternalUrl": "https://maps.google.com/maps?q=Archbishop+House+Changanacherry+Kottayam+Kerala+686101",
+  "mapCaption": "Archbishop's House, Changanacherry — Click to open in Maps",
+  "addressLines": [
+    "Archbishop House, P.B. No. 20",
+    "Changanacherry P.O., Kottayam 686 101",
+    "Kerala, India"
+  ],
+  "phones": [
+    { "label": "0481 2420040", "tel": "+914812420040" },
+    { "label": "2420379", "tel": "+914812420379" },
+    { "label": "2420614", "tel": "+914812420614" },
+    { "label": "Mobile: +91 9037440040", "tel": "+919037440040" }
+  ],
+  "email": "info@archchanganacherry.org"
+}
