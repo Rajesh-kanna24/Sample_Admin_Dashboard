@@ -1,0 +1,854 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Announcements — Admin</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"/>
+  <link rel="stylesheet" href="style.css"/>
+  <style>
+    :root { --brand:#921a02; --brand-dark:#6e1301; --brand-light:rgba(146,26,2,0.08); --brand-border:rgba(217,35,45,0.18); }
+
+    .page-head { display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; margin-bottom:18px; }
+    .page-head h1 { font-size:1.4rem; font-weight:800; color:#1e293b; margin:0; display:flex; align-items:center; gap:10px; }
+    .page-head h1 i { color:var(--brand); }
+    .btn-add-ann { background:var(--brand); color:#fff; border:none; border-radius:8px; padding:10px 18px; font-size:.85rem; font-weight:700; cursor:pointer; display:inline-flex; align-items:center; gap:8px; transition:background .15s, transform .1s; }
+    .btn-add-ann:hover { background:var(--brand-dark); transform:translateY(-1px); }
+
+    /* Stats */
+    .ann-stats { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:14px; margin-bottom:22px; }
+    .ann-stat { background:#fff; border:1px solid #e2e8f0; border-radius:12px; padding:14px 18px; display:flex; align-items:center; gap:12px; box-shadow:0 1px 3px rgba(0,0,0,.03); }
+    .ann-stat-icon { width:42px; height:42px; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:1.2rem; flex-shrink:0; }
+    .ann-stat-icon.brand { background:var(--brand-light); color:var(--brand); }
+    .ann-stat-icon.green { background:#f0fdf4; color:#16a34a; }
+    .ann-stat-icon.gray  { background:#f1f5f9; color:#64748b; }
+    .ann-stat-value { font-size:1.4rem; font-weight:800; color:#1e293b; line-height:1; }
+    .ann-stat-label { font-size:.7rem; color:#64748b; margin-top:4px; }
+
+    /* Cards */
+    .ann-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(290px,1fr)); gap:16px; }
+    .ann-card { background:#fff; border:1px solid #e2e8f0; border-radius:12px; overflow:hidden; transition:box-shadow .2s, transform .2s; display:flex; flex-direction:column; }
+    .ann-card:hover { box-shadow:0 8px 22px rgba(0,0,0,.08); transform:translateY(-2px); }
+    .ann-thumb { width:100%; aspect-ratio:16/9; background:#f1f5f9; display:flex; align-items:center; justify-content:center; overflow:hidden; }
+    .ann-thumb img { width:100%; height:100%; object-fit:cover; display:block; }
+    .ann-thumb .ph { font-size:2rem; color:#cbd5e1; }
+    .ann-body { padding:14px 16px 16px; flex:1; display:flex; flex-direction:column; }
+    .ann-meta { font-size:.7rem; color:#94a3b8; margin-bottom:6px; display:flex; align-items:center; justify-content:space-between; gap:8px; }
+    .ann-status { font-size:.65rem; font-weight:700; padding:2px 8px; border-radius:20px; text-transform:uppercase; letter-spacing:.04em; }
+    .ann-status.published { background:#dcfce7; color:#15803d; }
+    .ann-status.draft     { background:#fee2e2; color:#b91c1c; }
+    .ann-title { font-size:.95rem; font-weight:700; color:#1e293b; margin:0 0 6px; line-height:1.35; }
+    .ann-summary { font-size:.78rem; color:#64748b; line-height:1.5; margin:0 0 10px; flex:1; display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden; }
+    .ann-blocks-info { font-size:.7rem; color:#94a3b8; margin-bottom:10px; display:flex; gap:10px; flex-wrap:wrap; }
+    .ann-blocks-info span { display:inline-flex; align-items:center; gap:3px; }
+    .ann-actions { display:flex; gap:6px; padding-top:10px; border-top:1px solid #f1f5f9; }
+    .ann-actions button { flex:1; padding:6px 10px; border:1px solid #e2e8f0; border-radius:6px; background:#fff; font-size:.72rem; font-weight:600; cursor:pointer; transition:all .15s; display:inline-flex; align-items:center; justify-content:center; gap:4px; }
+    .ann-actions button:hover { background:#f8fafc; border-color:#cbd5e1; }
+    .ann-actions button.edit:hover { color:#4f46e5; border-color:#c7d2fe; }
+    .ann-actions button.del:hover  { color:#dc2626; border-color:#fecaca; }
+
+    .empty-ann { text-align:center; padding:60px 20px; color:#94a3b8; background:#fff; border:1px dashed #e2e8f0; border-radius:12px; }
+    .empty-ann i { font-size:3rem; display:block; margin-bottom:10px; color:#cbd5e1; }
+    .empty-ann h3 { font-size:1.05rem; color:#475569; margin:6px 0 4px; }
+
+    /* Modal */
+    .ann-backdrop { display:none; position:fixed; inset:0; background:rgba(15,23,42,.55); z-index:9000; align-items:center; justify-content:center; padding:20px; overflow-y:auto; }
+    .ann-backdrop.show { display:flex; }
+    .ann-box { background:#fff; border-radius:14px; max-width:780px; width:100%; max-height:92vh; overflow-y:auto; padding:26px 28px; position:relative; box-shadow:0 16px 50px rgba(0,0,0,.25); }
+    .ann-close { position:absolute; top:14px; right:14px; background:#f1f5f9; border:none; width:32px; height:32px; border-radius:8px; cursor:pointer; font-size:1rem; color:#64748b; }
+    .ann-close:hover { background:#e2e8f0; color:#1e293b; }
+    .ann-box h2 { font-size:1.25rem; font-weight:800; color:#1e293b; margin:0 0 4px; }
+    .ann-box .subtle { font-size:.78rem; color:#94a3b8; margin-bottom:18px; }
+    .form-group { margin-bottom:14px; }
+    .form-group label { display:block; font-size:.74rem; font-weight:700; color:#475569; text-transform:uppercase; letter-spacing:.04em; margin-bottom:6px; }
+    .form-group input[type=text], .form-group input[type=date], .form-group textarea, .form-group select {
+      width:100%; border:1px solid #e2e8f0; border-radius:8px; padding:9px 12px; font-size:.85rem; outline:none; font-family:inherit; transition:border-color .15s, box-shadow .15s;
+    }
+    .form-group input:focus, .form-group textarea:focus, .form-group select:focus { border-color:var(--brand); box-shadow:0 0 0 3px rgba(146,26,2,.1); }
+    .form-row { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+    @media(max-width:600px){ .form-row { grid-template-columns:1fr; } }
+
+    /* Cover image */
+    .cover-zone { border:1.5px dashed #cbd5e1; border-radius:10px; padding:18px; text-align:center; background:#f8fafc; cursor:pointer; transition:border-color .15s, background .15s; position:relative; min-height:120px; display:flex; align-items:center; justify-content:center; }
+    .cover-zone:hover { border-color:var(--brand); background:rgba(146,26,2,.04); }
+    .cover-zone input { position:absolute; inset:0; opacity:0; cursor:pointer; }
+    .cover-zone .cz-empty { color:#64748b; }
+    .cover-zone .cz-empty i { font-size:1.6rem; display:block; margin-bottom:6px; color:#94a3b8; }
+    .cover-preview { position:relative; width:100%; }
+    .cover-preview img { width:100%; max-height:200px; object-fit:cover; border-radius:8px; display:block; }
+    .cover-preview .rm-cover { position:absolute; top:8px; right:8px; background:rgba(220,38,38,.95); color:#fff; border:none; border-radius:50%; width:28px; height:28px; cursor:pointer; font-size:.85rem; display:flex; align-items:center; justify-content:center; }
+
+    /* Blocks editor */
+    .blocks-section h3 { font-size:.92rem; font-weight:700; color:#1e293b; margin:18px 0 8px; display:flex; align-items:center; justify-content:space-between; }
+    .add-block-bar { display:flex; gap:6px; flex-wrap:wrap; padding:10px; background:#f8fafc; border:1px dashed #cbd5e1; border-radius:10px; margin-bottom:12px; }
+    .add-block-bar .label { font-size:.7rem; color:#64748b; align-self:center; margin-right:4px; font-weight:600; }
+    .add-block-btn { background:#fff; border:1px solid #e2e8f0; border-radius:6px; padding:6px 12px; font-size:.74rem; font-weight:600; cursor:pointer; color:#475569; display:inline-flex; align-items:center; gap:5px; transition:all .15s; }
+    .add-block-btn:hover { border-color:var(--brand); color:var(--brand); background:#fef2f0; }
+
+    .block-item { background:#f8fafc; border:1px solid #e2e8f0; border-radius:10px; padding:14px; margin-bottom:10px; position:relative; }
+    .block-item-head { display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; }
+    .block-type-tag { font-size:.65rem; font-weight:700; text-transform:uppercase; letter-spacing:.06em; padding:3px 9px; border-radius:20px; color:#fff; display:inline-flex; align-items:center; gap:4px; }
+    .block-type-tag.heading { background:#7c3aed; }
+    .block-type-tag.text    { background:#0891b2; }
+    .block-type-tag.image   { background:#16a34a; }
+    .block-type-tag.gallery { background:#ea580c; }
+    .block-controls { display:flex; gap:4px; }
+    .block-controls button { background:#fff; border:1px solid #e2e8f0; border-radius:5px; width:26px; height:26px; cursor:pointer; font-size:.75rem; color:#64748b; display:flex; align-items:center; justify-content:center; }
+    .block-controls button:hover { background:#fef2f0; color:var(--brand); border-color:var(--brand-border); }
+    .block-controls button.del:hover { color:#dc2626; border-color:#fecaca; }
+    .block-item textarea, .block-item input[type=text] { width:100%; border:1px solid #e2e8f0; border-radius:6px; padding:8px 10px; font-size:.82rem; outline:none; font-family:inherit; }
+    .block-item textarea:focus, .block-item input:focus { border-color:var(--brand); }
+    .block-item textarea { resize:vertical; min-height:60px; }
+
+    /* Image block */
+    .image-block-zone { border:1.5px dashed #cbd5e1; border-radius:8px; padding:14px; text-align:center; background:#fff; position:relative; cursor:pointer; min-height:80px; display:flex; align-items:center; justify-content:center; }
+    .image-block-zone input { position:absolute; inset:0; opacity:0; cursor:pointer; }
+    .image-block-preview { position:relative; }
+    .image-block-preview img { width:100%; max-height:200px; object-fit:cover; border-radius:6px; display:block; }
+    .image-block-preview .rm { position:absolute; top:6px; right:6px; background:rgba(220,38,38,.92); color:#fff; border:none; border-radius:50%; width:24px; height:24px; cursor:pointer; font-size:.72rem; }
+
+    /* Gallery block */
+    .gallery-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(110px,1fr)); gap:8px; margin-bottom:8px; }
+    .gallery-item { position:relative; aspect-ratio:1/1; border-radius:6px; overflow:hidden; background:#f1f5f9; }
+    .gallery-item img { width:100%; height:100%; object-fit:cover; }
+    .gallery-item .rm-img { position:absolute; top:4px; right:4px; background:rgba(220,38,38,.92); color:#fff; border:none; border-radius:50%; width:22px; height:22px; cursor:pointer; font-size:.7rem; display:flex; align-items:center; justify-content:center; }
+    .gallery-item input.cap-input { position:absolute; bottom:0; left:0; right:0; background:rgba(0,0,0,.65); border:none; color:#fff; padding:4px 6px; font-size:.65rem; outline:none; }
+    .gallery-item input.cap-input::placeholder { color:rgba(255,255,255,.6); }
+    .gallery-add { aspect-ratio:1/1; border:1.5px dashed #cbd5e1; border-radius:6px; display:flex; align-items:center; justify-content:center; background:#f8fafc; color:#94a3b8; cursor:pointer; position:relative; transition:border-color .15s, color .15s; font-size:1.5rem; }
+    .gallery-add:hover { border-color:var(--brand); color:var(--brand); background:#fef2f0; }
+    .gallery-add input { position:absolute; inset:0; opacity:0; cursor:pointer; }
+
+    /* Modal footer */
+    .modal-actions { display:flex; gap:10px; padding-top:18px; margin-top:18px; border-top:1px solid #e2e8f0; }
+    .btn-cancel { background:#f1f5f9; color:#475569; border:none; border-radius:8px; padding:10px 18px; font-size:.82rem; font-weight:600; cursor:pointer; }
+    .btn-cancel:hover { background:#e2e8f0; }
+    .btn-save { flex:1; background:var(--brand); color:#fff; border:none; border-radius:8px; padding:10px 18px; font-size:.85rem; font-weight:700; cursor:pointer; transition:background .15s; }
+    .btn-save:hover { background:var(--brand-dark); }
+    .btn-save:disabled { opacity:.6; cursor:not-allowed; }
+    .save-status { font-size:.78rem; margin-top:10px; min-height:1.2em; }
+
+    /* Toast */
+    #ann-toast { position:fixed; bottom:24px; left:50%; transform:translateX(-50%) translateY(100px); background:#1e293b; color:#fff; padding:11px 20px; border-radius:10px; font-size:.85rem; font-weight:600; z-index:10000; opacity:0; transition:transform .3s, opacity .3s; box-shadow:0 8px 28px rgba(0,0,0,.3); }
+    #ann-toast.show { transform:translateX(-50%) translateY(0); opacity:1; }
+    #ann-toast.success { background:#15803d; }
+    #ann-toast.error   { background:#dc2626; }
+
+    /* Sidebar (matches existing pages) */
+    .sidebar { background:#fff; width:260px; height:100vh; position:fixed; left:0; top:0; border-right:1px solid #e2e8f0; overflow-y:auto; padding:20px 16px; z-index:200; transition:transform .3s; }
+    .dash-main { margin-left:260px; padding:24px; min-height:100vh; }
+    @media (max-width:991px){
+      .sidebar { transform:translateX(-100%); }
+      .sidebar.open { transform:translateX(0); }
+      .dash-main { margin-left:0; padding:20px 14px; }
+      .sidebar-toggle { display:block; position:fixed; top:14px; left:14px; z-index:300; background:var(--brand); color:#fff; border:none; border-radius:8px; padding:8px 14px; font-size:1.1rem; cursor:pointer; }
+    }
+    @media (min-width:992px){ .sidebar-toggle { display:none; } }
+    .sidebar-overlay { display:none; position:fixed; inset:0; z-index:199; background:rgba(0,0,0,.45); }
+    .sidebar-overlay.show { display:block; }
+    .sidebar-brand { display:flex; align-items:center; gap:10px; padding:6px 6px 16px; border-bottom:1px solid #f1f5f9; margin-bottom:14px; }
+    .sidebar-logo { width:36px; height:36px; border-radius:9px; background:var(--brand); color:#fff; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:.85rem; }
+    .sidebar-brand-text { font-size:.92rem; font-weight:700; color:#1e293b; }
+    .sidebar-brand-sub  { font-size:.66rem; color:#94a3b8; }
+    .sidebar-section    { font-size:.62rem; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:#94a3b8; padding:14px 10px 6px; margin:0; }
+    .sidebar-item { display:flex; align-items:center; gap:9px; padding:9px 12px; color:#475569; font-size:.82rem; font-weight:600; text-decoration:none; border-radius:8px; cursor:pointer; transition:background .15s, color .15s; margin-bottom:1px; }
+    .sidebar-item i, .sidebar-item .si-icon { width:18px; text-align:center; flex-shrink:0; }
+    .sidebar-item:hover { background:var(--brand-light); color:var(--brand); }
+    .sidebar-item.active { background:var(--brand); color:#fff; }
+    .sidebar-item.active:hover { background:var(--brand-dark); color:#fff; }
+    .si-badge { margin-left:auto; background:#e2e8f0; color:#64748b; font-size:.62rem; font-weight:700; padding:1px 7px; border-radius:20px; }
+    .sidebar-item.active .si-badge { background:rgba(255,255,255,.25); color:#fff; }
+  </style>
+</head>
+<body>
+
+<button class="sidebar-toggle" id="sidebar-toggle">☰</button>
+<div id="ann-toast"></div>
+<div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-brand">
+    <div class="sidebar-logo">AF</div>
+    <div>
+      <div class="sidebar-brand-text">AdminForge</div>
+      <div class="sidebar-brand-sub">Management System</div>
+    </div>
+  </div>
+  <div class="sidebar-menu">
+    <p class="sidebar-section">Main</p>
+    <a href="dashboard.html" class="sidebar-item"><i class="bi bi-house"></i> Home</a>
+    <a href="about.html" class="sidebar-item"><i class="bi bi-info-circle"></i> About Us</a>
+    <a href="administration.html" class="sidebar-item"><i class="bi bi-building-check"></i> Administration</a>
+    <a href="parishes.html" class="sidebar-item"><i class="bi bi-geo-alt"></i> Parishes</a>
+    <a href="priests.html" class="sidebar-item"><i class="bi bi-person-badge"></i> Priests</a>
+    <a href="seminarians.html" class="sidebar-item"><i class="bi bi-mortarboard"></i> Seminarians</a>
+    <a href="apostolilife.html" class="sidebar-item"><i class="bi bi-building"></i> Apostolic Life</a>
+    <a href="department.html" class="sidebar-item"><i class="bi bi-building"></i> Departments</a>
+    <a href="mission.html" class="sidebar-item"><span class="si-icon">🌍</span> Missions</a>
+    <a href="generalinfo.html" class="sidebar-item"><span class="si-icon">📋</span> General Information</a>
+    <a href="announcements.html" class="sidebar-item active"><i class="bi bi-megaphone-fill"></i> Announcements <span class="si-badge" id="sidebar-ann-count">0</span></a>
+
+    <p class="sidebar-section">Communications</p>
+    <a href="userquery.html" class="sidebar-item"><span class="si-icon">✉</span> User Queries</a>
+    <a href="contactinfo.html" class="sidebar-item"><span class="si-icon">📞</span> Contact Info</a>
+  </div>
+</aside>
+
+<main class="dash-main">
+
+  <div class="page-head">
+    <h1><i class="bi bi-megaphone-fill"></i> Announcements</h1>
+    <button class="btn-add-ann" id="btn-new-ann"><i class="bi bi-plus-circle"></i> New Announcement</button>
+  </div>
+
+  <!-- Stats -->
+  <div class="ann-stats">
+    <div class="ann-stat">
+      <div class="ann-stat-icon brand"><i class="bi bi-collection"></i></div>
+      <div><div class="ann-stat-value" id="stat-total">0</div><div class="ann-stat-label">Total Announcements</div></div>
+    </div>
+    <div class="ann-stat">
+      <div class="ann-stat-icon green"><i class="bi bi-eye-fill"></i></div>
+      <div><div class="ann-stat-value" id="stat-published">0</div><div class="ann-stat-label">Published</div></div>
+    </div>
+    <div class="ann-stat">
+      <div class="ann-stat-icon gray"><i class="bi bi-eye-slash-fill"></i></div>
+      <div><div class="ann-stat-value" id="stat-drafts">0</div><div class="ann-stat-label">Drafts</div></div>
+    </div>
+  </div>
+
+  <!-- Grid -->
+  <div id="ann-grid" class="ann-grid"></div>
+
+</main>
+
+<!-- ─── EDITOR MODAL ─── -->
+<div class="ann-backdrop" id="m-ann">
+  <div class="ann-box">
+    <button class="ann-close" onclick="closeAnnModal()">&times;</button>
+    <h2 id="ann-modal-title">New Announcement</h2>
+    <p class="subtle">Add flexible content blocks: headings, paragraphs, single images, or galleries.</p>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label>Title <span style="color:#dc2626;">*</span></label>
+        <input type="text" id="ann-title" placeholder="e.g. Christmas Season Schedule"/>
+      </div>
+      <div class="form-group">
+        <label>Publish Date</label>
+        <input type="date" id="ann-date"/>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>Summary <span style="font-weight:400; color:#94a3b8; text-transform:none; letter-spacing:0;">— shown on the listing card (optional)</span></label>
+      <textarea id="ann-summary" rows="2" placeholder="Short summary visible on the announcements list page…"></textarea>
+    </div>
+
+    <div class="form-group">
+      <label>Cover Image <span style="font-weight:400; color:#94a3b8; text-transform:none; letter-spacing:0;">— shown on the listing card (optional)</span></label>
+      <div class="cover-zone" id="cover-zone">
+        <input type="file" id="cover-file" accept="image/*"/>
+        <div class="cz-empty" id="cover-empty">
+          <i class="bi bi-image"></i>
+          <div>Click or drop to upload a cover image</div>
+          <div style="font-size:.7rem; margin-top:4px; color:#94a3b8;">Recommended: 1200×675px</div>
+        </div>
+        <div class="cover-preview" id="cover-preview" style="display:none;">
+          <img id="cover-img" src="" alt="">
+          <button type="button" class="rm-cover" onclick="removeCover(event)" title="Remove cover image"><i class="bi bi-trash"></i></button>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label>Status</label>
+        <select id="ann-published">
+          <option value="true">Published</option>
+          <option value="false">Draft (hidden from website)</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Display Order <span style="font-weight:400; color:#94a3b8; text-transform:none; letter-spacing:0;">— higher = on top</span></label>
+        <input type="text" id="ann-order" placeholder="auto"/>
+      </div>
+    </div>
+
+    <div class="blocks-section">
+      <h3><span><i class="bi bi-blocks me-1"></i>Content Blocks</span></h3>
+      <div class="add-block-bar">
+        <span class="label">Add:</span>
+        <button class="add-block-btn" type="button" onclick="addBlock('heading')"><i class="bi bi-type-h2"></i> Heading</button>
+        <button class="add-block-btn" type="button" onclick="addBlock('text')"><i class="bi bi-text-paragraph"></i> Text</button>
+        <button class="add-block-btn" type="button" onclick="addBlock('image')"><i class="bi bi-image"></i> Image</button>
+        <button class="add-block-btn" type="button" onclick="addBlock('gallery')"><i class="bi bi-collection"></i> Gallery</button>
+      </div>
+      <div id="blocks-list"></div>
+    </div>
+
+    <div class="modal-actions">
+      <button type="button" class="btn-cancel" onclick="closeAnnModal()">Cancel</button>
+      <button type="button" class="btn-save" id="btn-save-ann" onclick="saveAnnouncement()"><i class="bi bi-check2-circle"></i> Save Announcement</button>
+    </div>
+    <div class="save-status" id="ann-save-status"></div>
+  </div>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import {
+  getFirestore, collection, doc, getDocs, getDoc, addDoc, updateDoc, deleteDoc,
+  query, orderBy, serverTimestamp, onSnapshot
+} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+// ── Cloudinary (matches dashboard.html) ───────────────────
+const CLOUDINARY = { cloudName:"dqwayxpbp", uploadPreset:"church_hero_images" };
+async function uploadToCloudinary(file, folder="announcements") {
+  const fd = new FormData();
+  fd.append("file", file); fd.append("upload_preset", CLOUDINARY.uploadPreset); fd.append("folder", folder);
+  const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY.cloudName}/image/upload`, { method:"POST", body:fd });
+  if (!res.ok) {
+    let msg = "Cloudinary upload failed";
+    try { const d = await res.json(); msg = d.error?.message || msg; } catch {}
+    throw new Error(msg);
+  }
+  const data = await res.json();
+  return { url:data.secure_url, publicId:data.public_id };
+}
+async function deleteFromCloudinary(publicId) {
+  if (!publicId) return { result:"skipped" };
+  try {
+    const fd = new FormData();
+    fd.append("public_id", publicId); fd.append("upload_preset", CLOUDINARY.uploadPreset);
+    const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY.cloudName}/image/destroy`, { method:"POST", body:fd });
+    return await res.json();
+  } catch (err) {
+    console.warn("[Cloudinary] delete failed:", err.message);
+    return { result:"error" };
+  }
+}
+
+// ── Firebase ────────────────────────────────────────────
+const FC = {
+  apiKey:            "AIzaSyArM8sv7J1RUj4XvAJhJd40tzA7Yc8BGXY",
+  authDomain:        "admin-dashboard-ed62c.firebaseapp.com",
+  projectId:         "admin-dashboard-ed62c",
+  storageBucket:     "admin-dashboard-ed62c.firebasestorage.app",
+  messagingSenderId: "560027475135",
+  appId:             "1:560027475135:web:3fae0cb0268729ae79fa0a"
+};
+const ADMIN = "issacnewton1503@gmail.com";
+const app   = initializeApp(FC);
+const auth  = getAuth(app);
+const db    = getFirestore(app);
+const annCol = collection(db, "announcements");
+
+let role = null;
+let allAnns = [];
+let editingId = null;          // null when creating
+let editingDocSnapshot = null; // server copy when editing — to compute deletions
+
+// In-memory editor state
+let draft = {
+  title: "",
+  summary: "",
+  publishDate: "",
+  coverImageUrl: "",
+  coverImagePublicId: "",
+  published: true,
+  order: 0,
+  blocks: []                   // [{ type, ...payload }]
+};
+// Track Cloudinary IDs to delete on save (replaced/removed images)
+let pendingDeletes = [];
+// Pending file uploads: cover + per-block files
+let pendingCoverFile = null;
+
+// ── Helpers ─────────────────────────────────────────────
+const esc = s => String(s ?? "").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#39;");
+const b64 = f => new Promise(r => { const fr=new FileReader(); fr.onload=ev=>r(ev.target.result); fr.readAsDataURL(f); });
+const toast = (msg, type="", dur=2800) => {
+  const t = document.getElementById("ann-toast");
+  t.textContent = msg;
+  t.className = "show" + (type ? " "+type : "");
+  clearTimeout(t._t);
+  t._t = setTimeout(()=> t.className = "", dur);
+};
+window.toast = toast;
+
+// ── Auth gate ───────────────────────────────────────────
+document.body.style.display = "none";
+onAuthStateChanged(auth, async user => {
+  if (!user) { window.location.href = "index.html"; return; }
+  const snap = await getDoc(doc(db, "users", user.uid));
+  if (!snap.exists()) { await signOut(auth); window.location.href = "index.html"; return; }
+  role = user.email === ADMIN ? "Admin" : "User";
+  document.body.style.display = "";
+  if (role !== "Admin") {
+    document.getElementById("btn-new-ann").style.display = "none";
+  }
+  startListening();
+});
+
+// Sidebar toggle
+document.getElementById("sidebar-toggle").addEventListener("click", () => {
+  document.getElementById("sidebar").classList.toggle("open");
+  document.getElementById("sidebar-overlay").classList.toggle("show");
+});
+document.getElementById("sidebar-overlay").addEventListener("click", () => {
+  document.getElementById("sidebar").classList.remove("open");
+  document.getElementById("sidebar-overlay").classList.remove("show");
+});
+
+// ── Live listener ───────────────────────────────────────
+function startListening() {
+  const q = query(annCol, orderBy("order", "desc"));
+  onSnapshot(q, snap => {
+    allAnns = snap.docs.map(d => ({ id:d.id, ...d.data() }));
+    renderGrid();
+    updateStats();
+  }, err => {
+    console.error("[Announcements] listener error:", err);
+    document.getElementById("ann-grid").innerHTML =
+      `<div class="empty-ann" style="grid-column:1/-1;"><i class="bi bi-exclamation-triangle"></i><h3>Couldn't load announcements</h3><p>${esc(err.message)}</p></div>`;
+  });
+}
+
+function fmtDate(v) {
+  if (!v) return "";
+  const d = v?.toDate ? v.toDate() : new Date(v);
+  if (isNaN(d.getTime())) return String(v);
+  return d.toLocaleDateString("en-IN", { day:"2-digit", month:"short", year:"numeric" });
+}
+
+function renderGrid() {
+  const grid = document.getElementById("ann-grid");
+  if (!allAnns.length) {
+    grid.innerHTML = `
+      <div class="empty-ann" style="grid-column:1/-1;">
+        <i class="bi bi-megaphone"></i>
+        <h3>No announcements yet</h3>
+        <p>Click <strong>New Announcement</strong> to create one.</p>
+      </div>`;
+    return;
+  }
+  grid.innerHTML = allAnns.map(a => {
+    const blocks = Array.isArray(a.blocks) ? a.blocks : [];
+    const cnt = { heading:0, text:0, image:0, gallery:0 };
+    blocks.forEach(b => { if (cnt[b.type] !== undefined) cnt[b.type]++; });
+    const totalImgs = (cnt.image || 0) + blocks.filter(b => b.type==="gallery").reduce((s,b)=>s + (b.images?.length||0), 0);
+    const date = a.publishDate || a.created_at;
+    return `
+      <article class="ann-card">
+        <div class="ann-thumb">
+          ${a.coverImageUrl
+            ? `<img src="${esc(a.coverImageUrl)}" alt="${esc(a.title)}" onerror="this.parentNode.innerHTML='<div class=ph><i class=bi bi-megaphone></i></div>';">`
+            : `<div class="ph"><i class="bi bi-megaphone"></i></div>`}
+        </div>
+        <div class="ann-body">
+          <div class="ann-meta">
+            <span><i class="bi bi-calendar3 me-1"></i>${esc(fmtDate(date))}</span>
+            <span class="ann-status ${a.published === false ? 'draft' : 'published'}">${a.published === false ? 'Draft' : 'Live'}</span>
+          </div>
+          <h3 class="ann-title">${esc(a.title || "Untitled")}</h3>
+          ${a.summary ? `<p class="ann-summary">${esc(a.summary)}</p>` : `<p class="ann-summary" style="font-style:italic; color:#cbd5e1;">No summary</p>`}
+          <div class="ann-blocks-info">
+            ${cnt.heading ? `<span title="Headings"><i class="bi bi-type-h2"></i>${cnt.heading}</span>` : ""}
+            ${cnt.text    ? `<span title="Text blocks"><i class="bi bi-text-paragraph"></i>${cnt.text}</span>` : ""}
+            ${totalImgs   ? `<span title="Images"><i class="bi bi-image"></i>${totalImgs}</span>` : ""}
+            ${!blocks.length ? `<span style="color:#cbd5e1;">No content blocks</span>` : ""}
+          </div>
+          ${role === "Admin" ? `
+          <div class="ann-actions">
+            <button class="edit" onclick="window.editAnn('${esc(a.id)}')"><i class="bi bi-pencil"></i> Edit</button>
+            <button class="del" onclick="window.deleteAnn('${esc(a.id)}')"><i class="bi bi-trash"></i> Delete</button>
+          </div>` : ""}
+        </div>
+      </article>`;
+  }).join("");
+}
+
+function updateStats() {
+  document.getElementById("stat-total").textContent = allAnns.length;
+  document.getElementById("stat-published").textContent = allAnns.filter(a => a.published !== false).length;
+  document.getElementById("stat-drafts").textContent = allAnns.filter(a => a.published === false).length;
+  const sb = document.getElementById("sidebar-ann-count");
+  if (sb) sb.textContent = allAnns.length;
+}
+
+// ── Modal open/close ─────────────────────────────────────
+function openAnnModal() { document.getElementById("m-ann").classList.add("show"); }
+window.closeAnnModal = function() { document.getElementById("m-ann").classList.remove("show"); };
+
+function resetDraft() {
+  draft = { title:"", summary:"", publishDate:"", coverImageUrl:"", coverImagePublicId:"", published:true, order:0, blocks:[] };
+  pendingDeletes = [];
+  pendingCoverFile = null;
+  editingId = null;
+  editingDocSnapshot = null;
+}
+
+document.getElementById("btn-new-ann").addEventListener("click", () => {
+  if (role !== "Admin") { toast("⛔ Admin only.", "error"); return; }
+  resetDraft();
+  draft.order = (allAnns[0]?.order || 0) + 1;          // top of the list by default
+  draft.publishDate = new Date().toISOString().slice(0,10);
+  document.getElementById("ann-modal-title").textContent = "New Announcement";
+  hydrateForm();
+  document.getElementById("ann-save-status").textContent = "";
+  openAnnModal();
+});
+
+window.editAnn = async function(id) {
+  if (role !== "Admin") { toast("⛔ Admin only.", "error"); return; }
+  const a = allAnns.find(x => x.id === id);
+  if (!a) return;
+  resetDraft();
+  editingId = id;
+  editingDocSnapshot = JSON.parse(JSON.stringify(a));
+  draft.title = a.title || "";
+  draft.summary = a.summary || "";
+  draft.publishDate = a.publishDate || "";
+  draft.coverImageUrl = a.coverImageUrl || "";
+  draft.coverImagePublicId = a.coverImagePublicId || "";
+  draft.published = a.published !== false;
+  draft.order = typeof a.order === "number" ? a.order : 0;
+  draft.blocks = Array.isArray(a.blocks) ? JSON.parse(JSON.stringify(a.blocks)) : [];
+  document.getElementById("ann-modal-title").textContent = "Edit Announcement";
+  hydrateForm();
+  document.getElementById("ann-save-status").textContent = "";
+  openAnnModal();
+};
+
+window.deleteAnn = async function(id) {
+  if (role !== "Admin") return;
+  const a = allAnns.find(x => x.id === id);
+  if (!a) return;
+  if (!confirm(`Delete the announcement "${a.title || 'Untitled'}" permanently? Its images will also be removed from Cloudinary.`)) return;
+  toast("Deleting…");
+  try {
+    // Collect all publicIds to clean up
+    const ids = [];
+    if (a.coverImagePublicId) ids.push(a.coverImagePublicId);
+    (a.blocks || []).forEach(b => {
+      if (b.type === "image" && b.publicId) ids.push(b.publicId);
+      if (b.type === "gallery" && Array.isArray(b.images)) b.images.forEach(im => { if (im.publicId) ids.push(im.publicId); });
+    });
+    for (const pid of ids) await deleteFromCloudinary(pid);
+    await deleteDoc(doc(db, "announcements", id));
+    toast("✅ Announcement deleted.", "success");
+  } catch (err) {
+    toast("❌ Delete failed: " + err.message, "error", 4000);
+  }
+};
+
+// ── Form hydration ────────────────────────────────────────
+function hydrateForm() {
+  document.getElementById("ann-title").value = draft.title;
+  document.getElementById("ann-summary").value = draft.summary;
+  document.getElementById("ann-date").value = draft.publishDate;
+  document.getElementById("ann-published").value = draft.published ? "true" : "false";
+  document.getElementById("ann-order").value = draft.order;
+  renderCoverPreview();
+  renderBlocks();
+}
+function renderCoverPreview() {
+  const img = document.getElementById("cover-img");
+  const preview = document.getElementById("cover-preview");
+  const empty = document.getElementById("cover-empty");
+  if (draft.coverImageUrl) {
+    img.src = draft.coverImageUrl;
+    preview.style.display = "block";
+    empty.style.display = "none";
+  } else {
+    img.src = "";
+    preview.style.display = "none";
+    empty.style.display = "block";
+  }
+}
+
+document.getElementById("cover-file").addEventListener("change", async ev => {
+  const f = ev.target.files[0]; if (!f) return;
+  pendingCoverFile = f;
+  // mark old for deletion (if any)
+  if (draft.coverImagePublicId) pendingDeletes.push(draft.coverImagePublicId);
+  draft.coverImageUrl = await b64(f);   // preview only — real URL after upload
+  draft.coverImagePublicId = "";
+  renderCoverPreview();
+});
+window.removeCover = function(ev) {
+  ev?.stopPropagation();
+  if (draft.coverImagePublicId) pendingDeletes.push(draft.coverImagePublicId);
+  draft.coverImageUrl = ""; draft.coverImagePublicId = "";
+  pendingCoverFile = null;
+  document.getElementById("cover-file").value = "";
+  renderCoverPreview();
+};
+
+// ── Blocks ────────────────────────────────────────────────
+window.addBlock = function(type) {
+  const block = (() => {
+    switch (type) {
+      case "heading": return { type, text:"" };
+      case "text":    return { type, text:"" };
+      case "image":   return { type, url:"", publicId:"", caption:"", _file:null };
+      case "gallery": return { type, images:[] };
+      default: return null;
+    }
+  })();
+  if (!block) return;
+  draft.blocks.push(block);
+  renderBlocks();
+};
+
+function renderBlocks() {
+  const list = document.getElementById("blocks-list");
+  if (!draft.blocks.length) {
+    list.innerHTML = `<div style="text-align:center; padding:24px; color:#94a3b8; font-size:.82rem; background:#f8fafc; border:1px dashed #e2e8f0; border-radius:10px;">
+      No blocks yet — click a button above to add content.
+    </div>`;
+    return;
+  }
+  list.innerHTML = draft.blocks.map((b, i) => {
+    const head = `
+      <div class="block-item-head">
+        <span class="block-type-tag ${b.type}"><i class="bi ${iconForType(b.type)}"></i> ${b.type}</span>
+        <div class="block-controls">
+          <button title="Move up"   onclick="window.moveBlock(${i},-1)"><i class="bi bi-arrow-up"></i></button>
+          <button title="Move down" onclick="window.moveBlock(${i}, 1)"><i class="bi bi-arrow-down"></i></button>
+          <button class="del" title="Remove block" onclick="window.removeBlock(${i})"><i class="bi bi-x-lg"></i></button>
+        </div>
+      </div>`;
+    let body = "";
+    if (b.type === "heading") {
+      body = `<input type="text" placeholder="Heading text…" value="${esc(b.text)}" oninput="window.updateBlockField(${i},'text',this.value)">`;
+    } else if (b.type === "text") {
+      body = `<textarea rows="4" placeholder="Write paragraph(s)… Use a blank line to separate paragraphs." oninput="window.updateBlockField(${i},'text',this.value)">${esc(b.text)}</textarea>`;
+    } else if (b.type === "image") {
+      body = renderImageBlock(b, i);
+    } else if (b.type === "gallery") {
+      body = renderGalleryBlock(b, i);
+    }
+    return `<div class="block-item">${head}${body}</div>`;
+  }).join("");
+}
+
+function iconForType(t) {
+  switch (t) {
+    case "heading": return "bi-type-h2";
+    case "text":    return "bi-text-paragraph";
+    case "image":   return "bi-image";
+    case "gallery": return "bi-collection";
+    default:        return "bi-square";
+  }
+}
+
+function renderImageBlock(b, i) {
+  const previewSrc = b._previewDataUrl || b.url || "";
+  const showPreview = !!previewSrc;
+  return `
+    ${showPreview ? `
+      <div class="image-block-preview" style="margin-bottom:8px;">
+        <img src="${esc(previewSrc)}" alt="">
+        <button class="rm" type="button" title="Remove image" onclick="window.removeImageFromBlock(${i})"><i class="bi bi-x"></i></button>
+      </div>
+    ` : `
+      <div class="image-block-zone" style="margin-bottom:8px;">
+        <input type="file" accept="image/*" onchange="window.onBlockImageFile(event, ${i})">
+        <div style="color:#64748b;"><i class="bi bi-cloud-upload"></i> Click or drop to upload an image</div>
+      </div>
+    `}
+    <input type="text" placeholder="Caption (optional)" value="${esc(b.caption || '')}" oninput="window.updateBlockField(${i},'caption',this.value)">`;
+}
+
+function renderGalleryBlock(b, i) {
+  const items = (b.images || []).map((im, idx) => {
+    const src = im._previewDataUrl || im.url || "";
+    return `
+      <div class="gallery-item">
+        ${src ? `<img src="${esc(src)}" alt="">` : `<div style="width:100%;height:100%;background:#f1f5f9;"></div>`}
+        <input class="cap-input" type="text" placeholder="Caption" value="${esc(im.caption || '')}" oninput="window.updateGalleryCaption(${i}, ${idx}, this.value)">
+        <button class="rm-img" type="button" title="Remove" onclick="window.removeGalleryImage(${i}, ${idx})"><i class="bi bi-x"></i></button>
+      </div>`;
+  }).join("");
+  return `
+    <div class="gallery-grid">
+      ${items}
+      <label class="gallery-add" title="Add images to this gallery">
+        <input type="file" accept="image/*" multiple onchange="window.onGalleryFiles(event, ${i})">
+        <i class="bi bi-plus-lg"></i>
+      </label>
+    </div>
+    <div style="font-size:.7rem; color:#94a3b8;">Tip: select multiple files at once. Drag-add not supported here.</div>`;
+}
+
+window.updateBlockField = (i, field, value) => {
+  if (!draft.blocks[i]) return;
+  draft.blocks[i][field] = value;
+  // Don't re-render — the input already reflects the value, and a re-render would lose focus.
+};
+window.updateGalleryCaption = (bi, ii, value) => {
+  if (!draft.blocks[bi] || !draft.blocks[bi].images?.[ii]) return;
+  draft.blocks[bi].images[ii].caption = value;
+};
+window.moveBlock = (i, dir) => {
+  const j = i + dir;
+  if (j < 0 || j >= draft.blocks.length) return;
+  [draft.blocks[i], draft.blocks[j]] = [draft.blocks[j], draft.blocks[i]];
+  renderBlocks();
+};
+window.removeBlock = (i) => {
+  const b = draft.blocks[i];
+  if (!b) return;
+  // Schedule deletion of any uploaded images this block held
+  if (b.type === "image" && b.publicId) pendingDeletes.push(b.publicId);
+  if (b.type === "gallery" && Array.isArray(b.images)) {
+    b.images.forEach(im => { if (im.publicId) pendingDeletes.push(im.publicId); });
+  }
+  draft.blocks.splice(i, 1);
+  renderBlocks();
+};
+window.onBlockImageFile = async (ev, i) => {
+  const f = ev.target.files[0]; if (!f) return;
+  const b = draft.blocks[i]; if (!b || b.type !== "image") return;
+  if (b.publicId) pendingDeletes.push(b.publicId);
+  b._file = f;
+  b._previewDataUrl = await b64(f);
+  b.url = ""; b.publicId = "";
+  renderBlocks();
+};
+window.removeImageFromBlock = (i) => {
+  const b = draft.blocks[i]; if (!b || b.type !== "image") return;
+  if (b.publicId) pendingDeletes.push(b.publicId);
+  b._file = null; b._previewDataUrl = ""; b.url = ""; b.publicId = "";
+  renderBlocks();
+};
+window.onGalleryFiles = async (ev, i) => {
+  const files = [...(ev.target.files || [])]; if (!files.length) return;
+  const b = draft.blocks[i]; if (!b || b.type !== "gallery") return;
+  if (!Array.isArray(b.images)) b.images = [];
+  for (const f of files) {
+    const preview = await b64(f);
+    b.images.push({ _file:f, _previewDataUrl:preview, url:"", publicId:"", caption:"" });
+  }
+  ev.target.value = "";
+  renderBlocks();
+};
+window.removeGalleryImage = (bi, ii) => {
+  const b = draft.blocks[bi]; if (!b || b.type !== "gallery") return;
+  const im = b.images?.[ii]; if (!im) return;
+  if (im.publicId) pendingDeletes.push(im.publicId);
+  b.images.splice(ii, 1);
+  renderBlocks();
+};
+
+// ── Save ─────────────────────────────────────────────────
+async function saveAnnouncement() {
+  if (role !== "Admin") { toast("⛔ Admin only.", "error"); return; }
+  const titleEl = document.getElementById("ann-title");
+  const title = titleEl.value.trim();
+  if (!title) { titleEl.focus(); toast("Title is required.", "error"); return; }
+
+  // Pull form values into draft
+  draft.title = title;
+  draft.summary = document.getElementById("ann-summary").value.trim();
+  draft.publishDate = document.getElementById("ann-date").value;
+  draft.published = document.getElementById("ann-published").value === "true";
+  const orderRaw = document.getElementById("ann-order").value.trim();
+  draft.order = orderRaw === "" ? (allAnns[0]?.order || 0) + 1 : (Number(orderRaw) || 0);
+
+  const btn = document.getElementById("btn-save-ann");
+  const status = document.getElementById("ann-save-status");
+  btn.disabled = true; btn.innerHTML = `<span class="spinner-border spinner-border-sm me-1"></span> Saving…`;
+  status.textContent = ""; status.style.color = "#64748b";
+
+  try {
+    // 1. Upload cover (if pending)
+    if (pendingCoverFile) {
+      status.textContent = "☁️ Uploading cover image…";
+      const { url, publicId } = await uploadToCloudinary(pendingCoverFile, "announcementCovers");
+      draft.coverImageUrl = url;
+      draft.coverImagePublicId = publicId;
+      pendingCoverFile = null;
+    }
+
+    // 2. Upload block images (image + gallery)
+    let imgI = 0;
+    const totalUploads =
+      draft.blocks.filter(b => b.type==="image" && b._file).length
+      + draft.blocks.filter(b => b.type==="gallery").reduce((s,b)=> s + (b.images||[]).filter(im=>im._file).length, 0);
+    for (const b of draft.blocks) {
+      if (b.type === "image" && b._file) {
+        imgI++; status.textContent = `☁️ Uploading image ${imgI} of ${totalUploads}…`;
+        const { url, publicId } = await uploadToCloudinary(b._file, "announcementImages");
+        b.url = url; b.publicId = publicId; b._file = null; b._previewDataUrl = "";
+      } else if (b.type === "gallery" && Array.isArray(b.images)) {
+        for (const im of b.images) {
+          if (im._file) {
+            imgI++; status.textContent = `☁️ Uploading image ${imgI} of ${totalUploads}…`;
+            const { url, publicId } = await uploadToCloudinary(im._file, "announcementImages");
+            im.url = url; im.publicId = publicId; im._file = null; im._previewDataUrl = "";
+          }
+        }
+      }
+    }
+
+    // 3. Persist scheduled deletions (after successful uploads, so we don't lose images on partial failures)
+    for (const pid of pendingDeletes) await deleteFromCloudinary(pid);
+    pendingDeletes = [];
+
+    // 4. Build payload (strip private underscored fields)
+    const cleanBlocks = draft.blocks.map(b => {
+      if (b.type === "heading") return { type:"heading", text:String(b.text || "") };
+      if (b.type === "text")    return { type:"text",    text:String(b.text || "") };
+      if (b.type === "image")   return { type:"image",   url:String(b.url || ""), publicId:String(b.publicId || ""), caption:String(b.caption || "") };
+      if (b.type === "gallery") return {
+        type:"gallery",
+        images: (b.images || []).filter(im => im.url).map(im => ({
+          url:String(im.url), publicId:String(im.publicId || ""), caption:String(im.caption || "")
+        }))
+      };
+      return null;
+    }).filter(Boolean);
+
+    const payload = {
+      title: draft.title,
+      summary: draft.summary,
+      publishDate: draft.publishDate || "",
+      coverImageUrl: draft.coverImageUrl || "",
+      coverImagePublicId: draft.coverImagePublicId || "",
+      published: !!draft.published,
+      order: Number(draft.order) || 0,
+      blocks: cleanBlocks,
+      updated_at: serverTimestamp()
+    };
+
+    // 5. Write to Firestore
+    status.textContent = "💾 Saving to database…";
+    if (editingId) {
+      await updateDoc(doc(db, "announcements", editingId), payload);
+    } else {
+      payload.created_at = serverTimestamp();
+      await addDoc(annCol, payload);
+    }
+
+    toast("✅ Announcement saved!", "success");
+    closeAnnModal();
+    resetDraft();
+  } catch (err) {
+    console.error("[Announcements] save error:", err);
+    status.textContent = "❌ " + err.message;
+    status.style.color = "#dc2626";
+    toast("❌ Save failed", "error", 4000);
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = `<i class="bi bi-check2-circle"></i> Save Announcement`;
+  }
+}
+window.saveAnnouncement = saveAnnouncement;
+</script>
+
+</body>
+</html>
