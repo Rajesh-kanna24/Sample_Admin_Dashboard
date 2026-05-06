@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>News Management — AdminForge</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Raleway:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css"/>
+
+  <style>
+    :root{--brand:#921a02;--brand-dark:#6d1201;--brand-light:rgba(146,26,2,0.08);--brand-border:rgba(146,26,2,0.18);}
+
+    /* ── Modals ── */
+    .hm-backdrop{display:none;position:fixed;inset:0;z-index:9998;background:rgba(0,0,0,.55);backdrop-filter:blur(3px);align-items:center;justify-content:center}
+    .hm-backdrop.show{display:flex;animation:hmFadeIn .2s ease}
+    @keyframes hmFadeIn{from{opacity:0}to{opacity:1}}
+    .hm-box{background:#fff;border-radius:16px;padding:24px;width:100%;max-width:700px;max-height:92vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.25);position:relative;animation:hmUp .25s ease}
+    @keyframes hmUp{from{transform:translateY(20px);opacity:0}to{transform:translateY(0);opacity:1}}
+    .hm-box h5{font-size:1rem;font-weight:700;margin:0 0 16px}
+    .hm-close{position:absolute;top:14px;right:16px;background:none;border:none;font-size:1.2rem;cursor:pointer;color:#6b7280}
+    .hm-group{margin-bottom:12px}
+    .hm-group label{display:block;font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#64748b;margin-bottom:5px}
+    .hm-group input,.hm-group select,.hm-group textarea{width:100%;border:1px solid #e2e8f0;border-radius:8px;padding:8px 12px;font-size:.84rem;outline:none;transition:border-color .2s;font-family:inherit}
+    .hm-group textarea{resize:vertical;min-height:80px}
+    .hm-group input:focus,.hm-group select:focus,.hm-group textarea:focus{border-color:#921a02}
+    .hm-actions{display:flex;gap:10px;margin-top:16px;flex-wrap:wrap}
+    .hm-save{flex:1;padding:10px;border-radius:8px;border:none;background:#921a02;color:#fff;font-weight:600;font-size:.85rem;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;min-height:40px;min-width:100px}
+    .hm-save:hover:not(:disabled){background:#6d1201}
+    .hm-save:disabled{opacity:.6;cursor:not-allowed}
+    .hm-cancel{padding:10px 18px;border-radius:8px;border:1px solid #e2e8f0;background:#f8fafc;font-size:.85rem;cursor:pointer}
+    .hm-status{font-size:.78rem;text-align:center;margin-top:8px;min-height:18px}
+    .spin{width:14px;height:14px;border:2px solid rgba(255,255,255,.4);border-top-color:#fff;border-radius:50%;animation:spinAnim .6s linear infinite;display:inline-block}
+    @keyframes spinAnim{to{transform:rotate(360deg)}}
+    #dash-toast{position:fixed;bottom:24px;right:24px;z-index:99999;background:#1e293b;color:#fff;padding:12px 20px;border-radius:10px;font-size:.82rem;font-weight:600;box-shadow:0 8px 24px rgba(0,0,0,.25);opacity:0;transform:translateY(10px);transition:opacity .25s,transform .25s;pointer-events:none;max-width:320px}
+    #dash-toast.show{opacity:1;transform:translateY(0)}
+    #dash-toast.success{background:#16a34a}
+    #dash-toast.error{background:#dc2626}
+    #dash-toast.info{background:#2563eb}
+
+    /* ── Stats ── */
+    .stats-bar{display:grid;grid-template-columns:repeat(auto-fit,minmax(80px,1fr));gap:8px;margin-bottom:16px}
+    .stat-pill{background:#fff;border:1px solid #e2e8f0;border-radius:9px;padding:9px;text-align:center}
+    .stat-num{font-size:1.2rem;font-weight:800;color:#921a02;line-height:1;display:block}
+    .stat-lbl{font-size:.58rem;color:#64748b;margin-top:3px}
+
+    /* ── Action bar ── */
+    .action-bar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:16px;background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:10px 14px;}
+    .btn-add{display:inline-flex;align-items:center;gap:5px;padding:8px 16px;background:#921a02;color:#fff;border:none;border-radius:8px;font-size:.78rem;font-weight:700;cursor:pointer}
+    .btn-add:hover{background:#6d1201}
+    .filter-tabs{display:flex;gap:5px;flex-wrap:wrap;flex:1}
+    .ftab{padding:5px 12px;border-radius:20px;border:1.5px solid #e2e8f0;background:#fff;color:#64748b;font-size:.72rem;font-weight:700;cursor:pointer;transition:all .15s;display:inline-flex;align-items:center;gap:5px}
+    .ftab.active{background:#921a02;border-color:#921a02;color:#fff}
+    .ftab:hover:not(.active){border-color:var(--brand-border);color:#921a02;background:#fdf5f4}
+    .search-bar{position:relative;min-width:200px}
+    .search-bar input{width:100%;padding:7px 12px 7px 30px;border:1px solid var(--brand-border);border-radius:8px;font-size:.82rem;outline:none}
+    .search-bar input:focus{border-color:#921a02}
+    .search-bar i{position:absolute;left:9px;top:50%;transform:translateY(-50%);color:#94a3b8;font-size:.82rem}
+
+    /* ── News Cards (admin view) ── */
+    .news-admin-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px}
+    .news-admin-card{background:#fff;border:1px solid #e2e8f0;border-radius:12px;overflow:hidden;transition:box-shadow .15s}
+    .news-admin-card:hover{box-shadow:0 4px 16px rgba(146,26,2,.1)}
+    .nac-thumb{width:100%;aspect-ratio:16/9;background:#f1f5f9;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}
+    .nac-thumb img{width:100%;height:100%;object-fit:cover;display:block}
+    .nac-thumb .nac-placeholder{font-size:2.5rem;color:#cbd5e1}
+    .nac-type-badge{position:absolute;top:8px;left:8px;padding:3px 9px;border-radius:20px;font-size:.62rem;font-weight:800;letter-spacing:.05em}
+    .tb-video{background:#fef2f2;color:#dc2626}
+    .tb-newspaper{background:#fef9ee;color:#b45309}
+    .tb-event{background:#f0fdf4;color:#16a34a}
+    .tb-general{background:#f0f4ff;color:#2563eb}
+    .nac-status{position:absolute;top:8px;right:8px;padding:3px 8px;border-radius:20px;font-size:.6rem;font-weight:800}
+    .nac-status.pub{background:#dcfce7;color:#16a34a}
+    .nac-status.draft{background:#fef9c3;color:#854d0e}
+    .nac-body{padding:12px 14px 14px}
+    .nac-date{font-size:.68rem;color:#94a3b8;font-weight:600;margin-bottom:4px}
+    .nac-title{font-size:.9rem;font-weight:700;color:#1e293b;margin:0 0 6px;line-height:1.35}
+    .nac-summary{font-size:.78rem;color:#64748b;margin:0 0 10px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+    .nac-actions{display:flex;gap:6px}
+    .btn-edit-card{flex:1;padding:6px;border-radius:6px;background:#4f46e5;color:#fff;border:none;font-size:.72rem;font-weight:600;cursor:pointer}
+    .btn-edit-card:hover{background:#4338ca}
+    .btn-del-card{padding:6px 10px;border-radius:6px;background:#fee2e2;color:#dc2626;border:1px solid #fecaca;font-size:.72rem;cursor:pointer}
+    .btn-del-card:hover{background:#fecaca}
+    .btn-toggle-pub{flex:1;padding:6px;border-radius:6px;border:1px solid #e2e8f0;background:#f8fafc;color:#64748b;font-size:.72rem;cursor:pointer}
+    .btn-toggle-pub.pub{background:#dcfce7;color:#16a34a;border-color:#bbf7d0}
+    .btn-toggle-pub:hover{border-color:#921a02}
+
+    /* ── Empty state ── */
+    .empty-state{text-align:center;padding:60px 20px;color:#94a3b8;grid-column:1/-1}
+    .empty-state i{font-size:3rem;display:block;margin-bottom:10px;opacity:.4}
+
+    /* ── Dynamic form fields ── */
+    .field-group{background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:14px;margin-top:10px}
+    .field-group-label{font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:var(--brand);margin-bottom:10px}
+    .reading-row-modal{display:flex;gap:6px;align-items:flex-start;margin-bottom:6px}
+    .reading-row-modal input,.reading-row-modal textarea{flex:1;border:1px solid #e2e8f0;border-radius:6px;padding:6px 10px;font-size:.8rem;outline:none}
+    .reading-row-modal input:focus,.reading-row-modal textarea:focus{border-color:#921a02}
+    .reading-row-modal textarea{resize:vertical;min-height:40px;flex:2}
+    .btn-rm-row{background:#fef2f2;color:#dc2626;border:1px solid #fecaca;border-radius:5px;padding:4px 8px;font-size:.7rem;cursor:pointer;flex-shrink:0}
+    .btn-add-row{background:rgba(146,26,2,.07);color:#921a02;border:1px dashed rgba(146,26,2,.35);border-radius:6px;padding:5px 12px;font-size:.72rem;font-weight:700;cursor:pointer;margin-top:6px;width:100%}
+    .img-row{display:flex;gap:6px;align-items:flex-start;margin-bottom:6px}
+    .img-row input{flex:2;border:1px solid #e2e8f0;border-radius:6px;padding:6px 10px;font-size:.8rem;outline:none}
+    .img-row input:focus{border-color:#921a02}
+    .img-row input.caption{flex:1}
+  </style>
+</head>
+<body>
+<div id="dash-toast"></div>
+<div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+<div class="dash-layout">
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-brand">
+      <div class="sidebar-logo">AF</div>
+      <div><div class="sidebar-brand-text">AdminForge</div><div class="sidebar-brand-sub">Management System</div></div>
+    </div>
+    <div class="sidebar-menu">
+      <p class="sidebar-section">Main</p>
+      <div class="sidebar-item" onclick="location.href='dashboard.html'"><span class="si-icon">⬡</span> Users</div>
+      <p class="sidebar-section">Pages</p>
+      <div class="sidebar-item" onclick="location.href='dashboard.html'"><span class="si-icon">⬡</span> Home</div>
+      <a href="about.html" class="sidebar-item"><span class="si-icon">ℹ</span> About Us</a>
+      <a href="administration.html" class="sidebar-item"><span class="si-icon">⛪</span> Administration</a>
+      <a href="parishes.html" class="sidebar-item"><span class="si-icon">⬡</span> Parishes</a>
+      <a href="priests.html" class="sidebar-item"><span class="si-icon">✝</span> Priests</a>
+      <a href="seminarians.html" class="sidebar-item"><span class="si-icon">🎓</span> Seminarians</a>
+      <a href="department.html" class="sidebar-item"><span class="si-icon">🏢</span> Departments</a>
+      <a href="mission.html" class="sidebar-item"><span class="si-icon">🌍</span> Missions</a>
+      <a href="generalinfo.html" class="sidebar-item"><span class="si-icon">🌍</span> General Information</a>
+      <a href="apostolilife.html" class="sidebar-item"><span class="si-icon">🏢</span> Apostolic Life</a>
+<p class="sidebar-section">Sub Section</p> 
+
+              <a href="liturgy.html" class="sidebar-item"><span class="si-icon">📅</span> Liturgy </a>
+              <a href="calender.html" class="sidebar-item"><span class="si-icon">📅</span> Calendar</a>
+              <a href="announcements.html" class="sidebar-item"><span class="si-icon">📣</span> Announcements</a>
+            <div class="sidebar-item active"><span class="si-icon">📰</span> News <span class="si-badge" id="sidebar-total">0</span></div>
+      <p class="sidebar-section" style="margin-top:14px;">Account</p>
+      <div class="sidebar-item" onclick="toast('Coming soon!')"><span class="si-icon">⚙</span> Settings</div>
+    </div>
+    <div class="sidebar-footer">
+      <div class="user-row">
+        <div class="user-row-avatar" id="sidebar-avatar">?</div>
+        <div><div class="user-row-name" id="sidebar-username">Loading…</div><div class="user-row-role" id="sidebar-role">—</div></div>
+      </div>
+    </div>
+  </aside>
+
+  <nav class="topbar">
+    <div class="topbar-left">
+      <button class="sidebar-toggle" id="sidebar-toggle">☰</button>
+      <div class="topbar-rule d-none d-lg-block"></div>
+      <div>
+        <div class="topbar-title">📰 News Management</div>
+        <div class="topbar-sub">Video, Newspaper, Event & General news — saved changes go live instantly on church website</div>
+      </div>
+    </div>
+    <div class="topbar-right">
+      <span id="role-badge" class="badge bg-secondary me-2" style="font-size:.8rem;padding:6px 12px;"></span>
+      <button class="btn btn-logout btn-sm" id="btn-logout">⏻ Logout</button>
+    </div>
+  </nav>
+
+  <main class="dash-main">
+    <div class="stats-bar">
+      <div class="stat-pill"><span class="stat-num" id="st-total">0</span><div class="stat-lbl">Total</div></div>
+      <div class="stat-pill"><span class="stat-num" id="st-published">0</span><div class="stat-lbl">Published</div></div>
+      <div class="stat-pill"><span class="stat-num" id="st-draft">0</span><div class="stat-lbl">Drafts</div></div>
+      <div class="stat-pill" style="border-color:#dc2626"><span class="stat-num" id="st-video">0</span><div class="stat-lbl">Videos</div></div>
+      <div class="stat-pill" style="border-color:#b45309"><span class="stat-num" id="st-newspaper">0</span><div class="stat-lbl">Newspaper</div></div>
+      <div class="stat-pill" style="border-color:#16a34a"><span class="stat-num" id="st-event">0</span><div class="stat-lbl">Events</div></div>
+      <div class="stat-pill" style="border-color:#2563eb"><span class="stat-num" id="st-general">0</span><div class="stat-lbl">General</div></div>
+    </div>
+
+    <div class="action-bar" id="admin-bar" style="display:none;">
+      <button class="btn-add" onclick="openAdd()"><i class="bi bi-plus-lg"></i> Add News</button>
+      <div class="filter-tabs">
+        <button class="ftab active" data-cat="all" onclick="setFilter('all',this)"><i class="bi bi-grid"></i> All</button>
+        <button class="ftab" data-cat="video" onclick="setFilter('video',this)"><i class="bi bi-play-circle"></i> Video</button>
+        <button class="ftab" data-cat="newspaper" onclick="setFilter('newspaper',this)"><i class="bi bi-newspaper"></i> Newspaper</button>
+        <button class="ftab" data-cat="event" onclick="setFilter('event',this)"><i class="bi bi-calendar-event"></i> Event</button>
+        <button class="ftab" data-cat="general" onclick="setFilter('general',this)"><i class="bi bi-megaphone"></i> General</button>
+      </div>
+      <div class="search-bar">
+        <i class="bi bi-search"></i>
+        <input type="text" id="search-input" placeholder="Search news…" oninput="renderGrid()"/>
+      </div>
+    </div>
+    <!-- Viewer filter bar -->
+    <div class="action-bar" id="viewer-bar" style="display:none;">
+      <div class="filter-tabs">
+        <button class="ftab active" data-cat="all" onclick="setFilter('all',this)">All</button>
+        <button class="ftab" data-cat="video" onclick="setFilter('video',this)">Video</button>
+        <button class="ftab" data-cat="newspaper" onclick="setFilter('newspaper',this)">Newspaper</button>
+        <button class="ftab" data-cat="event" onclick="setFilter('event',this)">Event</button>
+        <button class="ftab" data-cat="general" onclick="setFilter('general',this)">General</button>
+      </div>
+      <div class="search-bar">
+        <i class="bi bi-search"></i>
+        <input type="text" id="search-input-viewer" placeholder="Search news…" oninput="renderGrid()"/>
+      </div>
+    </div>
+
+    <div class="news-admin-grid" id="news-grid">
+      <!-- loaded by JS -->
+    </div>
+  </main>
+</div>
+
+<!-- ══════════ ADD/EDIT MODAL ══════════ -->
+<div id="m-news" class="hm-backdrop">
+  <div class="hm-box" style="max-width:720px;">
+    <button class="hm-close" onclick="closeM('m-news')">✕</button>
+    <h5 id="modal-title">Add News</h5>
+
+    <!-- Type selector -->
+    <div class="hm-group">
+      <label>News Type <span style="color:red">*</span></label>
+      <select id="f-type" onchange="onTypeChange()">
+        <option value="video">📹 Video News</option>
+        <option value="newspaper">📰 Newspaper News</option>
+        <option value="event">📅 Event News</option>
+        <option value="general">📢 General News</option>
+      </select>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+      <div class="hm-group">
+        <label>Title <span style="color:red">*</span></label>
+        <input type="text" id="f-title" placeholder="News title"/>
+      </div>
+      <div class="hm-group">
+        <label>Publish Date</label>
+        <input type="date" id="f-date"/>
+      </div>
+    </div>
+
+    <div class="hm-group">
+      <label>Summary / Short Description</label>
+      <textarea id="f-summary" rows="2" placeholder="Short description shown on news card…"></textarea>
+    </div>
+
+    <div class="hm-group">
+      <label>Display Order <small style="font-weight:400;color:#94a3b8;">(higher = shown first)</small></label>
+      <input type="number" id="f-order" value="0" placeholder="0"/>
+    </div>
+
+    <div class="hm-group">
+      <label>Status</label>
+      <select id="f-published">
+        <option value="true">✅ Published (visible on website)</option>
+        <option value="false">📝 Draft (hidden from website)</option>
+      </select>
+    </div>
+
+    <!-- ── VIDEO fields ── -->
+    <div id="fields-video" class="field-group" style="display:none;">
+      <div class="field-group-label">📹 Video Details</div>
+      <div class="hm-group" style="margin-bottom:10px;">
+        <label>YouTube / Video URL <span style="color:red">*</span></label>
+        <input type="url" id="f-videoUrl" placeholder="https://www.youtube.com/watch?v=..."/>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+        <div class="hm-group" style="margin-bottom:0">
+          <label>Custom Thumbnail URL <small>(optional)</small></label>
+          <input type="url" id="f-thumbnailUrl" placeholder="https://… (auto from YouTube)"/>
+        </div>
+        <div class="hm-group" style="margin-bottom:0">
+          <label>Duration <small>(e.g. 5:42)</small></label>
+          <input type="text" id="f-duration" placeholder="5:42"/>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── NEWSPAPER fields ── -->
+    <div id="fields-newspaper" class="field-group" style="display:none;">
+      <div class="field-group-label">📰 Newspaper Details</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+        <div class="hm-group" style="margin-bottom:10px;">
+          <label>Publication Name</label>
+          <input type="text" id="f-publication" placeholder="e.g. Deepika, Mathrubhumi"/>
+        </div>
+        <div class="hm-group" style="margin-bottom:10px;">
+          <label>PDF URL <small>(optional)</small></label>
+          <input type="url" id="f-pdfUrl" placeholder="https://…/article.pdf"/>
+        </div>
+      </div>
+      <div class="hm-group" style="margin-bottom:0">
+        <label>Cover / Clipping Image URL</label>
+        <input type="url" id="f-coverImageUrl-np" placeholder="https://… image of newspaper clipping"/>
+      </div>
+    </div>
+
+    <!-- ── EVENT fields ── -->
+    <div id="fields-event" class="field-group" style="display:none;">
+      <div class="field-group-label">📅 Event Details</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+        <div class="hm-group" style="margin-bottom:10px;">
+          <label>Event Date <span style="color:red">*</span></label>
+          <input type="date" id="f-eventDate"/>
+        </div>
+        <div class="hm-group" style="margin-bottom:10px;">
+          <label>Event Time</label>
+          <input type="text" id="f-eventTime" placeholder="e.g. 10:00 AM"/>
+        </div>
+      </div>
+      <div class="hm-group" style="margin-bottom:10px;">
+        <label>Venue / Location</label>
+        <input type="text" id="f-venue" placeholder="e.g. Archbishop's House, Changanacherry"/>
+      </div>
+      <div class="hm-group" style="margin-bottom:0">
+        <label>Cover Image URL</label>
+        <input type="url" id="f-coverImageUrl-ev" placeholder="https://… event poster or photo"/>
+      </div>
+    </div>
+
+    <!-- ── GENERAL fields ── -->
+    <div id="fields-general" class="field-group" style="display:none;">
+      <div class="field-group-label">📢 General News Details</div>
+      <div class="hm-group" style="margin-bottom:0">
+        <label>Cover Image URL</label>
+        <input type="url" id="f-coverImageUrl-gen" placeholder="https://… cover image"/>
+      </div>
+    </div>
+
+    <!-- ── Content Blocks ── -->
+    <div class="hm-group" style="margin-top:14px;">
+      <label>Content Blocks <small style="font-weight:400;color:#94a3b8;">(detailed body content)</small></label>
+      <div id="blocks-container"></div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px;">
+        <button class="btn-add-row" type="button" onclick="addBlock('heading')" style="flex:1;min-width:100px;">+ Heading</button>
+        <button class="btn-add-row" type="button" onclick="addBlock('text')" style="flex:1;min-width:100px;">+ Text</button>
+        <button class="btn-add-row" type="button" onclick="addBlock('image')" style="flex:1;min-width:100px;">+ Image</button>
+        <button class="btn-add-row" type="button" onclick="addBlock('gallery')" style="flex:2;min-width:160px;">+ Gallery</button>
+      </div>
+    </div>
+
+    <div class="hm-actions">
+      <button class="hm-cancel" onclick="closeM('m-news')">Cancel</button>
+      <button class="hm-save" id="btn-modal-save" onclick="modalSave()">💾 Save to Firestore</button>
+      <button id="btn-modal-del" onclick="modalDel()" style="display:none;padding:10px 14px;border-radius:8px;border:none;background:#ef4444;color:#fff;font-size:.82rem;cursor:pointer;">🗑 Delete</button>
+    </div>
+    <div class="hm-status" id="modal-status"></div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<script type="module">
+import{initializeApp}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import{getAuth,onAuthStateChanged,signOut}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import{getFirestore,collection,query,orderBy,onSnapshot,doc,setDoc,deleteDoc,serverTimestamp,updateDoc}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+const FC={apiKey:"AIzaSyArM8sv7J1RUj4XvAJhJd40tzA7Yc8BGXY",authDomain:"admin-dashboard-ed62c.firebaseapp.com",projectId:"admin-dashboard-ed62c",storageBucket:"admin-dashboard-ed62c.firebasestorage.app",messagingSenderId:"560027475135",appId:"1:560027475135:web:3fae0cb0268729ae79fa0a"};
+const ADMIN="issacnewton1503@gmail.com";
+const app=initializeApp(FC),auth=getAuth(app),db=getFirestore(app);
+
+let role=null,allNews=[],currentFilter="all",editId=null;
+
+const esc=s=>String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+
+function fmtDate(v){
+  if(!v)return"";
+  const d=v?.toDate?v.toDate():new Date(v);
+  if(isNaN(d.getTime()))return String(v);
+  return d.toLocaleDateString("en-IN",{day:"2-digit",month:"short",year:"numeric"});
+}
+
+window.toast=function(msg,type="",dur=3500){
+  const t=document.getElementById("dash-toast");
+  t.textContent=msg;t.className="show"+(type?" "+type:"");
+  clearTimeout(t._t);t._t=setTimeout(()=>t.className="",dur);
+};
+window.closeM=id=>document.getElementById(id).classList.remove("show");
+function openM(id){document.getElementById(id).classList.add("show");}
+function busy(on){
+  const b=document.getElementById("btn-modal-save");if(!b)return;
+  if(on){b._l=b.innerHTML;b.disabled=true;b.innerHTML=`<span class="spin"></span> Saving…`;}
+  else{b.disabled=false;b.innerHTML=b._l||"Save";}
+}
+
+/* ── Auth ── */
+document.body.style.display="none";
+onAuthStateChanged(auth,async user=>{
+  if(!user){location.href="index.html";return;}
+  const{getDoc,doc:gDoc}=await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js");
+  const snap=await getDoc(gDoc(db,"users",user.uid));
+  if(!snap.exists()){await signOut(auth);location.href="index.html";return;}
+  const prof=snap.data();
+  role=user.email===ADMIN?"Admin":"Viewer";
+  const uname=prof.username||user.displayName||user.email;
+  document.getElementById("sidebar-username").textContent=uname;
+  document.getElementById("sidebar-role").textContent=role;
+  document.getElementById("sidebar-avatar").textContent=uname[0].toUpperCase();
+  const badge=document.getElementById("role-badge");
+  badge.textContent=role;badge.className=role==="Admin"?"badge bg-warning text-dark me-2":"badge bg-primary me-2";
+  document.body.style.display="";
+  document.getElementById(role==="Admin"?"admin-bar":"viewer-bar").style.display="flex";
+  startListener();
+});
+document.getElementById("btn-logout").addEventListener("click",async()=>{await signOut(auth);location.href="index.html";});
+document.getElementById("sidebar-toggle").addEventListener("click",()=>{document.getElementById("sidebar").classList.toggle("open");document.getElementById("sidebar-overlay").classList.toggle("show");});
+document.getElementById("sidebar-overlay").addEventListener("click",()=>{document.getElementById("sidebar").classList.remove("open");document.getElementById("sidebar-overlay").classList.remove("show");});
+
+/* ── Firestore listener ── */
+function startListener(){
+  const q=query(collection(db,"news"),orderBy("order","desc"));
+  onSnapshot(q,snap=>{
+    allNews=snap.docs.map(d=>({id:d.id,...d.data()}));
+    updateStats();
+    window.renderGrid();
+  });
+}
+
+/* ── Stats ── */
+function updateStats(){
+  const pub=allNews.filter(n=>n.published!==false).length;
+  const draft=allNews.length-pub;
+  document.getElementById("st-total").textContent=allNews.length;
+  document.getElementById("st-published").textContent=pub;
+  document.getElementById("st-draft").textContent=draft;
+  document.getElementById("sidebar-total").textContent=allNews.length;
+  ["video","newspaper","event","general"].forEach(t=>{
+    document.getElementById("st-"+t).textContent=allNews.filter(n=>(n.type||"general")===t).length;
+  });
+}
+
+/* ── Filter ── */
+window.setFilter=function(cat,btn){
+  currentFilter=cat;
+  document.querySelectorAll(".ftab").forEach(b=>b.classList.remove("active"));
+  btn.classList.add("active");
+  window.renderGrid();
+};
+
+/* ── Render grid ── */
+window.renderGrid=function(){
+  const q=(document.getElementById(role==="Admin"?"search-input":"search-input-viewer")?.value||"").toLowerCase().trim();
+  let items=currentFilter==="all"?allNews:allNews.filter(n=>(n.type||"general")===currentFilter);
+  if(q)items=items.filter(n=>(n.title||"").toLowerCase().includes(q)||(n.summary||"").toLowerCase().includes(q));
+
+  const grid=document.getElementById("news-grid");
+  const isAdmin=role==="Admin";
+
+  if(!items.length){
+    grid.innerHTML=`<div class="empty-state"><i class="bi bi-inbox"></i><p>No news found</p></div>`;return;
+  }
+
+  const typeLabels={video:"Video",newspaper:"Newspaper",event:"Event",general:"General"};
+  const typeIcons={video:"bi-play-circle-fill",newspaper:"bi-newspaper",event:"bi-calendar-event-fill",general:"bi-megaphone-fill"};
+
+  grid.innerHTML=items.map(n=>{
+    const type=n.type||"general";
+    const date=n.date;
+    let thumb="";
+    if(type==="video"){
+      const ytId=(n.thumbnailUrl||"");
+      const yt=n.videoUrl?.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|shorts\/))([A-Za-z0-9_-]{11})/);
+      const ytThumb=yt?`https://img.youtube.com/vi/${yt[1]}/hqdefault.jpg`:"";
+      const src=n.thumbnailUrl||ytThumb;
+      thumb=src?`<img src="${esc(src)}" alt="" onerror="this.style.display='none'">`:`<i class="nac-placeholder bi bi-play-circle"></i>`;
+    }else if(n.coverImageUrl){
+      thumb=`<img src="${esc(n.coverImageUrl)}" alt="" onerror="this.style.display='none'">`;
+    }else{
+      thumb=`<i class="nac-placeholder bi ${typeIcons[type]||"bi-megaphone"}"></i>`;
+    }
+    const pubStatus=n.published!==false;
+    return `<div class="news-admin-card">
+      <div class="nac-thumb">
+        ${thumb}
+        <span class="nac-type-badge tb-${type}"><i class="bi ${typeIcons[type]||"bi-megaphone"} me-1"></i>${typeLabels[type]||"General"}</span>
+        <span class="nac-status ${pubStatus?"pub":"draft"}">${pubStatus?"Published":"Draft"}</span>
+      </div>
+      <div class="nac-body">
+        ${date?`<div class="nac-date"><i class="bi bi-calendar3 me-1"></i>${esc(fmtDate(date))}</div>`:""}
+        <h3 class="nac-title">${esc(n.title||"Untitled")}</h3>
+        ${n.summary?`<p class="nac-summary">${esc(n.summary)}</p>`:""}
+        ${isAdmin?`<div class="nac-actions">
+          <button class="btn-edit-card" onclick="openEdit('${n.id}')">✏️ Edit</button>
+          <button class="btn-toggle-pub ${pubStatus?"pub":""}" onclick="togglePublish('${n.id}',${!pubStatus})">${pubStatus?"Unpublish":"Publish"}</button>
+          <button class="btn-del-card" onclick="delNews('${n.id}','${esc(n.title||"")}')">🗑</button>
+        </div>`:""}
+      </div>
+    </div>`;
+  }).join("");
+};
+
+/* ── Toggle publish ── */
+window.togglePublish=async function(id,publish){
+  try{
+    await updateDoc(doc(db,"news",id),{published:publish,updated_at:serverTimestamp()});
+    toast(publish?"Published! Now visible on website.":"Unpublished. Hidden from website.","success");
+  }catch(e){toast("❌ "+e.message,"error");}
+};
+
+/* ── Delete ── */
+window.delNews=async function(id,title){
+  if(!confirm(`Delete "${title}"? This cannot be undone.`))return;
+  try{
+    await deleteDoc(doc(db,"news",id));
+    toast("Deleted.","success");
+  }catch(e){toast("❌ "+e.message,"error");}
+};
+
+/* ── TYPE CHANGE — show/hide fields ── */
+window.onTypeChange=function(){
+  const type=document.getElementById("f-type").value;
+  ["video","newspaper","event","general"].forEach(t=>{
+    document.getElementById("fields-"+t).style.display=t===type?"block":"none";
+  });
+};
+
+/* ── Open Add ── */
+window.openAdd=function(){
+  if(role!=="Admin"){toast("Admin access required","error");return;}
+  editId=null;
+  document.getElementById("modal-title").textContent="Add News";
+  document.getElementById("f-type").value="video";
+  document.getElementById("f-title").value="";
+  document.getElementById("f-date").value=new Date().toISOString().split("T")[0];
+  document.getElementById("f-summary").value="";
+  document.getElementById("f-order").value="0";
+  document.getElementById("f-published").value="true";
+  document.getElementById("f-videoUrl").value="";
+  document.getElementById("f-thumbnailUrl").value="";
+  document.getElementById("f-duration").value="";
+  document.getElementById("f-publication").value="";
+  document.getElementById("f-pdfUrl").value="";
+  document.getElementById("f-coverImageUrl-np").value="";
+  document.getElementById("f-eventDate").value="";
+  document.getElementById("f-eventTime").value="";
+  document.getElementById("f-venue").value="";
+  document.getElementById("f-coverImageUrl-ev").value="";
+  document.getElementById("f-coverImageUrl-gen").value="";
+  document.getElementById("btn-modal-del").style.display="none";
+  document.getElementById("modal-status").textContent="";
+  document.getElementById("blocks-container").innerHTML="";
+  window.onTypeChange();
+  busy(false);
+  openM("m-news");
+};
+
+/* ── Open Edit ── */
+window.openEdit=function(id){
+  if(role!=="Admin"){toast("Admin access required","error");return;}
+  const n=allNews.find(x=>x.id===id);
+  if(!n)return;
+  editId=id;
+  const type=n.type||"general";
+  document.getElementById("modal-title").textContent="Edit News";
+  document.getElementById("f-type").value=type;
+  document.getElementById("f-title").value=n.title||"";
+  const d=n.date?.toDate?n.date.toDate():n.date?new Date(n.date):null;
+  document.getElementById("f-date").value=d&&!isNaN(d)?d.toISOString().split("T")[0]:"";
+  document.getElementById("f-summary").value=n.summary||"";
+  document.getElementById("f-order").value=n.order||0;
+  document.getElementById("f-published").value=String(n.published!==false);
+  // type fields
+  document.getElementById("f-videoUrl").value=n.videoUrl||"";
+  document.getElementById("f-thumbnailUrl").value=n.thumbnailUrl||"";
+  document.getElementById("f-duration").value=n.duration||"";
+  document.getElementById("f-publication").value=n.publication||"";
+  document.getElementById("f-pdfUrl").value=n.pdfUrl||"";
+  document.getElementById("f-coverImageUrl-np").value=type==="newspaper"?n.coverImageUrl||"":"";
+  const evD=n.eventDate?new Date(n.eventDate):null;
+  document.getElementById("f-eventDate").value=evD&&!isNaN(evD)?evD.toISOString().split("T")[0]:"";
+  document.getElementById("f-eventTime").value=n.eventTime||"";
+  document.getElementById("f-venue").value=n.venue||"";
+  document.getElementById("f-coverImageUrl-ev").value=type==="event"?n.coverImageUrl||"":"";
+  document.getElementById("f-coverImageUrl-gen").value=type==="general"?n.coverImageUrl||"":"";
+  document.getElementById("btn-modal-del").style.display="";
+  document.getElementById("modal-status").textContent="";
+  // blocks
+  const cont=document.getElementById("blocks-container");
+  cont.innerHTML="";
+  (n.blocks||[]).forEach(b=>addBlockData(b));
+  window.onTypeChange();
+  busy(false);
+  openM("m-news");
+};
+
+/* ── Blocks ── */
+window.addBlock=function(type){addBlockData({type,text:"",url:"",caption:"",images:[]});};
+function addBlockData(b){
+  const cont=document.getElementById("blocks-container");
+  const div=document.createElement("div");
+  div.style.cssText="background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:10px;margin-bottom:8px;";
+  let inner="";
+  if(b.type==="heading"){
+    inner=`<div style="display:flex;gap:6px;align-items:center;margin-bottom:4px;"><span style="font-size:.65rem;font-weight:800;color:var(--brand);text-transform:uppercase;">Heading</span><button class="btn-rm-row" onclick="this.closest('[data-block]').remove()" style="margin-left:auto">✕</button></div>
+    <input type="text" placeholder="Heading text…" value="${esc(b.text||"")}" style="width:100%;border:1px solid #e2e8f0;border-radius:6px;padding:6px 10px;font-size:.84rem;outline:none;font-family:inherit;">`;
+  }else if(b.type==="text"){
+    inner=`<div style="display:flex;gap:6px;align-items:center;margin-bottom:4px;"><span style="font-size:.65rem;font-weight:800;color:var(--brand);text-transform:uppercase;">Text</span><button class="btn-rm-row" onclick="this.closest('[data-block]').remove()" style="margin-left:auto">✕</button></div>
+    <textarea placeholder="Paragraph text…" rows="3" style="width:100%;border:1px solid #e2e8f0;border-radius:6px;padding:6px 10px;font-size:.84rem;resize:vertical;outline:none;font-family:inherit;">${esc(b.text||"")}</textarea>`;
+  }else if(b.type==="image"){
+    inner=`<div style="display:flex;gap:6px;align-items:center;margin-bottom:6px;"><span style="font-size:.65rem;font-weight:800;color:var(--brand);text-transform:uppercase;">Image</span><button class="btn-rm-row" onclick="this.closest('[data-block]').remove()" style="margin-left:auto">✕</button></div>
+    <input type="url" placeholder="Image URL" value="${esc(b.url||"")}" style="width:100%;border:1px solid #e2e8f0;border-radius:6px;padding:6px 10px;font-size:.82rem;outline:none;margin-bottom:5px;">
+    <input type="text" placeholder="Caption (optional)" value="${esc(b.caption||"")}" style="width:100%;border:1px solid #e2e8f0;border-radius:6px;padding:6px 10px;font-size:.82rem;outline:none;">`;
+  }else if(b.type==="gallery"){
+    const imgs=(b.images||[{url:"",caption:""}]);
+    const imgRows=imgs.map(im=>`<div class="img-row">
+      <input type="url" placeholder="Image URL" value="${esc(im.url||"")}">
+      <input type="text" placeholder="Caption" class="caption" value="${esc(im.caption||"")}">
+      <button class="btn-rm-row" onclick="this.closest('.img-row').remove()">✕</button>
+    </div>`).join("");
+    inner=`<div style="display:flex;gap:6px;align-items:center;margin-bottom:6px;"><span style="font-size:.65rem;font-weight:800;color:var(--brand);text-transform:uppercase;">Gallery</span><button class="btn-rm-row" onclick="this.closest('[data-block]').remove()" style="margin-left:auto">✕ Remove</button></div>
+    <div class="gallery-imgs">${imgRows}</div>
+    <button class="btn-add-row" onclick="addGalleryImg(this)">+ Add Image</button>`;
+  }
+  div.setAttribute("data-block",b.type);
+  div.innerHTML=inner;
+  cont.appendChild(div);
+}
+window.addGalleryImg=function(btn){
+  const wrap=btn.previousElementSibling;
+  const div=document.createElement("div");
+  div.className="img-row";
+  div.innerHTML=`<input type="url" placeholder="Image URL"><input type="text" placeholder="Caption" class="caption"><button class="btn-rm-row" onclick="this.closest('.img-row').remove()">✕</button>`;
+  wrap.appendChild(div);
+};
+function getBlocks(){
+  return[...document.querySelectorAll("#blocks-container [data-block]")].map(div=>{
+    const type=div.dataset.block;
+    if(type==="heading")return{type,text:div.querySelector("input")?.value||""};
+    if(type==="text")return{type,text:div.querySelector("textarea")?.value||""};
+    if(type==="image"){const ins=div.querySelectorAll("input");return{type,url:ins[0]?.value||"",caption:ins[1]?.value||""};}
+    if(type==="gallery"){
+      const imgs=[...div.querySelectorAll(".img-row")].map(r=>{const ins=r.querySelectorAll("input");return{url:ins[0]?.value||"",caption:ins[1]?.value||""};}).filter(i=>i.url);
+      return{type,images:imgs};
+    }
+    return null;
+  }).filter(Boolean);
+}
+
+/* ── Save ── */
+window.modalSave=async function(){
+  const type=document.getElementById("f-type").value;
+  const title=document.getElementById("f-title").value.trim();
+  const dateVal=document.getElementById("f-date").value;
+  const summary=document.getElementById("f-summary").value.trim();
+  const order=parseInt(document.getElementById("f-order").value)||0;
+  const published=document.getElementById("f-published").value==="true";
+  const blocks=getBlocks();
+  const st=document.getElementById("modal-status");
+
+  if(!title){st.textContent="Title is required.";st.style.color="#ef4444";return;}
+
+  // Build doc
+  const data={type,title,summary,order,published,blocks,updated_at:serverTimestamp()};
+  if(dateVal)data.date=new Date(dateVal);
+
+  if(type==="video"){
+    const vu=document.getElementById("f-videoUrl").value.trim();
+    if(!vu){st.textContent="Video URL is required.";st.style.color="#ef4444";return;}
+    data.videoUrl=vu;
+    data.thumbnailUrl=document.getElementById("f-thumbnailUrl").value.trim();
+    data.duration=document.getElementById("f-duration").value.trim();
+  }else if(type==="newspaper"){
+    data.publication=document.getElementById("f-publication").value.trim();
+    data.pdfUrl=document.getElementById("f-pdfUrl").value.trim();
+    data.coverImageUrl=document.getElementById("f-coverImageUrl-np").value.trim();
+  }else if(type==="event"){
+    const evD=document.getElementById("f-eventDate").value;
+    data.eventDate=evD||"";
+    data.eventTime=document.getElementById("f-eventTime").value.trim();
+    data.venue=document.getElementById("f-venue").value.trim();
+    data.coverImageUrl=document.getElementById("f-coverImageUrl-ev").value.trim();
+  }else{
+    data.coverImageUrl=document.getElementById("f-coverImageUrl-gen").value.trim();
+  }
+
+  busy(true);st.textContent="";
+  try{
+    const id=editId||`news_${Date.now()}`;
+    if(!editId)data.created_at=serverTimestamp();
+    await setDoc(doc(db,"news",id),data,{merge:true});
+    closeM("m-news");
+    toast(`✅ ${editId?"Updated":"Created"}! Changes live on church website.`,"success");
+  }catch(e){
+    st.textContent="❌ "+e.message;st.style.color="#ef4444";busy(false);
+  }
+};
+
+/* ── Delete from modal ── */
+window.modalDel=async function(){
+  if(!editId)return;
+  const n=allNews.find(x=>x.id===editId);
+  if(!n||!confirm(`Delete "${n.title}"? This cannot be undone.`))return;
+  try{
+    await deleteDoc(doc(db,"news",editId));
+    closeM("m-news");toast("Deleted.","success");
+  }catch(e){toast("❌ "+e.message,"error");}
+};
+
+document.querySelectorAll(".hm-backdrop").forEach(bd=>{
+  bd.addEventListener("click",ev=>{if(ev.target===bd)bd.classList.remove("show");});
+});
+</script>
+</body>
+</html>
