@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Gallery Management — AdminForge</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Raleway:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css"/>
+
+  <style>
+    :root{
+      --brand:#921a02;--brand-dark:#6d1201;
+      --brand-light:rgba(146,26,2,0.08);--brand-border:rgba(146,26,2,0.18);
+    }
+
+    /* ── Toast ── */
+    #dash-toast{position:fixed;bottom:24px;right:24px;z-index:99999;background:#1e293b;color:#fff;padding:12px 20px;border-radius:10px;font-size:.82rem;font-weight:600;box-shadow:0 8px 24px rgba(0,0,0,.25);opacity:0;transform:translateY(10px);transition:opacity .25s,transform .25s;pointer-events:none;max-width:320px}
+    #dash-toast.show{opacity:1;transform:translateY(0)}
+    #dash-toast.success{background:#16a34a}
+    #dash-toast.error{background:#dc2626}
+    #dash-toast.info{background:#2563eb}
+
+    /* ── Modals ── */
+    .hm-backdrop{display:none;position:fixed;inset:0;z-index:9998;background:rgba(0,0,0,.55);backdrop-filter:blur(3px);align-items:center;justify-content:center}
+    .hm-backdrop.show{display:flex;animation:hmFadeIn .2s ease}
+    @keyframes hmFadeIn{from{opacity:0}to{opacity:1}}
+    .hm-box{background:#fff;border-radius:16px;padding:24px;width:100%;max-width:680px;max-height:92vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.25);position:relative;animation:hmUp .25s ease}
+    @keyframes hmUp{from{transform:translateY(20px);opacity:0}to{transform:translateY(0);opacity:1}}
+    .hm-box h5{font-size:1rem;font-weight:700;margin:0 0 16px}
+    .hm-close{position:absolute;top:14px;right:16px;background:none;border:none;font-size:1.2rem;cursor:pointer;color:#6b7280}
+    .hm-group{margin-bottom:12px}
+    .hm-group label{display:block;font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#64748b;margin-bottom:5px}
+    .hm-group input,.hm-group select,.hm-group textarea{width:100%;border:1px solid #e2e8f0;border-radius:8px;padding:8px 12px;font-size:.84rem;outline:none;transition:border-color .2s;font-family:inherit}
+    .hm-group textarea{resize:vertical;min-height:70px}
+    .hm-group input:focus,.hm-group select:focus,.hm-group textarea:focus{border-color:#921a02}
+    .hm-actions{display:flex;gap:10px;margin-top:16px;flex-wrap:wrap}
+    .hm-save{flex:1;padding:10px;border-radius:8px;border:none;background:#921a02;color:#fff;font-weight:600;font-size:.85rem;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;min-height:40px}
+    .hm-save:hover:not(:disabled){background:#6d1201}
+    .hm-save:disabled{opacity:.6;cursor:not-allowed}
+    .hm-cancel{padding:10px 18px;border-radius:8px;border:1px solid #e2e8f0;background:#f8fafc;font-size:.85rem;cursor:pointer}
+    .hm-status{font-size:.78rem;text-align:center;margin-top:8px;min-height:18px}
+    .spin{width:14px;height:14px;border:2px solid rgba(255,255,255,.4);border-top-color:#fff;border-radius:50%;animation:spinAnim .6s linear infinite;display:inline-block}
+    @keyframes spinAnim{to{transform:rotate(360deg)}}
+
+    /* ── Stats ── */
+    .stats-bar{display:grid;grid-template-columns:repeat(auto-fit,minmax(80px,1fr));gap:8px;margin-bottom:16px}
+    .stat-pill{background:#fff;border:1px solid #e2e8f0;border-radius:9px;padding:9px;text-align:center}
+    .stat-num{font-size:1.2rem;font-weight:800;color:#921a02;line-height:1;display:block}
+    .stat-lbl{font-size:.58rem;color:#64748b;margin-top:3px}
+
+    /* ── Action bar ── */
+    .action-bar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:16px;background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:10px 14px;}
+    .btn-add{display:inline-flex;align-items:center;gap:5px;padding:8px 16px;background:#921a02;color:#fff;border:none;border-radius:8px;font-size:.78rem;font-weight:700;cursor:pointer}
+    .btn-add:hover{background:#6d1201}
+    .filter-tabs{display:flex;gap:5px;flex-wrap:wrap;flex:1}
+    .ftab{padding:5px 12px;border-radius:20px;border:1.5px solid #e2e8f0;background:#fff;color:#64748b;font-size:.72rem;font-weight:700;cursor:pointer;transition:all .15s;display:inline-flex;align-items:center;gap:5px}
+    .ftab.active{background:#921a02;border-color:#921a02;color:#fff}
+    .ftab:hover:not(.active){border-color:var(--brand-border);color:#921a02;background:#fdf5f4}
+    .search-bar{position:relative;min-width:180px}
+    .search-bar input{width:100%;padding:7px 12px 7px 30px;border:1px solid var(--brand-border);border-radius:8px;font-size:.82rem;outline:none}
+    .search-bar input:focus{border-color:#921a02}
+    .search-bar i{position:absolute;left:9px;top:50%;transform:translateY(-50%);color:#94a3b8;font-size:.82rem}
+
+    /* ── Section header (accordion-style) ── */
+    .section-header{display:flex;align-items:center;justify-content:space-between;background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:14px 18px;margin-bottom:10px;cursor:pointer;user-select:none;transition:box-shadow .15s}
+    .section-header:hover{box-shadow:0 2px 8px rgba(146,26,2,.08)}
+    .section-header-left{display:flex;align-items:center;gap:10px}
+    .section-badge{width:36px;height:36px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:1rem}
+    .badge-events{background:#fef2f2;color:#dc2626}
+    .badge-festival{background:#fef9ee;color:#b45309}
+    .badge-madhyastan{background:#f0fdf4;color:#16a34a}
+    .badge-general{background:#f0f4ff;color:#2563eb}
+    .section-title{font-size:.92rem;font-weight:700;color:#1e293b}
+    .section-count{font-size:.72rem;color:#64748b;margin-top:1px}
+    .section-toggle{color:#94a3b8;font-size:1.1rem;transition:transform .2s}
+    .section-toggle.open{transform:rotate(180deg)}
+
+    /* ── Gallery grid per section ── */
+    .section-body{display:none;margin-bottom:20px}
+    .section-body.open{display:block;animation:sectionFade .2s ease}
+    @keyframes sectionFade{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:translateY(0)}}
+    .gallery-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;padding:4px 0 16px}
+
+    /* ── Gallery Cards ── */
+    .gallery-card{background:#fff;border:1px solid #e2e8f0;border-radius:10px;overflow:hidden;transition:box-shadow .15s,transform .15s}
+    .gallery-card:hover{box-shadow:0 4px 16px rgba(146,26,2,.12);transform:translateY(-2px)}
+    .gc-thumb{width:100%;aspect-ratio:4/3;background:#f1f5f9;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}
+    .gc-thumb img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .3s}
+    .gallery-card:hover .gc-thumb img{transform:scale(1.04)}
+    .gc-thumb .gc-placeholder{font-size:2rem;color:#cbd5e1}
+    .gc-pub-badge{position:absolute;top:7px;right:7px;padding:2px 8px;border-radius:20px;font-size:.58rem;font-weight:800}
+    .gc-pub-badge.pub{background:#dcfce7;color:#16a34a}
+    .gc-pub-badge.draft{background:#fef9c3;color:#854d0e}
+    .gc-body{padding:10px 12px 12px}
+    .gc-date{font-size:.65rem;color:#94a3b8;font-weight:600;margin-bottom:3px}
+    .gc-title{font-size:.82rem;font-weight:700;color:#1e293b;margin:0 0 8px;line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+    .gc-actions{display:flex;gap:5px}
+    .btn-edit-gc{flex:1;padding:5px;border-radius:6px;background:#4f46e5;color:#fff;border:none;font-size:.7rem;font-weight:600;cursor:pointer}
+    .btn-edit-gc:hover{background:#4338ca}
+    .btn-del-gc{padding:5px 9px;border-radius:6px;background:#fee2e2;color:#dc2626;border:1px solid #fecaca;font-size:.7rem;cursor:pointer}
+    .btn-del-gc:hover{background:#fecaca}
+    .btn-toggle-gc{flex:1;padding:5px;border-radius:6px;border:1px solid #e2e8f0;background:#f8fafc;color:#64748b;font-size:.7rem;cursor:pointer}
+    .btn-toggle-gc.pub{background:#dcfce7;color:#16a34a;border-color:#bbf7d0}
+
+    /* ── Add image button card ── */
+    .gc-add-card{background:#fafafa;border:2px dashed var(--brand-border);border-radius:10px;aspect-ratio:4/3;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;color:#921a02;transition:all .15s;gap:6px}
+    .gc-add-card:hover{background:#fdf5f4;border-color:#921a02}
+    .gc-add-card i{font-size:1.6rem}
+    .gc-add-card span{font-size:.72rem;font-weight:700}
+
+    /* ── Drag & drop zone ── */
+    .drop-zone{border:2px dashed #e2e8f0;border-radius:10px;padding:24px;text-align:center;transition:all .2s;background:#fafafa;cursor:pointer;position:relative}
+    .drop-zone.dragover{border-color:#921a02;background:#fdf5f4}
+    .drop-zone input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+    .drop-zone-icon{font-size:2rem;color:#cbd5e1;margin-bottom:8px}
+    .drop-zone-text{font-size:.8rem;color:#64748b;margin:0}
+    .drop-zone-sub{font-size:.7rem;color:#94a3b8;margin:4px 0 0}
+
+    /* ── Preview strip ── */
+    .preview-strip{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+    .preview-item{position:relative;width:72px;height:72px;border-radius:7px;overflow:hidden;border:1px solid #e2e8f0}
+    .preview-item img{width:100%;height:100%;object-fit:cover}
+    .preview-rm{position:absolute;top:2px;right:2px;background:rgba(0,0,0,.6);color:#fff;border:none;border-radius:3px;padding:1px 5px;font-size:.6rem;cursor:pointer;line-height:1.4}
+
+    /* ── URL input rows ── */
+    .url-row{display:flex;gap:6px;align-items:center;margin-bottom:6px}
+    .url-row input{flex:1;border:1px solid #e2e8f0;border-radius:6px;padding:6px 10px;font-size:.8rem;outline:none}
+    .url-row input:focus{border-color:#921a02}
+    .btn-rm-row{background:#fef2f2;color:#dc2626;border:1px solid #fecaca;border-radius:5px;padding:4px 8px;font-size:.7rem;cursor:pointer;flex-shrink:0}
+    .btn-add-row{background:rgba(146,26,2,.07);color:#921a02;border:1px dashed rgba(146,26,2,.35);border-radius:6px;padding:6px 12px;font-size:.72rem;font-weight:700;cursor:pointer;margin-top:4px;width:100%}
+
+    /* ── Lightbox ── */
+    #lightbox{position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,.92);display:none;align-items:center;justify-content:center;flex-direction:column;gap:12px}
+    #lightbox.show{display:flex}
+    #lightbox img{max-width:92vw;max-height:82vh;border-radius:8px;box-shadow:0 0 60px rgba(0,0,0,.6)}
+    #lightbox-close{position:absolute;top:18px;right:22px;background:none;border:none;color:#fff;font-size:1.6rem;cursor:pointer}
+    #lightbox-caption{color:#e2e8f0;font-size:.85rem;font-weight:500}
+
+    /* ── Empty state ── */
+    .empty-state{text-align:center;padding:40px 20px;color:#94a3b8;grid-column:1/-1}
+    .empty-state i{font-size:2.5rem;display:block;margin-bottom:8px;opacity:.4}
+    .empty-state p{font-size:.82rem;margin:0}
+
+    /* ── Tab separator ── */
+    .section-add-btn{display:inline-flex;align-items:center;gap:5px;padding:5px 12px;background:rgba(146,26,2,.07);color:#921a02;border:1px dashed rgba(146,26,2,.35);border-radius:7px;font-size:.72rem;font-weight:700;cursor:pointer;margin-bottom:12px}
+    .section-add-btn:hover{background:#fdf5f4}
+  </style>
+</head>
+<body>
+<div id="dash-toast"></div>
+<div id="lightbox">
+  <button id="lightbox-close" onclick="closeLightbox()">✕</button>
+  <img id="lightbox-img" src="" alt="">
+  <div id="lightbox-caption"></div>
+</div>
+<div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+<div class="dash-layout">
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-brand">
+      <div class="sidebar-logo">AF</div>
+      <div><div class="sidebar-brand-text">AdminForge</div><div class="sidebar-brand-sub">Management System</div></div>
+    </div>
+    <div class="sidebar-menu">
+      <p class="sidebar-section">Main</p>
+      <div class="sidebar-item" onclick="location.href='dashboard.html'"><span class="si-icon">⬡</span> Users</div>
+      <p class="sidebar-section">Pages</p>
+      <div class="sidebar-item" onclick="location.href='dashboard.html'"><span class="si-icon">⬡</span> Home</div>
+      <a href="about.html" class="sidebar-item"><span class="si-icon">ℹ</span> About Us</a>
+      <a href="administration.html" class="sidebar-item"><span class="si-icon">⛪</span> Administration</a>
+      <a href="parishes.html" class="sidebar-item"><span class="si-icon">⬡</span> Parishes</a>
+      <a href="priests.html" class="sidebar-item"><span class="si-icon">✝</span> Priests</a>
+      <a href="seminarians.html" class="sidebar-item"><span class="si-icon">🎓</span> Seminarians</a>
+      <a href="department.html" class="sidebar-item"><span class="si-icon">🏢</span> Departments</a>
+      <a href="mission.html" class="sidebar-item"><span class="si-icon">🌍</span> Missions</a>
+      <a href="generalinfo.html" class="sidebar-item"><span class="si-icon">🌍</span> General Information</a>
+      <a href="apostolilife.html" class="sidebar-item"><span class="si-icon">🏢</span> Apostolic Life</a>
+      <p class="sidebar-section">Sub Section</p>
+      <a href="liturgy.html" class="sidebar-item"><span class="si-icon">📅</span> Liturgy</a>
+      <a href="calender.html" class="sidebar-item"><span class="si-icon">📅</span> Calendar</a>
+      <a href="announcements.html" class="sidebar-item"><span class="si-icon">📣</span> Announcements</a>
+      <a href="news.html" class="sidebar-item"><span class="si-icon">📰</span> News</a>
+      <div class="sidebar-item active"><span class="si-icon">🖼</span> Gallery <span class="si-badge" id="sidebar-total">0</span></div>
+      <p class="sidebar-section" style="margin-top:14px;">Account</p>
+      <div class="sidebar-item" onclick="toast('Coming soon!')"><span class="si-icon">⚙</span> Settings</div>
+    </div>
+    <div class="sidebar-footer">
+      <div class="user-row">
+        <div class="user-row-avatar" id="sidebar-avatar">?</div>
+        <div>
+          <div class="user-row-name" id="sidebar-username">Loading…</div>
+          <div class="user-row-role" id="sidebar-role">—</div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <nav class="topbar">
+    <div class="topbar-left">
+      <button class="sidebar-toggle" id="sidebar-toggle">☰</button>
+      <div class="topbar-rule d-none d-lg-block"></div>
+      <div>
+        <div class="topbar-title">🖼 Gallery Management</div>
+        <div class="topbar-sub">Events · Festival · Madhyastan · General — drag & drop or URL upload, live on church website</div>
+      </div>
+    </div>
+    <div class="topbar-right">
+      <span id="role-badge" class="badge bg-secondary me-2" style="font-size:.8rem;padding:6px 12px;"></span>
+      <button class="btn btn-logout btn-sm" id="btn-logout">⏻ Logout</button>
+    </div>
+  </nav>
+
+  <main class="dash-main">
+
+    <!-- Stats -->
+    <div class="stats-bar">
+      <div class="stat-pill"><span class="stat-num" id="st-total">0</span><div class="stat-lbl">Total</div></div>
+      <div class="stat-pill"><span class="stat-num" id="st-published">0</span><div class="stat-lbl">Published</div></div>
+      <div class="stat-pill"><span class="stat-num" id="st-draft">0</span><div class="stat-lbl">Drafts</div></div>
+      <div class="stat-pill" style="border-color:#dc2626"><span class="stat-num" id="st-events">0</span><div class="stat-lbl">Events</div></div>
+      <div class="stat-pill" style="border-color:#b45309"><span class="stat-num" id="st-festival">0</span><div class="stat-lbl">Festival</div></div>
+      <div class="stat-pill" style="border-color:#16a34a"><span class="stat-num" id="st-madhyastan">0</span><div class="stat-lbl">Madhyastan</div></div>
+      <div class="stat-pill" style="border-color:#2563eb"><span class="stat-num" id="st-general">0</span><div class="stat-lbl">General</div></div>
+    </div>
+
+    <!-- Admin action bar -->
+    <div class="action-bar" id="admin-bar" style="display:none;">
+      <button class="btn-add" onclick="openAdd()"><i class="bi bi-plus-lg"></i> Add Gallery</button>
+      <div class="filter-tabs">
+        <button class="ftab active" data-cat="all" onclick="setFilter('all',this)"><i class="bi bi-grid"></i> All</button>
+        <button class="ftab" data-cat="events" onclick="setFilter('events',this)"><i class="bi bi-calendar-event"></i> Events</button>
+        <button class="ftab" data-cat="festival" onclick="setFilter('festival',this)"><i class="bi bi-stars"></i> Festival</button>
+        <button class="ftab" data-cat="madhyastan" onclick="setFilter('madhyastan',this)"><i class="bi bi-heart"></i> Madhyastan</button>
+        <button class="ftab" data-cat="general" onclick="setFilter('general',this)"><i class="bi bi-images"></i> General</button>
+      </div>
+      <div class="search-bar">
+        <i class="bi bi-search"></i>
+        <input type="text" id="search-input" placeholder="Search gallery…" oninput="renderSections()"/>
+      </div>
+    </div>
+
+    <!-- Viewer bar -->
+    <div class="action-bar" id="viewer-bar" style="display:none;">
+      <div class="filter-tabs">
+        <button class="ftab active" data-cat="all" onclick="setFilter('all',this)">All</button>
+        <button class="ftab" data-cat="events" onclick="setFilter('events',this)">Events</button>
+        <button class="ftab" data-cat="festival" onclick="setFilter('festival',this)">Festival</button>
+        <button class="ftab" data-cat="madhyastan" onclick="setFilter('madhyastan',this)">Madhyastan</button>
+        <button class="ftab" data-cat="general" onclick="setFilter('general',this)">General</button>
+      </div>
+      <div class="search-bar">
+        <i class="bi bi-search"></i>
+        <input type="text" id="search-input-viewer" placeholder="Search gallery…" oninput="renderSections()"/>
+      </div>
+    </div>
+
+    <!-- Sections container -->
+    <div id="sections-container"></div>
+
+  </main>
+</div>
+
+<!-- ══════════ ADD/EDIT MODAL ══════════ -->
+<div id="m-gallery" class="hm-backdrop">
+  <div class="hm-box">
+    <button class="hm-close" onclick="closeM('m-gallery')">✕</button>
+    <h5 id="modal-title">Add Gallery</h5>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+      <div class="hm-group">
+        <label>Section / Category <span style="color:red">*</span></label>
+        <select id="f-category">
+          <option value="events">📅 Events</option>
+          <option value="festival">🌟 Festival</option>
+          <option value="madhyastan">💚 Madhyastan</option>
+          <option value="general">🖼 General</option>
+        </select>
+      </div>
+      <div class="hm-group">
+        <label>Date <span style="color:red">*</span></label>
+        <input type="date" id="f-date"/>
+      </div>
+    </div>
+
+    <div class="hm-group">
+      <label>Title <span style="color:red">*</span></label>
+      <input type="text" id="f-title" placeholder="Gallery title or album name…"/>
+    </div>
+
+    <div class="hm-group">
+      <label>Description <small style="font-weight:400;color:#94a3b8;">(optional)</small></label>
+      <textarea id="f-description" rows="2" placeholder="Short description about this gallery…"></textarea>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+      <div class="hm-group">
+        <label>Display Order <small style="font-weight:400;color:#94a3b8;">(higher = shown first)</small></label>
+        <input type="number" id="f-order" value="0"/>
+      </div>
+      <div class="hm-group">
+        <label>Status</label>
+        <select id="f-published">
+          <option value="true">✅ Published</option>
+          <option value="false">📝 Draft</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- ── Images Section ── -->
+    <div class="hm-group" style="margin-top:4px;">
+      <label>Images <span style="color:red">*</span> <small style="font-weight:400;color:#94a3b8;">— Drag & drop files OR paste URLs below</small></label>
+
+      <!-- Drop zone -->
+      <div class="drop-zone" id="drop-zone">
+        <input type="file" id="file-input" accept="image/*" multiple onchange="handleFileSelect(this.files)">
+        <div class="drop-zone-icon">📂</div>
+        <p class="drop-zone-text"><strong>Drag & drop images here</strong></p>
+        <p class="drop-zone-sub">or click to browse · JPG, PNG, WebP, GIF</p>
+      </div>
+
+      <!-- File preview strip -->
+      <div class="preview-strip" id="preview-strip"></div>
+
+      <!-- URL inputs -->
+      <div style="margin-top:12px;">
+        <label style="font-size:.72rem;font-weight:700;text-transform:uppercase;color:#64748b;letter-spacing:.05em;margin-bottom:6px;display:block;">Or add image URLs</label>
+        <div id="url-rows">
+          <div class="url-row">
+            <input type="url" placeholder="https://… image URL" oninput="updateUrlPreview(this)">
+            <input type="text" placeholder="Caption (optional)" style="flex:.7;border:1px solid #e2e8f0;border-radius:6px;padding:6px 10px;font-size:.8rem;outline:none">
+            <button class="btn-rm-row" onclick="removeUrlRow(this)">✕</button>
+          </div>
+        </div>
+        <button class="btn-add-row" onclick="addUrlRow()">+ Add another URL</button>
+      </div>
+    </div>
+
+    <div class="hm-actions">
+      <button class="hm-cancel" onclick="closeM('m-gallery')">Cancel</button>
+      <button class="hm-save" id="btn-modal-save" onclick="modalSave()">💾 Save to Firestore</button>
+      <button id="btn-modal-del" onclick="modalDel()" style="display:none;padding:10px 14px;border-radius:8px;border:none;background:#ef4444;color:#fff;font-size:.82rem;cursor:pointer;">🗑 Delete</button>
+    </div>
+    <div class="hm-status" id="modal-status"></div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<script type="module">
+import{initializeApp}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import{getAuth,onAuthStateChanged,signOut}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import{getFirestore,collection,query,orderBy,onSnapshot,doc,setDoc,deleteDoc,serverTimestamp,updateDoc,getDoc}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
+const FC={apiKey:"AIzaSyArM8sv7J1RUj4XvAJhJd40tzA7Yc8BGXY",authDomain:"admin-dashboard-ed62c.firebaseapp.com",projectId:"admin-dashboard-ed62c",storageBucket:"admin-dashboard-ed62c.firebasestorage.app",messagingSenderId:"560027475135",appId:"1:560027475135:web:3fae0cb0268729ae79fa0a"};
+const ADMIN="issacnewton1503@gmail.com";
+const app=initializeApp(FC),auth=getAuth(app),db=getFirestore(app);
+const storage = getStorage(app);
+
+let role=null,allGallery=[],currentFilter="all",editId=null;
+// Uploaded files list (base64 or dataURL for preview; in production you'd upload to Storage)
+let uploadedFiles=[]; // {dataUrl, name}
+
+const esc=s=>String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+
+function fmtDate(v){
+  if(!v)return"";
+  const d=v?.toDate?v.toDate():new Date(v);
+  if(isNaN(d.getTime()))return String(v);
+  return d.toLocaleDateString("en-IN",{day:"2-digit",month:"short",year:"numeric"});
+}
+
+window.toast=function(msg,type="",dur=3500){
+  const t=document.getElementById("dash-toast");
+  t.textContent=msg;t.className="show"+(type?" "+type:"");
+  clearTimeout(t._t);t._t=setTimeout(()=>t.className="",dur);
+};
+window.closeM=id=>document.getElementById(id).classList.remove("show");
+function openM(id){document.getElementById(id).classList.add("show");}
+
+function busy(on){
+  const b=document.getElementById("btn-modal-save");if(!b)return;
+  if(on){b._l=b.innerHTML;b.disabled=true;b.innerHTML=`<span class="spin"></span> Saving…`;}
+  else{b.disabled=false;b.innerHTML=b._l||"Save";}
+}
+
+/* ── Auth ── */
+document.body.style.display="none";
+onAuthStateChanged(auth,async user=>{
+  if(!user){location.href="index.html";return;}
+  const snap=await getDoc(doc(db,"users",user.uid));
+  if(!snap.exists()){await signOut(auth);location.href="index.html";return;}
+  const prof=snap.data();
+  role=user.email===ADMIN?"Admin":"Viewer";
+  const uname=prof.username||user.displayName||user.email;
+  document.getElementById("sidebar-username").textContent=uname;
+  document.getElementById("sidebar-role").textContent=role;
+  document.getElementById("sidebar-avatar").textContent=uname[0].toUpperCase();
+  const badge=document.getElementById("role-badge");
+  badge.textContent=role;badge.className=role==="Admin"?"badge bg-warning text-dark me-2":"badge bg-primary me-2";
+  document.body.style.display="";
+  document.getElementById(role==="Admin"?"admin-bar":"viewer-bar").style.display="flex";
+  startListener();
+});
+
+document.getElementById("btn-logout").addEventListener("click",async()=>{await signOut(auth);location.href="index.html";});
+document.getElementById("sidebar-toggle").addEventListener("click",()=>{document.getElementById("sidebar").classList.toggle("open");document.getElementById("sidebar-overlay").classList.toggle("show");});
+document.getElementById("sidebar-overlay").addEventListener("click",()=>{document.getElementById("sidebar").classList.remove("open");document.getElementById("sidebar-overlay").classList.remove("show");});
+
+/* ── Firestore listener ── */
+function startListener(){
+  const q=query(collection(db,"gallery"),orderBy("order","desc"));
+  onSnapshot(q,snap=>{
+    allGallery=snap.docs.map(d=>({id:d.id,...d.data()}));
+    updateStats();
+    window.renderSections();
+  });
+}
+
+/* ── Stats ── */
+function updateStats(){
+  const pub=allGallery.filter(n=>n.published!==false).length;
+  document.getElementById("st-total").textContent=allGallery.length;
+  document.getElementById("st-published").textContent=pub;
+  document.getElementById("st-draft").textContent=allGallery.length-pub;
+  document.getElementById("sidebar-total").textContent=allGallery.length;
+  ["events","festival","madhyastan","general"].forEach(c=>{
+    document.getElementById("st-"+c).textContent=allGallery.filter(n=>(n.category||"general")===c).length;
+  });
+}
+
+/* ── Filter ── */
+window.setFilter=function(cat,btn){
+  currentFilter=cat;
+  document.querySelectorAll(".ftab").forEach(b=>b.classList.remove("active"));
+  btn.classList.add("active");
+  window.renderSections();
+};
+
+/* ── Section config ── */
+const SECTIONS=[
+  {key:"events",label:"Events",icon:"bi-calendar-event-fill",emoji:"📅",badgeCls:"badge-events"},
+  {key:"festival",label:"Festival",icon:"bi-stars",emoji:"🌟",badgeCls:"badge-festival"},
+  {key:"madhyastan",label:"Madhyastan",icon:"bi-heart-fill",emoji:"💚",badgeCls:"badge-madhyastan"},
+  {key:"general",label:"General",icon:"bi-images",emoji:"🖼",badgeCls:"badge-general"},
+];
+const openSections=new Set(["events","festival","madhyastan","general"]);
+
+/* ── Render ── */
+window.renderSections=function(){
+  const q=(document.getElementById(role==="Admin"?"search-input":"search-input-viewer")?.value||"").toLowerCase().trim();
+  const isAdmin=role==="Admin";
+  const container=document.getElementById("sections-container");
+
+  const sectionsToShow=currentFilter==="all"?SECTIONS:SECTIONS.filter(s=>s.key===currentFilter);
+
+  container.innerHTML=sectionsToShow.map(sec=>{
+    let items=allGallery.filter(n=>(n.category||"general")===sec.key);
+    if(q)items=items.filter(n=>(n.title||"").toLowerCase().includes(q)||(n.description||"").toLowerCase().includes(q));
+    const isOpen=openSections.has(sec.key);
+
+    const cards=items.map(n=>{
+      const pubStatus=n.published!==false;
+      const firstImg=getFirstImage(n);
+      return `<div class="gallery-card">
+        <div class="gc-thumb" onclick="openLightbox('${esc(firstImg)}','${esc(n.title||"")}')" style="cursor:${firstImg?"zoom-in":"default"}">
+          ${firstImg
+            ?`<img src="${esc(firstImg)}" alt="${esc(n.title||"")}" onerror="this.style.display='none'">`
+            :`<i class="gc-placeholder bi bi-images"></i>`}
+          <span class="gc-pub-badge ${pubStatus?"pub":"draft"}">${pubStatus?"Published":"Draft"}</span>
+        </div>
+        <div class="gc-body">
+          ${n.date?`<div class="gc-date"><i class="bi bi-calendar3 me-1"></i>${esc(fmtDate(n.date))}</div>`:""}
+          <div class="gc-title">${esc(n.title||"Untitled")} <small style="font-weight:400;color:#94a3b8;">(${(n.images||[]).length} photos)</small></div>
+          ${isAdmin?`<div class="gc-actions">
+            <button class="btn-edit-gc" onclick="openEdit('${n.id}')">✏️ Edit</button>
+            <button class="btn-toggle-gc ${pubStatus?"pub":""}" onclick="togglePublish('${n.id}',${!pubStatus})">${pubStatus?"Unpublish":"Publish"}</button>
+            <button class="btn-del-gc" onclick="delGallery('${n.id}','${esc(n.title||"")}')">🗑</button>
+          </div>`:""}
+        </div>
+      </div>`;
+    }).join("");
+
+    const addBtn=isAdmin?`<div class="gallery-card"><div class="gc-add-card" onclick="openAddFor('${sec.key}')"><i class="bi bi-plus-circle"></i><span>Add Gallery</span></div></div>`:"";
+
+    return `<div class="section-header" onclick="toggleSection('${sec.key}')">
+        <div class="section-header-left">
+          <div class="section-badge ${sec.badgeCls}"><i class="bi ${sec.icon}"></i></div>
+          <div>
+            <div class="section-title">${sec.emoji} ${sec.label}</div>
+            <div class="section-count">${items.length} album${items.length!==1?"s":""}</div>
+          </div>
+        </div>
+        <i class="bi bi-chevron-down section-toggle ${isOpen?"open":""}"></i>
+      </div>
+      <div class="section-body ${isOpen?"open":""}">
+        <div class="gallery-grid">
+          ${cards}
+          ${addBtn}
+          ${!items.length&&!isAdmin?`<div class="empty-state"><i class="bi bi-images"></i><p>No galleries in this section yet.</p></div>`:""}
+        </div>
+      </div>`;
+  }).join("");
+};
+
+function getFirstImage(n){
+  if(!n.images||!n.images.length)return"";
+  return n.images[0].url||n.images[0]||"";
+}
+
+window.toggleSection=function(key){
+  if(openSections.has(key))openSections.delete(key);
+  else openSections.add(key);
+  window.renderSections();
+};
+
+/* ── Lightbox ── */
+window.openLightbox=function(src,caption){
+  if(!src)return;
+  document.getElementById("lightbox-img").src=src;
+  document.getElementById("lightbox-caption").textContent=caption||"";
+  document.getElementById("lightbox").classList.add("show");
+};
+window.closeLightbox=function(){document.getElementById("lightbox").classList.remove("show");};
+document.getElementById("lightbox").addEventListener("click",e=>{if(e.target===document.getElementById("lightbox"))window.closeLightbox();});
+
+/* ── Toggle publish ── */
+window.togglePublish=async function(id,publish){
+  try{
+    await updateDoc(doc(db,"gallery",id),{published:publish,updated_at:serverTimestamp()});
+    toast(publish?"Published! Visible on website.":"Unpublished.","success");
+  }catch(e){toast("❌ "+e.message,"error");}
+};
+
+/* ── Delete ── */
+window.delGallery=async function(id,title){
+  if(!confirm(`Delete gallery "${title}"? This cannot be undone.`))return;
+  try{
+    await deleteDoc(doc(db,"gallery",id));
+    toast("Deleted.","success");
+  }catch(e){toast("❌ "+e.message,"error");}
+};
+
+/* ── Open Add ── */
+window.openAdd=function(){openAddFor("events");};
+window.openAddFor=function(cat){
+  if(role!=="Admin"){toast("Admin access required","error");return;}
+  editId=null;uploadedFiles=[];
+  document.getElementById("modal-title").textContent="Add Gallery";
+  document.getElementById("f-category").value=cat||"events";
+  document.getElementById("f-title").value="";
+  document.getElementById("f-date").value=new Date().toISOString().split("T")[0];
+  document.getElementById("f-description").value="";
+  document.getElementById("f-order").value="0";
+  document.getElementById("f-published").value="true";
+  document.getElementById("btn-modal-del").style.display="none";
+  document.getElementById("modal-status").textContent="";
+  document.getElementById("preview-strip").innerHTML="";
+  document.getElementById("url-rows").innerHTML=`<div class="url-row">
+    <input type="url" placeholder="https://… image URL">
+    <input type="text" placeholder="Caption (optional)" style="flex:.7;border:1px solid #e2e8f0;border-radius:6px;padding:6px 10px;font-size:.8rem;outline:none">
+    <button class="btn-rm-row" onclick="removeUrlRow(this)">✕</button>
+  </div>`;
+  busy(false);
+  openM("m-gallery");
+};
+
+/* ── Open Edit ── */
+window.openEdit=function(id){
+  if(role!=="Admin"){toast("Admin access required","error");return;}
+  const n=allGallery.find(x=>x.id===id);
+  if(!n)return;
+  editId=id;uploadedFiles=[];
+  document.getElementById("modal-title").textContent="Edit Gallery";
+  document.getElementById("f-category").value=n.category||"events";
+  const d=n.date?.toDate?n.date.toDate():n.date?new Date(n.date):null;
+  document.getElementById("f-date").value=d&&!isNaN(d)?d.toISOString().split("T")[0]:"";
+  document.getElementById("f-title").value=n.title||"";
+  document.getElementById("f-description").value=n.description||"";
+  document.getElementById("f-order").value=n.order||0;
+  document.getElementById("f-published").value=String(n.published!==false);
+  document.getElementById("btn-modal-del").style.display="";
+  document.getElementById("modal-status").textContent="";
+  // Populate URL rows from saved images
+  const imgs=n.images||[];
+  const urlRows=document.getElementById("url-rows");
+  urlRows.innerHTML="";
+  (imgs.length?imgs:[{url:"",caption:""}]).forEach(im=>{
+    const div=document.createElement("div");
+    div.className="url-row";
+    div.innerHTML=`<input type="url" placeholder="https://… image URL" value="${esc(im.url||im||"")}">
+      <input type="text" placeholder="Caption (optional)" style="flex:.7;border:1px solid #e2e8f0;border-radius:6px;padding:6px 10px;font-size:.8rem;outline:none" value="${esc(im.caption||"")}">
+      <button class="btn-rm-row" onclick="removeUrlRow(this)">✕</button>`;
+    urlRows.appendChild(div);
+  });
+  document.getElementById("preview-strip").innerHTML="";
+  busy(false);
+  openM("m-gallery");
+};
+
+/* ── Drag & Drop ── */
+const dropZone=document.getElementById("drop-zone");
+dropZone.addEventListener("dragover",e=>{e.preventDefault();dropZone.classList.add("dragover");});
+dropZone.addEventListener("dragleave",()=>dropZone.classList.remove("dragover"));
+dropZone.addEventListener("drop",e=>{
+  e.preventDefault();dropZone.classList.remove("dragover");
+  window.handleFileSelect(e.dataTransfer.files);
+});
+
+window.handleFileSelect=function(files){
+  if(!files||!files.length)return;
+  Array.from(files).forEach(file=>{
+    if(!file.type.startsWith("image/"))return;
+    const reader=new FileReader();
+    reader.onload=ev=>{
+      const dataUrl=ev.target.result;
+      uploadedFiles.push({dataUrl,name:file.name});
+      renderPreviewStrip();
+    };
+    reader.readAsDataURL(file);
+  });
+};
+
+function renderPreviewStrip(){
+  const strip=document.getElementById("preview-strip");
+  strip.innerHTML=uploadedFiles.map((f,i)=>`<div class="preview-item">
+    <img src="${f.dataUrl}" alt="${esc(f.name)}">
+    <button class="preview-rm" onclick="removeUpload(${i})">✕</button>
+  </div>`).join("");
+}
+
+window.removeUpload=function(i){
+  uploadedFiles.splice(i,1);
+  renderPreviewStrip();
+};
+
+/* ── URL rows ── */
+window.addUrlRow=function(){
+  const div=document.createElement("div");
+  div.className="url-row";
+  div.innerHTML=`<input type="url" placeholder="https://… image URL">
+    <input type="text" placeholder="Caption (optional)" style="flex:.7;border:1px solid #e2e8f0;border-radius:6px;padding:6px 10px;font-size:.8rem;outline:none">
+    <button class="btn-rm-row" onclick="removeUrlRow(this)">✕</button>`;
+  document.getElementById("url-rows").appendChild(div);
+};
+window.removeUrlRow=function(btn){
+  const rows=document.getElementById("url-rows");
+  if(rows.children.length>1)btn.closest(".url-row").remove();
+};
+
+// ── Cloudinary config (news page-ல் உள்ளதே) ──
+const CLOUD_NAME = "dqwayxpbp";      // news page-ல் இருந்து copy பண்ணுங்கள்
+const UPLOAD_PRESET = "உங்கள்_preset_name";  // news page-ல் இருந்து copy பண்ணுங்கள்
+
+// ── Upload to Cloudinary & collect all image URLs ──
+async function collectImages() {
+  const imgs = [];
+  const st = document.getElementById("modal-status");
+
+  // URL rows (unchanged)
+  document.querySelectorAll("#url-rows .url-row").forEach(row => {
+    const inputs = row.querySelectorAll("input");
+    const url = (inputs[0]?.value || "").trim();
+    const caption = (inputs[1]?.value || "").trim();
+    if (url) imgs.push({ url, caption });
+  });
+
+  // Uploaded files → Cloudinary
+  for (let i = 0; i < uploadedFiles.length; i++) {
+    const f = uploadedFiles[i];
+    try {
+      st.textContent = `⬆️ Uploading ${i + 1} of ${uploadedFiles.length}…`;
+      st.style.color = "#2563eb";
+
+      const res = await fetch(f.dataUrl);
+      const blob = await res.blob();
+
+      const formData = new FormData();
+      formData.append("file", blob, f.name);
+      formData.append("upload_preset", UPLOAD_PRESET);
+      formData.append("folder", "gallery");
+
+      const response = await fetch(
+        `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`,
+        { method: "POST", body: formData }
+      );
+
+      if (!response.ok) throw new Error("Upload failed");
+      const data = await response.json();
+      imgs.push({ url: data.secure_url, caption: f.name });
+
+    } catch (e) {
+      st.textContent = `❌ Failed: ${f.name}`;
+      st.style.color = "#ef4444";
+      console.error(e);
+    }
+  }
+
+  st.textContent = "";
+  return imgs;
+}
+/* ── Save ── */
+window.modalSave=async function(){
+  const category=document.getElementById("f-category").value;
+  const title=document.getElementById("f-title").value.trim();
+  const dateVal=document.getElementById("f-date").value;
+  const description=document.getElementById("f-description").value.trim();
+  const order=parseInt(document.getElementById("f-order").value)||0;
+  const published=document.getElementById("f-published").value==="true";
+  const st=document.getElementById("modal-status");
+ const images = await collectImages();
+
+  if(!title){st.textContent="Title is required.";st.style.color="#ef4444";return;}
+  if(!dateVal){st.textContent="Date is required.";st.style.color="#ef4444";return;}
+  if(!images.length){st.textContent="Add at least one image (URL or upload).";st.style.color="#ef4444";return;}
+
+  const data={category,title,description,order,published,images,updated_at:serverTimestamp(),date:new Date(dateVal)};
+  busy(true);st.textContent="";
+  try{
+    const id=editId||`gallery_${Date.now()}`;
+    if(!editId)data.created_at=serverTimestamp();
+    await setDoc(doc(db,"gallery",id),data,{merge:true});
+    closeM("m-gallery");
+    toast(`✅ ${editId?"Updated":"Created"}! Live on church website.`,"success");
+  }catch(e){
+    st.textContent="❌ "+e.message;st.style.color="#ef4444";busy(false);
+  }
+};
+
+/* ── Delete from modal ── */
+window.modalDel=async function(){
+  if(!editId)return;
+  const n=allGallery.find(x=>x.id===editId);
+  if(!n||!confirm(`Delete gallery "${n.title}"? This cannot be undone.`))return;
+  try{
+    await deleteDoc(doc(db,"gallery",editId));
+    closeM("m-gallery");toast("Deleted.","success");
+  }catch(e){toast("❌ "+e.message,"error");}
+};
+
+document.querySelectorAll(".hm-backdrop").forEach(bd=>{
+  bd.addEventListener("click",ev=>{if(ev.target===bd)bd.classList.remove("show");});
+});
+</script>
+</body>
+</html>
