@@ -1,0 +1,1060 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Daily Readings Admin — Archeparchy</title>
+  <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;600;700;800;900&family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"/>
+  <style>
+    :root {
+      --brand: #921a02;
+      --brand-dark: #6d1201;
+      --brand-light: rgba(146,26,2,0.08);
+      --brand-border: rgba(146,26,2,0.18);
+      --sidebar-w: 250px;
+      --topbar-h: 60px;
+      --text: #1e293b;
+      --muted: #64748b;
+      --border: #e2e8f0;
+      --surface: #fff;
+      --bg: #f8f4f2;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Poppins', sans-serif; background: var(--bg); display: flex; min-height: 100vh; }
+
+    /* ═══════ SIDEBAR ═══════ */
+    .sidebar {
+      width: var(--sidebar-w); background: #fff;
+      border-right: 1px solid var(--brand-border);
+      display: flex; flex-direction: column;
+      position: fixed; top: 0; left: 0; bottom: 0;
+      z-index: 300; overflow-y: auto;
+      transition: transform 0.3s; box-shadow: 2px 0 20px rgba(146,26,2,0.07);
+    }
+    .sidebar-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.45); z-index: 299; backdrop-filter: blur(3px); }
+    .sidebar-overlay.show { display: block; }
+    @media (max-width: 991px) { .sidebar { transform: translateX(-100%); } .sidebar.open { transform: translateX(0); } }
+
+    .sidebar-brand { display: flex; align-items: center; gap: 11px; padding: 20px 18px 16px; border-bottom: 1px solid var(--brand-border); }
+    .sidebar-logo { width: 42px; height: 42px; background: linear-gradient(135deg, var(--brand) 0%, var(--brand-dark) 100%); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; color: #fff; flex-shrink: 0; box-shadow: 0 4px 14px rgba(146,26,2,0.3); }
+    .sb-brand-text { font-family: 'Raleway', sans-serif; font-weight: 800; font-size: 0.88rem; color: #1e0a00; }
+    .sb-brand-sub { font-size: 0.62rem; color: #999; }
+    .sidebar-menu { flex: 1; padding: 10px 0; }
+    .sb-section { font-size: 0.6rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #bbb; padding: 14px 18px 6px; font-family: 'Raleway', sans-serif; }
+    .sb-item { display: flex; align-items: center; gap: 9px; padding: 9px 18px; font-size: 0.79rem; font-weight: 500; color: #555; text-decoration: none; border-left: 3px solid transparent; transition: all 0.18s; cursor: pointer; }
+    .sb-item:hover { background: #fdf5f4; color: var(--brand); border-left-color: rgba(146,26,2,0.3); }
+    .sb-item.active { background: linear-gradient(90deg, rgba(146,26,2,0.1) 0%, rgba(146,26,2,0.02) 100%); color: var(--brand); font-weight: 700; border-left-color: var(--brand); }
+    .sb-badge { background: var(--brand); color: #fff; border-radius: 999px; padding: 1px 7px; font-size: 0.6rem; font-weight: 700; margin-left: auto; }
+    .sb-live { background: #16a34a; color: #fff; border-radius: 999px; padding: 1px 7px; font-size: 0.6rem; font-weight: 700; margin-left: auto; animation: livePulse 2s ease-in-out infinite; }
+    @keyframes livePulse { 0%,100%{opacity:1} 50%{opacity:0.6} }
+    .sidebar-footer { padding: 14px 18px; border-top: 1px solid var(--brand-border); }
+    .user-row { display: flex; align-items: center; gap: 9px; }
+    .user-av { width: 34px; height: 34px; border-radius: 50%; background: var(--brand); color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.8rem; flex-shrink: 0; }
+    .user-name { font-size: 0.75rem; font-weight: 700; color: #1e0a00; }
+    .user-role { font-size: 0.62rem; color: #999; }
+
+    /* ═══════ TOPBAR ═══════ */
+    .topbar { position: fixed; top: 0; left: var(--sidebar-w); right: 0; height: var(--topbar-h); background: var(--brand); display: flex; align-items: center; padding: 0 22px; gap: 14px; z-index: 200; box-shadow: 0 2px 16px rgba(146,26,2,0.35); transition: left 0.3s; }
+    @media (max-width: 991px) { .topbar { left: 0; } }
+    .sb-toggle { background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.25); color: #fff; width: 36px; height: 36px; border-radius: 9px; cursor: pointer; font-size: 1rem; display: none; align-items: center; justify-content: center; flex-shrink: 0; }
+    .sb-toggle:hover { background: rgba(255,255,255,0.28); }
+    @media (max-width: 991px) { .sb-toggle { display: flex; } }
+    .topbar-title { font-family: 'Playfair Display', serif; font-size: 1.05rem; font-weight: 700; color: #fff; }
+    .topbar-sub { font-size: 0.64rem; color: rgba(255,255,255,0.62); text-transform: uppercase; letter-spacing: 0.07em; margin-top: 1px; }
+    .topbar-actions { margin-left: auto; display: flex; align-items: center; gap: 10px; }
+    .btn-view-site { background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3); color: #fff; padding: 7px 14px; border-radius: 20px; font-size: 0.72rem; font-weight: 700; cursor: pointer; text-decoration: none; display: flex; align-items: center; gap: 5px; transition: background 0.2s; }
+    .btn-view-site:hover { background: rgba(255,255,255,0.28); color: #fff; }
+    .live-dot { width: 8px; height: 8px; border-radius: 50%; background: #4ade80; margin-right: 2px; animation: livePulse 2s ease-in-out infinite; }
+
+    /* ═══════ MAIN ═══════ */
+    .main-wrap { margin-left: var(--sidebar-w); margin-top: var(--topbar-h); flex: 1; padding: 22px 20px 60px; transition: margin-left 0.3s; }
+    @media (max-width: 991px) { .main-wrap { margin-left: 0; } }
+
+    /* ═══════ STATS BAR ═══════ */
+    .stats-bar { display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 12px; margin-bottom: 20px; }
+    .stat-card { background: #fff; border: 1.5px solid var(--border); border-radius: 14px; padding: 14px 12px; text-align: center; transition: border-color 0.2s, box-shadow 0.2s; }
+    .stat-card:hover { border-color: var(--brand-border); box-shadow: 0 4px 16px rgba(146,26,2,0.09); }
+    .stat-num { display: block; font-size: 1.6rem; font-weight: 800; color: var(--brand); line-height: 1; font-family: 'Raleway', sans-serif; }
+    .stat-lbl { font-size: 0.6rem; color: var(--muted); margin-top: 4px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.07em; }
+
+    /* ═══════ PANEL ═══════ */
+    .panel { background: #fff; border: 1.5px solid var(--border); border-radius: 18px; padding: 22px; box-shadow: 0 2px 12px rgba(0,0,0,0.04); }
+    .panel-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 18px; flex-wrap: wrap; gap: 12px; }
+    .panel-title { font-family: 'Raleway', sans-serif; font-size: 1.05rem; font-weight: 800; color: var(--text); }
+    .panel-sub { font-size: 0.73rem; color: var(--muted); margin-top: 2px; }
+
+    /* ═══════ TOOLBAR ═══════ */
+    .toolbar { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 16px; }
+    .ym-select { border: 1.5px solid var(--brand-border); border-radius: 9px; padding: 8px 14px; font-size: 0.82rem; color: var(--text); background: #fff; outline: none; cursor: pointer; font-family: 'Poppins', sans-serif; transition: border-color 0.2s; }
+    .ym-select:focus { border-color: var(--brand); }
+    .search-wrap { position: relative; flex: 1; min-width: 180px; }
+    .search-wrap input { width: 100%; padding: 8px 12px 8px 34px; border: 1.5px solid var(--brand-border); border-radius: 9px; font-size: 0.82rem; outline: none; font-family: 'Poppins', sans-serif; transition: border-color 0.2s; }
+    .search-wrap input:focus { border-color: var(--brand); }
+    .search-wrap i { position: absolute; left: 11px; top: 50%; transform: translateY(-50%); color: #94a3b8; }
+    .btn-primary { display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px; background: var(--brand); color: #fff; border: none; border-radius: 9px; font-size: 0.76rem; font-weight: 700; cursor: pointer; font-family: 'Raleway', sans-serif; transition: background 0.15s, box-shadow 0.15s; letter-spacing: 0.02em; }
+    .btn-primary:hover { background: var(--brand-dark); box-shadow: 0 4px 14px rgba(146,26,2,0.3); }
+    .btn-secondary { display: inline-flex; align-items: center; gap: 6px; padding: 8px 14px; background: #1d4ed8; color: #fff; border: none; border-radius: 9px; font-size: 0.76rem; font-weight: 700; cursor: pointer; font-family: 'Raleway', sans-serif; transition: background 0.15s; }
+    .btn-secondary:hover { background: #1e3a8a; }
+    .btn-export { display: inline-flex; align-items: center; gap: 6px; padding: 8px 14px; background: #0f766e; color: #fff; border: none; border-radius: 9px; font-size: 0.76rem; font-weight: 700; cursor: pointer; font-family: 'Raleway', sans-serif; transition: background 0.15s; }
+    .btn-export:hover { background: #0d5f58; }
+
+    /* ═══════ MONTH TABS ═══════ */
+    .month-tabs { display: flex; gap: 4px; flex-wrap: wrap; margin-bottom: 16px; }
+    .month-tab { padding: 6px 11px; border-radius: 7px; border: 1.5px solid var(--border); background: #fff; color: var(--muted); font-size: 0.68rem; font-weight: 700; cursor: pointer; transition: all 0.15s; font-family: 'Raleway', sans-serif; letter-spacing: 0.03em; }
+    .month-tab.active { background: var(--brand); color: #fff; border-color: var(--brand); box-shadow: 0 3px 10px rgba(146,26,2,0.25); }
+    .month-tab:hover:not(.active) { background: #fdf5f4; color: var(--brand); border-color: var(--brand-border); }
+
+    /* ═══════ VIEW TOGGLE ═══════ */
+    .view-toggle { display: flex; gap: 5px; }
+    .view-btn { display: inline-flex; align-items: center; gap: 5px; padding: 7px 12px; border-radius: 8px; border: 1.5px solid var(--border); background: #fff; color: var(--muted); font-size: 0.72rem; font-weight: 700; cursor: pointer; font-family: 'Raleway', sans-serif; transition: all 0.15s; }
+    .view-btn.active { background: var(--brand); color: #fff; border-color: var(--brand); }
+    .view-btn:hover:not(.active) { background: #fdf5f4; color: var(--brand); border-color: var(--brand-border); }
+
+    /* ═══════ DAY CARDS GRID ═══════ */
+    .day-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 13px; }
+    .day-card { background: #fff; border: 1.5px solid var(--border); border-radius: 14px; padding: 15px; position: relative; transition: all 0.18s; }
+    .day-card:hover { box-shadow: 0 6px 24px rgba(146,26,2,0.1); border-color: var(--brand-border); transform: translateY(-1px); }
+    .day-card.today-card { border-color: var(--brand); background: linear-gradient(135deg, #fff8f7 0%, #fff 100%); }
+    .day-num { font-size: 1.7rem; font-weight: 800; color: var(--brand); font-family: 'Raleway', sans-serif; line-height: 1; }
+    .day-name-badge { font-size: 0.68rem; color: var(--muted); font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em; margin-left: 5px; }
+    .today-tag { display: inline-block; background: var(--brand); color: #fff; border-radius: 4px; padding: 1px 6px; font-size: 0.58rem; font-weight: 700; margin-left: 5px; vertical-align: middle; font-family: 'Raleway', sans-serif; }
+    .day-season { font-size: 0.79rem; color: #374151; font-weight: 600; margin: 7px 0 5px; line-height: 1.45; }
+    .feast-pill { display: inline-block; background: #fffbee; border: 1px solid #e8ca6a; color: #7a5500; font-size: 0.62rem; padding: 2px 8px; border-radius: 5px; margin: 2px 2px 0 0; font-weight: 700; }
+    .reading-tag { display: inline-block; background: var(--brand-light); color: var(--brand); font-size: 0.62rem; padding: 2px 8px; border-radius: 5px; margin: 2px 2px 0 0; font-weight: 700; }
+    .card-actions { position: absolute; top: 11px; right: 11px; display: flex; gap: 5px; opacity: 0; transition: opacity 0.15s; }
+    .day-card:hover .card-actions { opacity: 1; }
+    .btn-edit { background: #4f46e5; color: #fff; border: none; border-radius: 6px; padding: 4px 10px; font-size: 0.67rem; cursor: pointer; font-weight: 600; transition: background 0.15s; }
+    .btn-edit:hover { background: #4338ca; }
+    .btn-del { background: #fee2e2; color: #dc2626; border: none; border-radius: 6px; padding: 4px 10px; font-size: 0.67rem; cursor: pointer; font-weight: 600; transition: background 0.15s; }
+    .btn-del:hover { background: #fecaca; }
+
+    /* ═══════ TABLE PREVIEW ═══════ */
+    #table-view { display: none; }
+    #table-view.visible { display: block; }
+    .preview-banner { display: flex; align-items: center; gap: 10px; padding: 10px 16px; background: linear-gradient(90deg, #fff8f0 0%, #fdf5f4 100%); border: 1.5px solid var(--brand-border); border-radius: 10px; margin-bottom: 14px; font-size: 0.76rem; color: var(--brand-dark); font-weight: 700; }
+    .preview-table-wrap { overflow-x: auto; border: 1px solid var(--brand-border); border-radius: 8px; }
+    .preview-table { width: 100%; min-width: 600px; border-collapse: collapse; font-family: 'Poppins', sans-serif; font-size: 13px; }
+    .preview-table thead th { background: var(--brand); color: #fff; padding: 11px 12px; font-weight: 600; font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; white-space: nowrap; }
+    .preview-table tbody tr { border-bottom: 1px solid #f0e8e4; transition: background 0.15s; }
+    .preview-table tbody tr:last-child { border-bottom: none; }
+    .preview-table tbody tr:hover { background: #fdf6f4; }
+    .preview-table td { padding: 10px 12px; vertical-align: top; color: #3a2020; line-height: 1.55; word-break: break-word; }
+    .pt-day { font-weight: 700; color: var(--brand); font-size: 15px; text-align: center; vertical-align: middle !important; white-space: nowrap; }
+    .pt-dayname { color: #888; font-weight: 500; font-size: 11px; vertical-align: middle !important; white-space: nowrap; }
+    .pt-season { font-weight: 600; color: #5a2a1a; }
+    .pt-feast { display: inline-block; background: #fff3cd; color: #7a5c00; border: 1px solid #ffd700; border-radius: 4px; padding: 1px 7px; font-size: 10px; font-weight: 600; margin-top: 4px; }
+    .pt-ref { font-weight: 600; color: var(--brand); font-size: 12px; }
+    .pt-desc { color: #555; font-size: 12px; }
+    .pt-today { background: #fff8f0 !important; }
+    .pt-today .pt-day { color: #c8401a; }
+    .today-badge-pt { display: inline-block; background: var(--brand); color: #fff; border-radius: 4px; padding: 2px 5px; font-size: 8px; font-weight: 700; margin-top: 3px; }
+
+    /* ═══════ MODAL ═══════ */
+    .modal-backdrop { display: none; position: fixed; inset: 0; z-index: 500; background: rgba(0,0,0,0.55); backdrop-filter: blur(5px); align-items: center; justify-content: center; padding: 16px; }
+    .modal-backdrop.show { display: flex; animation: mFadeIn 0.22s ease; }
+    @keyframes mFadeIn { from{opacity:0} to{opacity:1} }
+    .modal-box { background: #fff; border-radius: 20px; padding: 28px; width: 100%; max-width: 700px; max-height: 92vh; overflow-y: auto; box-shadow: 0 24px 80px rgba(0,0,0,0.22); position: relative; animation: mUp 0.25s ease; border: 1px solid var(--brand-border); }
+    @keyframes mUp { from{transform:translateY(20px);opacity:0} to{transform:translateY(0);opacity:1} }
+    .modal-title { font-family: 'Raleway', sans-serif; font-size: 1.05rem; font-weight: 800; color: var(--brand); margin: 0 0 20px; }
+    .modal-close { position: absolute; top: 16px; right: 18px; background: none; border: none; font-size: 1.1rem; cursor: pointer; color: #94a3b8; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: all 0.15s; }
+    .modal-close:hover { background: #fee2e2; color: #dc2626; }
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .form-group { margin-bottom: 13px; }
+    .form-group label { display: block; font-size: 0.67rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em; color: var(--muted); margin-bottom: 5px; font-family: 'Raleway', sans-serif; }
+    .form-group input, .form-group select, .form-group textarea { width: 100%; border: 1.5px solid var(--border); border-radius: 9px; padding: 9px 13px; font-size: 0.83rem; outline: none; transition: border-color 0.2s, box-shadow 0.2s; font-family: 'Poppins', sans-serif; background: #fff; color: var(--text); }
+    .form-group textarea { resize: vertical; min-height: 70px; }
+    .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--brand); box-shadow: 0 0 0 3px rgba(146,26,2,0.08); }
+    .auto-hint { font-size: 0.62rem; color: #16a34a; font-weight: 600; margin-left: 5px; display: none; }
+    .readings-section label { display: block; font-size: 0.67rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em; color: var(--muted); margin-bottom: 8px; font-family: 'Raleway', sans-serif; }
+    .reading-row { display: flex; gap: 7px; align-items: flex-start; margin-bottom: 8px; }
+    .reading-row input { flex: 1; border: 1.5px solid var(--border); border-radius: 8px; padding: 8px 11px; font-size: 0.79rem; outline: none; font-family: 'Poppins', sans-serif; transition: border-color 0.2s; }
+    .reading-row textarea { flex: 2; border: 1.5px solid var(--border); border-radius: 8px; padding: 8px 11px; font-size: 0.79rem; resize: vertical; min-height: 38px; outline: none; font-family: 'Poppins', sans-serif; transition: border-color 0.2s; }
+    .reading-row input:focus, .reading-row textarea:focus { border-color: var(--brand); }
+    .btn-rm { background: #fef2f2; color: #dc2626; border: 1px solid #fecaca; border-radius: 6px; padding: 6px 10px; font-size: 0.68rem; cursor: pointer; flex-shrink: 0; transition: background 0.15s; }
+    .btn-rm:hover { background: #fee2e2; }
+    .btn-add-reading { background: var(--brand-light); color: var(--brand); border: 1.5px dashed var(--brand-border); border-radius: 8px; padding: 7px 14px; font-size: 0.72rem; font-weight: 700; cursor: pointer; margin-top: 6px; font-family: 'Raleway', sans-serif; transition: background 0.15s; }
+    .btn-add-reading:hover { background: rgba(146,26,2,0.13); }
+    .modal-actions { display: flex; gap: 10px; margin-top: 20px; flex-wrap: wrap; }
+    .btn-save { flex: 1; padding: 11px 16px; border-radius: 9px; border: none; background: var(--brand); color: #fff; font-weight: 700; font-size: 0.83rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; font-family: 'Raleway', sans-serif; transition: background 0.15s; }
+    .btn-save:hover:not(:disabled) { background: var(--brand-dark); }
+    .btn-save:disabled { opacity: 0.6; cursor: not-allowed; }
+    .btn-cancel { padding: 11px 18px; border-radius: 9px; border: 1.5px solid var(--border); background: #f8fafc; font-size: 0.83rem; cursor: pointer; color: var(--muted); transition: all 0.15s; }
+    .btn-cancel:hover { border-color: var(--brand); color: var(--brand); }
+    .btn-delete-entry { padding: 11px 14px; border-radius: 9px; border: none; background: #ef4444; color: #fff; font-size: 0.82rem; cursor: pointer; font-weight: 600; transition: background 0.15s; }
+    .btn-delete-entry:hover { background: #dc2626; }
+    .modal-status { font-size: 0.76rem; text-align: center; margin-top: 8px; min-height: 18px; }
+    .spin { width: 14px; height: 14px; border: 2px solid rgba(255,255,255,0.4); border-top-color: #fff; border-radius: 50%; animation: spinA 0.6s linear infinite; display: inline-block; }
+    @keyframes spinA { to{transform:rotate(360deg)} }
+
+    /* ═══════ IMPORT MODAL ═══════ */
+    .import-info { background: #fdf5f4; border: 1.5px solid var(--brand-border); border-radius: 11px; padding: 13px; margin-bottom: 14px; font-size: 0.79rem; color: var(--muted); line-height: 1.65; }
+    .import-info strong { color: var(--brand); }
+    .json-area { width: 100%; height: 140px; font-family: monospace; font-size: 0.71rem; border: 1.5px solid var(--border); border-radius: 9px; padding: 11px; outline: none; resize: vertical; background: #f8fafc; color: var(--text); }
+    .json-area:focus { border-color: var(--brand); background: #fff; }
+    .json-status { font-size: 0.74rem; margin-top: 6px; min-height: 18px; }
+    .year-chips { display: flex; gap: 8px; flex-wrap: wrap; margin: 8px 0; }
+    .year-chip { display: inline-flex; align-items: center; gap: 5px; padding: 5px 13px; border-radius: 7px; border: 1.5px solid var(--border); background: #fff; font-size: 0.76rem; font-weight: 700; cursor: pointer; color: var(--text); font-family: 'Raleway', sans-serif; transition: all 0.15s; }
+    .year-chip.selected { border-color: var(--brand); background: var(--brand-light); color: var(--brand); }
+    .month-import-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 5px; margin: 8px 0; }
+    .m-import-btn { padding: 7px; text-align: center; border-radius: 7px; border: 1.5px solid var(--border); background: #fff; font-size: 0.67rem; font-weight: 700; cursor: pointer; color: var(--text); font-family: 'Raleway', sans-serif; transition: all 0.15s; }
+    .m-import-btn.selected { border-color: var(--brand); background: var(--brand-light); color: var(--brand); }
+    .m-import-btn.all-m { grid-column: 1/-1; background: #f0fdf4; border-color: #86efac; color: #16a34a; }
+    .m-import-btn.all-m.selected { background: #dcfce7; border-color: #16a34a; }
+    .import-summary { background: #fffbee; border: 1.5px solid #fde68a; border-radius: 9px; padding: 11px; font-size: 0.78rem; color: #78350f; margin-top: 11px; display: none; }
+    .progress-wrap { display: none; margin-top: 13px; }
+    .progress-bar-bg { background: var(--border); border-radius: 999px; height: 8px; overflow: hidden; margin-bottom: 7px; }
+    .progress-bar { height: 100%; background: var(--brand); border-radius: 999px; width: 0; transition: width 0.3s; }
+    .progress-text { font-size: 0.74rem; color: var(--muted); text-align: center; }
+    .import-log { background: #0f172a; color: #86efac; font-size: 0.71rem; border-radius: 10px; padding: 13px; height: 150px; overflow-y: auto; font-family: monospace; margin-top: 10px; display: none; }
+    .btn-load-default { display: inline-flex; align-items: center; gap: 6px; padding: 7px 14px; border-radius: 8px; border: 1.5px solid var(--brand-border); background: var(--brand-light); color: var(--brand); font-size: 0.74rem; font-weight: 700; cursor: pointer; font-family: 'Raleway', sans-serif; margin-bottom: 10px; transition: all 0.15s; }
+    .btn-load-default:hover { background: rgba(146,26,2,0.15); }
+
+    /* ═══════ TOAST ═══════ */
+    #toast { position: fixed; bottom: 24px; right: 24px; z-index: 9999; background: #1e293b; color: #fff; padding: 12px 22px; border-radius: 12px; font-size: 0.82rem; font-weight: 600; box-shadow: 0 8px 32px rgba(0,0,0,0.28); opacity: 0; transform: translateY(10px); transition: opacity 0.25s, transform 0.25s; pointer-events: none; max-width: 320px; }
+    #toast.show { opacity: 1; transform: translateY(0); }
+    #toast.success { background: #16a34a; }
+    #toast.error { background: #dc2626; }
+    #toast.info { background: #2563eb; }
+
+    /* ═══════ EMPTY / LOADING ═══════ */
+    .empty-state { text-align: center; padding: 55px 20px; color: #94a3b8; }
+    .empty-state i { font-size: 2.5rem; display: block; margin-bottom: 12px; opacity: 0.35; }
+    .loading-overlay { text-align: center; padding: 50px 20px; color: #94a3b8; }
+    .big-spin { display: inline-block; width: 32px; height: 32px; border: 3px solid var(--brand-border); border-top-color: var(--brand); border-radius: 50%; animation: spinA 0.7s linear infinite; margin-bottom: 12px; }
+
+    /* ═══════ FIREBASE STATUS BANNER ═══════ */
+    .firebase-banner { display: flex; align-items: center; gap: 10px; padding: 10px 16px; border-radius: 10px; margin-bottom: 18px; font-size: 0.78rem; font-weight: 600; }
+    .firebase-banner.connected { background: #f0fdf4; border: 1.5px solid #86efac; color: #15803d; }
+    .firebase-banner.error { background: #fef2f2; border: 1.5px solid #fecaca; color: #dc2626; }
+    .firebase-banner.loading { background: #eff6ff; border: 1.5px solid #bfdbfe; color: #2563eb; }
+
+    @media (max-width: 600px) {
+      .form-grid { grid-template-columns: 1fr; }
+      .panel { padding: 14px; }
+      .main-wrap { padding: 14px 10px 48px; }
+    }
+  </style>
+</head>
+<body>
+
+<div id="toast"></div>
+<div class="sidebar-overlay" id="sb-overlay"></div>
+
+<!-- ═══════════════════ SIDEBAR ═══════════════════ -->
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-brand">
+    <div class="sidebar-logo">⛪</div>
+    <div>
+      <div class="sb-brand-text">Archeparchy</div>
+      <div class="sb-brand-sub">Admin Dashboard</div>
+    </div>
+  </div>
+  <div class="sidebar-menu">
+    <p class="sb-section">Main</p>
+    <a href="#" class="sb-item"><i class="bi bi-grid-1x2"></i> Dashboard</a>
+    <a href="#" class="sb-item"><i class="bi bi-people"></i> Users</a>
+    <p class="sb-section">Pages</p>
+    <a href="#" class="sb-item"><i class="bi bi-house"></i> Home</a>
+    <a href="#" class="sb-item"><i class="bi bi-info-circle"></i> About Us</a>
+    <a href="#" class="sb-item"><i class="bi bi-building"></i> Administration</a>
+    <a href="#" class="sb-item"><i class="bi bi-geo-alt"></i> Parishes</a>
+    <a href="#" class="sb-item"><i class="bi bi-person-badge"></i> Priests</a>
+    <a href="#" class="sb-item"><i class="bi bi-mortarboard"></i> Seminarians</a>
+    <a href="#" class="sb-item"><i class="bi bi-globe"></i> Missions</a>
+    <p class="sb-section" style="margin-top:12px;">Sub Section</p>
+    <a href="#" class="sb-item"><i class="bi bi-calendar3"></i> Calendar</a>
+    <a href="#" class="sb-item"><i class="bi bi-megaphone"></i> Announcements</a>
+    <a href="#" class="sb-item"><i class="bi bi-book"></i> Liturgy (Full)</a>
+    <div class="sb-item active"><i class="bi bi-book-half"></i> Daily Readings <span class="sb-live">LIVE</span></div>
+    <p class="sb-section" style="margin-top:12px;">Account</p>
+    <a href="#" class="sb-item"><i class="bi bi-gear"></i> Settings</a>
+    <a href="#" class="sb-item" id="btn-logout"><i class="bi bi-box-arrow-right"></i> Logout</a>
+  </div>
+  <div class="sidebar-footer">
+    <div class="user-row">
+      <div class="user-av" id="user-av">A</div>
+      <div>
+        <div class="user-name" id="user-name">Admin</div>
+        <div class="user-role" id="user-role">Administrator</div>
+      </div>
+    </div>
+  </div>
+</aside>
+
+<!-- ═══════════════════ TOPBAR ═══════════════════ -->
+<nav class="topbar">
+  <button class="sb-toggle" id="sb-toggle">☰</button>
+  <span style="font-size:1.2rem;color:rgba(255,255,255,0.8);">✝</span>
+  <div>
+    <div class="topbar-title">Daily Readings Admin</div>
+    <div class="topbar-sub">Archeparchy of Changanassery · Firebase Live</div>
+  </div>
+  <div class="topbar-actions">
+    <a href="church-daily-readings.html" target="_blank" class="btn-view-site">
+      <span class="live-dot"></span> View Church Site
+    </a>
+  </div>
+</nav>
+
+<!-- ═══════════════════ MAIN ═══════════════════ -->
+<div class="main-wrap">
+
+  <!-- Firebase status -->
+  <div class="firebase-banner loading" id="firebase-banner">
+    <i class="bi bi-cloud-arrow-up"></i>
+    <span id="firebase-status-text">Connecting to Firebase…</span>
+  </div>
+
+  <!-- Stats -->
+  <div class="stats-bar">
+    <div class="stat-card"><span class="stat-num" id="st-month">0</span><div class="stat-lbl">Month Entries</div></div>
+    <div class="stat-card"><span class="stat-num" id="st-feasts">0</span><div class="stat-lbl">Feast Days</div></div>
+    <div class="stat-card"><span class="stat-num" id="st-readings">0</span><div class="stat-lbl">Total Readings</div></div>
+    <div class="stat-card"><span class="stat-num" id="st-year">0</span><div class="stat-lbl" id="st-year-lbl">Year Total</div></div>
+    <div class="stat-card"><span class="stat-num" id="st-sync" style="font-size:1rem;padding-top:4px;">—</span><div class="stat-lbl">Last Sync</div></div>
+  </div>
+
+  <!-- Main panel -->
+  <div class="panel">
+    <div class="panel-header">
+      <div>
+        <div class="panel-title">📖 Daily Readings</div>
+        <div class="panel-sub">Firebase → <code>dailyReadings/{year}/months/{month}</code> · Changes reflect live on church website</div>
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
+        <div class="view-toggle">
+          <button class="view-btn active" id="btn-cards" onclick="switchView('cards')"><i class="bi bi-grid-3x3-gap"></i> Cards</button>
+          <button class="view-btn" id="btn-table" onclick="switchView('table')"><i class="bi bi-eye"></i> Preview</button>
+        </div>
+        <button class="btn-secondary" onclick="openImport()"><i class="bi bi-cloud-upload"></i> Import JSON</button>
+        <button class="btn-export" onclick="exportJSON()"><i class="bi bi-download"></i> Export</button>
+        <button class="btn-primary" onclick="openAdd()"><i class="bi bi-plus-lg"></i> Add Entry</button>
+      </div>
+    </div>
+
+    <div class="toolbar">
+      <select class="ym-select" id="sel-year" onchange="onYearChange()">
+        <option value="2025">2025</option>
+        <option value="2026" selected>2026</option>
+        <option value="2027">2027</option>
+      </select>
+      <div class="search-wrap">
+        <i class="bi bi-search"></i>
+        <input type="text" placeholder="Search season, feast, reading…" oninput="renderAll()"/>
+      </div>
+    </div>
+
+    <div class="month-tabs" id="month-tabs"></div>
+
+    <!-- Card grid view -->
+    <div id="cards-view">
+      <div id="day-grid" class="day-grid">
+        <div class="loading-overlay" style="grid-column:1/-1;"><div class="big-spin"></div><div>Loading from Firebase…</div></div>
+      </div>
+    </div>
+
+    <!-- Table preview view -->
+    <div id="table-view">
+      <div class="preview-banner">
+        <i class="bi bi-eye-fill"></i>
+        Website Preview — exactly as it appears on the church daily readings page
+        <span style="font-weight:400;color:var(--muted);margin-left:4px;">· Live Firebase data</span>
+      </div>
+      <div id="table-content"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════ ADD/EDIT MODAL ═══════════════════ -->
+<div id="m-entry" class="modal-backdrop">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal('m-entry')">✕</button>
+    <div class="modal-title" id="m-title">Add Entry</div>
+    <div class="form-grid">
+      <div class="form-group">
+        <label>Year <span style="color:red">*</span></label>
+        <select id="f-year" onchange="autoDay()">
+          <option value="2025">2025</option><option value="2026" selected>2026</option><option value="2027">2027</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Month <span style="color:red">*</span></label>
+        <select id="f-month" onchange="autoDay()">
+          <option>January</option><option>February</option><option>March</option>
+          <option>April</option><option>May</option><option>June</option>
+          <option>July</option><option>August</option><option>September</option>
+          <option>October</option><option>November</option><option>December</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Day <span style="color:red">*</span></label>
+        <input type="number" id="f-day" min="1" max="31" placeholder="1–31" oninput="autoDay()"/>
+      </div>
+      <div class="form-group">
+        <label>Day Name <span style="color:red">*</span> <span class="auto-hint" id="auto-hint">✓ auto</span></label>
+        <select id="f-dayname">
+          <option>Sun</option><option>Mon</option><option>Tue</option>
+          <option>Wed</option><option>Thu</option><option>Fri</option><option>Sat</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Liturgical Season / Title <span style="color:red">*</span></label>
+      <input type="text" id="f-season" placeholder="e.g. 1st Sunday of Annunciation"/>
+    </div>
+    <div class="form-group">
+      <label>Feasts (comma-separated)</label>
+      <input type="text" id="f-feasts" placeholder="e.g. St. Francis Xavier, Christmas"/>
+    </div>
+    <div class="readings-section">
+      <label>Readings <span style="color:red">*</span></label>
+      <div id="readings-container"></div>
+      <button class="btn-add-reading" onclick="addReadingRow()">+ Add Reading</button>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeModal('m-entry')">Cancel</button>
+      <button class="btn-save" id="btn-save" onclick="saveEntry()">
+        <i class="bi bi-cloud-check"></i> Save to Firebase
+      </button>
+      <button class="btn-delete-entry" id="btn-del-entry" style="display:none" onclick="deleteEntry()">
+        <i class="bi bi-trash3"></i> Delete
+      </button>
+    </div>
+    <div class="modal-status" id="m-status"></div>
+  </div>
+</div>
+
+<!-- ═══════════════════ IMPORT MODAL ═══════════════════ -->
+<div id="m-import" class="modal-backdrop">
+  <div class="modal-box" style="max-width:740px">
+    <button class="modal-close" onclick="closeModal('m-import')">✕</button>
+    <div class="modal-title">📥 Import JSON → Firebase dailyReadings</div>
+    <div class="import-info">
+      Paste your <strong>liturgyData JSON</strong> or click <strong>Load Default</strong> to pre-fill sample data.
+      Data will be stored at <code>dailyReadings/{year}/months/{month}</code> in Firestore.
+      <br><span style="color:#dc2626;font-weight:600;">⚠️ Existing data for selected months will be overwritten.</span>
+    </div>
+    <button class="btn-load-default" onclick="loadDefault()"><i class="bi bi-download"></i> Load Default 2026 Data</button>
+    <div class="form-group">
+      <label>Paste liturgyData JSON *</label>
+      <textarea class="json-area" id="json-paste" oninput="parseJSON()" placeholder='{"2026":{"May":[{"day":6,"dayName":"Wed","season":"5th Wednesday","feasts":["St. Dominic Savio"],"readings":[{"ref":"Phil 4:10-20","desc":"..."}]}]}}'></textarea>
+      <div class="json-status" id="json-status"></div>
+    </div>
+    <div class="form-group">
+      <label>Select Year(s)</label>
+      <div class="year-chips" id="imp-years"><span style="font-size:.75rem;color:#94a3b8;">Paste JSON to see years</span></div>
+    </div>
+    <div class="form-group">
+      <label>Select Month(s)</label>
+      <div class="month-import-grid" id="imp-months">
+        <div class="m-import-btn all-m selected" onclick="toggleAllM(this)">✅ All Months</div>
+      </div>
+    </div>
+    <div class="import-summary" id="imp-summary"></div>
+    <div class="progress-wrap" id="imp-progress">
+      <div class="progress-bar-bg"><div class="progress-bar" id="imp-bar"></div></div>
+      <div class="progress-text" id="imp-text">Preparing…</div>
+    </div>
+    <div class="import-log" id="imp-log"></div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeModal('m-import')">Cancel</button>
+      <button class="btn-save" id="btn-do-import" onclick="doImport()"><i class="bi bi-cloud-upload"></i> Start Import</button>
+    </div>
+    <div class="modal-status" id="imp-status"></div>
+  </div>
+</div>
+
+<!-- ═══════════════════ FIREBASE + LOGIC ═══════════════════ -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { getFirestore, doc, getDoc, setDoc, deleteDoc, serverTimestamp, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+// ──────────────────────────────────────────
+// 🔥 FIREBASE CONFIG — REPLACE WITH YOURS
+// ──────────────────────────────────────────
+const FC = {
+  apiKey: "AIzaSyArM8sv7J1RUj4XvAJhJd40tzA7Yc8BGXY",
+  authDomain: "admin-dashboard-ed62c.firebaseapp.com",
+  projectId: "admin-dashboard-ed62c",
+  storageBucket: "admin-dashboard-ed62c.firebasestorage.app",
+  messagingSenderId: "560027475135",
+  appId: "1:560027475115:web:3fae0cb0268729ae79fa0a"
+};
+
+const app = initializeApp(FC);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+// ── Expose to window for non-module scripts ──
+window._db = db;
+window._doc = doc;
+window._setDoc = setDoc;
+window._deleteDoc = deleteDoc;
+window._serverTimestamp = serverTimestamp;
+window._getDoc = getDoc;
+window._getDocs = getDocs;
+window._collection = collection;
+window._firebaseReady = false;
+
+const MONTHS = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+window.MONTHS = MONTHS;
+
+// ── Auth check ──
+document.body.style.opacity = "0";
+onAuthStateChanged(auth, async user => {
+  if (!user) { location.href = "index.html"; return; }
+  try {
+    const snap = await getDoc(doc(db, "users", user.uid));
+    const prof = snap.exists() ? snap.data() : {};
+    const uname = prof.username || user.displayName || user.email || "Admin";
+    document.getElementById("user-av").textContent = uname[0].toUpperCase();
+    document.getElementById("user-name").textContent = uname;
+    document.getElementById("user-role").textContent = user.email === "issacnewton1503@gmail.com" ? "Admin" : "Viewer";
+  } catch(e) {}
+  document.body.style.opacity = "1";
+  window._firebaseReady = true;
+  setFirebaseStatus("connected", "✅ Connected to Firebase · dailyReadings collection");
+  const now = new Date();
+  window.curYear = String(now.getFullYear());
+  window.curMonth = MONTHS[now.getMonth()];
+  document.getElementById("sel-year").value = window.curYear;
+  buildMonthTabs();
+  await loadAndRender();
+});
+
+document.getElementById("btn-logout").addEventListener("click", async () => {
+  await signOut(auth); location.href = "index.html";
+});
+
+// ── Firestore helpers ──
+// Collection: dailyReadings → subcollection months
+function getMonthRef(yr, mo) {
+  return doc(db, "dailyReadings", String(yr), "months", mo);
+}
+
+async function fetchMonth(yr, mo) {
+  const k = `${yr}_${mo}`;
+  if (window._cache[k] !== undefined) return window._cache[k];
+  try {
+    const snap = await getDoc(getMonthRef(yr, mo));
+    window._cache[k] = (snap.exists() && Array.isArray(snap.data().entries)) ? snap.data().entries : [];
+  } catch(e) { window._cache[k] = []; }
+  return window._cache[k];
+}
+
+async function saveMonth(yr, mo, entries) {
+  const cleaned = (entries || []).map(e => ({
+    day: Number(e.day),
+    dayName: String(e.dayName || ""),
+    season: String(e.season || ""),
+    feasts: (e.feasts || []).map(f => String(f)).filter(Boolean),
+    readings: (e.readings || []).map(r => ({ ref: String(r.ref || ""), desc: String(r.desc || "") })).filter(r => r.ref)
+  })).sort((a,b) => a.day - b.day);
+  await setDoc(getMonthRef(yr, mo), {
+    entries: cleaned,
+    updated_at: serverTimestamp(),
+    updated_by: "admin",
+    year: String(yr),
+    month: mo
+  });
+  window._cache[`${yr}_${mo}`] = cleaned;
+  document.getElementById("st-sync").textContent = new Date().toLocaleTimeString();
+  return cleaned;
+}
+
+window._fetchMonth = fetchMonth;
+window._saveMonth = saveMonth;
+
+async function loadAndRender() {
+  await fetchMonth(window.curYear, window.curMonth);
+  updateStats();
+  renderAll();
+}
+
+function updateStats() {
+  const entries = window._cache[`${window.curYear}_${window.curMonth}`] || [];
+  document.getElementById("st-month").textContent = entries.length;
+  document.getElementById("st-feasts").textContent = entries.filter(e => e.feasts?.length).length;
+  document.getElementById("st-readings").textContent = entries.reduce((s, e) => s + (e.readings?.length || 0), 0);
+  let yt = 0;
+  MONTHS.forEach(m => { yt += (window._cache[`${window.curYear}_${m}`] || []).length; });
+  document.getElementById("st-year").textContent = yt;
+  document.getElementById("st-year-lbl").textContent = window.curYear + " Total";
+}
+
+</script>
+
+<script>
+// ──────────────────────────────────────────
+// GLOBAL STATE
+// ──────────────────────────────────────────
+window._cache = {};
+window.curYear = "2026";
+window.curMonth = "January";
+window.curView = "cards";
+window.editKey = null;
+const MONTHS_ABBR = {January:"Jan",February:"Feb",March:"Mar",April:"Apr",May:"May",June:"Jun",July:"Jul",August:"Aug",September:"Sep",October:"Oct",November:"Nov",December:"Dec"};
+const ENG_DAYS = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+const now = new Date();
+
+// ── Toast ──
+function toast(msg, type="", dur=3200) {
+  const t = document.getElementById("toast");
+  t.textContent = msg; t.className = "show " + type;
+  clearTimeout(t._t); t._t = setTimeout(() => t.className = "", dur);
+}
+
+// ── Modal ──
+function closeModal(id) { document.getElementById(id).classList.remove("show"); }
+function openModal(id) { document.getElementById(id).classList.add("show"); }
+document.querySelectorAll(".modal-backdrop").forEach(b => {
+  b.addEventListener("click", e => { if (e.target === b) b.classList.remove("show"); });
+});
+
+// ── Firebase status banner ──
+function setFirebaseStatus(type, msg) {
+  const b = document.getElementById("firebase-banner");
+  const t = document.getElementById("firebase-status-text");
+  b.className = "firebase-banner " + type;
+  t.textContent = msg;
+  const icons = { connected:"bi-cloud-check-fill", error:"bi-cloud-slash", loading:"bi-cloud-arrow-up" };
+  b.querySelector("i").className = "bi " + (icons[type] || "bi-cloud");
+}
+
+// ── Sidebar toggle ──
+document.getElementById("sb-toggle").addEventListener("click", () => {
+  document.getElementById("sidebar").classList.toggle("open");
+  document.getElementById("sb-overlay").classList.toggle("show");
+});
+document.getElementById("sb-overlay").addEventListener("click", () => {
+  document.getElementById("sidebar").classList.remove("open");
+  document.getElementById("sb-overlay").classList.remove("show");
+});
+
+// ── Month tabs ──
+function buildMonthTabs() {
+  document.getElementById("month-tabs").innerHTML = (window.MONTHS || []).map(m =>
+    `<button class="month-tab${m===window.curMonth?" active":""}" onclick="switchMonth('${m}',this)">${MONTHS_ABBR[m]||m}</button>`
+  ).join("");
+}
+window.switchMonth = async function(m, btn) {
+  window.curMonth = m;
+  document.querySelectorAll(".month-tab").forEach(b => b.classList.remove("active"));
+  btn.classList.add("active");
+  if (window._fetchMonth) await window._fetchMonth(window.curYear, window.curMonth);
+  updateStats2(); renderAll();
+};
+function updateStats2() {
+  const entries = window._cache[`${window.curYear}_${window.curMonth}`] || [];
+  document.getElementById("st-month").textContent = entries.length;
+  document.getElementById("st-feasts").textContent = entries.filter(e => e.feasts?.length).length;
+  document.getElementById("st-readings").textContent = entries.reduce((s,e) => s + (e.readings?.length||0), 0);
+  let yt = 0;
+  (window.MONTHS||[]).forEach(m => { yt += (window._cache[`${window.curYear}_${m}`]||[]).length; });
+  document.getElementById("st-year").textContent = yt;
+}
+
+// ── Year change ──
+window.onYearChange = async function() {
+  window.curYear = document.getElementById("sel-year").value;
+  buildMonthTabs();
+  if (window._fetchMonth) await window._fetchMonth(window.curYear, window.curMonth);
+  updateStats2(); renderAll();
+};
+
+// ── View switch ──
+window.switchView = function(view) {
+  window.curView = view;
+  document.getElementById("btn-cards").classList.toggle("active", view==="cards");
+  document.getElementById("btn-table").classList.toggle("active", view==="table");
+  document.getElementById("cards-view").style.display = view==="cards" ? "block" : "none";
+  document.getElementById("table-view").classList.toggle("visible", view==="table");
+  if (view === "table") renderTablePreview();
+};
+
+// ── Render all ──
+window.renderAll = function() {
+  renderGrid();
+  if (window.curView === "table") renderTablePreview();
+};
+
+// ── Get search query ──
+function getQ() { return (document.querySelector('.search-wrap input')?.value||"").toLowerCase().trim(); }
+
+// ── Filter entries ──
+function filterEntries(raw) {
+  const q = getQ();
+  if (!q) return [...raw].sort((a,b) => a.day - b.day);
+  return raw.filter(e =>
+    String(e.day).includes(q) || (e.season||"").toLowerCase().includes(q) ||
+    (e.feasts||[]).some(f => f.toLowerCase().includes(q)) ||
+    (e.readings||[]).some(r => (r.ref||"").toLowerCase().includes(q) || (r.desc||"").toLowerCase().includes(q))
+  ).sort((a,b) => a.day - b.day);
+}
+
+function isToday(day) {
+  return window.curYear === String(now.getFullYear()) &&
+         window.curMonth === (window.MONTHS||[])[now.getMonth()] &&
+         day === now.getDate();
+}
+
+// ── Render card grid ──
+function renderGrid() {
+  const raw = window._cache[`${window.curYear}_${window.curMonth}`] || [];
+  const entries = filterEntries(raw);
+  const grid = document.getElementById("day-grid");
+  if (!entries.length) {
+    grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1"><i class="bi bi-calendar-x"></i><p>No entries for ${window.curMonth} ${window.curYear}${getQ()?` matching "${getQ()}"`:""}</p><small style="font-size:.78rem;font-family:'Poppins',sans-serif;">Click <strong>Add Entry</strong> or <strong>Import JSON</strong> to get started.</small></div>`;
+    return;
+  }
+  grid.innerHTML = entries.map((e, vi) => {
+    const realIdx = raw.findIndex(r => r.day === e.day);
+    const today = isToday(e.day);
+    const feasts = (e.feasts||[]).filter(Boolean).map(f => `<span class="feast-pill">⭐ ${f}</span>`).join("");
+    const rTags = (e.readings||[]).slice(0,3).map(r => `<span class="reading-tag">${r.ref}</span>`).join("") + (e.readings?.length>3 ? `<span class="reading-tag">+${e.readings.length-3}</span>` : "");
+    return `
+      <div class="day-card${today?" today-card":""}">
+        <div class="card-actions">
+          <button class="btn-edit" onclick="openEdit('${window.curYear}','${window.curMonth}',${realIdx})">✏️ Edit</button>
+          <button class="btn-del" onclick="delEntry('${window.curYear}','${window.curMonth}',${realIdx})">🗑</button>
+        </div>
+        <div style="display:flex;align-items:baseline;gap:4px;margin-bottom:7px;">
+          <span class="day-num">${e.day}</span>
+          <span class="day-name-badge">${e.dayName||""}</span>
+          ${today?`<span class="today-tag">TODAY</span>`:""}
+        </div>
+        <div class="day-season">${e.season||""}</div>
+        ${feasts?`<div style="margin-top:6px;">${feasts}</div>`:""}
+        ${rTags?`<div style="margin-top:5px;">${rTags}</div>`:""}
+      </div>`;
+  }).join("");
+}
+
+// ── Render table preview ──
+function renderTablePreview() {
+  const raw = window._cache[`${window.curYear}_${window.curMonth}`] || [];
+  const entries = filterEntries(raw);
+  const target = document.getElementById("table-content");
+  if (!entries.length) {
+    target.innerHTML = `<div class="empty-state"><i class="bi bi-calendar-x"></i><p>No entries for ${window.curMonth} ${window.curYear}</p></div>`;
+    return;
+  }
+  const rows = entries.map(e => {
+    const today = isToday(e.day);
+    const feasts = (e.feasts||[]).filter(Boolean).map(f => `<span class="pt-feast">⭐ ${f}</span>`).join(" ");
+    const readings = (e.readings||[]).map(r => `<div><span class="pt-ref">${r.ref}</span>${r.desc?` <span class="pt-desc">— ${r.desc}</span>`:""}</div>`).join("");
+    return `<tr class="${today?"pt-today":""}">
+      <td class="pt-day">${e.day}${today?`<br><span class="today-badge-pt">TODAY</span>`:""}</td>
+      <td class="pt-dayname">${e.dayName||""}</td>
+      <td class="pt-season">${e.season||""}${feasts?`<div class="mt-1">${feasts}</div>`:""}</td>
+      <td>${readings}</td>
+    </tr>`;
+  }).join("");
+  target.innerHTML = `
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:1rem;padding-bottom:.6rem;border-bottom:2px solid var(--brand-border);">
+      <span style="background:var(--brand);color:#fff;font-family:'Raleway',sans-serif;font-weight:800;font-size:15px;padding:3px 12px;border-radius:6px;">${window.curYear}</span>
+      <span style="font-size:1.05rem;font-weight:700;color:#2c2c2c;font-family:'Raleway',sans-serif;">${window.curMonth}</span>
+    </div>
+    <div class="preview-table-wrap">
+      <table class="preview-table">
+        <thead><tr><th>Day</th><th>Day</th><th>Season / Feast</th><th>Readings</th></tr></thead>
+        <tbody>${rows}</tbody>
+      </table>
+    </div>`;
+}
+
+// ── Auto-fill day name ──
+window.autoDay = function() {
+  const yr=parseInt(document.getElementById("f-year").value);
+  const mo=document.getElementById("f-month").value;
+  const day=parseInt(document.getElementById("f-day").value);
+  const hint=document.getElementById("auto-hint");
+  if (!yr||!mo||!day||day<1||day>31){hint.style.display="none";return;}
+  const moIdx=(window.MONTHS||[]).indexOf(mo);
+  const d=new Date(yr,moIdx,day);
+  if (d.getMonth()!==moIdx){hint.style.display="none";return;}
+  document.getElementById("f-dayname").value=ENG_DAYS[d.getDay()];
+  hint.style.display="inline";
+};
+
+// ── Reading rows ──
+function buildReadings(readings) {
+  const c=document.getElementById("readings-container"); c.innerHTML="";
+  if (!readings.length) readings=[{ref:"",desc:""}];
+  readings.forEach(r=>addReadingRowData(r));
+}
+window.addReadingRow = function(){addReadingRowData({ref:"",desc:""});};
+function addReadingRowData(r) {
+  const c=document.getElementById("readings-container"),d=document.createElement("div");
+  d.className="reading-row";
+  d.innerHTML=`<input type="text" placeholder="Ref (e.g. Lk 1:26-38)" value="${(r.ref||"").replace(/"/g,'&quot;')}"/>
+    <textarea placeholder="Description (optional)">${r.desc||""}</textarea>
+    <button class="btn-rm" onclick="this.parentElement.remove()">✕</button>`;
+  c.appendChild(d);
+}
+function getReadings() {
+  return [...document.querySelectorAll("#readings-container .reading-row")].map(row=>{
+    const els=row.querySelectorAll("input,textarea");
+    return {ref:(els[0]?.value||"").trim(), desc:(els[1]?.value||"").trim()};
+  }).filter(r=>r.ref);
+}
+
+// ── Open add ──
+window.openAdd = function() {
+  window.editKey=null;
+  document.getElementById("m-title").textContent="Add Entry";
+  document.getElementById("f-year").value=window.curYear;
+  document.getElementById("f-month").value=window.curMonth;
+  document.getElementById("f-day").value="";
+  document.getElementById("f-dayname").value="Sun";
+  document.getElementById("f-season").value="";
+  document.getElementById("f-feasts").value="";
+  document.getElementById("auto-hint").style.display="none";
+  document.getElementById("btn-del-entry").style.display="none";
+  document.getElementById("m-status").textContent="";
+  document.getElementById("btn-save").disabled=false;
+  document.getElementById("btn-save").innerHTML='<i class="bi bi-cloud-check"></i> Save to Firebase';
+  buildReadings([]);
+  openModal("m-entry");
+};
+
+// ── Open edit ──
+window.openEdit = function(yr, mo, idx) {
+  const entry=(window._cache[`${yr}_${mo}`]||[])[idx];
+  if (!entry) return;
+  window.editKey={year:yr,month:mo,dayIdx:idx};
+  document.getElementById("m-title").textContent="Edit Entry";
+  document.getElementById("f-year").value=yr;
+  document.getElementById("f-month").value=mo;
+  document.getElementById("f-day").value=entry.day;
+  document.getElementById("f-dayname").value=entry.dayName||"Sun";
+  document.getElementById("f-season").value=entry.season||"";
+  document.getElementById("f-feasts").value=(entry.feasts||[]).join(", ");
+  document.getElementById("auto-hint").style.display="none";
+  document.getElementById("btn-del-entry").style.display="";
+  document.getElementById("m-status").textContent="";
+  document.getElementById("btn-save").disabled=false;
+  document.getElementById("btn-save").innerHTML='<i class="bi bi-cloud-check"></i> Save to Firebase';
+  buildReadings(entry.readings||[]);
+  openModal("m-entry");
+};
+
+// ── Save entry ──
+window.saveEntry = async function() {
+  if (!window._firebaseReady) { toast("Firebase not ready yet","error"); return; }
+  const yr=document.getElementById("f-year").value,mo=document.getElementById("f-month").value;
+  const day=parseInt(document.getElementById("f-day").value);
+  const dayName=document.getElementById("f-dayname").value;
+  const season=document.getElementById("f-season").value.trim();
+  const feastsRaw=document.getElementById("f-feasts").value.trim();
+  const feasts=feastsRaw?feastsRaw.split(",").map(s=>s.trim()).filter(Boolean):[];
+  const readings=getReadings();
+  const st=document.getElementById("m-status");
+  if (!day||day<1||day>31){st.textContent="Valid day (1–31) required.";st.style.color="#ef4444";return;}
+  if (!season){st.textContent="Season/title is required.";st.style.color="#ef4444";return;}
+  if (!readings.length){st.textContent="At least one reading required.";st.style.color="#ef4444";return;}
+  const btn=document.getElementById("btn-save");
+  btn.disabled=true; btn.innerHTML=`<span class="spin"></span> Saving…`; st.textContent="";
+  try {
+    const k=`${yr}_${mo}`;
+    if (!window._cache[k]) window._cache[k]=[];
+    const entry={day,dayName,season,feasts,readings};
+    if (window.editKey) {
+      if (window.editKey.year!==yr||window.editKey.month!==mo) {
+        const ok=`${window.editKey.year}_${window.editKey.month}`;
+        if (window._cache[ok]) window._cache[ok].splice(window.editKey.dayIdx,1);
+        await window._saveMonth(window.editKey.year,window.editKey.month,window._cache[ok]||[]);
+        window._cache[k].push(entry);
+      } else {
+        window._cache[k][window.editKey.dayIdx]=entry;
+      }
+    } else {
+      // Check duplicate day
+      const dupIdx=window._cache[k].findIndex(e=>e.day===day);
+      if (dupIdx>=0) window._cache[k][dupIdx]=entry;
+      else window._cache[k].push(entry);
+    }
+    await window._saveMonth(yr,mo,window._cache[k]);
+    window.curYear=yr; window.curMonth=mo;
+    document.getElementById("sel-year").value=yr;
+    buildMonthTabs();
+    updateStats2(); renderAll();
+    closeModal("m-entry");
+    toast("✅ Saved! Church website updated automatically.","success");
+  } catch(err) {
+    st.textContent="❌ "+err.message; st.style.color="#ef4444";
+    btn.disabled=false; btn.innerHTML='<i class="bi bi-cloud-check"></i> Save to Firebase';
+  }
+};
+
+// ── Delete entry ──
+window.delEntry = async function(yr,mo,idx) {
+  const entry=(window._cache[`${yr}_${mo}`]||[])[idx];
+  if (!entry||!confirm(`Delete Day ${entry.day} — "${entry.season}"?`)) return;
+  window._cache[`${yr}_${mo}`].splice(idx,1);
+  try {
+    await window._saveMonth(yr,mo,window._cache[`${yr}_${mo}`]);
+    updateStats2(); renderAll();
+    toast("🗑 Deleted.","success");
+  } catch(err){ toast("❌ "+err.message,"error"); }
+};
+window.deleteEntry = async function() {
+  if (!window.editKey) return;
+  const entry=(window._cache[`${window.editKey.year}_${window.editKey.month}`]||[])[window.editKey.dayIdx];
+  if (!entry||!confirm(`Delete Day ${entry.day}?`)) return;
+  window._cache[`${window.editKey.year}_${window.editKey.month}`].splice(window.editKey.dayIdx,1);
+  try {
+    await window._saveMonth(window.editKey.year,window.editKey.month,window._cache[`${window.editKey.year}_${window.editKey.month}`]);
+    updateStats2(); renderAll(); closeModal("m-entry");
+    toast("🗑 Deleted.","success");
+  } catch(err){ toast("❌ "+err.message,"error"); }
+};
+
+// ── Export JSON ──
+window.exportJSON = function() {
+  const yr=window.curYear, mo=window.curMonth;
+  const entries=window._cache[`${yr}_${mo}`]||[];
+  const out={[yr]:{[mo]:entries}};
+  const blob=new Blob([JSON.stringify(out,null,2)],{type:"application/json"});
+  const a=document.createElement("a"); a.href=URL.createObjectURL(blob);
+  a.download=`dailyReadings_${yr}_${mo}.json`; a.click();
+  toast("📥 Exported!","info");
+};
+
+// ──────────────────────────────────────────
+// IMPORT LOGIC
+// ──────────────────────────────────────────
+let parsedJSON=null, impSelYears=new Set(), impAllMonths=true;
+
+const SAMPLE_DATA = {
+  "2026":{
+    "January":[{"day":1,"dayName":"Thu","season":"Nativity, 1st Thursday","feasts":["Naming of the Lord","Beginning of the Year"],"readings":[{"ref":"1 John 4:12-16","desc":"God abides in us."},{"ref":"John 10:31-38","desc":"The Father and I are one."},{"ref":"Gen 17:1-14","desc":"Walk before me and be blameless."},{"ref":"Matt 6:25-34","desc":"Do not worry about your life."}]},{"day":6,"dayName":"Tue","season":"Denaha (Epiphany) of Our Lord","feasts":[],"readings":[{"ref":"Exod 19:16-25","desc":"God descends on Mount Sinai."},{"ref":"Joel 2:28-32","desc":"I will pour out my Spirit."},{"ref":"2 Tim 1:6-10","desc":"Fan into flame the gift of God."},{"ref":"Mark 1:1-11","desc":"The baptism of Jesus."}]}],
+    "May":[{"day":1,"dayName":"Fri","season":"4th Friday of the Resurrection","feasts":["St. Joseph the Worker"],"readings":[{"ref":"2 Cor 5:14-20","desc":"We are ambassadors for Christ."},{"ref":"Jn 3:1-12","desc":"You must be born again."}]},{"day":6,"dayName":"Wed","season":"5th Wednesday of the Resurrection","feasts":["St. Dominic Savio"],"readings":[{"ref":"Phil 4:10-20","desc":"I can do all things through Christ."},{"ref":"Lk 17:5-10","desc":"Increase our faith."}]},{"day":14,"dayName":"Thu","season":"6th Thursday (Ascension of Our Lord)","feasts":["St. Matthias, Apostle"],"readings":[{"ref":"Gen 5:18-24","desc":"Enoch walked with God."},{"ref":"Acts 1:1-14","desc":"Jesus is taken up to heaven."},{"ref":"Mk 16:9-20","desc":"Go into all the world."}]},{"day":24,"dayName":"Sun","season":"1st Sunday of the Apostles (Pentecost)","feasts":[],"readings":[{"ref":"Gen 2:1-8","desc":"God rested on the seventh day."},{"ref":"Acts 2:1-21","desc":"The coming of the Holy Spirit."},{"ref":"Jn 20:19-23","desc":"Receive the Holy Spirit."}]}],
+    "December":[{"day":25,"dayName":"Fri","season":"Feast of the Nativity of Our Lord Jesus Christ (Christmas)","feasts":["Christmas"],"readings":[{"ref":"Is 7:10-16 + 9:1-3, 6-7","desc":"A Virgin will conceive and bear a son."},{"ref":"Gal 3:15-4:6","desc":"All are children of God in Christ."},{"ref":"Lk 2:1-20","desc":"The Birth of Jesus."}]}]
+  }
+};
+
+window.loadDefault = function() {
+  document.getElementById("json-paste").value=JSON.stringify(SAMPLE_DATA,null,2);
+  parseJSON();
+  document.getElementById("json-status").textContent="✅ Sample 2026 data loaded!";
+  document.getElementById("json-status").style.color="#16a34a";
+};
+
+window.parseJSON = function() {
+  const raw=document.getElementById("json-paste").value.trim();
+  const st=document.getElementById("json-status"), yc=document.getElementById("imp-years");
+  if (!raw){parsedJSON=null;impSelYears=new Set();st.textContent="";yc.innerHTML='<span style="font-size:.75rem;color:#94a3b8;">Paste JSON to see years</span>';updateImpSummary();return;}
+  let str=raw.replace(/^[\s\S]*?=\s*/,"").replace(/;[\s]*$/,"").trim();
+  try {
+    parsedJSON=JSON.parse(str);
+    const years=Object.keys(parsedJSON).filter(k=>/^\d{4}$/.test(k));
+    if (!years.length) throw new Error("No year keys found");
+    let tot=0; years.forEach(y=>Object.values(parsedJSON[y]||{}).forEach(a=>{tot+=a.length;}));
+    st.textContent=`✅ Valid JSON — ${years.join(", ")} — ${tot} total entries`;st.style.color="#16a34a";
+    impSelYears=new Set(years);
+    yc.innerHTML=years.map(y=>`<div class="year-chip selected" data-year="${y}" onclick="toggleYC(this)">📅 ${y}</div>`).join("");
+    buildImpMonths(); updateImpSummary();
+  } catch(e) {
+    parsedJSON=null; impSelYears=new Set();
+    yc.innerHTML='<span style="font-size:.75rem;color:#ef4444;">Invalid JSON</span>';
+    st.textContent="❌ "+e.message; st.style.color="#ef4444";
+    buildImpMonths(); updateImpSummary();
+  }
+};
+
+function buildImpMonths() {
+  const grid=document.getElementById("imp-months");
+  grid.querySelectorAll('[data-month]').forEach(b=>b.remove());
+  (window.MONTHS||[]).forEach(m=>{
+    const btn=document.createElement("div");
+    btn.className="m-import-btn"+(impAllMonths?" selected":"");
+    btn.dataset.month=m; btn.textContent=MONTHS_ABBR[m]||m;
+    btn.onclick=function(){toggleMBtn(this);}; grid.appendChild(btn);
+  });
+}
+window.toggleYC=function(el){el.classList.toggle("selected");impSelYears=new Set([...document.querySelectorAll(".year-chip.selected")].map(c=>c.dataset.year));updateImpSummary();};
+window.toggleAllM=function(btn){impAllMonths=!impAllMonths;btn.classList.toggle("selected",impAllMonths);document.querySelectorAll(".m-import-btn[data-month]").forEach(b=>b.classList.toggle("selected",impAllMonths));updateImpSummary();};
+window.toggleMBtn=function(btn){btn.classList.toggle("selected");const anyOff=[...document.querySelectorAll(".m-import-btn[data-month]")].some(b=>!b.classList.contains("selected"));impAllMonths=!anyOff;document.querySelector(".m-import-btn.all-m").classList.toggle("selected",impAllMonths);updateImpSummary();};
+function getSelMonths(){if(impAllMonths)return window.MONTHS||[];return[...document.querySelectorAll(".m-import-btn[data-month].selected")].map(b=>b.dataset.month);}
+function updateImpSummary(){
+  const src=parsedJSON||{},years=[...impSelYears],months=getSelMonths();
+  let te=0,tf=0;years.forEach(y=>months.forEach(m=>{const e=(src[y]||{})[m]||[];te+=e.length;tf+=e.filter(e=>e.feasts?.length>0).length;}));
+  const s=document.getElementById("imp-summary");
+  if (!parsedJSON||!years.length||!months.length){s.style.display="none";return;}
+  s.style.display="block";
+  s.innerHTML=`Will write <strong>${years.length * months.filter(m=>years.some(y=>(parsedJSON[y]||{})[m])).length}</strong> documents to <code>dailyReadings/{year}/months/{month}</code>. Total: <strong>${te}</strong> entries, <strong>${tf}</strong> feast days.`;
+}
+
+window.openImport = function() {
+  parsedJSON=null; impSelYears=new Set(); impAllMonths=true;
+  document.getElementById("json-paste").value="";
+  document.getElementById("json-status").textContent="";
+  document.getElementById("imp-years").innerHTML='<span style="font-size:.75rem;color:#94a3b8;">Paste JSON to see years</span>';
+  document.getElementById("imp-progress").style.display="none";
+  document.getElementById("imp-log").style.display="none";
+  document.getElementById("imp-log").innerHTML="";
+  document.getElementById("imp-status").textContent="";
+  document.getElementById("btn-do-import").disabled=false;
+  document.getElementById("btn-do-import").innerHTML='<i class="bi bi-cloud-upload"></i> Start Import';
+  buildImpMonths(); updateImpSummary();
+  openModal("m-import");
+};
+
+function impLog(msg,color="#86efac"){
+  const log=document.getElementById("imp-log");
+  log.style.display="block"; const line=document.createElement("div");
+  line.style.color=color; line.textContent="› "+msg; log.appendChild(line); log.scrollTop=log.scrollHeight;
+}
+
+window.doImport = async function() {
+  if (!parsedJSON){alert("Paste valid JSON first.");return;}
+  if (!window._firebaseReady||!window._setDoc){alert("Firebase not ready. Refresh and try again.");return;}
+  const years=[...impSelYears], months=getSelMonths();
+  if (!years.length){alert("Select at least one year.");return;}
+  if (!months.length){alert("Select at least one month.");return;}
+  const tasks=[];
+  years.forEach(yr=>months.forEach(mo=>{const e=(parsedJSON[yr]||{})[mo];if(Array.isArray(e)&&e.length>0)tasks.push({yr,mo,entries:e});}));
+  if (!tasks.length){alert("No data found for selected years/months.");return;}
+  const btn=document.getElementById("btn-do-import");
+  btn.disabled=true; btn.innerHTML=`<span class="spin"></span> Importing…`;
+  const pw=document.getElementById("imp-progress"),bar=document.getElementById("imp-bar"),txt=document.getElementById("imp-text"),st=document.getElementById("imp-status");
+  pw.style.display="block"; bar.style.width="0%"; txt.textContent=`0 / ${tasks.length} documents…`; st.textContent="";
+  impLog(`Starting: ${tasks.length} doc(s) → Firestore dailyReadings collection`,"#facc15");
+  let done=0, failed=0;
+  for (const {yr,mo,entries} of tasks) {
+    try {
+      const cleaned=entries.map(e=>({
+        day:Number(e.day), dayName:String(e.dayName||""), season:String(e.season||""),
+        feasts:(e.feasts||[]).map(f=>String(f)).filter(Boolean),
+        readings:(e.readings||[]).map(r=>({ref:String(r.ref||""),desc:String(r.desc||"")})).filter(r=>r.ref)
+      })).sort((a,b)=>a.day-b.day);
+      const ref=window._doc(window._db,"dailyReadings",String(yr),"months",mo);
+      await window._setDoc(ref,{entries:cleaned,updated_at:window._serverTimestamp(),updated_by:"admin-import",year:String(yr),month:mo});
+      window._cache[`${yr}_${mo}`]=cleaned;
+      done++; impLog(`✅ ${yr}/${mo} — ${cleaned.length} entries`);
+    } catch(err) { failed++; impLog(`❌ ${yr}/${mo} — ${err.message}`,"#f87171"); }
+    const pct=Math.round(((done+failed)/tasks.length)*100);
+    bar.style.width=pct+"%"; txt.textContent=`${done+failed} / ${tasks.length} documents…`;
+    await new Promise(r=>setTimeout(r,0));
+  }
+  bar.style.width="100%"; txt.textContent=`Done! ${done} written, ${failed} failed.`;
+  document.getElementById("st-sync").textContent=new Date().toLocaleTimeString();
+  if (failed===0) {
+    impLog(`🎉 Import complete! ${done} doc(s) written to Firestore.`,"#34d399");
+    btn.innerHTML="✅ Import Complete"; st.textContent=`✅ ${done} docs saved.`; st.style.color="#16a34a";
+    toast(`✅ Imported ${done} docs! Church website will now show updated data.`,"success",5000);
+  } else {
+    impLog(`Finished with ${failed} error(s).`,"#f87171");
+    btn.disabled=false; btn.innerHTML="⚠️ Retry Import";
+    st.textContent=`⚠️ ${done} ok, ${failed} failed.`; st.style.color="#dc2626";
+    toast(`⚠️ ${failed} doc(s) failed.`,"error",5000);
+  }
+  updateStats2(); renderAll();
+};
+</script>
+</body>
+</html>
