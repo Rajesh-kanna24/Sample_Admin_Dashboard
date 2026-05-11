@@ -63,7 +63,7 @@
     .search-bar input:focus{border-color:#921a02}
     .search-bar i{position:absolute;left:9px;top:50%;transform:translateY(-50%);color:#94a3b8;font-size:.82rem}
 
-    /* ── Section header (accordion-style) ── */
+    /* ── Section header ── */
     .section-header{display:flex;align-items:center;justify-content:space-between;background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:14px 18px;margin-bottom:10px;cursor:pointer;user-select:none;transition:box-shadow .15s}
     .section-header:hover{box-shadow:0 2px 8px rgba(146,26,2,.08)}
     .section-header-left{display:flex;align-items:center;gap:10px}
@@ -77,7 +77,7 @@
     .section-toggle{color:#94a3b8;font-size:1.1rem;transition:transform .2s}
     .section-toggle.open{transform:rotate(180deg)}
 
-    /* ── Gallery grid per section ── */
+    /* ── Gallery grid ── */
     .section-body{display:none;margin-bottom:20px}
     .section-body.open{display:block;animation:sectionFade .2s ease}
     @keyframes sectionFade{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:translateY(0)}}
@@ -131,6 +131,17 @@
     .btn-rm-row{background:#fef2f2;color:#dc2626;border:1px solid #fecaca;border-radius:5px;padding:4px 8px;font-size:.7rem;cursor:pointer;flex-shrink:0}
     .btn-add-row{background:rgba(146,26,2,.07);color:#921a02;border:1px dashed rgba(146,26,2,.35);border-radius:6px;padding:6px 12px;font-size:.72rem;font-weight:700;cursor:pointer;margin-top:4px;width:100%}
 
+    /* ── Upload method tabs ── */
+    .upload-tabs{display:flex;gap:6px;margin-bottom:12px}
+    .upload-tab{flex:1;padding:8px;border-radius:7px;border:1.5px solid #e2e8f0;background:#f8fafc;color:#64748b;font-size:.76rem;font-weight:700;cursor:pointer;text-align:center;transition:all .15s}
+    .upload-tab.active{background:#921a02;border-color:#921a02;color:#fff}
+
+    /* ── Upload progress ── */
+    .upload-progress-wrap{margin-top:10px}
+    .upload-progress-bar{height:6px;background:#e2e8f0;border-radius:100px;overflow:hidden;margin-bottom:4px}
+    .upload-progress-fill{height:100%;background:#921a02;border-radius:100px;transition:width .3s ease;width:0%}
+    .upload-progress-text{font-size:.72rem;color:#64748b;text-align:center}
+
     /* ── Lightbox ── */
     #lightbox{position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,.92);display:none;align-items:center;justify-content:center;flex-direction:column;gap:12px}
     #lightbox.show{display:flex}
@@ -142,10 +153,6 @@
     .empty-state{text-align:center;padding:40px 20px;color:#94a3b8;grid-column:1/-1}
     .empty-state i{font-size:2.5rem;display:block;margin-bottom:8px;opacity:.4}
     .empty-state p{font-size:.82rem;margin:0}
-
-    /* ── Tab separator ── */
-    .section-add-btn{display:inline-flex;align-items:center;gap:5px;padding:5px 12px;background:rgba(146,26,2,.07);color:#921a02;border:1px dashed rgba(146,26,2,.35);border-radius:7px;font-size:.72rem;font-weight:700;cursor:pointer;margin-bottom:12px}
-    .section-add-btn:hover{background:#fdf5f4}
   </style>
 </head>
 <body>
@@ -182,7 +189,7 @@
       <a href="calender.html" class="sidebar-item"><span class="si-icon">📅</span> Calendar</a>
       <a href="announcements.html" class="sidebar-item"><span class="si-icon">📣</span> Announcements</a>
       <a href="news.html" class="sidebar-item"><span class="si-icon">📰</span> News</a>
-              <a href="dailyrreading.html" class="sidebar-item"><i class="bi bi-book-half"></i> Daily Readings <span class="sb-live">LIVE</span></a>
+      <a href="dailyrreading.html" class="sidebar-item"><i class="bi bi-book-half"></i> Daily Readings <span class="sb-live">LIVE</span></a>
       <div class="sidebar-item active"><span class="si-icon">🖼</span> Gallery <span class="si-badge" id="sidebar-total">0</span></div>
       <p class="sidebar-section" style="margin-top:14px;">Account</p>
       <div class="sidebar-item" onclick="toast('Coming soon!')"><span class="si-icon">⚙</span> Settings</div>
@@ -204,7 +211,7 @@
       <div class="topbar-rule d-none d-lg-block"></div>
       <div>
         <div class="topbar-title">🖼 Gallery Management</div>
-        <div class="topbar-sub">Events · Festival · Madhyastan · General — drag & drop or URL upload, live on church website</div>
+        <div class="topbar-sub">Events · Festival · Madhyastan · General — Images stored in Cloudinary, URLs saved in Firebase</div>
       </div>
     </div>
     <div class="topbar-right">
@@ -311,25 +318,41 @@
 
     <!-- ── Images Section ── -->
     <div class="hm-group" style="margin-top:4px;">
-      <label>Images <span style="color:red">*</span> <small style="font-weight:400;color:#94a3b8;">— Drag & drop files OR paste URLs below</small></label>
+      <label>Images <span style="color:red">*</span></label>
 
-      <!-- Drop zone -->
-      <div class="drop-zone" id="drop-zone">
-        <input type="file" id="file-input" accept="image/*" multiple onchange="handleFileSelect(this.files)">
-        <div class="drop-zone-icon">📂</div>
-        <p class="drop-zone-text"><strong>Drag & drop images here</strong></p>
-        <p class="drop-zone-sub">or click to browse · JPG, PNG, WebP, GIF</p>
+      <!-- Upload method tabs -->
+      <div class="upload-tabs">
+        <button class="upload-tab active" id="tab-upload" onclick="switchUploadTab('upload')">
+          <i class="bi bi-cloud-upload"></i> Upload Files
+        </button>
+        <button class="upload-tab" id="tab-url" onclick="switchUploadTab('url')">
+          <i class="bi bi-link-45deg"></i> Paste URLs
+        </button>
       </div>
 
-      <!-- File preview strip -->
-      <div class="preview-strip" id="preview-strip"></div>
+      <!-- FILE UPLOAD TAB -->
+      <div id="panel-upload">
+        <div class="drop-zone" id="drop-zone">
+          <input type="file" id="file-input" accept="image/*" multiple onchange="handleFileSelect(this.files)">
+          <div class="drop-zone-icon">☁️</div>
+          <p class="drop-zone-text"><strong>Drag & drop images here</strong></p>
+          <p class="drop-zone-sub">or click to browse · Images upload to Cloudinary automatically · JPG, PNG, WebP, GIF</p>
+        </div>
+        <!-- File preview strip -->
+        <div class="preview-strip" id="preview-strip"></div>
+        <!-- Upload progress -->
+        <div class="upload-progress-wrap" id="upload-progress-wrap" style="display:none;">
+          <div class="upload-progress-bar"><div class="upload-progress-fill" id="upload-progress-fill"></div></div>
+          <div class="upload-progress-text" id="upload-progress-text">Uploading…</div>
+        </div>
+      </div>
 
-      <!-- URL inputs -->
-      <div style="margin-top:12px;">
-        <label style="font-size:.72rem;font-weight:700;text-transform:uppercase;color:#64748b;letter-spacing:.05em;margin-bottom:6px;display:block;">Or add image URLs</label>
+      <!-- URL TAB -->
+      <div id="panel-url" style="display:none;">
+        <p style="font-size:.75rem;color:#94a3b8;margin-bottom:8px;">Paste direct image URLs (already hosted somewhere). These will be saved as-is — no Cloudinary upload.</p>
         <div id="url-rows">
           <div class="url-row">
-            <input type="url" placeholder="https://… image URL" oninput="updateUrlPreview(this)">
+            <input type="url" placeholder="https://… image URL">
             <input type="text" placeholder="Caption (optional)" style="flex:.7;border:1px solid #e2e8f0;border-radius:6px;padding:6px 10px;font-size:.8rem;outline:none">
             <button class="btn-rm-row" onclick="removeUrlRow(this)">✕</button>
           </div>
@@ -338,9 +361,19 @@
       </div>
     </div>
 
+    <!-- Existing images (edit mode) -->
+    <div id="existing-images-wrap" style="display:none;">
+      <div class="hm-group">
+        <label>Existing Images <small style="font-weight:400;color:#94a3b8;">— click ✕ to remove</small></label>
+        <div class="preview-strip" id="existing-strip"></div>
+      </div>
+    </div>
+
     <div class="hm-actions">
       <button class="hm-cancel" onclick="closeM('m-gallery')">Cancel</button>
-      <button class="hm-save" id="btn-modal-save" onclick="modalSave()">💾 Save to Firestore</button>
+      <button class="hm-save" id="btn-modal-save" onclick="modalSave()">
+        <i class="bi bi-cloud-upload"></i> Save Gallery
+      </button>
       <button id="btn-modal-del" onclick="modalDel()" style="display:none;padding:10px 14px;border-radius:8px;border:none;background:#ef4444;color:#fff;font-size:.82rem;cursor:pointer;">🗑 Delete</button>
     </div>
     <div class="hm-status" id="modal-status"></div>
@@ -353,139 +386,257 @@
 import{initializeApp}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import{getAuth,onAuthStateChanged,signOut}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 import{getFirestore,collection,query,orderBy,onSnapshot,doc,setDoc,deleteDoc,serverTimestamp,updateDoc,getDoc}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
-const FC={apiKey:"AIzaSyArM8sv7J1RUj4XvAJhJd40tzA7Yc8BGXY",authDomain:"admin-dashboard-ed62c.firebaseapp.com",projectId:"admin-dashboard-ed62c",storageBucket:"admin-dashboard-ed62c.firebasestorage.app",messagingSenderId:"560027475135",appId:"1:560027475135:web:3fae0cb0268729ae79fa0a"};
-const ADMIN="issacnewton1503@gmail.com";
-const app=initializeApp(FC),auth=getAuth(app),db=getFirestore(app);
-const storage = getStorage(app);
 
-let role=null,allGallery=[],currentFilter="all",editId=null;
-// Uploaded files list (base64 or dataURL for preview; in production you'd upload to Storage)
-let uploadedFiles=[]; // {dataUrl, name}
-
-const esc=s=>String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
-
-function fmtDate(v){
-  if(!v)return"";
-  const d=v?.toDate?v.toDate():new Date(v);
-  if(isNaN(d.getTime()))return String(v);
-  return d.toLocaleDateString("en-IN",{day:"2-digit",month:"short",year:"numeric"});
-}
-
-window.toast=function(msg,type="",dur=3500){
-  const t=document.getElementById("dash-toast");
-  t.textContent=msg;t.className="show"+(type?" "+type:"");
-  clearTimeout(t._t);t._t=setTimeout(()=>t.className="",dur);
+/* ══════════════════════════════════════════
+   CLOUDINARY CONFIG  (from dashboard.html)
+   Cloud name  : dqwayxpbp
+   Upload preset: church_hero_images
+   Gallery folder: gallery
+══════════════════════════════════════════ */
+const CLOUDINARY = {
+  cloudName:    "dqwayxpbp",
+  uploadPreset: "church_hero_images",
+  folder:       "gallery"
 };
-window.closeM=id=>document.getElementById(id).classList.remove("show");
-function openM(id){document.getElementById(id).classList.add("show");}
 
-function busy(on){
-  const b=document.getElementById("btn-modal-save");if(!b)return;
-  if(on){b._l=b.innerHTML;b.disabled=true;b.innerHTML=`<span class="spin"></span> Saving…`;}
-  else{b.disabled=false;b.innerHTML=b._l||"Save";}
+/**
+ * Upload a single File to Cloudinary.
+ * Returns { url, publicId }
+ */
+async function uploadToCloudinary(file) {
+  const fd = new FormData();
+  fd.append("file",           file);
+  fd.append("upload_preset",  CLOUDINARY.uploadPreset);
+  fd.append("folder",         CLOUDINARY.folder);
+
+  const res = await fetch(
+    `https://api.cloudinary.com/v1_1/${CLOUDINARY.cloudName}/image/upload`,
+    { method: "POST", body: fd }
+  );
+
+  if (!res.ok) {
+    let msg = "Cloudinary upload failed";
+    try { const d = await res.json(); msg = d.error?.message || msg; } catch(_){}
+    throw new Error(msg);
+  }
+
+  const data = await res.json();
+  return { url: data.secure_url, publicId: data.public_id };
 }
 
-/* ── Auth ── */
-document.body.style.display="none";
-onAuthStateChanged(auth,async user=>{
-  if(!user){location.href="index.html";return;}
-  const snap=await getDoc(doc(db,"users",user.uid));
-  if(!snap.exists()){await signOut(auth);location.href="index.html";return;}
-  const prof=snap.data();
-  role=user.email===ADMIN?"Admin":"Viewer";
-  const uname=prof.username||user.displayName||user.email;
-  document.getElementById("sidebar-username").textContent=uname;
-  document.getElementById("sidebar-role").textContent=role;
-  document.getElementById("sidebar-avatar").textContent=uname[0].toUpperCase();
-  const badge=document.getElementById("role-badge");
-  badge.textContent=role;badge.className=role==="Admin"?"badge bg-warning text-dark me-2":"badge bg-primary me-2";
-  document.body.style.display="";
-  document.getElementById(role==="Admin"?"admin-bar":"viewer-bar").style.display="flex";
+/**
+ * Delete an image from Cloudinary by publicId.
+ * Note: unsigned delete only works if your upload preset allows it.
+ * If not, the image stays in Cloudinary but URL is removed from Firebase.
+ */
+async function deleteFromCloudinary(publicId) {
+  if (!publicId) return;
+  try {
+    const fd = new FormData();
+    fd.append("public_id",      publicId);
+    fd.append("upload_preset",  CLOUDINARY.uploadPreset);
+    const res = await fetch(
+      `https://api.cloudinary.com/v1_1/${CLOUDINARY.cloudName}/image/destroy`,
+      { method: "POST", body: fd }
+    );
+    const data = await res.json();
+    console.log("[Cloudinary] delete:", publicId, "→", data.result);
+  } catch(err) {
+    console.warn("[Cloudinary] delete failed (non-critical):", err.message);
+  }
+}
+
+/* ══════════════════════════════════════════
+   FIREBASE CONFIG
+══════════════════════════════════════════ */
+const FC = {
+  apiKey: "AIzaSyArM8sv7J1RUj4XvAJhJd40tzA7Yc8BGXY",
+  authDomain: "admin-dashboard-ed62c.firebaseapp.com",
+  projectId: "admin-dashboard-ed62c",
+  storageBucket: "admin-dashboard-ed62c.firebasestorage.app",
+  messagingSenderId: "560027475135",
+  appId: "1:560027475135:web:3fae0cb0268729ae79fa0a"
+};
+const ADMIN = "issacnewton1503@gmail.com";
+const app = initializeApp(FC);
+const auth = getAuth(app);
+const db   = getFirestore(app);
+
+/* ══════════════════════════════════════════
+   STATE
+══════════════════════════════════════════ */
+let role = null;
+let allGallery = [];
+let currentFilter = "all";
+let editId = null;
+let activeUploadTab = "upload"; // "upload" | "url"
+
+// Uploaded files waiting to go to Cloudinary: [{ file: File, dataUrl: string, name: string }]
+let pendingFiles = [];
+
+// Existing images in edit mode: [{ url, publicId, caption }]
+// items marked with _remove:true will be deleted from Cloudinary on save
+let existingImages = [];
+
+const esc = s => String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+
+function fmtDate(v) {
+  if (!v) return "";
+  const d = v?.toDate ? v.toDate() : new Date(v);
+  if (isNaN(d.getTime())) return String(v);
+  return d.toLocaleDateString("en-IN", { day:"2-digit", month:"short", year:"numeric" });
+}
+
+/* ── Toast ── */
+window.toast = function(msg, type="", dur=3500) {
+  const t = document.getElementById("dash-toast");
+  t.textContent = msg; t.className = "show" + (type ? " "+type : "");
+  clearTimeout(t._t); t._t = setTimeout(() => t.className = "", dur);
+};
+window.closeM = id => document.getElementById(id).classList.remove("show");
+function openM(id) { document.getElementById(id).classList.add("show"); }
+
+/* ── Button busy state ── */
+function busy(on) {
+  const b = document.getElementById("btn-modal-save");
+  if (!b) return;
+  if (on) {
+    b._l = b.innerHTML; b.disabled = true;
+    b.innerHTML = `<span class="spin"></span> Saving…`;
+  } else {
+    b.disabled = false; b.innerHTML = b._l || "Save";
+  }
+}
+
+/* ── Upload tab switch ── */
+window.switchUploadTab = function(tab) {
+  activeUploadTab = tab;
+  document.getElementById("tab-upload").classList.toggle("active", tab === "upload");
+  document.getElementById("tab-url").classList.toggle("active", tab === "url");
+  document.getElementById("panel-upload").style.display = tab === "upload" ? "" : "none";
+  document.getElementById("panel-url").style.display   = tab === "url"    ? "" : "none";
+};
+
+/* ══════════════════════════════════════════
+   AUTH
+══════════════════════════════════════════ */
+document.body.style.display = "none";
+onAuthStateChanged(auth, async user => {
+  if (!user) { location.href = "index.html"; return; }
+  const snap = await getDoc(doc(db, "users", user.uid));
+  if (!snap.exists()) { await signOut(auth); location.href = "index.html"; return; }
+  const prof = snap.data();
+  role = user.email === ADMIN ? "Admin" : "Viewer";
+  const uname = prof.username || user.displayName || user.email;
+  document.getElementById("sidebar-username").textContent = uname;
+  document.getElementById("sidebar-role").textContent = role;
+  document.getElementById("sidebar-avatar").textContent = uname[0].toUpperCase();
+  const badge = document.getElementById("role-badge");
+  badge.textContent = role;
+  badge.className = role === "Admin" ? "badge bg-warning text-dark me-2" : "badge bg-primary me-2";
+  document.body.style.display = "";
+  document.getElementById(role === "Admin" ? "admin-bar" : "viewer-bar").style.display = "flex";
   startListener();
 });
 
-document.getElementById("btn-logout").addEventListener("click",async()=>{await signOut(auth);location.href="index.html";});
-document.getElementById("sidebar-toggle").addEventListener("click",()=>{document.getElementById("sidebar").classList.toggle("open");document.getElementById("sidebar-overlay").classList.toggle("show");});
-document.getElementById("sidebar-overlay").addEventListener("click",()=>{document.getElementById("sidebar").classList.remove("open");document.getElementById("sidebar-overlay").classList.remove("show");});
+document.getElementById("btn-logout").addEventListener("click", async () => {
+  await signOut(auth); location.href = "index.html";
+});
+document.getElementById("sidebar-toggle").addEventListener("click", () => {
+  document.getElementById("sidebar").classList.toggle("open");
+  document.getElementById("sidebar-overlay").classList.toggle("show");
+});
+document.getElementById("sidebar-overlay").addEventListener("click", () => {
+  document.getElementById("sidebar").classList.remove("open");
+  document.getElementById("sidebar-overlay").classList.remove("show");
+});
 
-/* ── Firestore listener ── */
-function startListener(){
-  const q=query(collection(db,"gallery"),orderBy("order","desc"));
-  onSnapshot(q,snap=>{
-    allGallery=snap.docs.map(d=>({id:d.id,...d.data()}));
+/* ══════════════════════════════════════════
+   FIRESTORE LISTENER
+══════════════════════════════════════════ */
+function startListener() {
+  const q = query(collection(db, "gallery"), orderBy("order", "desc"));
+  onSnapshot(q, snap => {
+    allGallery = snap.docs.map(d => ({ id: d.id, ...d.data() }));
     updateStats();
     window.renderSections();
   });
 }
 
 /* ── Stats ── */
-function updateStats(){
-  const pub=allGallery.filter(n=>n.published!==false).length;
-  document.getElementById("st-total").textContent=allGallery.length;
-  document.getElementById("st-published").textContent=pub;
-  document.getElementById("st-draft").textContent=allGallery.length-pub;
-  document.getElementById("sidebar-total").textContent=allGallery.length;
-  ["events","festival","madhyastan","general"].forEach(c=>{
-    document.getElementById("st-"+c).textContent=allGallery.filter(n=>(n.category||"general")===c).length;
+function updateStats() {
+  const pub = allGallery.filter(n => n.published !== false).length;
+  document.getElementById("st-total").textContent = allGallery.length;
+  document.getElementById("st-published").textContent = pub;
+  document.getElementById("st-draft").textContent = allGallery.length - pub;
+  document.getElementById("sidebar-total").textContent = allGallery.length;
+  ["events","festival","madhyastan","general"].forEach(c => {
+    document.getElementById("st-"+c).textContent =
+      allGallery.filter(n => (n.category||"general") === c).length;
   });
 }
 
 /* ── Filter ── */
-window.setFilter=function(cat,btn){
-  currentFilter=cat;
-  document.querySelectorAll(".ftab").forEach(b=>b.classList.remove("active"));
+window.setFilter = function(cat, btn) {
+  currentFilter = cat;
+  document.querySelectorAll(".ftab").forEach(b => b.classList.remove("active"));
   btn.classList.add("active");
   window.renderSections();
 };
 
 /* ── Section config ── */
-const SECTIONS=[
-  {key:"events",label:"Events",icon:"bi-calendar-event-fill",emoji:"📅",badgeCls:"badge-events"},
-  {key:"festival",label:"Festival",icon:"bi-stars",emoji:"🌟",badgeCls:"badge-festival"},
-  {key:"madhyastan",label:"Madhyastan",icon:"bi-heart-fill",emoji:"💚",badgeCls:"badge-madhyastan"},
-  {key:"general",label:"General",icon:"bi-images",emoji:"🖼",badgeCls:"badge-general"},
+const SECTIONS = [
+  {key:"events",    label:"Events",     icon:"bi-calendar-event-fill", emoji:"📅", badgeCls:"badge-events"},
+  {key:"festival",  label:"Festival",   icon:"bi-stars",               emoji:"🌟", badgeCls:"badge-festival"},
+  {key:"madhyastan",label:"Madhyastan", icon:"bi-heart-fill",          emoji:"💚", badgeCls:"badge-madhyastan"},
+  {key:"general",   label:"General",    icon:"bi-images",              emoji:"🖼", badgeCls:"badge-general"},
 ];
-const openSections=new Set(["events","festival","madhyastan","general"]);
+const openSections = new Set(["events","festival","madhyastan","general"]);
 
-/* ── Render ── */
-window.renderSections=function(){
-  const q=(document.getElementById(role==="Admin"?"search-input":"search-input-viewer")?.value||"").toLowerCase().trim();
-  const isAdmin=role==="Admin";
-  const container=document.getElementById("sections-container");
+/* ── Render all sections ── */
+window.renderSections = function() {
+  const q = (document.getElementById(role==="Admin"?"search-input":"search-input-viewer")?.value||"").toLowerCase().trim();
+  const isAdmin = role === "Admin";
+  const container = document.getElementById("sections-container");
+  const sectionsToShow = currentFilter === "all" ? SECTIONS : SECTIONS.filter(s => s.key === currentFilter);
 
-  const sectionsToShow=currentFilter==="all"?SECTIONS:SECTIONS.filter(s=>s.key===currentFilter);
+  container.innerHTML = sectionsToShow.map(sec => {
+    let items = allGallery.filter(n => (n.category||"general") === sec.key);
+    if (q) items = items.filter(n =>
+      (n.title||"").toLowerCase().includes(q) ||
+      (n.description||"").toLowerCase().includes(q)
+    );
+    const isOpen = openSections.has(sec.key);
 
-  container.innerHTML=sectionsToShow.map(sec=>{
-    let items=allGallery.filter(n=>(n.category||"general")===sec.key);
-    if(q)items=items.filter(n=>(n.title||"").toLowerCase().includes(q)||(n.description||"").toLowerCase().includes(q));
-    const isOpen=openSections.has(sec.key);
-
-    const cards=items.map(n=>{
-      const pubStatus=n.published!==false;
-      const firstImg=getFirstImage(n);
+    const cards = items.map(n => {
+      const pubStatus = n.published !== false;
+      const firstImg = getFirstImage(n);
       return `<div class="gallery-card">
         <div class="gc-thumb" onclick="openLightbox('${esc(firstImg)}','${esc(n.title||"")}')" style="cursor:${firstImg?"zoom-in":"default"}">
           ${firstImg
-            ?`<img src="${esc(firstImg)}" alt="${esc(n.title||"")}" onerror="this.style.display='none'">`
-            :`<i class="gc-placeholder bi bi-images"></i>`}
+            ? `<img src="${esc(firstImg)}" alt="${esc(n.title||"")}" onerror="this.style.display='none'">`
+            : `<i class="gc-placeholder bi bi-images"></i>`}
           <span class="gc-pub-badge ${pubStatus?"pub":"draft"}">${pubStatus?"Published":"Draft"}</span>
         </div>
         <div class="gc-body">
-          ${n.date?`<div class="gc-date"><i class="bi bi-calendar3 me-1"></i>${esc(fmtDate(n.date))}</div>`:""}
+          ${n.date ? `<div class="gc-date"><i class="bi bi-calendar3 me-1"></i>${esc(fmtDate(n.date))}</div>` : ""}
           <div class="gc-title">${esc(n.title||"Untitled")} <small style="font-weight:400;color:#94a3b8;">(${(n.images||[]).length} photos)</small></div>
-          ${isAdmin?`<div class="gc-actions">
-            <button class="btn-edit-gc" onclick="openEdit('${n.id}')">✏️ Edit</button>
+          ${isAdmin ? `<div class="gc-actions">
+            <button class="btn-edit-gc"   onclick="openEdit('${n.id}')">✏️ Edit</button>
             <button class="btn-toggle-gc ${pubStatus?"pub":""}" onclick="togglePublish('${n.id}',${!pubStatus})">${pubStatus?"Unpublish":"Publish"}</button>
-            <button class="btn-del-gc" onclick="delGallery('${n.id}','${esc(n.title||"")}')">🗑</button>
-          </div>`:""}
+            <button class="btn-del-gc"    onclick="delGallery('${n.id}','${esc(n.title||"")}')">🗑</button>
+          </div>` : ""}
         </div>
       </div>`;
     }).join("");
 
-    const addBtn=isAdmin?`<div class="gallery-card"><div class="gc-add-card" onclick="openAddFor('${sec.key}')"><i class="bi bi-plus-circle"></i><span>Add Gallery</span></div></div>`:"";
+    const addBtn = isAdmin
+      ? `<div class="gallery-card"><div class="gc-add-card" onclick="openAddFor('${sec.key}')">
+           <i class="bi bi-plus-circle"></i><span>Add Gallery</span>
+         </div></div>` : "";
 
-    return `<div class="section-header" onclick="toggleSection('${sec.key}')">
+    return `
+      <div class="section-header" onclick="toggleSection('${sec.key}')">
         <div class="section-header-left">
           <div class="section-badge ${sec.badgeCls}"><i class="bi ${sec.icon}"></i></div>
           <div>
@@ -499,249 +650,354 @@ window.renderSections=function(){
         <div class="gallery-grid">
           ${cards}
           ${addBtn}
-          ${!items.length&&!isAdmin?`<div class="empty-state"><i class="bi bi-images"></i><p>No galleries in this section yet.</p></div>`:""}
+          ${!items.length && !isAdmin ? `<div class="empty-state"><i class="bi bi-images"></i><p>No galleries in this section yet.</p></div>` : ""}
         </div>
       </div>`;
   }).join("");
 };
 
-function getFirstImage(n){
-  if(!n.images||!n.images.length)return"";
-  return n.images[0].url||n.images[0]||"";
+function getFirstImage(n) {
+  if (!n.images || !n.images.length) return "";
+  return n.images[0].url || n.images[0] || "";
 }
 
-window.toggleSection=function(key){
-  if(openSections.has(key))openSections.delete(key);
+window.toggleSection = function(key) {
+  if (openSections.has(key)) openSections.delete(key);
   else openSections.add(key);
   window.renderSections();
 };
 
 /* ── Lightbox ── */
-window.openLightbox=function(src,caption){
-  if(!src)return;
-  document.getElementById("lightbox-img").src=src;
-  document.getElementById("lightbox-caption").textContent=caption||"";
+window.openLightbox = function(src, caption) {
+  if (!src) return;
+  document.getElementById("lightbox-img").src = src;
+  document.getElementById("lightbox-caption").textContent = caption || "";
   document.getElementById("lightbox").classList.add("show");
 };
-window.closeLightbox=function(){document.getElementById("lightbox").classList.remove("show");};
-document.getElementById("lightbox").addEventListener("click",e=>{if(e.target===document.getElementById("lightbox"))window.closeLightbox();});
+window.closeLightbox = function() { document.getElementById("lightbox").classList.remove("show"); };
+document.getElementById("lightbox").addEventListener("click", e => {
+  if (e.target === document.getElementById("lightbox")) window.closeLightbox();
+});
 
 /* ── Toggle publish ── */
-window.togglePublish=async function(id,publish){
-  try{
-    await updateDoc(doc(db,"gallery",id),{published:publish,updated_at:serverTimestamp()});
-    toast(publish?"Published! Visible on website.":"Unpublished.","success");
-  }catch(e){toast("❌ "+e.message,"error");}
+window.togglePublish = async function(id, publish) {
+  try {
+    await updateDoc(doc(db,"gallery",id), { published: publish, updated_at: serverTimestamp() });
+    toast(publish ? "Published! Visible on website." : "Unpublished.", "success");
+  } catch(e) { toast("❌ "+e.message, "error"); }
 };
 
-/* ── Delete ── */
-window.delGallery=async function(id,title){
-  if(!confirm(`Delete gallery "${title}"? This cannot be undone.`))return;
-  try{
-    await deleteDoc(doc(db,"gallery",id));
-    toast("Deleted.","success");
-  }catch(e){toast("❌ "+e.message,"error");}
+/* ── Delete gallery (also removes Cloudinary images) ── */
+window.delGallery = async function(id, title) {
+  if (!confirm(`Delete gallery "${title}"? Images will also be removed from Cloudinary.`)) return;
+  try {
+    const item = allGallery.find(x => x.id === id);
+    // Remove all Cloudinary images
+    if (item?.images) {
+      for (const img of item.images) {
+        if (img.publicId) await deleteFromCloudinary(img.publicId);
+      }
+    }
+    await deleteDoc(doc(db, "gallery", id));
+    toast("Deleted.", "success");
+  } catch(e) { toast("❌ "+e.message, "error"); }
 };
 
-/* ── Open Add ── */
-window.openAdd=function(){openAddFor("events");};
-window.openAddFor=function(cat){
-  if(role!=="Admin"){toast("Admin access required","error");return;}
-  editId=null;uploadedFiles=[];
-  document.getElementById("modal-title").textContent="Add Gallery";
-  document.getElementById("f-category").value=cat||"events";
-  document.getElementById("f-title").value="";
-  document.getElementById("f-date").value=new Date().toISOString().split("T")[0];
-  document.getElementById("f-description").value="";
-  document.getElementById("f-order").value="0";
-  document.getElementById("f-published").value="true";
-  document.getElementById("btn-modal-del").style.display="none";
-  document.getElementById("modal-status").textContent="";
-  document.getElementById("preview-strip").innerHTML="";
-  document.getElementById("url-rows").innerHTML=`<div class="url-row">
-    <input type="url" placeholder="https://… image URL">
-    <input type="text" placeholder="Caption (optional)" style="flex:.7;border:1px solid #e2e8f0;border-radius:6px;padding:6px 10px;font-size:.8rem;outline:none">
-    <button class="btn-rm-row" onclick="removeUrlRow(this)">✕</button>
-  </div>`;
+/* ══════════════════════════════════════════
+   OPEN ADD MODAL
+══════════════════════════════════════════ */
+window.openAdd    = function() { openAddFor("events"); };
+window.openAddFor = function(cat) {
+  if (role !== "Admin") { toast("Admin access required", "error"); return; }
+  editId = null;
+  pendingFiles = [];
+  existingImages = [];
+  document.getElementById("modal-title").textContent = "Add Gallery";
+  document.getElementById("f-category").value  = cat || "events";
+  document.getElementById("f-title").value      = "";
+  document.getElementById("f-date").value       = new Date().toISOString().split("T")[0];
+  document.getElementById("f-description").value= "";
+  document.getElementById("f-order").value      = "0";
+  document.getElementById("f-published").value  = "true";
+  document.getElementById("btn-modal-del").style.display = "none";
+  document.getElementById("modal-status").textContent = "";
+  document.getElementById("preview-strip").innerHTML   = "";
+  document.getElementById("existing-images-wrap").style.display = "none";
+  document.getElementById("upload-progress-wrap").style.display = "none";
+  resetUrlRows();
+  switchUploadTab("upload");
   busy(false);
   openM("m-gallery");
 };
 
-/* ── Open Edit ── */
-window.openEdit=function(id){
-  if(role!=="Admin"){toast("Admin access required","error");return;}
-  const n=allGallery.find(x=>x.id===id);
-  if(!n)return;
-  editId=id;uploadedFiles=[];
-  document.getElementById("modal-title").textContent="Edit Gallery";
-  document.getElementById("f-category").value=n.category||"events";
-  const d=n.date?.toDate?n.date.toDate():n.date?new Date(n.date):null;
-  document.getElementById("f-date").value=d&&!isNaN(d)?d.toISOString().split("T")[0]:"";
-  document.getElementById("f-title").value=n.title||"";
-  document.getElementById("f-description").value=n.description||"";
-  document.getElementById("f-order").value=n.order||0;
-  document.getElementById("f-published").value=String(n.published!==false);
-  document.getElementById("btn-modal-del").style.display="";
-  document.getElementById("modal-status").textContent="";
-  // Populate URL rows from saved images
-  const imgs=n.images||[];
-  const urlRows=document.getElementById("url-rows");
-  urlRows.innerHTML="";
-  (imgs.length?imgs:[{url:"",caption:""}]).forEach(im=>{
-    const div=document.createElement("div");
-    div.className="url-row";
-    div.innerHTML=`<input type="url" placeholder="https://… image URL" value="${esc(im.url||im||"")}">
-      <input type="text" placeholder="Caption (optional)" style="flex:.7;border:1px solid #e2e8f0;border-radius:6px;padding:6px 10px;font-size:.8rem;outline:none" value="${esc(im.caption||"")}">
-      <button class="btn-rm-row" onclick="removeUrlRow(this)">✕</button>`;
-    urlRows.appendChild(div);
-  });
-  document.getElementById("preview-strip").innerHTML="";
+/* ══════════════════════════════════════════
+   OPEN EDIT MODAL
+══════════════════════════════════════════ */
+window.openEdit = function(id) {
+  if (role !== "Admin") { toast("Admin access required", "error"); return; }
+  const n = allGallery.find(x => x.id === id);
+  if (!n) return;
+  editId = id;
+  pendingFiles = [];
+  // Deep copy existing images so we can mark them for removal
+  existingImages = (n.images || []).map(img => ({
+    url:      img.url      || img || "",
+    publicId: img.publicId || "",
+    caption:  img.caption  || "",
+    _remove:  false
+  }));
+
+  document.getElementById("modal-title").textContent = "Edit Gallery";
+  document.getElementById("f-category").value  = n.category || "events";
+  const d = n.date?.toDate ? n.date.toDate() : n.date ? new Date(n.date) : null;
+  document.getElementById("f-date").value       = d && !isNaN(d) ? d.toISOString().split("T")[0] : "";
+  document.getElementById("f-title").value      = n.title || "";
+  document.getElementById("f-description").value= n.description || "";
+  document.getElementById("f-order").value      = n.order || 0;
+  document.getElementById("f-published").value  = String(n.published !== false);
+  document.getElementById("btn-modal-del").style.display = "";
+  document.getElementById("modal-status").textContent = "";
+  document.getElementById("upload-progress-wrap").style.display = "none";
+  document.getElementById("preview-strip").innerHTML = "";
+  resetUrlRows();
+  switchUploadTab("upload");
+  renderExistingStrip();
   busy(false);
   openM("m-gallery");
 };
 
-/* ── Drag & Drop ── */
-const dropZone=document.getElementById("drop-zone");
-dropZone.addEventListener("dragover",e=>{e.preventDefault();dropZone.classList.add("dragover");});
-dropZone.addEventListener("dragleave",()=>dropZone.classList.remove("dragover"));
-dropZone.addEventListener("drop",e=>{
-  e.preventDefault();dropZone.classList.remove("dragover");
+/* ── Render existing images strip (edit mode) ── */
+function renderExistingStrip() {
+  const wrap  = document.getElementById("existing-images-wrap");
+  const strip = document.getElementById("existing-strip");
+  const visible = existingImages.filter(i => !i._remove);
+  if (!visible.length) { wrap.style.display = "none"; return; }
+  wrap.style.display = "";
+  strip.innerHTML = visible.map((img, i) => `
+    <div class="preview-item" style="width:80px;height:60px;">
+      <img src="${esc(img.url)}" alt="${esc(img.caption)}" onerror="this.src='https://placehold.co/80x60'">
+      <button class="preview-rm" onclick="removeExistingImage(${i})" title="Remove">✕</button>
+    </div>`).join("");
+}
+
+window.removeExistingImage = function(idx) {
+  // Only mark visible (non-removed) items
+  const visible = existingImages.filter(i => !i._remove);
+  const item = visible[idx];
+  if (item) item._remove = true;
+  renderExistingStrip();
+};
+
+/* ══════════════════════════════════════════
+   DRAG & DROP + FILE SELECT
+══════════════════════════════════════════ */
+const dropZone = document.getElementById("drop-zone");
+dropZone.addEventListener("dragover", e => { e.preventDefault(); dropZone.classList.add("dragover"); });
+dropZone.addEventListener("dragleave", () => dropZone.classList.remove("dragover"));
+dropZone.addEventListener("drop", e => {
+  e.preventDefault(); dropZone.classList.remove("dragover");
   window.handleFileSelect(e.dataTransfer.files);
 });
 
-window.handleFileSelect=function(files){
-  if(!files||!files.length)return;
-  Array.from(files).forEach(file=>{
-    if(!file.type.startsWith("image/"))return;
-    const reader=new FileReader();
-    reader.onload=ev=>{
-      const dataUrl=ev.target.result;
-      uploadedFiles.push({dataUrl,name:file.name});
-      renderPreviewStrip();
+window.handleFileSelect = function(files) {
+  if (!files || !files.length) return;
+  Array.from(files).forEach(file => {
+    if (!file.type.startsWith("image/")) return;
+    const reader = new FileReader();
+    reader.onload = ev => {
+      pendingFiles.push({ file, dataUrl: ev.target.result, name: file.name });
+      renderPendingStrip();
     };
     reader.readAsDataURL(file);
   });
 };
 
-function renderPreviewStrip(){
-  const strip=document.getElementById("preview-strip");
-  strip.innerHTML=uploadedFiles.map((f,i)=>`<div class="preview-item">
-    <img src="${f.dataUrl}" alt="${esc(f.name)}">
-    <button class="preview-rm" onclick="removeUpload(${i})">✕</button>
-  </div>`).join("");
+function renderPendingStrip() {
+  const strip = document.getElementById("preview-strip");
+  if (!pendingFiles.length) { strip.innerHTML = ""; return; }
+  strip.innerHTML = pendingFiles.map((f, i) => `
+    <div class="preview-item">
+      <img src="${f.dataUrl}" alt="${esc(f.name)}">
+      <button class="preview-rm" onclick="removePending(${i})">✕</button>
+    </div>`).join("");
 }
 
-window.removeUpload=function(i){
-  uploadedFiles.splice(i,1);
-  renderPreviewStrip();
+window.removePending = function(i) {
+  pendingFiles.splice(i, 1);
+  renderPendingStrip();
 };
 
-/* ── URL rows ── */
-window.addUrlRow=function(){
-  const div=document.createElement("div");
-  div.className="url-row";
-  div.innerHTML=`<input type="url" placeholder="https://… image URL">
+/* ── URL rows helpers ── */
+function resetUrlRows() {
+  document.getElementById("url-rows").innerHTML = `
+    <div class="url-row">
+      <input type="url" placeholder="https://… image URL">
+      <input type="text" placeholder="Caption (optional)" style="flex:.7;border:1px solid #e2e8f0;border-radius:6px;padding:6px 10px;font-size:.8rem;outline:none">
+      <button class="btn-rm-row" onclick="removeUrlRow(this)">✕</button>
+    </div>`;
+}
+window.addUrlRow = function() {
+  const div = document.createElement("div");
+  div.className = "url-row";
+  div.innerHTML = `
+    <input type="url" placeholder="https://… image URL">
     <input type="text" placeholder="Caption (optional)" style="flex:.7;border:1px solid #e2e8f0;border-radius:6px;padding:6px 10px;font-size:.8rem;outline:none">
     <button class="btn-rm-row" onclick="removeUrlRow(this)">✕</button>`;
   document.getElementById("url-rows").appendChild(div);
 };
-window.removeUrlRow=function(btn){
-  const rows=document.getElementById("url-rows");
-  if(rows.children.length>1)btn.closest(".url-row").remove();
+window.removeUrlRow = function(btn) {
+  const rows = document.getElementById("url-rows");
+  if (rows.children.length > 1) btn.closest(".url-row").remove();
 };
 
-// ── Cloudinary config (news page-ல் உள்ளதே) ──
-const CLOUD_NAME = "dqwayxpbp";      // news page-ல் இருந்து copy பண்ணுங்கள்
-const UPLOAD_PRESET = "உங்கள்_preset_name";  // news page-ல் இருந்து copy பண்ணுங்கள்
-
-// ── Upload to Cloudinary & collect all image URLs ──
-async function collectImages() {
-  const imgs = [];
+/* ══════════════════════════════════════════
+   COLLECT ALL IMAGES  (upload + url + existing)
+   Returns array of { url, publicId, caption }
+══════════════════════════════════════════ */
+async function collectAllImages() {
   const st = document.getElementById("modal-status");
+  const progressWrap = document.getElementById("upload-progress-wrap");
+  const progressFill = document.getElementById("upload-progress-fill");
+  const progressText = document.getElementById("upload-progress-text");
+  const images = [];
 
-  // URL rows (unchanged)
-  document.querySelectorAll("#url-rows .url-row").forEach(row => {
-    const inputs = row.querySelectorAll("input");
-    const url = (inputs[0]?.value || "").trim();
-    const caption = (inputs[1]?.value || "").trim();
-    if (url) imgs.push({ url, caption });
-  });
-
-  // Uploaded files → Cloudinary
-  for (let i = 0; i < uploadedFiles.length; i++) {
-    const f = uploadedFiles[i];
-    try {
-      st.textContent = `⬆️ Uploading ${i + 1} of ${uploadedFiles.length}…`;
-      st.style.color = "#2563eb";
-
-      const res = await fetch(f.dataUrl);
-      const blob = await res.blob();
-
-      const formData = new FormData();
-      formData.append("file", blob, f.name);
-      formData.append("upload_preset", UPLOAD_PRESET);
-      formData.append("folder", "gallery");
-
-      const response = await fetch(
-        `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`,
-        { method: "POST", body: formData }
-      );
-
-      if (!response.ok) throw new Error("Upload failed");
-      const data = await response.json();
-      imgs.push({ url: data.secure_url, caption: f.name });
-
-    } catch (e) {
-      st.textContent = `❌ Failed: ${f.name}`;
-      st.style.color = "#ef4444";
-      console.error(e);
+  // 1. Keep existing images that are NOT marked for removal
+  //    Also delete removed ones from Cloudinary
+  for (const img of existingImages) {
+    if (img._remove) {
+      if (img.publicId) {
+        st.textContent = "🗑 Removing old image from Cloudinary…";
+        st.style.color = "#f59e0b";
+        await deleteFromCloudinary(img.publicId);
+      }
+    } else {
+      images.push({ url: img.url, publicId: img.publicId || "", caption: img.caption || "" });
     }
   }
 
+  // 2. Upload pending files to Cloudinary
+  if (pendingFiles.length) {
+    progressWrap.style.display = "";
+    for (let i = 0; i < pendingFiles.length; i++) {
+      const f = pendingFiles[i];
+      const pct = Math.round((i / pendingFiles.length) * 100);
+      progressFill.style.width = pct + "%";
+      progressText.textContent = `☁️ Uploading ${i+1} of ${pendingFiles.length}: ${f.name}`;
+      st.textContent = `Uploading image ${i+1} of ${pendingFiles.length}…`;
+      st.style.color = "#2563eb";
+
+      try {
+        const { url, publicId } = await uploadToCloudinary(f.file);
+        images.push({ url, publicId, caption: f.name });
+      } catch(err) {
+        st.textContent = `❌ Upload failed for ${f.name}: ${err.message}`;
+        st.style.color = "#ef4444";
+        progressWrap.style.display = "none";
+        throw err; // Stop save process
+      }
+    }
+    progressFill.style.width = "100%";
+    progressText.textContent = "✅ All images uploaded!";
+    setTimeout(() => { progressWrap.style.display = "none"; }, 1500);
+  }
+
+  // 3. URL tab images (no upload, just store the URL)
+  if (activeUploadTab === "url") {
+    document.querySelectorAll("#url-rows .url-row").forEach(row => {
+      const inputs = row.querySelectorAll("input");
+      const url     = (inputs[0]?.value || "").trim();
+      const caption = (inputs[1]?.value || "").trim();
+      if (url) images.push({ url, publicId: "", caption });
+    });
+  }
+
   st.textContent = "";
-  return imgs;
+  return images;
 }
-/* ── Save ── */
-window.modalSave=async function(){
-  const category=document.getElementById("f-category").value;
-  const title=document.getElementById("f-title").value.trim();
-  const dateVal=document.getElementById("f-date").value;
-  const description=document.getElementById("f-description").value.trim();
-  const order=parseInt(document.getElementById("f-order").value)||0;
-  const published=document.getElementById("f-published").value==="true";
-  const st=document.getElementById("modal-status");
- const images = await collectImages();
 
-  if(!title){st.textContent="Title is required.";st.style.color="#ef4444";return;}
-  if(!dateVal){st.textContent="Date is required.";st.style.color="#ef4444";return;}
-  if(!images.length){st.textContent="Add at least one image (URL or upload).";st.style.color="#ef4444";return;}
+/* ══════════════════════════════════════════
+   SAVE  (Add or Edit)
+══════════════════════════════════════════ */
+window.modalSave = async function() {
+  const category    = document.getElementById("f-category").value;
+  const title       = document.getElementById("f-title").value.trim();
+  const dateVal     = document.getElementById("f-date").value;
+  const description = document.getElementById("f-description").value.trim();
+  const order       = parseInt(document.getElementById("f-order").value) || 0;
+  const published   = document.getElementById("f-published").value === "true";
+  const st          = document.getElementById("modal-status");
 
-  const data={category,title,description,order,published,images,updated_at:serverTimestamp(),date:new Date(dateVal)};
-  busy(true);st.textContent="";
-  try{
-    const id=editId||`gallery_${Date.now()}`;
-    if(!editId)data.created_at=serverTimestamp();
-    await setDoc(doc(db,"gallery",id),data,{merge:true});
+  if (!title)   { st.textContent = "Title is required."; st.style.color = "#ef4444"; return; }
+  if (!dateVal) { st.textContent = "Date is required.";  st.style.color = "#ef4444"; return; }
+
+  busy(true);
+  st.textContent = "";
+
+  try {
+    // Collect images (upload files to Cloudinary if needed)
+    const images = await collectAllImages();
+
+    if (!images.length) {
+      st.textContent = "Add at least one image (upload a file or paste a URL).";
+      st.style.color = "#ef4444";
+      busy(false); return;
+    }
+
+    st.textContent = "💾 Saving to Firebase…";
+    st.style.color = "#64748b";
+
+    const data = {
+      category,
+      title,
+      description,
+      order,
+      published,
+      images,   // ← Each item: { url, publicId, caption }
+      updated_at: serverTimestamp(),
+      date: new Date(dateVal)
+    };
+
+    const id = editId || `gallery_${Date.now()}`;
+    if (!editId) data.created_at = serverTimestamp();
+
+    await setDoc(doc(db, "gallery", id), data, { merge: true });
+
     closeM("m-gallery");
-    toast(`✅ ${editId?"Updated":"Created"}! Live on church website.`,"success");
-  }catch(e){
-    st.textContent="❌ "+e.message;st.style.color="#ef4444";busy(false);
+    toast(`✅ ${editId ? "Updated" : "Created"}! Live on church website.`, "success");
+
+  } catch(err) {
+    st.textContent = "❌ " + err.message;
+    st.style.color = "#ef4444";
+    busy(false);
   }
 };
 
-/* ── Delete from modal ── */
-window.modalDel=async function(){
-  if(!editId)return;
-  const n=allGallery.find(x=>x.id===editId);
-  if(!n||!confirm(`Delete gallery "${n.title}"? This cannot be undone.`))return;
-  try{
-    await deleteDoc(doc(db,"gallery",editId));
-    closeM("m-gallery");toast("Deleted.","success");
-  }catch(e){toast("❌ "+e.message,"error");}
+/* ── Delete from modal (removes Cloudinary images too) ── */
+window.modalDel = async function() {
+  if (!editId) return;
+  const n = allGallery.find(x => x.id === editId);
+  if (!n || !confirm(`Delete gallery "${n.title}"? Images will also be removed from Cloudinary.`)) return;
+  const st = document.getElementById("modal-status");
+  try {
+    // Delete all Cloudinary images
+    if (n.images) {
+      for (const img of n.images) {
+        if (img.publicId) {
+          st.textContent = "🗑 Removing images from Cloudinary…";
+          st.style.color = "#f59e0b";
+          await deleteFromCloudinary(img.publicId);
+        }
+      }
+    }
+    await deleteDoc(doc(db, "gallery", editId));
+    closeM("m-gallery");
+    toast("Deleted.", "success");
+  } catch(e) { toast("❌ "+e.message, "error"); }
 };
 
-document.querySelectorAll(".hm-backdrop").forEach(bd=>{
-  bd.addEventListener("click",ev=>{if(ev.target===bd)bd.classList.remove("show");});
+/* ── Close modal on backdrop click ── */
+document.querySelectorAll(".hm-backdrop").forEach(bd => {
+  bd.addEventListener("click", ev => { if (ev.target === bd) bd.classList.remove("show"); });
 });
 </script>
 </body>
